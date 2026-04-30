@@ -136,6 +136,8 @@
     <div class="idx-grid"  id="tw-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">個股</div>
     <div class="stock-grid" id="tw-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">無人機概念</div>
+    <div class="stock-grid" id="tw-drone"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">ETF</div>
     <div class="stock-grid" id="tw-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
   </div>
@@ -231,8 +233,9 @@ async function loadAll() {
 
   renderIdx(us.indices, 'us-indices');
   renderStocks(us.stocks, 'us-stocks');
-  renderIdx(tw.indices, 'tw-indices');
+  renderIdx(tw.indices,   'tw-indices');
   renderStocks(tw.stocks, 'tw-stocks');
+  renderStocks(tw.drone,  'tw-drone');
   renderStocks(tw.etf,    'tw-etf');
   renderIdx(jp.indices, 'jp-indices');
   renderStocks(jp.stocks, 'jp-stocks');

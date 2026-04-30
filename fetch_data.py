@@ -31,8 +31,20 @@ TW_STOCKS = [
     {'symbol': '2454.TW', 'name': '聯發科'},
     {'symbol': '3711.TW', 'name': 'ASE 日月光'},
     {'symbol': '2303.TW', 'name': '聯電'},
+    {'symbol': '3008.TW', 'name': '大立光'},
+    {'symbol': '2308.TW', 'name': '台達電'},
     {'symbol': '2382.TW', 'name': '廣達'},
     {'symbol': '2603.TW', 'name': '長榮'},
+    {'symbol': '2881.TW', 'name': '富邦金'},
+    {'symbol': '2882.TW', 'name': '國泰金'},
+    {'symbol': '2891.TW', 'name': '中信金'},
+    {'symbol': '1802.TW', 'name': '台玻'},
+    {'symbol': '6770.TW', 'name': '力積電'},
+]
+TW_DRONE = [
+    {'symbol': '8033.TW', 'name': '雷虎科技'},
+    {'symbol': '2634.TW', 'name': '漢翔航空'},
+    {'symbol': '4961.TW', 'name': '鼎天國際'},
 ]
 TW_ETF = [
     {'symbol': '0050.TW',   'name': '元大台灣50'},
@@ -115,6 +127,7 @@ if __name__ == '__main__':
         'updated':  now,
         'indices':  fetch_group(TW_INDICES),
         'stocks':   fetch_group(TW_STOCKS),
+        'drone':    fetch_group(TW_DRONE),
         'etf':      fetch_group(TW_ETF),
     })
 
