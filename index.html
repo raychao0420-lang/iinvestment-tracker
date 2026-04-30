@@ -202,10 +202,13 @@ function fmt(v, d=2) {
 function renderIdx(items, id) {
   document.getElementById(id).innerHTML = items.map(s => {
     const c = cls(s.pct), sign = s.pct>=0 ? '+' : '';
+    const chgStr = s.pct!==null
+      ? `${arrow(s.pct)} ${sign}${fmt(s.change, s.price>999?2:2)} (${sign}${fmt(s.pct)}%)`
+      : '–';
     return `<div class="idx-card">
       <div class="idx-name">${s.name}</div>
       <div class="idx-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
-      <div class="idx-chg ${c}">${arrow(s.pct)} ${s.pct!==null ? sign+fmt(s.pct)+'%' : '–'}
+      <div class="idx-chg ${c}">${chgStr}
         <span style="color:#94a3b8;font-size:.75rem;margin-left:.3rem">${s.date||''}</span>
       </div>
     </div>`;
@@ -216,7 +219,7 @@ function renderStocks(items, id) {
   document.getElementById(id).innerHTML = items.map(s => {
     const c = cls(s.pct), sign = s.pct>=0 ? '+' : '';
     const badge = s.pct!==null
-      ? `<span class="chg-badge ${c}">${arrow(s.pct)} ${sign}${fmt(s.pct)}%</span>`
+      ? `<span class="chg-badge ${c}">${arrow(s.pct)} ${sign}${fmt(s.change)} (${sign}${fmt(s.pct)}%)</span>`
       : `<span class="chg-badge flat">–</span>`;
     return `<div class="stock-card">
       <div>
