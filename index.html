@@ -177,9 +177,18 @@ function updateTags() {
       m>=8*60&&m<14*60+30 ? 'tag-live' : 'tag-wait');
 }
 function initTab() {
-  const m = twNow().getHours()*60 + twNow().getMinutes();
-  const id = m>=5*60&&m<14*60 ? 'us-tab' : m>=17*60&&m<20*60 ? 'jp-tab' : 'tw-tab';
-  bootstrap.Tab.getOrCreateInstance(document.getElementById(id)).show();
+  // 預設美股
+  bootstrap.Tab.getOrCreateInstance(document.getElementById('us-tab')).show();
+}
+function switchToLatest(us, tw, jp) {
+  // 資料載入後切換到最近更新的市場
+  const parse = s => s ? new Date(s.replace(/\//g,'-').replace(' ','T')) : new Date(0);
+  const latest = [
+    { id:'us-tab', t: parse(us.updated) },
+    { id:'tw-tab', t: parse(tw.updated) },
+    { id:'jp-tab', t: parse(jp.updated) },
+  ].sort((a,b) => b.t - a.t)[0];
+  bootstrap.Tab.getOrCreateInstance(document.getElementById(latest.id)).show();
 }
 
 // ── 渲染 ─────────────────────────────────────────────────────────────────────
@@ -239,6 +248,7 @@ async function loadAll() {
   renderStocks(tw.etf,    'tw-etf');
   renderIdx(jp.indices, 'jp-indices');
   renderStocks(jp.stocks, 'jp-stocks');
+  switchToLatest(us, tw, jp);
 
   // 顯示最晚更新時間
   const times = [us.updated, tw.updated, jp.updated].filter(Boolean);
