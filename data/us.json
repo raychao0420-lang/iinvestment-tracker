@@ -1,0 +1,103 @@
+{
+  "updated": "2026/04/30 20:27",
+  "indices": [
+    {
+      "symbol": "^GSPC",
+      "name": "S&P 500",
+      "price": 7135.95,
+      "change": -2.85,
+      "pct": -0.04,
+      "date": "04/29"
+    },
+    {
+      "symbol": "^IXIC",
+      "name": "NASDAQ",
+      "price": 24673.24,
+      "change": 9.44,
+      "pct": 0.04,
+      "date": "04/29"
+    },
+    {
+      "symbol": "^DJI",
+      "name": "道瓊",
+      "price": 48861.81,
+      "change": -280.12,
+      "pct": -0.57,
+      "date": "04/29"
+    },
+    {
+      "symbol": "^RUT",
+      "name": "羅素 2000",
+      "price": 2739.47,
+      "change": -16.58,
+      "pct": -0.6,
+      "date": "04/29"
+    }
+  ],
+  "stocks": [
+    {
+      "symbol": "TSM",
+      "name": "台積電 ADR",
+      "price": 393.83,
+      "change": 1.49,
+      "pct": 0.38,
+      "date": "04/29"
+    },
+    {
+      "symbol": "NVDA",
+      "name": "輝達 NVDA",
+      "price": 209.25,
+      "change": -3.92,
+      "pct": -1.84,
+      "date": "04/29"
+    },
+    {
+      "symbol": "MU",
+      "name": "美光 MU",
+      "price": 518.46,
+      "change": 14.17,
+      "pct": 2.81,
+      "date": "04/29"
+    },
+    {
+      "symbol": "TSLA",
+      "name": "特斯拉 TSLA",
+      "price": 372.8,
+      "change": -3.22,
+      "pct": -0.86,
+      "date": "04/29"
+    },
+    {
+      "symbol": "EWT",
+      "name": "摩台指 EWT",
+      "price": 87.19,
+      "change": -0.05,
+      "pct": -0.06,
+      "date": "04/29"
+    },
+    {
+      "symbol": "VOO",
+      "name": "VOO",
+      "price": 654.24,
+      "change": -0.02,
+      "pct": -0.0,
+      "date": "04/29"
+    },
+    {
+      "symbol": "QQQ",
+      "name": "QQQ",
+      "price": 661.57,
+      "change": 4.02,
+      "pct": 0.61,
+      "date": "04/29"
+    },
+    {
+      "symbol": "SCHD",
+      "name": "SCHD",
+      "price": 31.45,
+      "change": 0.14,
+      "pct": 0.45,
+      "date": "04/29"
+    }
+  ]
+}

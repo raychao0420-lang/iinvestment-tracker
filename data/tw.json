@@ -1,0 +1,121 @@
+{
+  "updated": "2026/04/30 20:27",
+  "indices": [
+    {
+      "symbol": "^TWII",
+      "name": "加權指數",
+      "price": 38926.63,
+      "change": -376.87,
+      "pct": -0.96,
+      "date": "04/30"
+    },
+    {
+      "symbol": "00631L.TW",
+      "name": "元大台灣50正2",
+      "price": 28.61,
+      "change": -0.21,
+      "pct": -0.73,
+      "date": "04/30"
+    }
+  ],
+  "stocks": [
+    {
+      "symbol": "2330.TW",
+      "name": "台積電",
+      "price": 2135.0,
+      "change": -45.0,
+      "pct": -2.06,
+      "date": "04/30"
+    },
+    {
+      "symbol": "2454.TW",
+      "name": "聯發科",
+      "price": 2610.0,
+      "change": 35.0,
+      "pct": 1.36,
+      "date": "04/30"
+    },
+    {
+      "symbol": "3711.TW",
+      "name": "ASE 日月光",
+      "price": 478.0,
+      "change": -10.5,
+      "pct": -2.15,
+      "date": "04/30"
+    },
+    {
+      "symbol": "2303.TW",
+      "name": "聯電",
+      "price": 77.3,
+      "change": 2.8,
+      "pct": 3.76,
+      "date": "04/30"
+    },
+    {
+      "symbol": "2382.TW",
+      "name": "廣達",
+      "price": 312.5,
+      "change": -9.5,
+      "pct": -2.95,
+      "date": "04/30"
+    },
+    {
+      "symbol": "2603.TW",
+      "name": "長榮",
+      "price": 202.0,
+      "change": 0.5,
+      "pct": 0.25,
+      "date": "04/30"
+    }
+  ],
+  "etf": [
+    {
+      "symbol": "0050.TW",
+      "name": "元大台灣50",
+      "price": 90.5,
+      "change": -0.25,
+      "pct": -0.28,
+      "date": "04/30"
+    },
+    {
+      "symbol": "006208.TW",
+      "name": "富邦台50",
+      "price": 209.75,
+      "change": -0.7,
+      "pct": -0.33,
+      "date": "04/30"
+    },
+    {
+      "symbol": "00878.TW",
+      "name": "國泰永續高股息",
+      "price": 25.39,
+      "change": 0.09,
+      "pct": 0.36,
+      "date": "04/30"
+    },
+    {
+      "symbol": "00919.TW",
+      "name": "群益台灣精選高息",
+      "price": 23.65,
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "04/30"
+    },
+    {
+      "symbol": "00929.TW",
+      "name": "復華台灣科技優息",
+      "price": 22.24,
+      "change": 0.14,
+      "pct": 0.63,
+      "date": "04/30"
+    },
+    {
+      "symbol": "00940.TW",
+      "name": "元大台灣價值高息",
+      "price": 10.34,
+      "change": 0.01,
+      "pct": 0.1,
+      "date": "04/30"
+    }
+  ]
+}

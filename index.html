@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>投資小幫手</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+  :root { --up:#dc2626; --down:#16a34a; --flat:#6b7280; }
+
+  body { background:#f1f5f9; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+
+  .top-bar {
+    background:linear-gradient(135deg,#1e293b 0%,#334155 100%);
+    color:#fff; padding:.6rem 1rem;
+    position:sticky; top:0; z-index:99;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .top-bar h1 { font-size:1.15rem; font-weight:700; margin:0; }
+  .top-bar .time-badge {
+    font-size:.75rem; background:rgba(255,255,255,.15);
+    border-radius:99px; padding:.2rem .65rem; white-space:nowrap;
+  }
+
+  .market-tabs { background:#fff; border-bottom:1px solid #e2e8f0; }
+  .market-tabs .nav-link {
+    font-size:1rem; font-weight:600; padding:.55rem 1.1rem;
+    border-radius:0; border-bottom:3px solid transparent; color:#475569;
+  }
+  .market-tabs .nav-link.active { color:#1d4ed8; border-bottom-color:#1d4ed8; background:none; }
+  .badge-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+  .dot-us{background:#f59e0b;} .dot-tw{background:#10b981;} .dot-jp{background:#f43f5e;}
+
+  .section-title {
+    font-size:.72rem; font-weight:700; letter-spacing:.08em;
+    text-transform:uppercase; color:#94a3b8; padding:.6rem 1rem .3rem;
+  }
+
+  /* 股票卡片 */
+  .stock-card {
+    background:#fff; border-radius:12px; padding:.85rem 1rem;
+    margin:.4rem .75rem; box-shadow:0 1px 3px rgba(0,0,0,.07);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .stock-name  { font-size:1.05rem; font-weight:600; color:#1e293b; }
+  .stock-sub   { font-size:.78rem; color:#94a3b8; margin-top:1px; }
+  .stock-price { font-size:1.35rem; font-weight:700; text-align:right; }
+  .chg-badge {
+    display:inline-block; font-size:.8rem; font-weight:700;
+    padding:.18rem .55rem; border-radius:6px; margin-top:3px;
+  }
+  .chg-badge.up   { background:#fee2e2; color:var(--up); }
+  .chg-badge.down { background:#dcfce7; color:var(--down); }
+  .chg-badge.flat { background:#f1f5f9; color:var(--flat); }
+
+  /* 指數大卡 */
+  .idx-card {
+    background:#fff; border-radius:12px; padding:1rem 1.1rem;
+    margin:.4rem .75rem; box-shadow:0 1px 3px rgba(0,0,0,.07);
+  }
+  .idx-name  { font-size:.85rem; color:#64748b; font-weight:600; }
+  .idx-price { font-size:1.6rem; font-weight:800; margin:.1rem 0; }
+  .idx-chg   { font-size:.9rem; font-weight:600; }
+
+  .up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--flat);}
+
+  /* 電腦版 */
+  @media(min-width:768px){
+    .idx-grid   { display:grid; grid-template-columns:repeat(2,1fr); }
+    .stock-grid { display:grid; grid-template-columns:repeat(2,1fr); }
+    .idx-card,.stock-card { margin:.4rem; }
+    .stock-name  { font-size:1rem; }
+    .stock-price { font-size:1.25rem; }
+  }
+  @media(min-width:1200px){
+    .idx-grid   { grid-template-columns:repeat(4,1fr); }
+    .stock-grid { grid-template-columns:repeat(3,1fr); }
+  }
+
+  /* 底部 */
+  .update-bar {
+    background:#fff; border-top:1px solid #e2e8f0; text-align:center;
+    padding:.6rem; font-size:.8rem; color:#94a3b8; position:sticky; bottom:0;
+  }
+
+  /* 更新時段標籤 */
+  .session-tag { font-size:.7rem; font-weight:700; padding:.15rem .5rem; border-radius:99px; margin-left:.4rem; vertical-align:middle; }
+  .tag-live  { background:#dcfce7; color:#16a34a; }
+  .tag-wait  { background:#fef3c7; color:#b45309; }
+
+  /* 骨架 */
+  .skeleton { background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);
+    background-size:200% 100%; animation:shimmer 1.5s infinite;
+    border-radius:6px; height:1.2em; width:70%; }
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+  .spin{display:inline-block;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1><i class="bi bi-bar-chart-fill me-2" style="color:#60a5fa"></i>投資小幫手</h1>
+  <span class="time-badge" id="clock">--:--</span>
+</div>
+
+<ul class="nav market-tabs px-1" id="marketTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="us-tab" data-bs-toggle="tab" data-bs-target="#us-panel" type="button" role="tab">
+      <span class="badge-dot dot-us"></span>美股<span class="session-tag" id="us-tag"></span>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="tw-tab" data-bs-toggle="tab" data-bs-target="#tw-panel" type="button" role="tab">
+      <span class="badge-dot dot-tw"></span>台股<span class="session-tag" id="tw-tag"></span>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="jp-tab" data-bs-toggle="tab" data-bs-target="#jp-panel" type="button" role="tab">
+      <span class="badge-dot dot-jp"></span>日股 <span class="session-tag" id="jp-tag"></span>
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content pb-5">
+  <div class="tab-pane fade" id="us-panel" role="tabpanel">
+    <div class="section-title">指數</div>
+    <div class="idx-grid"  id="us-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">台灣相關 & ETF</div>
+    <div class="stock-grid" id="us-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+  </div>
+  <div class="tab-pane fade" id="tw-panel" role="tabpanel">
+    <div class="section-title">指數</div>
+    <div class="idx-grid"  id="tw-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">個股</div>
+    <div class="stock-grid" id="tw-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">ETF</div>
+    <div class="stock-grid" id="tw-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
+  </div>
+  <div class="tab-pane fade" id="jp-panel" role="tabpanel">
+    <div class="section-title">指數</div>
+    <div class="idx-grid"  id="jp-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">半導體相關</div>
+    <div class="stock-grid" id="jp-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+  </div>
+</div>
+
+<div class="update-bar">
+  <span id="last-update">載入中…</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ── 時鐘 / Tab ────────────────────────────────────────────────────────────────
+function twNow() {
+  return new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Taipei'}));
+}
+function updateClock() {
+  const d = twNow(), p = n => String(n).padStart(2,'0');
+  document.getElementById('clock').textContent =
+    `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function updateTags() {
+  const m = twNow().getHours()*60 + twNow().getMinutes();
+  const set = (id, text, cls) => {
+    const el = document.getElementById(id);
+    el.textContent = text; el.className = 'session-tag ' + (cls||'');
+  };
+  set('us-tag', m>=6*60&&m<14*60 ? '已更新' : '', m>=6*60&&m<14*60 ? 'tag-wait' : '');
+  set('tw-tag', m>=9*60&&m<13*60+30 ? '盤中' : m>=13*60+30&&m<17*60 ? '已收盤' : '',
+      m>=9*60&&m<13*60+30 ? 'tag-live' : 'tag-wait');
+  set('jp-tag', m>=8*60&&m<14*60+30 ? '盤中' : m>=14*60+30&&m<17*60 ? '已收盤' : '',
+      m>=8*60&&m<14*60+30 ? 'tag-live' : 'tag-wait');
+}
+function initTab() {
+  const m = twNow().getHours()*60 + twNow().getMinutes();
+  const id = m>=5*60&&m<14*60 ? 'us-tab' : m>=17*60&&m<20*60 ? 'jp-tab' : 'tw-tab';
+  bootstrap.Tab.getOrCreateInstance(document.getElementById(id)).show();
+}
+
+// ── 渲染 ─────────────────────────────────────────────────────────────────────
+function cls(pct) { return pct===null ? 'flat' : pct>0 ? 'up' : pct<0 ? 'down' : 'flat'; }
+function arrow(pct) { return pct===null ? '' : pct>0 ? '▲' : pct<0 ? '▼' : '–'; }
+function fmt(v, d=2) {
+  if (v===null||v===undefined) return '–';
+  return Number(v).toLocaleString('en-US', {minimumFractionDigits:d, maximumFractionDigits:d});
+}
+
+function renderIdx(items, id) {
+  document.getElementById(id).innerHTML = items.map(s => {
+    const c = cls(s.pct), sign = s.pct>=0 ? '+' : '';
+    return `<div class="idx-card">
+      <div class="idx-name">${s.name}</div>
+      <div class="idx-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
+      <div class="idx-chg ${c}">${arrow(s.pct)} ${s.pct!==null ? sign+fmt(s.pct)+'%' : '–'}
+        <span style="color:#94a3b8;font-size:.75rem;margin-left:.3rem">${s.date||''}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderStocks(items, id) {
+  document.getElementById(id).innerHTML = items.map(s => {
+    const c = cls(s.pct), sign = s.pct>=0 ? '+' : '';
+    const badge = s.pct!==null
+      ? `<span class="chg-badge ${c}">${arrow(s.pct)} ${sign}${fmt(s.pct)}%</span>`
+      : `<span class="chg-badge flat">–</span>`;
+    return `<div class="stock-card">
+      <div>
+        <div class="stock-name">${s.name}</div>
+        <div class="stock-sub">${s.symbol} · ${s.date||'–'}</div>
+      </div>
+      <div>
+        <div class="stock-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
+        <div style="text-align:right">${badge}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── 載入資料 ──────────────────────────────────────────────────────────────────
+async function loadAll() {
+  const ts = Date.now();
+  const [us, tw, jp] = await Promise.all([
+    fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
+    fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
+    fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
+  ]);
+
+  renderIdx(us.indices, 'us-indices');
+  renderStocks(us.stocks, 'us-stocks');
+  renderIdx(tw.indices, 'tw-indices');
+  renderStocks(tw.stocks, 'tw-stocks');
+  renderStocks(tw.etf,    'tw-etf');
+  renderIdx(jp.indices, 'jp-indices');
+  renderStocks(jp.stocks, 'jp-stocks');
+
+  // 顯示最晚更新時間
+  const times = [us.updated, tw.updated, jp.updated].filter(Boolean);
+  document.getElementById('last-update').textContent =
+    `資料時間｜美股 ${us.updated||'–'} ／ 台股 ${tw.updated||'–'} ／ 日股 ${jp.updated||'–'}`;
+}
+
+// ── 初始化 ────────────────────────────────────────────────────────────────────
+updateClock();
+updateTags();
+initTab();
+setInterval(() => { updateClock(); updateTags(); }, 30000);
+loadAll().catch(() => {
+  document.getElementById('last-update').textContent = '資料載入失敗，請稍後再試';
+});
+</script>
+</body>
+</html>

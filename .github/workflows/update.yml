@@ -1,0 +1,35 @@
+name: Update Stock Data
+
+on:
+  schedule:
+    - cron: '5 23 * * 0-4'   # 07:05 台灣時間 週一~五
+    - cron: '5 6 * * 1-5'    # 14:05 台灣時間 週一~五
+    - cron: '5 9 * * 1-5'    # 17:05 台灣時間 週一~五
+  workflow_dispatch:           # 手動觸發
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install yfinance pytz
+
+      - name: Fetch stock data
+        run: python fetch_data.py
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "data: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
