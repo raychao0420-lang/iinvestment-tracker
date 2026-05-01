@@ -1,21 +1,21 @@
 {
-  "updated": "2026/05/01 08:38",
+  "updated": "2026/05/01 15:39",
   "indices": [
     {
       "symbol": "^TWII",
       "name": "加權指數",
-      "price": 39303.5,
-      "change": -218.23,
-      "pct": -0.55,
-      "date": "04/29"
+      "price": 38926.63,
+      "change": -376.87,
+      "pct": -0.96,
+      "date": "04/30"
     },
     {
       "symbol": "00631L.TW",
       "name": "元大台灣50正2",
-      "price": 28.82,
-      "change": -0.45,
-      "pct": -1.54,
-      "date": "04/29"
+      "price": 28.61,
+      "change": -0.21,
+      "pct": -0.73,
+      "date": "04/30"
     }
   ],
   "stocks": [
@@ -154,42 +154,42 @@
     {
       "symbol": "0050.TW",
       "name": "元大台灣50",
-      "price": 90.75,
-      "change": -1.25,
-      "pct": -1.36,
-      "date": "04/29"
+      "price": 90.5,
+      "change": -0.25,
+      "pct": -0.28,
+      "date": "04/30"
     },
     {
       "symbol": "006208.TW",
       "name": "富邦台50",
-      "price": 210.45,
-      "change": -2.7,
-      "pct": -1.27,
-      "date": "04/29"
+      "price": 209.75,
+      "change": -0.7,
+      "pct": -0.33,
+      "date": "04/30"
     },
     {
       "symbol": "00878.TW",
       "name": "國泰永續高股息",
-      "price": 25.3,
-      "change": 0.0,
-      "pct": 0.0,
-      "date": "04/29"
+      "price": 25.39,
+      "change": 0.09,
+      "pct": 0.36,
+      "date": "04/30"
     },
     {
       "symbol": "00919.TW",
       "name": "群益台灣精選高息",
       "price": 23.65,
-      "change": 0.15,
-      "pct": 0.64,
-      "date": "04/29"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "04/30"
     },
     {
       "symbol": "00929.TW",
       "name": "復華台灣科技優息",
-      "price": 22.1,
-      "change": -0.26,
-      "pct": -1.16,
-      "date": "04/29"
+      "price": 22.24,
+      "change": 0.14,
+      "pct": 0.63,
+      "date": "04/30"
     },
     {
       "symbol": "00940.TW",
