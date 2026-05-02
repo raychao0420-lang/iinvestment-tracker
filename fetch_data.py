@@ -1,5 +1,5 @@
 import yfinance as yf
-import json, os
+import json, os, time
 from datetime import datetime
 import pytz
 
@@ -21,9 +21,17 @@ US_STOCKS = [
     {'symbol': 'QQQ',  'name': 'QQQ'},
     {'symbol': 'SCHD', 'name': 'SCHD'},
 ]
+US_CLOUD = [
+    {'symbol': 'AMZN',  'name': '亞馬遜 AWS'},
+    {'symbol': 'MSFT',  'name': '微軟 Azure'},
+    {'symbol': 'GOOGL', 'name': 'Alphabet GCP'},
+    {'symbol': 'ORCL',  'name': 'Oracle Cloud'},
+    {'symbol': 'META',  'name': 'Meta'},
+    {'symbol': 'IBM',   'name': 'IBM Cloud'},
+]
 
 TW_INDICES = [
-    {'symbol': '^TWII',   'name': '加權指數'},
+    {'symbol': '^TWII',     'name': '加權指數'},
     {'symbol': '00631L.TW', 'name': '元大台灣50正2'},
 ]
 TW_STOCKS = [
@@ -69,39 +77,58 @@ JP_STOCKS = [
 ]
 
 
-def fetch_group(items):
-    symbols = [x['symbol'] for x in items]
-    out = {x['symbol']: {**x, 'price': None, 'change': None, 'pct': None, 'date': None}
-           for x in items}
-    try:
-        raw = yf.download(symbols, period='5d', interval='1d',
-                          progress=False, auto_adjust=True, threads=True)
-        closes = raw['Close']
-        if len(symbols) == 1:
-            closes = closes.to_frame(name=symbols[0])
+def fetch_market(groups):
+    """
+    groups: dict of group_name -> list of {symbol, name}
+    Downloads all symbols in one batch request (with retry), then splits back into groups.
+    Returns dict of group_name -> list of {symbol, name, price, change, pct, date}
+    """
+    all_items = [(gname, item) for gname, items in groups.items() for item in items]
+    symbols = [item['symbol'] for _, item in all_items]
 
-        for sym in symbols:
-            try:
-                col = closes[sym].dropna()
-                if len(col) >= 2:
-                    prev, last = float(col.iloc[-2]), float(col.iloc[-1])
-                    out[sym].update({
-                        'price':  round(last, 2),
-                        'change': round(last - prev, 2),
-                        'pct':    round((last - prev) / prev * 100, 2),
-                        'date':   col.index[-1].strftime('%m/%d'),
-                    })
-                elif len(col) == 1:
-                    out[sym].update({
-                        'price': round(float(col.iloc[-1]), 2),
-                        'date':  col.index[-1].strftime('%m/%d'),
-                    })
-            except Exception as e:
-                print(f'  {sym}: {e}')
-    except Exception as e:
-        print(f'download error: {e}')
+    out = {item['symbol']: {**item, 'price': None, 'change': None, 'pct': None, 'date': None}
+           for _, item in all_items}
 
-    return [out[x['symbol']] for x in items]
+    closes = None
+    for attempt in range(3):
+        try:
+            raw = yf.download(symbols, period='7d', interval='1d',
+                              progress=False, auto_adjust=True)
+            closes = raw['Close']
+            if len(symbols) == 1:
+                closes = closes.to_frame(name=symbols[0])
+            break
+        except Exception as e:
+            print(f'  attempt {attempt + 1} failed: {e}')
+            if attempt < 2:
+                time.sleep(5)
+
+    if closes is None:
+        print('  download failed after retries')
+        return {gname: [out[item['symbol']] for item in items]
+                for gname, items in groups.items()}
+
+    for sym in symbols:
+        try:
+            col = closes[sym].dropna()
+            if len(col) >= 2:
+                prev, last = float(col.iloc[-2]), float(col.iloc[-1])
+                out[sym].update({
+                    'price':  round(last, 2),
+                    'change': round(last - prev, 2),
+                    'pct':    round((last - prev) / prev * 100, 2),
+                    'date':   col.index[-1].strftime('%m/%d'),
+                })
+            elif len(col) == 1:
+                out[sym].update({
+                    'price': round(float(col.iloc[-1]), 2),
+                    'date':  col.index[-1].strftime('%m/%d'),
+                })
+        except Exception as e:
+            print(f'  {sym}: {e}')
+
+    return {gname: [out[item['symbol']] for item in items]
+            for gname, items in groups.items()}
 
 
 def save(path, payload):
@@ -116,26 +143,17 @@ if __name__ == '__main__':
     print(f'=== fetch_data {now} ===')
 
     print('--- US ---')
-    save('data/us.json', {
-        'updated':  now,
-        'indices':  fetch_group(US_INDICES),
-        'stocks':   fetch_group(US_STOCKS),
-    })
+    us = fetch_market({'indices': US_INDICES, 'stocks': US_STOCKS, 'cloud': US_CLOUD})
+    save('data/us.json', {'updated': now, **us})
 
+    time.sleep(2)
     print('--- TW ---')
-    save('data/tw.json', {
-        'updated':  now,
-        'indices':  fetch_group(TW_INDICES),
-        'stocks':   fetch_group(TW_STOCKS),
-        'drone':    fetch_group(TW_DRONE),
-        'etf':      fetch_group(TW_ETF),
-    })
+    tw = fetch_market({'indices': TW_INDICES, 'stocks': TW_STOCKS, 'drone': TW_DRONE, 'etf': TW_ETF})
+    save('data/tw.json', {'updated': now, **tw})
 
+    time.sleep(2)
     print('--- JP ---')
-    save('data/jp.json', {
-        'updated':  now,
-        'indices':  fetch_group(JP_INDICES),
-        'stocks':   fetch_group(JP_STOCKS),
-    })
+    jp = fetch_market({'indices': JP_INDICES, 'stocks': JP_STOCKS})
+    save('data/jp.json', {'updated': now, **jp})
 
     print('done')
