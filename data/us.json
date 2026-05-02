@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/02 12:18",
+  "updated": "2026/05/02 15:51",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -97,6 +97,56 @@
       "price": 31.86,
       "change": -0.21,
       "pct": -0.65,
+      "date": "05/01"
+    }
+  ],
+  "cloud": [
+    {
+      "symbol": "AMZN",
+      "name": "亞馬遜 AWS",
+      "price": 268.26,
+      "change": 3.2,
+      "pct": 1.21,
+      "date": "05/01"
+    },
+    {
+      "symbol": "MSFT",
+      "name": "微軟 Azure",
+      "price": 414.44,
+      "change": 6.66,
+      "pct": 1.63,
+      "date": "05/01"
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet GCP",
+      "price": 385.69,
+      "change": 0.89,
+      "pct": 0.23,
+      "date": "05/01"
+    },
+    {
+      "symbol": "ORCL",
+      "name": "Oracle Cloud",
+      "price": 171.83,
+      "change": 10.44,
+      "pct": 6.47,
+      "date": "05/01"
+    },
+    {
+      "symbol": "META",
+      "name": "Meta",
+      "price": 608.75,
+      "change": -3.16,
+      "pct": -0.52,
+      "date": "05/01"
+    },
+    {
+      "symbol": "IBM",
+      "name": "IBM Cloud",
+      "price": 232.2,
+      "change": 1.22,
+      "pct": 0.53,
       "date": "05/01"
     }
   ]
