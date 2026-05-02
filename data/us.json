@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/02 10:37",
+  "updated": "2026/05/02 10:48",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -20,10 +20,10 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": null,
-      "change": null,
-      "pct": null,
-      "date": null
+      "price": 49499.27,
+      "change": -152.87,
+      "pct": -0.31,
+      "date": "05/01"
     },
     {
       "symbol": "^RUT",
