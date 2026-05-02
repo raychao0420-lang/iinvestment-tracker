@@ -103,7 +103,15 @@
 
 <div class="top-bar">
   <h1><i class="bi bi-bar-chart-fill me-2" style="color:#60a5fa"></i>投資小幫手</h1>
-  <span class="time-badge" id="clock">--:--</span>
+  <div style="display:flex;align-items:center;gap:.5rem">
+    <button id="fetch-btn" title="觸發 GitHub Actions 重新抓取（長按清除 Token）" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:99px;padding:.2rem .75rem;font-size:.8rem;cursor:pointer;display:flex;align-items:center;gap:.3rem">
+      <i class="bi bi-cloud-download" id="fetch-icon"></i><span id="fetch-label">重抓</span>
+    </button>
+    <button id="refresh-btn" onclick="manualRefresh()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:99px;padding:.2rem .75rem;font-size:.8rem;cursor:pointer;display:flex;align-items:center;gap:.3rem">
+      <i class="bi bi-arrow-clockwise" id="refresh-icon"></i>更新
+    </button>
+    <span class="time-badge" id="clock">--:--</span>
+  </div>
 </div>
 
 <ul class="nav market-tabs px-1" id="marketTabs" role="tablist">
@@ -128,6 +136,8 @@
   <div class="tab-pane fade" id="us-panel" role="tabpanel">
     <div class="section-title">指數</div>
     <div class="idx-grid"  id="us-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">雲端服務</div>
+    <div class="stock-grid" id="us-cloud"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">台灣相關 & ETF</div>
     <div class="stock-grid" id="us-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
   </div>
@@ -244,6 +254,7 @@ async function loadAll() {
   ]);
 
   renderIdx(us.indices, 'us-indices');
+  renderStocks(us.cloud,  'us-cloud');
   renderStocks(us.stocks, 'us-stocks');
   renderIdx(tw.indices,   'tw-indices');
   renderStocks(tw.stocks, 'tw-stocks');
@@ -258,6 +269,105 @@ async function loadAll() {
   document.getElementById('last-update').textContent =
     `資料時間｜美股 ${us.updated||'–'} ／ 台股 ${tw.updated||'–'} ／ 日股 ${jp.updated||'–'}`;
 }
+
+// ── 手動更新 ──────────────────────────────────────────────────────────────────
+async function manualRefresh() {
+  const btn = document.getElementById('refresh-btn');
+  const icon = document.getElementById('refresh-icon');
+  btn.disabled = true;
+  icon.classList.add('spin');
+  try {
+    await loadAll();
+  } catch {
+    document.getElementById('last-update').textContent = '資料載入失敗，請稍後再試';
+  } finally {
+    btn.disabled = false;
+    icon.classList.remove('spin');
+  }
+}
+
+// ── GitHub Actions 觸發重抓 ───────────────────────────────────────────────────
+const GH_DISPATCH = 'https://api.github.com/repos/raychao0420-lang/iinvestment-tracker/actions/workflows/update.yml/dispatches';
+const PAT_KEY = 'gh_pat_inv';
+let _fetchTimer = null;
+let _longFired = false;
+let _longTimer;
+
+async function triggerFetch() {
+  if (_fetchTimer) return;
+
+  let token = localStorage.getItem(PAT_KEY);
+  if (!token) {
+    token = prompt('請輸入 GitHub Fine-grained Token\n（Settings → Developer settings → Fine-grained tokens，需勾選 Actions: Write）：');
+    if (!token) return;
+    token = token.trim();
+    localStorage.setItem(PAT_KEY, token);
+  }
+
+  const btn   = document.getElementById('fetch-btn');
+  const icon  = document.getElementById('fetch-icon');
+  const label = document.getElementById('fetch-label');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(GH_DISPATCH, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ref: 'main' }),
+    });
+
+    if (res.status === 204) {
+      // Actions 觸發成功，倒數 75 秒後自動刷新
+      let secs = 75;
+      icon.classList.add('spin');
+      label.textContent = `${secs}s`;
+      _fetchTimer = setInterval(() => {
+        secs--;
+        label.textContent = secs > 0 ? `${secs}s` : '讀取中…';
+        if (secs <= 0) {
+          clearInterval(_fetchTimer); _fetchTimer = null;
+          label.textContent = '重抓';
+          icon.classList.remove('spin');
+          btn.disabled = false;
+          manualRefresh();
+        }
+      }, 1000);
+    } else if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem(PAT_KEY);
+      alert('Token 無效或已過期，已清除，下次重抓時請重新輸入。');
+      btn.disabled = false;
+    } else {
+      const txt = await res.text().catch(() => '');
+      alert(`觸發失敗（HTTP ${res.status}）\n${txt.slice(0, 150)}`);
+      btn.disabled = false;
+    }
+  } catch {
+    alert('網路錯誤，請確認連線後再試。');
+    btn.disabled = false;
+  }
+}
+
+// 長按 1.5s 清除已儲存的 Token
+document.getElementById('fetch-btn').addEventListener('pointerdown', () => {
+  _longFired = false;
+  _longTimer = setTimeout(() => {
+    _longFired = true;
+    if (localStorage.getItem(PAT_KEY) && confirm('清除已儲存的 GitHub Token？')) {
+      localStorage.removeItem(PAT_KEY);
+    }
+  }, 1500);
+});
+['pointerup', 'pointerleave', 'pointercancel'].forEach(ev =>
+  document.getElementById('fetch-btn').addEventListener(ev, () => clearTimeout(_longTimer))
+);
+document.getElementById('fetch-btn').addEventListener('click', () => {
+  if (_longFired) { _longFired = false; return; }
+  triggerFetch();
+});
 
 // ── 初始化 ────────────────────────────────────────────────────────────────────
 updateClock();
