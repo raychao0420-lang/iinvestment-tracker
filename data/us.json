@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/04 16:09",
+  "updated": "2026/05/04 20:12",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -86,10 +86,10 @@
     {
       "symbol": "QQQ",
       "name": "QQQ",
-      "price": 674.15,
-      "change": 6.41,
-      "pct": 0.96,
-      "date": "05/01"
+      "price": null,
+      "change": null,
+      "pct": null,
+      "date": null
     },
     {
       "symbol": "SCHD",
