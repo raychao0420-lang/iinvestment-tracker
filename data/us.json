@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/05 20:16",
+  "updated": "2026/05/05 21:22",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -147,6 +147,14 @@
       "price": 229.48,
       "change": -2.72,
       "pct": -1.17,
+      "date": "05/04"
+    },
+    {
+      "symbol": "AAPL",
+      "name": "Apple",
+      "price": 276.83,
+      "change": -3.31,
+      "pct": -1.18,
       "date": "05/04"
     }
   ]
