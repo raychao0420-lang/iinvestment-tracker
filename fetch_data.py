@@ -28,6 +28,7 @@ US_CLOUD = [
     {'symbol': 'ORCL',  'name': 'Oracle Cloud'},
     {'symbol': 'META',  'name': 'Meta'},
     {'symbol': 'IBM',   'name': 'IBM Cloud'},
+    {'symbol': 'AAPL',  'name': 'Apple'},
 ]
 
 TW_INDICES = [
