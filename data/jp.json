@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/06 20:18",
+  "updated": "2026/05/07 00:13",
   "indices": [
     {
       "symbol": "^N225",
@@ -12,10 +12,10 @@
     {
       "symbol": "EWJ",
       "name": "日股 ETF (EWJ)",
-      "price": 89.26,
-      "change": 1.14,
-      "pct": 1.29,
-      "date": "05/05"
+      "price": 91.43,
+      "change": 2.17,
+      "pct": 2.44,
+      "date": "05/06"
     }
   ],
   "stocks": [
