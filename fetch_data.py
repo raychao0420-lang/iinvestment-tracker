@@ -78,10 +78,36 @@ JP_STOCKS = [
 ]
 
 
+def _parse_col(col):
+    """Extract (price, change, pct, date) from a Close series."""
+    col = col.dropna()
+    if len(col) >= 2:
+        prev, last = float(col.iloc[-2]), float(col.iloc[-1])
+        return round(last, 2), round(last - prev, 2), round((last - prev) / prev * 100, 2), col.index[-1].strftime('%m/%d')
+    if len(col) == 1:
+        return round(float(col.iloc[-1]), 2), None, None, col.index[-1].strftime('%m/%d')
+    return None, None, None, None
+
+
+def _fetch_single(sym):
+    """Fallback: fetch one symbol via Ticker.history()."""
+    for attempt in range(3):
+        try:
+            h = yf.Ticker(sym).history(period='7d', auto_adjust=True)
+            col = h['Close']
+            if not col.dropna().empty:
+                return col
+        except Exception as e:
+            print(f'    {sym} fallback attempt {attempt + 1}: {e}')
+            if attempt < 2:
+                time.sleep(3)
+    return None
+
+
 def fetch_market(groups):
     """
     groups: dict of group_name -> list of {symbol, name}
-    Downloads all symbols in one batch request (with retry), then splits back into groups.
+    First tries a single batch download; failed symbols fall back to individual fetches.
     Returns dict of group_name -> list of {symbol, name, price, change, pct, date}
     """
     all_items = [(gname, item) for gname, items in groups.items() for item in items]
@@ -90,6 +116,7 @@ def fetch_market(groups):
     out = {item['symbol']: {**item, 'price': None, 'change': None, 'pct': None, 'date': None}
            for _, item in all_items}
 
+    # --- batch attempt ---
     closes = None
     for attempt in range(3):
         try:
@@ -100,36 +127,79 @@ def fetch_market(groups):
                 closes = closes.to_frame(name=symbols[0])
             break
         except Exception as e:
-            print(f'  attempt {attempt + 1} failed: {e}')
+            print(f'  batch attempt {attempt + 1} failed: {e}')
             if attempt < 2:
                 time.sleep(5)
 
-    if closes is None:
-        print('  download failed after retries')
-        return {gname: [out[item['symbol']] for item in items]
-                for gname, items in groups.items()}
+    failed = []
+    if closes is not None:
+        for sym in symbols:
+            try:
+                price, change, pct, date = _parse_col(closes[sym])
+                if price is not None:
+                    out[sym].update({'price': price, 'change': change, 'pct': pct, 'date': date})
+                else:
+                    failed.append(sym)
+            except Exception as e:
+                print(f'  {sym}: {e}')
+                failed.append(sym)
+    else:
+        failed = symbols[:]
+        print('  batch failed entirely, falling back to individual fetch')
 
-    for sym in symbols:
-        try:
-            col = closes[sym].dropna()
-            if len(col) >= 2:
-                prev, last = float(col.iloc[-2]), float(col.iloc[-1])
-                out[sym].update({
-                    'price':  round(last, 2),
-                    'change': round(last - prev, 2),
-                    'pct':    round((last - prev) / prev * 100, 2),
-                    'date':   col.index[-1].strftime('%m/%d'),
-                })
-            elif len(col) == 1:
-                out[sym].update({
-                    'price': round(float(col.iloc[-1]), 2),
-                    'date':  col.index[-1].strftime('%m/%d'),
-                })
-        except Exception as e:
-            print(f'  {sym}: {e}')
+    # --- individual fallback ---
+    if failed:
+        print(f'  individual fallback for: {failed}')
+        for sym in failed:
+            col = _fetch_single(sym)
+            if col is not None:
+                price, change, pct, date = _parse_col(col)
+                if price is not None:
+                    out[sym].update({'price': price, 'change': change, 'pct': pct, 'date': date})
+                    print(f'    {sym}: recovered via fallback ({date})')
+                else:
+                    print(f'    {sym}: fallback returned empty data')
+            else:
+                print(f'    {sym}: fallback also failed')
+            time.sleep(1)
 
     return {gname: [out[item['symbol']] for item in items]
             for gname, items in groups.items()}
+
+
+def load_existing(path):
+    """Load existing JSON as symbol→item dict for merge."""
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            d = json.load(f)
+        result = {}
+        for val in d.values():
+            if isinstance(val, list):
+                for item in val:
+                    if 'symbol' in item:
+                        result[item['symbol']] = item
+        return result
+    except Exception:
+        return {}
+
+
+def merge_with_old(new_data, old_lookup):
+    """Replace null-price items with cached data so stale fetches don't erase good prices."""
+    merged = {}
+    for gname, items in new_data.items():
+        merged[gname] = []
+        for item in items:
+            sym = item['symbol']
+            if item.get('price') is not None:
+                merged[gname].append(item)
+            elif sym in old_lookup and old_lookup[sym].get('price') is not None:
+                print(f'  {sym}: keeping cached data ({old_lookup[sym].get("date")})')
+                merged[gname].append(old_lookup[sym])
+            else:
+                merged[gname].append(item)
+    return merged
 
 
 def save(path, payload):
@@ -144,17 +214,23 @@ if __name__ == '__main__':
     print(f'=== fetch_data {now} ===')
 
     print('--- US ---')
+    old_us = load_existing('data/us.json')
     us = fetch_market({'indices': US_INDICES, 'stocks': US_STOCKS, 'cloud': US_CLOUD})
+    us = merge_with_old(us, old_us)
     save('data/us.json', {'updated': now, **us})
 
     time.sleep(2)
     print('--- TW ---')
+    old_tw = load_existing('data/tw.json')
     tw = fetch_market({'indices': TW_INDICES, 'stocks': TW_STOCKS, 'drone': TW_DRONE, 'etf': TW_ETF})
+    tw = merge_with_old(tw, old_tw)
     save('data/tw.json', {'updated': now, **tw})
 
     time.sleep(2)
     print('--- JP ---')
+    old_jp = load_existing('data/jp.json')
     jp = fetch_market({'indices': JP_INDICES, 'stocks': JP_STOCKS})
+    jp = merge_with_old(jp, old_jp)
     save('data/jp.json', {'updated': now, **jp})
 
     print('done')
