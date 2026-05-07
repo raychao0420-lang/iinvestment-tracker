@@ -235,6 +235,9 @@ def fetch_tw_analysis():
             close = raw['Close'][sym].dropna()
             vol   = raw['Volume'][sym]
             vol   = vol[vol > 0].dropna()
+            # ^TWII volume is in 張; .TW ETF/stock volume is in 股 (÷1000 → 張)
+            if sym.endswith('.TW'):
+                vol = (vol / 1000).round()
 
             if len(close) < 20:
                 print(f'  {sym}: insufficient data ({len(close)} rows)')

@@ -285,9 +285,9 @@ function renderStocks(items, id) {
 // ── 大盤技術分析 ─────────────────────────────────────────────────────────────
 function fmtVol(v) {
   if (v === null || v === undefined || v === 0) return '–';
-  if (v >= 1e8) return (v/1e8).toFixed(1) + '億';
-  if (v >= 1e4) return (v/1e4).toFixed(1) + '萬';
-  return Math.round(v).toLocaleString();
+  // v is in 張 (lot units); display in 萬張
+  if (v >= 10000) return (v / 10000).toFixed(1) + '萬張';
+  return Math.round(v).toLocaleString() + '張';
 }
 
 function biasClass(b) {
@@ -349,7 +349,7 @@ function renderAnalysisCard(d, id) {
       </tbody>
     </table>
     <div class="an-vol">
-      <div class="an-vol-title">成交量 (近三日 → 最新)</div>
+      <div class="an-vol-title">成交量（張，近三日 → 最新）</div>
       <div style="margin-bottom:.2rem">${vol3str}</div>
       <div style="margin-bottom:.15rem;color:#64748b">5日均 ${fmtVol(d.vol_ma5)} ｜ 20日均 ${fmtVol(d.vol_ma20)} ｜ 半年均 ${fmtVol(d.vol_ma120)}</div>
       <div>今量比較：vs 5均 ${ratioStr(d.vol_ma5)} ｜ vs 20均 ${ratioStr(d.vol_ma20)} ｜ vs 半均 ${ratioStr(d.vol_ma120)}</div>
