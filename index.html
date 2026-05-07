@@ -97,6 +97,39 @@
 
   .spin{display:inline-block;animation:spin .8s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ── 大盤技術分析 ─────────────────────────────────── */
+  .an-card {
+    background:#fff; border-radius:12px; padding:1rem;
+    margin:.4rem .75rem; box-shadow:0 1px 3px rgba(0,0,0,.07);
+  }
+  .an-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.7rem; }
+  .an-name { font-size:1.1rem; font-weight:700; color:#1e293b; }
+  .an-sub  { font-size:.75rem; color:#94a3b8; }
+  .an-price{ font-size:1.8rem; font-weight:800; }
+
+  .an-bias { width:100%; border-collapse:collapse; font-size:.82rem; margin-bottom:.65rem; }
+  .an-bias th { color:#94a3b8; font-weight:600; padding:.2rem .3rem; text-align:center; font-size:.75rem; }
+  .an-bias td { padding:.22rem .3rem; text-align:center; }
+  .an-bias .row-lbl { text-align:left; font-weight:600; color:#475569; white-space:nowrap; }
+  .an-bias .ma-val  { color:#64748b; font-size:.8rem; }
+
+  /* 乖離率色階：正負均套用，絕對值判斷 */
+  .b-0  { color:#475569; }
+  .b-10 { background:#fef9c3; color:#854d0e; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-15 { background:#ffedd5; color:#9a3412; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-20 { background:#fee2e2; color:#dc2626; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-25 { background:#fecaca; color:#991b1b; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+
+  .an-vol { font-size:.8rem; color:#475569; border-top:1px solid #f1f5f9; padding-top:.5rem; }
+  .an-vol-title { font-weight:700; color:#64748b; margin-bottom:.25rem; }
+  .vol-hi { color:#dc2626; font-weight:600; }
+  .vol-lo { color:#16a34a; font-weight:600; }
+
+  @media(min-width:768px){
+    .an-grid { display:grid; grid-template-columns:repeat(2,1fr); }
+    .an-card { margin:.4rem; }
+  }
 </style>
 </head>
 <body>
@@ -142,7 +175,12 @@
     <div class="stock-grid" id="us-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
   </div>
   <div class="tab-pane fade" id="tw-panel" role="tabpanel">
-    <div class="section-title">指數</div>
+    <div class="section-title">大盤技術分析</div>
+    <div class="an-grid">
+      <div id="an-twii"><div class="an-card"><div class="skeleton" style="height:10rem"></div></div></div>
+      <div id="an-etf0050"><div class="an-card"><div class="skeleton" style="height:10rem"></div></div></div>
+    </div>
+    <div class="section-title mt-1">指數</div>
     <div class="idx-grid"  id="tw-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">個股</div>
     <div class="stock-grid" id="tw-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
@@ -244,18 +282,96 @@ function renderStocks(items, id) {
   }).join('');
 }
 
+// ── 大盤技術分析 ─────────────────────────────────────────────────────────────
+function fmtVol(v) {
+  if (v === null || v === undefined || v === 0) return '–';
+  if (v >= 1e8) return (v/1e8).toFixed(1) + '億';
+  if (v >= 1e4) return (v/1e4).toFixed(1) + '萬';
+  return Math.round(v).toLocaleString();
+}
+
+function biasClass(b) {
+  if (b === null || b === undefined) return 'b-0';
+  const a = Math.abs(b);
+  if (a >= 25) return 'b-25';
+  if (a >= 20) return 'b-20';
+  if (a >= 15) return 'b-15';
+  if (a >= 10) return 'b-10';
+  return 'b-0';
+}
+
+function renderAnalysisCard(d, id) {
+  const el = document.getElementById(id);
+  if (!d || !d.price) {
+    el.innerHTML = '<div class="an-card" style="color:#94a3b8;text-align:center;padding:1.5rem;font-size:.85rem">暫無資料</div>';
+    return;
+  }
+  const sign  = v => (v !== null && v >= 0) ? '+' : '';
+  const bFmt  = v => (v === null || v === undefined) ? '–' : `${sign(v)}${v.toFixed(2)}%`;
+  const maFmt = v => v === null ? '–' : fmt(v, v > 999 ? 0 : 2);
+
+  const latestVol = d.vol3 && d.vol3.length ? d.vol3[d.vol3.length - 1] : null;
+  function ratioStr(ma) {
+    if (!latestVol || !ma) return '<span style="color:#94a3b8">–</span>';
+    const r = (latestVol / ma - 1) * 100;
+    const c = r > 0 ? 'vol-hi' : 'vol-lo';
+    return `<span class="${c}">${r >= 0 ? '+' : ''}${r.toFixed(1)}%</span>`;
+  }
+
+  const vol3str = d.vol3 && d.vol3.length ? d.vol3.map(fmtVol).join(' → ') : '–';
+  const pc = cls(d.bias20);
+
+  el.innerHTML = `<div class="an-card">
+    <div class="an-header">
+      <div>
+        <div class="an-name">${d.name}</div>
+        <div class="an-sub">${d.symbol} · ${d.date || '–'}</div>
+      </div>
+      <div class="an-price ${pc}">${fmt(d.price, d.price > 999 ? 0 : 2)}</div>
+    </div>
+    <table class="an-bias">
+      <thead>
+        <tr><th></th><th>週線<br>MA5</th><th>月線<br>MA20</th><th>半年線<br>MA120</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-lbl">均線</td>
+          <td class="ma-val">${maFmt(d.ma5)}</td>
+          <td class="ma-val">${maFmt(d.ma20)}</td>
+          <td class="ma-val">${maFmt(d.ma120)}</td>
+        </tr>
+        <tr>
+          <td class="row-lbl">乖離</td>
+          <td><span class="${biasClass(d.bias5)}">${bFmt(d.bias5)}</span></td>
+          <td><span class="${biasClass(d.bias20)}">${bFmt(d.bias20)}</span></td>
+          <td><span class="${biasClass(d.bias120)}">${bFmt(d.bias120)}</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="an-vol">
+      <div class="an-vol-title">成交量 (近三日 → 最新)</div>
+      <div style="margin-bottom:.2rem">${vol3str}</div>
+      <div style="margin-bottom:.15rem;color:#64748b">5日均 ${fmtVol(d.vol_ma5)} ｜ 20日均 ${fmtVol(d.vol_ma20)} ｜ 半年均 ${fmtVol(d.vol_ma120)}</div>
+      <div>今量比較：vs 5均 ${ratioStr(d.vol_ma5)} ｜ vs 20均 ${ratioStr(d.vol_ma20)} ｜ vs 半均 ${ratioStr(d.vol_ma120)}</div>
+    </div>
+  </div>`;
+}
+
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp] = await Promise.all([
+  const [us, tw, jp, an] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
+    fetch(`data/tw_analysis.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
 
   renderIdx(us.indices, 'us-indices');
   renderStocks(us.cloud,  'us-cloud');
   renderStocks(us.stocks, 'us-stocks');
+  renderAnalysisCard(an ? an.twii    : null, 'an-twii');
+  renderAnalysisCard(an ? an.etf0050 : null, 'an-etf0050');
   renderIdx(tw.indices,   'tw-indices');
   renderStocks(tw.stocks, 'tw-stocks');
   renderStocks(tw.drone,  'tw-drone');

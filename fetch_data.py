@@ -209,6 +209,74 @@ def save(path, payload):
     print(f'saved {path}')
 
 
+def fetch_tw_analysis():
+    """Fetch TWII and 0050 with 1Y history for MA/bias/volume analysis."""
+    symbols = ['^TWII', '0050.TW']
+    raw = None
+    for attempt in range(3):
+        try:
+            raw = yf.download(symbols, period='1y', interval='1d',
+                              progress=False, auto_adjust=True)
+            break
+        except Exception as e:
+            print(f'  tw_analysis attempt {attempt+1}: {e}')
+            if attempt < 2:
+                time.sleep(5)
+    if raw is None:
+        return {}
+
+    result = {}
+    targets = [
+        ('twii',    '^TWII',   '台股大盤'),
+        ('etf0050', '0050.TW', '0050 元大台灣50'),
+    ]
+    for key, sym, name in targets:
+        try:
+            close = raw['Close'][sym].dropna()
+            vol   = raw['Volume'][sym]
+            vol   = vol[vol > 0].dropna()
+
+            if len(close) < 20:
+                print(f'  {sym}: insufficient data ({len(close)} rows)')
+                continue
+
+            price = float(close.iloc[-1])
+            date  = close.index[-1].strftime('%m/%d')
+
+            def sma(n):
+                return float(close.rolling(n).mean().iloc[-1]) if len(close) >= n else None
+
+            def bias(ma_val):
+                return round((price - ma_val) / ma_val * 100, 2) if ma_val is not None else None
+
+            def vma(n):
+                return int(vol.rolling(n).mean().iloc[-1]) if len(vol) >= n else None
+
+            ma5, ma20, ma120 = sma(5), sma(20), sma(120)
+            last3 = [int(v) for v in vol.iloc[-3:].tolist()] if len(vol) >= 3 else []
+
+            result[key] = {
+                'name':    name,
+                'symbol':  sym,
+                'price':   round(price, 2),
+                'date':    date,
+                'ma5':     round(ma5,   2) if ma5   is not None else None,
+                'ma20':    round(ma20,  2) if ma20  is not None else None,
+                'ma120':   round(ma120, 2) if ma120 is not None else None,
+                'bias5':   bias(ma5),
+                'bias20':  bias(ma20),
+                'bias120': bias(ma120),
+                'vol3':       last3,
+                'vol_ma5':    vma(5),
+                'vol_ma20':   vma(20),
+                'vol_ma120':  vma(120),
+            }
+            print(f'  {sym}: {price:.2f}, bias5={bias(ma5)}, bias20={bias(ma20)}, bias120={bias(ma120)}')
+        except Exception as e:
+            print(f'  {sym} analysis error: {e}')
+    return result
+
+
 if __name__ == '__main__':
     now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
     print(f'=== fetch_data {now} ===')
@@ -232,5 +300,13 @@ if __name__ == '__main__':
     jp = fetch_market({'indices': JP_INDICES, 'stocks': JP_STOCKS})
     jp = merge_with_old(jp, old_jp)
     save('data/jp.json', {'updated': now, **jp})
+
+    time.sleep(2)
+    print('--- TW Analysis ---')
+    analysis = fetch_tw_analysis()
+    if analysis:
+        save('data/tw_analysis.json', {'updated': now, **analysis})
+    else:
+        print('  tw_analysis: no data returned, skipping')
 
     print('done')
