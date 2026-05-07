@@ -284,10 +284,15 @@ function renderStocks(items, id) {
 
 // ── 大盤技術分析 ─────────────────────────────────────────────────────────────
 function fmtVol(v) {
-  if (v === null || v === undefined || v === 0) return '–';
-  // v is in 張 (lot units); display in 萬張
+  if (!v && v !== 0) return '–';
   if (v >= 10000) return (v / 10000).toFixed(1) + '萬張';
   return Math.round(v).toLocaleString() + '張';
+}
+function fmtAmt(v) {
+  if (!v && v !== 0) return '–';
+  if (v >= 10000) return (v / 10000).toFixed(2) + '兆元';
+  if (v >= 1000)  return Math.round(v) + '億元';
+  return v.toFixed(0) + '億元';
 }
 
 function biasClass(b) {
@@ -310,16 +315,38 @@ function renderAnalysisCard(d, id) {
   const bFmt  = v => (v === null || v === undefined) ? '–' : `${sign(v)}${v.toFixed(2)}%`;
   const maFmt = v => v === null ? '–' : fmt(v, v > 999 ? 0 : 2);
 
-  const latestVol = d.vol3 && d.vol3.length ? d.vol3[d.vol3.length - 1] : null;
-  function ratioStr(ma) {
-    if (!latestVol || !ma) return '<span style="color:#94a3b8">–</span>';
-    const r = (latestVol / ma - 1) * 100;
-    const c = r > 0 ? 'vol-hi' : 'vol-lo';
-    return `<span class="${c}">${r >= 0 ? '+' : ''}${r.toFixed(1)}%</span>`;
-  }
+  const isTWII = d.symbol === '^TWII';
 
-  const vol3str = d.vol3 && d.vol3.length ? d.vol3.map(fmtVol).join(' → ') : '–';
-  const pc = cls(d.bias20);
+  // ── 成交量 section ──
+  let volTitle, vol3str, maRow, ratioRow;
+
+  if (isTWII) {
+    // vol3 / vol_ma* are 億元 from TWSE
+    const latestAmt = d.vol3 && d.vol3.length ? d.vol3[d.vol3.length - 1] : null;
+    function rStr(ma) {
+      if (!latestAmt || !ma) return '<span style="color:#94a3b8">–</span>';
+      const r = (latestAmt / ma - 1) * 100;
+      return `<span class="${r > 0 ? 'vol-hi' : 'vol-lo'}">${r >= 0 ? '+' : ''}${r.toFixed(1)}%</span>`;
+    }
+    volTitle = '成交金額（近三日 → 最新）';
+    vol3str  = d.vol3 && d.vol3.length ? d.vol3.map(fmtAmt).join(' → ') : '–';
+    maRow    = `5均 ${fmtAmt(d.vol_ma5)} ｜ 20均 ${fmtAmt(d.vol_ma20)} ｜ 半均 ${fmtAmt(d.vol_ma120)}`;
+    ratioRow = `今量比較：vs 5均 ${rStr(d.vol_ma5)} ｜ vs 20均 ${rStr(d.vol_ma20)} ｜ vs 半均 ${rStr(d.vol_ma120)}`;
+
+  } else {
+    // 0050: vol3 = 張, vol3_amt = 億元; use 億元 for ratio
+    const latestAmt = d.vol3_amt && d.vol3_amt.length ? d.vol3_amt[d.vol3_amt.length - 1] : null;
+    function rStr(ma) {
+      if (!latestAmt || !ma) return '<span style="color:#94a3b8">–</span>';
+      const r = (latestAmt / ma - 1) * 100;
+      return `<span class="${r > 0 ? 'vol-hi' : 'vol-lo'}">${r >= 0 ? '+' : ''}${r.toFixed(1)}%</span>`;
+    }
+    const zip = (z, a) => z && a ? `${fmtVol(z)}<small style="color:#94a3b8;margin-left:.2rem">(${fmtAmt(a)})</small>` : fmtVol(z||0);
+    volTitle = '成交量（近三日 → 最新）';
+    vol3str  = (d.vol3||[]).map((z,i) => zip(z, d.vol3_amt && d.vol3_amt[i])).join(' → ') || '–';
+    maRow    = `5均 ${zip(d.vol_ma5, d.vol_ma5_amt)} ｜ 20均 ${zip(d.vol_ma20, d.vol_ma20_amt)} ｜ 半均 ${zip(d.vol_ma120, d.vol_ma120_amt)}`;
+    ratioRow = `今量比較：vs 5均 ${rStr(d.vol_ma5_amt)} ｜ vs 20均 ${rStr(d.vol_ma20_amt)} ｜ vs 半均 ${rStr(d.vol_ma120_amt)}`;
+  }
 
   el.innerHTML = `<div class="an-card">
     <div class="an-header">
@@ -327,7 +354,7 @@ function renderAnalysisCard(d, id) {
         <div class="an-name">${d.name}</div>
         <div class="an-sub">${d.symbol} · ${d.date || '–'}</div>
       </div>
-      <div class="an-price ${pc}">${fmt(d.price, d.price > 999 ? 0 : 2)}</div>
+      <div class="an-price ${cls(d.bias20)}">${fmt(d.price, d.price > 999 ? 0 : 2)}</div>
     </div>
     <table class="an-bias">
       <thead>
@@ -349,10 +376,10 @@ function renderAnalysisCard(d, id) {
       </tbody>
     </table>
     <div class="an-vol">
-      <div class="an-vol-title">成交量（張，近三日 → 最新）</div>
+      <div class="an-vol-title">${volTitle}</div>
       <div style="margin-bottom:.2rem">${vol3str}</div>
-      <div style="margin-bottom:.15rem;color:#64748b">5日均 ${fmtVol(d.vol_ma5)} ｜ 20日均 ${fmtVol(d.vol_ma20)} ｜ 半年均 ${fmtVol(d.vol_ma120)}</div>
-      <div>今量比較：vs 5均 ${ratioStr(d.vol_ma5)} ｜ vs 20均 ${ratioStr(d.vol_ma20)} ｜ vs 半均 ${ratioStr(d.vol_ma120)}</div>
+      <div style="margin-bottom:.15rem;color:#64748b">${maRow}</div>
+      <div>${ratioRow}</div>
     </div>
   </div>`;
 }

@@ -209,8 +209,60 @@ def save(path, payload):
     print(f'saved {path}')
 
 
+def fetch_twse_market_amount(target_days=130):
+    """Fetch Taiwan market daily 成交金額 (億元) by querying TWSE MI_INDEX day-by-day.
+    Walks back through weekdays until target_days trading days are collected.
+    Uses table[6] 總計(1~15) row — total market across all categories.
+    """
+    import requests, pandas as pd, urllib3
+    from datetime import date as _date, timedelta
+
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    records = {}
+    today = _date.today()
+    offset = 1
+    calendar_limit = target_days * 3  # upper bound to avoid infinite loop
+
+    while len(records) < target_days and offset <= calendar_limit:
+        d = today - timedelta(days=offset)
+        offset += 1
+        if d.weekday() >= 5:   # skip weekends
+            continue
+        date_str = d.strftime('%Y%m%d')
+        try:
+            r = requests.get(
+                'https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX',
+                params={'date': date_str, 'response': 'json'},
+                timeout=12,
+                verify=False,
+                headers={'User-Agent': 'Mozilla/5.0',
+                         'Referer': 'https://www.twse.com.tw/'}
+            )
+            tables = r.json().get('tables', [])
+            if len(tables) > 6:
+                rows = tables[6].get('data', [])
+                if rows:
+                    # last row = 總計(1~15); first valid numeric col is [1]
+                    total_row = rows[-1]
+                    amt = int(str(total_row[1]).replace(',', ''))
+                    if amt > 5e10:   # sanity: > 500億 to skip empty/holiday dates
+                        records[d.isoformat()] = round(amt / 1e8, 1)
+        except Exception as e:
+            pass
+        time.sleep(0.3)
+
+    if not records:
+        return None
+    s = pd.Series(records)
+    s.index = pd.to_datetime(s.index)
+    print(f'  TWSE: collected {len(s)} trading days')
+    return s.sort_index()
+
+
 def fetch_tw_analysis():
-    """Fetch TWII and 0050 with 1Y history for MA/bias/volume analysis."""
+    """Fetch TWII and 0050 MA/bias analysis; TWII volume from TWSE, 0050 in 張+億元."""
+    import pandas as pd
+
     symbols = ['^TWII', '0050.TW']
     raw = None
     for attempt in range(3):
@@ -233,50 +285,100 @@ def fetch_tw_analysis():
     for key, sym, name in targets:
         try:
             close = raw['Close'][sym].dropna()
-            vol   = raw['Volume'][sym]
-            vol   = vol[vol > 0].dropna()
-            # ^TWII volume is in 張; .TW ETF/stock volume is in 股 (÷1000 → 張)
-            if sym.endswith('.TW'):
-                vol = (vol / 1000).round()
-
             if len(close) < 20:
                 print(f'  {sym}: insufficient data ({len(close)} rows)')
                 continue
 
             price = float(close.iloc[-1])
-            date  = close.index[-1].strftime('%m/%d')
+            date_str = close.index[-1].strftime('%m/%d')
 
             def sma(n):
                 return float(close.rolling(n).mean().iloc[-1]) if len(close) >= n else None
-
-            def bias(ma_val):
-                return round((price - ma_val) / ma_val * 100, 2) if ma_val is not None else None
-
-            def vma(n):
-                return int(vol.rolling(n).mean().iloc[-1]) if len(vol) >= n else None
+            def bias(mv):
+                return round((price - mv) / mv * 100, 2) if mv is not None else None
 
             ma5, ma20, ma120 = sma(5), sma(20), sma(120)
-            last3 = [int(v) for v in vol.iloc[-3:].tolist()] if len(vol) >= 3 else []
-
             result[key] = {
                 'name':    name,
                 'symbol':  sym,
                 'price':   round(price, 2),
-                'date':    date,
+                'date':    date_str,
                 'ma5':     round(ma5,   2) if ma5   is not None else None,
                 'ma20':    round(ma20,  2) if ma20  is not None else None,
                 'ma120':   round(ma120, 2) if ma120 is not None else None,
                 'bias5':   bias(ma5),
                 'bias20':  bias(ma20),
                 'bias120': bias(ma120),
-                'vol3':       last3,
-                'vol_ma5':    vma(5),
-                'vol_ma20':   vma(20),
-                'vol_ma120':  vma(120),
+                # vol fields filled below
+                'vol3': [], 'vol_ma5': None, 'vol_ma20': None, 'vol_ma120': None,
             }
+
+            if sym == '0050.TW':
+                # Volume in 股 → 張
+                vol_s = raw['Volume'][sym]
+                vol_z = (vol_s[vol_s > 0].dropna() / 1000).round()
+
+                def vma(n):
+                    return int(vol_z.rolling(n).mean().iloc[-1]) if len(vol_z) >= n else None
+
+                result[key]['vol3']      = [int(v) for v in vol_z.iloc[-3:].tolist()] if len(vol_z) >= 3 else []
+                result[key]['vol_ma5']   = vma(5)
+                result[key]['vol_ma20']  = vma(20)
+                result[key]['vol_ma120'] = vma(120)
+
+                # 億元 = vol_股 × close / 1e8
+                vol_shares = vol_s[vol_s > 0].dropna()
+                cl_aligned = close.reindex(vol_shares.index)
+                vol_amt = (vol_shares * cl_aligned / 1e8).dropna()
+
+                def vma_amt(n):
+                    return round(float(vol_amt.rolling(n).mean().iloc[-1]), 1) if len(vol_amt) >= n else None
+
+                result[key]['vol3_amt']      = [round(float(v), 1) for v in vol_amt.iloc[-3:].tolist()] if len(vol_amt) >= 3 else []
+                result[key]['vol_ma5_amt']   = vma_amt(5)
+                result[key]['vol_ma20_amt']  = vma_amt(20)
+                result[key]['vol_ma120_amt'] = vma_amt(120)
+
             print(f'  {sym}: {price:.2f}, bias5={bias(ma5)}, bias20={bias(ma20)}, bias120={bias(ma120)}')
         except Exception as e:
             print(f'  {sym} analysis error: {e}')
+
+    # TWII volume: TWSE for recent data; calibrate yfinance for 120-day MA
+    print('  fetching TWSE market 成交金額...')
+    mkt = fetch_twse_market_amount(target_days=130)
+
+    if mkt is not None and len(mkt) >= 3 and 'twii' in result:
+        # Align TWSE dates with yfinance volume for calibration
+        yf_vol_raw = raw['Volume']['^TWII'].dropna()
+        yf_vol_pos = yf_vol_raw[yf_vol_raw > 0]
+        # Normalize yfinance index to date-only for matching
+        yf_idx = yf_vol_pos.copy()
+        yf_idx.index = yf_idx.index.normalize()
+        overlap = mkt.index.normalize().intersection(yf_idx.index.normalize())
+        print(f'  TWSE/yf overlap: {len(overlap)} days')
+
+        vol_ma120 = None
+        if len(overlap) >= 5:
+            twse_vals = mkt.loc[overlap]
+            yf_vals   = yf_idx.loc[overlap]
+            ratio = (twse_vals / yf_vals).median()
+            print(f'  calibration ratio (median): {ratio:.1f} 億/yf-unit')
+            # Estimate historical 成交金額 from yfinance via ratio
+            yf_amt_hist = (yf_vol_pos * ratio).dropna()
+            if len(yf_amt_hist) >= 120:
+                vol_ma120 = round(float(yf_amt_hist.rolling(120).mean().iloc[-1]), 1)
+
+        def mma(n):
+            return round(float(mkt.rolling(n).mean().iloc[-1]), 1) if len(mkt) >= n else None
+
+        result['twii']['vol3']      = [round(float(v), 1) for v in mkt.iloc[-3:].tolist()]
+        result['twii']['vol_ma5']   = mma(5)
+        result['twii']['vol_ma20']  = mma(20)
+        result['twii']['vol_ma120'] = vol_ma120
+        print(f'  TWSE vol: last3={result["twii"]["vol3"]}, ma5={mma(5)}, ma120={vol_ma120}億')
+    else:
+        print('  TWSE market vol: unavailable')
+
     return result
 
 
