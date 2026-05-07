@@ -242,9 +242,9 @@ def fetch_twse_market_amount(target_days=130):
             if len(tables) > 6:
                 rows = tables[6].get('data', [])
                 if rows:
-                    # last row = 總計(1~15); first valid numeric col is [1]
+                    # last row = 總計(1~15); col[2]=成交金額(元), col[1]=成交股數
                     total_row = rows[-1]
-                    amt = int(str(total_row[1]).replace(',', ''))
+                    amt = int(str(total_row[2]).replace(',', ''))
                     if amt > 5e10:   # sanity: > 500億 to skip empty/holiday dates
                         records[d.isoformat()] = round(amt / 1e8, 1)
         except Exception as e:
@@ -382,6 +382,86 @@ def fetch_tw_analysis():
     return result
 
 
+def fetch_chart_data():
+    """Download ~1y OHLCV for ^TWII and 0050.TW; compute MA5/20/60; keep last 126 bars (≈6 months)."""
+    import pandas as pd
+
+    symbols = ['^TWII', '0050.TW']
+    raw = None
+    for attempt in range(3):
+        try:
+            raw = yf.download(symbols, period='1y', interval='1d',
+                              progress=False, auto_adjust=True)
+            break
+        except Exception as e:
+            print(f'  chart attempt {attempt+1}: {e}')
+            if attempt < 2:
+                time.sleep(5)
+    if raw is None:
+        return {}
+
+    result = {}
+    targets = [('twii', '^TWII'), ('etf0050', '0050.TW')]
+
+    for key, sym in targets:
+        try:
+            df = pd.DataFrame({
+                'open':   raw['Open'][sym],
+                'high':   raw['High'][sym],
+                'low':    raw['Low'][sym],
+                'close':  raw['Close'][sym],
+                'volume': raw['Volume'][sym],
+            }).dropna()
+
+            # Compute MAs on full 1y data, then trim to last 126 rows (≈6 months)
+            ma5  = df['close'].rolling(5).mean()
+            ma20 = df['close'].rolling(20).mean()
+            ma60 = df['close'].rolling(60).mean()
+            df   = df.tail(126)
+            ma5  = ma5.reindex(df.index)
+            ma20 = ma20.reindex(df.index)
+            ma60 = ma60.reindex(df.index)
+
+            # ^TWII yfinance volume is in 張; 0050.TW is in 股 → ÷1000 = 張
+            vol_factor = 1 if sym == '^TWII' else 1 / 1000
+
+            candles, volume = [], []
+            for ts in df.index:
+                row  = df.loc[ts]
+                is_up = float(row['close']) >= float(row['open'])
+                d_str = ts.strftime('%Y-%m-%d')
+                candles.append({
+                    'time':  d_str,
+                    'open':  round(float(row['open']),  2),
+                    'high':  round(float(row['high']),  2),
+                    'low':   round(float(row['low']),   2),
+                    'close': round(float(row['close']), 2),
+                })
+                volume.append({
+                    'time':  d_str,
+                    'value': round(float(row['volume']) * vol_factor),
+                    'color': 'rgba(220,38,38,0.55)' if is_up else 'rgba(22,163,74,0.55)',
+                })
+
+            def to_line(s):
+                return [{'time': ts.strftime('%Y-%m-%d'), 'value': round(float(v), 2)}
+                        for ts, v in s.items() if pd.notna(v)]
+
+            result[key] = {
+                'symbol':  sym,
+                'candles': candles,
+                'volume':  volume,
+                'ma5':     to_line(ma5),
+                'ma20':    to_line(ma20),
+                'ma60':    to_line(ma60),
+            }
+            print(f'  chart {sym}: {len(candles)} candles')
+        except Exception as e:
+            print(f'  chart {sym} error: {e}')
+
+    return result
+
+
 if __name__ == '__main__':
     now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
     print(f'=== fetch_data {now} ===')
@@ -413,5 +493,13 @@ if __name__ == '__main__':
         save('data/tw_analysis.json', {'updated': now, **analysis})
     else:
         print('  tw_analysis: no data returned, skipping')
+
+    time.sleep(2)
+    print('--- Chart Data ---')
+    chart = fetch_chart_data()
+    if chart:
+        save('data/chart.json', {'updated': now, **chart})
+    else:
+        print('  chart: no data, skipping')
 
     print('done')

@@ -130,6 +130,30 @@
     .an-grid { display:grid; grid-template-columns:repeat(2,1fr); }
     .an-card { margin:.4rem; }
   }
+
+  /* ── K 線圖 Modal ─────────────────────────────────── */
+  #chart-modal {
+    display:none; position:fixed; inset:0; z-index:9999;
+    background:#0f172a; flex-direction:column;
+  }
+  #chart-header {
+    display:flex; align-items:center; gap:.5rem;
+    padding:.55rem .85rem; border-bottom:1px solid #1e293b; flex-shrink:0;
+    flex-wrap:wrap;
+  }
+  #chart-title { color:#f1f5f9; font-size:.95rem; font-weight:700; white-space:nowrap; }
+  #chart-ohlc  { flex:1; font-size:.72rem; color:#94a3b8; font-family:'Courier New',monospace;
+    min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #chart-close { margin-left:auto; background:none; border:none; color:#64748b;
+    font-size:1.5rem; line-height:1; cursor:pointer; padding:0 .2rem; flex-shrink:0; }
+  #chart-close:hover { color:#94a3b8; }
+  #chart-container { flex:1; min-height:0; width:100%; }
+
+  .btn-chart {
+    background:#1e293b; border:1px solid #334155; border-radius:5px;
+    color:#94a3b8; font-size:.68rem; padding:.1rem .45rem; cursor:pointer; white-space:nowrap;
+  }
+  .btn-chart:hover { background:#334155; color:#e2e8f0; }
 </style>
 </head>
 <body>
@@ -202,6 +226,17 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4/dist/lightweight-charts.standalone.production.js"></script>
+
+<!-- K 線圖 Modal -->
+<div id="chart-modal">
+  <div id="chart-header">
+    <span id="chart-title">K 線圖</span>
+    <span id="chart-ohlc"></span>
+    <button id="chart-close" onclick="closeChart()">×</button>
+  </div>
+  <div id="chart-container"></div>
+</div>
 <script>
 // ── 時鐘 / Tab ────────────────────────────────────────────────────────────────
 function twNow() {
@@ -314,6 +349,7 @@ function renderAnalysisCard(d, id) {
   const sign  = v => (v !== null && v >= 0) ? '+' : '';
   const bFmt  = v => (v === null || v === undefined) ? '–' : `${sign(v)}${v.toFixed(2)}%`;
   const maFmt = v => v === null ? '–' : fmt(v, v > 999 ? 0 : 2);
+  const chartKey = id.replace('an-', '');
 
   const isTWII = d.symbol === '^TWII';
 
@@ -351,7 +387,10 @@ function renderAnalysisCard(d, id) {
   el.innerHTML = `<div class="an-card">
     <div class="an-header">
       <div>
-        <div class="an-name">${d.name}</div>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div class="an-name">${d.name}</div>
+          <button class="btn-chart" onclick="openChart('${chartKey}')"><i class="bi bi-bar-chart-line"></i> K線圖</button>
+        </div>
         <div class="an-sub">${d.symbol} · ${d.date || '–'}</div>
       </div>
       <div class="an-price ${cls(d.bias20)}">${fmt(d.price, d.price > 999 ? 0 : 2)}</div>
@@ -419,6 +458,7 @@ async function manualRefresh() {
   const icon = document.getElementById('refresh-icon');
   btn.disabled = true;
   icon.classList.add('spin');
+  _chartCache = null;   // 清除 K 線快取
   try {
     await loadAll();
   } catch {
@@ -511,6 +551,123 @@ document.getElementById('fetch-btn').addEventListener('click', () => {
   if (_longFired) { _longFired = false; return; }
   triggerFetch();
 });
+
+// ── K 線圖 ────────────────────────────────────────────────────────────────────
+let _chartInst  = null;
+let _chartCache = null;
+
+async function openChart(key) {
+  const modal = document.getElementById('chart-modal');
+  modal.style.display = 'flex';
+  document.getElementById('chart-ohlc').textContent = '';
+
+  const cont = document.getElementById('chart-container');
+  cont.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:3rem;font-size:.9rem">載入中…</div>';
+
+  if (_chartInst) { _chartInst.remove(); _chartInst = null; }
+
+  if (!_chartCache) {
+    try {
+      _chartCache = await fetch(`data/chart.json?t=${Date.now()}`).then(r => r.json());
+    } catch {
+      cont.innerHTML = '<div style="color:#ef4444;text-align:center;padding:3rem">K線資料載入失敗，請先觸發重抓更新資料</div>';
+      return;
+    }
+  }
+
+  const data = _chartCache[key];
+  const names = { twii: '台股大盤 (^TWII)', etf0050: '元大台灣50 (0050)' };
+  document.getElementById('chart-title').textContent = names[key] || key;
+
+  if (!data || !data.candles || !data.candles.length) {
+    cont.innerHTML = '<div style="color:#ef4444;text-align:center;padding:3rem">暫無資料</div>';
+    return;
+  }
+
+  cont.innerHTML = '';
+  const w = cont.clientWidth, h = cont.clientHeight || window.innerHeight - 56;
+
+  const chart = LightweightCharts.createChart(cont, {
+    width: w, height: h,
+    layout:    { background: { color: '#0f172a' }, textColor: '#94a3b8' },
+    grid:      { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: '#334155' },
+    timeScale: { borderColor: '#334155', timeVisible: false },
+  });
+  _chartInst = chart;
+
+  // Volume bars (bottom 22%)
+  const volS = chart.addHistogramSeries({
+    color: 'rgba(100,116,139,0.4)',
+    priceFormat: { type: 'volume' },
+    priceScaleId: 'vol',
+  });
+  chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.78, bottom: 0 } });
+  volS.setData(data.volume || []);
+
+  // MA lines
+  const mkLine = (color, title) => chart.addLineSeries({
+    color, lineWidth: 1, title,
+    lastValueVisible: false, priceLineVisible: false,
+    crosshairMarkerVisible: false,
+  });
+  mkLine('#f59e0b', 'MA5').setData(data.ma5  || []);
+  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);
+  mkLine('#c084fc', 'MA60').setData(data.ma60 || []);
+
+  // Candlestick (紅漲綠跌)
+  const candS = chart.addCandlestickSeries({
+    upColor: '#dc2626', downColor: '#16a34a',
+    borderUpColor: '#dc2626', borderDownColor: '#16a34a',
+    wickUpColor:   '#ef4444', wickDownColor:   '#22c55e',
+  });
+  candS.setData(data.candles);
+
+  // Build volume lookup for tooltip
+  const volMap = {};
+  (data.volume || []).forEach(v => { volMap[v.time] = v.value; });
+
+  chart.subscribeCrosshairMove(param => {
+    if (!param.time) { document.getElementById('chart-ohlc').textContent = ''; return; }
+    const bar = param.seriesData.get(candS);
+    if (!bar) return;
+    const fv   = v => v >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(2);
+    const chg  = bar.close - bar.open;
+    const pct  = chg / bar.open * 100;
+    const sign = chg >= 0 ? '+' : '';
+    const col  = chg >= 0 ? '#ef4444' : '#22c55e';
+    const dStr = typeof param.time === 'string'
+      ? param.time
+      : `${param.time.year}-${String(param.time.month).padStart(2,'0')}-${String(param.time.day).padStart(2,'0')}`;
+    const vv  = volMap[dStr];
+    const vStr = vv ? ` ｜ 量 ${vv >= 10000 ? (vv/10000).toFixed(1)+'萬張' : Math.round(vv).toLocaleString()+'張'}` : '';
+    document.getElementById('chart-ohlc').innerHTML =
+      `<span style="color:#cbd5e1">${dStr}</span> ` +
+      `開 <b>${fv(bar.open)}</b> 高 <b>${fv(bar.high)}</b> 低 <b>${fv(bar.low)}</b> 收 <b>${fv(bar.close)}</b> ` +
+      `<span style="color:${col}">${sign}${fv(chg)} (${sign}${pct.toFixed(2)}%)</span>${vStr}`;
+  });
+
+  // Responsive resize
+  const ro = new ResizeObserver(() => {
+    if (_chartInst) _chartInst.applyOptions({ width: cont.clientWidth, height: cont.clientHeight });
+  });
+  ro.observe(cont);
+  _chartInst._ro = ro;
+
+  chart.timeScale().fitContent();
+}
+
+function closeChart() {
+  document.getElementById('chart-modal').style.display = 'none';
+  if (_chartInst) {
+    if (_chartInst._ro) _chartInst._ro.disconnect();
+    _chartInst.remove();
+    _chartInst = null;
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeChart(); });
 
 // ── 初始化 ────────────────────────────────────────────────────────────────────
 updateClock();
