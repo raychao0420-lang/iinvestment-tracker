@@ -285,7 +285,7 @@ def fetch_twse_market_amount(target_days=130):
     return s.sort_index()
 
 
-def fetch_tw_analysis():
+def fetch_tw_analysis(mkt_series=None):
     """Fetch TWII and 0050 MA/bias analysis; TWII volume from TWSE, 0050 in 張+億元."""
     import pandas as pd
 
@@ -370,8 +370,10 @@ def fetch_tw_analysis():
             print(f'  {sym} analysis error: {e}')
 
     # TWII volume: TWSE for recent data; calibrate yfinance for 120-day MA
-    print('  fetching TWSE market 成交金額...')
-    mkt = fetch_twse_market_amount(target_days=130)
+    if mkt_series is None:
+        print('  fetching TWSE market 成交金額...')
+        mkt_series = fetch_twse_market_amount(target_days=130)
+    mkt = mkt_series
 
     if mkt is not None and len(mkt) >= 3 and 'twii' in result:
         # Align TWSE dates with yfinance volume for calibration
@@ -408,7 +410,7 @@ def fetch_tw_analysis():
     return result
 
 
-def fetch_chart_data():
+def fetch_chart_data(mkt_series=None):
     """Download ~1y OHLCV for ^TWII and 0050.TW; compute MA5/20/60; keep last 126 bars (≈6 months)."""
     import pandas as pd
 
@@ -448,8 +450,12 @@ def fetch_chart_data():
             ma20 = ma20.reindex(df.index)
             ma60 = ma60.reindex(df.index)
 
-            # ^TWII yfinance volume is in 張; 0050.TW is in 股 → ÷1000 = 張
-            vol_factor = 1 if sym == '^TWII' else 1 / 1000
+            # ^TWII: use TWSE 成交金額(億元) when available; 0050.TW: 股 ÷ 1000 = 張
+            use_twse = sym == '^TWII' and mkt_series is not None
+            mkt_dict = {}
+            if use_twse:
+                mkt_dict = {d.strftime('%Y-%m-%d'): v for d, v in mkt_series.items()}
+            vol_factor = 1 / 1000  # only used for 0050.TW
 
             candles, volume = [], []
             for ts in df.index:
@@ -463,11 +469,20 @@ def fetch_chart_data():
                     'low':   round(float(row['low']),   2),
                     'close': round(float(row['close']), 2),
                 })
-                volume.append({
-                    'time':  d_str,
-                    'value': round(float(row['volume']) * vol_factor),
-                    'color': 'rgba(220,38,38,0.55)' if is_up else 'rgba(22,163,74,0.55)',
-                })
+                if use_twse:
+                    vol_val = mkt_dict.get(d_str)
+                    if vol_val is not None:
+                        volume.append({
+                            'time':  d_str,
+                            'value': vol_val,  # 億元
+                            'color': 'rgba(220,38,38,0.55)' if is_up else 'rgba(22,163,74,0.55)',
+                        })
+                else:
+                    volume.append({
+                        'time':  d_str,
+                        'value': round(float(row['volume']) * vol_factor),
+                        'color': 'rgba(220,38,38,0.55)' if is_up else 'rgba(22,163,74,0.55)',
+                    })
 
             def to_line(s):
                 return [{'time': ts.strftime('%Y-%m-%d'), 'value': round(float(v), 2)}
@@ -481,7 +496,9 @@ def fetch_chart_data():
                 'ma20':    to_line(ma20),
                 'ma60':    to_line(ma60),
             }
-            print(f'  chart {sym}: {len(candles)} candles')
+            if use_twse:
+                result[key]['vol_unit'] = '億元'
+            print(f'  chart {sym}: {len(candles)} candles, {len(volume)} vol bars')
         except Exception as e:
             print(f'  chart {sym} error: {e}')
 
@@ -585,8 +602,12 @@ if __name__ == '__main__':
     save('data/jp.json', {'updated': now, **jp})
 
     time.sleep(2)
+    print('--- TWSE Market 成交金額 ---')
+    mkt_series = fetch_twse_market_amount(target_days=130)
+
+    time.sleep(1)
     print('--- TW Analysis ---')
-    analysis = fetch_tw_analysis()
+    analysis = fetch_tw_analysis(mkt_series=mkt_series)
     if analysis:
         save('data/tw_analysis.json', {'updated': now, **analysis})
     else:
@@ -594,7 +615,7 @@ if __name__ == '__main__':
 
     time.sleep(2)
     print('--- Chart Data ---')
-    chart = fetch_chart_data()
+    chart = fetch_chart_data(mkt_series=mkt_series)
     if chart:
         save('data/chart.json', {'updated': now, **chart})
     else:

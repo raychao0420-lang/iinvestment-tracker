@@ -678,7 +678,7 @@ async function openChart(key) {
     const sign = chg >= 0 ? '+' : '';
     const col  = chg >= 0 ? '#ef4444' : '#22c55e';
     const vv   = volMap[dStr];
-    const vStr = vv ? ` ｜ 量 ${vv >= 10000 ? (vv/10000).toFixed(1)+'萬張' : Math.round(vv).toLocaleString()+'張'}` : '';
+    const vStr = vv != null ? ` ｜ 量 ${data.vol_unit === '億元' ? Math.round(vv)+'億' : vv >= 10000 ? (vv/10000).toFixed(1)+'萬張' : Math.round(vv).toLocaleString()+'張'}` : '';
     document.getElementById('chart-ohlc').innerHTML =
       `<span style="color:#cbd5e1">${dStr}</span> ` +
       `開 <b>${fv(bar.open)}</b> 高 <b>${fv(bar.high)}</b> 低 <b>${fv(bar.low)}</b> 收 <b>${fv(bar.close)}</b> ` +
