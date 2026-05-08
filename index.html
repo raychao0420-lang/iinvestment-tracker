@@ -671,24 +671,32 @@ async function openChart(key) {
   const volMap = {};
   (data.volume || []).forEach(v => { volMap[v.time] = v.value; });
 
-  chart.subscribeCrosshairMove(param => {
-    if (!param.time) { document.getElementById('chart-ohlc').textContent = ''; return; }
-    const bar = param.seriesData.get(candS);
-    if (!bar) return;
-    const fv   = v => v >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(2);
+  const fv = v => v >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(2);
+  function showBarInfo(bar, dStr) {
     const chg  = bar.close - bar.open;
     const pct  = chg / bar.open * 100;
     const sign = chg >= 0 ? '+' : '';
     const col  = chg >= 0 ? '#ef4444' : '#22c55e';
-    const dStr = typeof param.time === 'string'
-      ? param.time
-      : `${param.time.year}-${String(param.time.month).padStart(2,'0')}-${String(param.time.day).padStart(2,'0')}`;
-    const vv  = volMap[dStr];
+    const vv   = volMap[dStr];
     const vStr = vv ? ` ｜ 量 ${vv >= 10000 ? (vv/10000).toFixed(1)+'萬張' : Math.round(vv).toLocaleString()+'張'}` : '';
     document.getElementById('chart-ohlc').innerHTML =
       `<span style="color:#cbd5e1">${dStr}</span> ` +
       `開 <b>${fv(bar.open)}</b> 高 <b>${fv(bar.high)}</b> 低 <b>${fv(bar.low)}</b> 收 <b>${fv(bar.close)}</b> ` +
       `<span style="color:${col}">${sign}${fv(chg)} (${sign}${pct.toFixed(2)}%)</span>${vStr}`;
+  }
+
+  // 預設顯示最後一根（今日收盤）
+  const lastBar = data.candles[data.candles.length - 1];
+  showBarInfo(lastBar, lastBar.time);
+
+  chart.subscribeCrosshairMove(param => {
+    if (!param.time) { showBarInfo(lastBar, lastBar.time); return; }
+    const bar = param.seriesData.get(candS);
+    if (!bar) return;
+    const dStr = typeof param.time === 'string'
+      ? param.time
+      : `${param.time.year}-${String(param.time.month).padStart(2,'0')}-${String(param.time.day).padStart(2,'0')}`;
+    showBarInfo(bar, dStr);
   });
 
   // Responsive resize

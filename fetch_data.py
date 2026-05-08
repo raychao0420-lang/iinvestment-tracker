@@ -268,10 +268,10 @@ def fetch_twse_market_amount(target_days=130):
             if len(tables) > 6:
                 rows = tables[6].get('data', [])
                 if rows:
-                    # last row = 總計(1~15); col[2]=成交金額(元), col[1]=成交股數
+                    # last row = 總計(1~15); col[1]=成交金額(元), col[2]=成交股數(股)
                     total_row = rows[-1]
-                    amt = int(str(total_row[2]).replace(',', ''))
-                    if amt > 5e10:   # sanity: > 500億 to skip empty/holiday dates
+                    amt = int(str(total_row[1]).replace(',', ''))
+                    if amt > 5e10:   # sanity: > 500億元 to skip empty/holiday dates
                         records[d.isoformat()] = round(amt / 1e8, 1)
         except Exception as e:
             pass
