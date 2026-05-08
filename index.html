@@ -154,6 +154,9 @@
     color:#94a3b8; font-size:.68rem; padding:.1rem .45rem; cursor:pointer; white-space:nowrap;
   }
   .btn-chart:hover { background:#334155; color:#e2e8f0; }
+
+  /* ── 台指夜盤 ────────────────────────────────────────── */
+  .futures-updated { font-size:.7rem; color:#94a3b8; font-weight:400; margin-left:.5rem; }
 </style>
 </head>
 <body>
@@ -199,6 +202,10 @@
     <div class="stock-grid" id="us-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
   </div>
   <div class="tab-pane fade" id="tw-panel" role="tabpanel">
+    <div id="tw-futures-section" style="display:none">
+      <div class="section-title">台指夜盤<span class="futures-updated" id="futures-updated"></span></div>
+      <div class="idx-grid" id="tw-futures-list"></div>
+    </div>
     <div class="section-title">大盤技術分析</div>
     <div class="an-grid">
       <div id="an-twii"><div class="an-card"><div class="skeleton" style="height:10rem"></div></div></div>
@@ -423,14 +430,39 @@ function renderAnalysisCard(d, id) {
   </div>`;
 }
 
+// ── 台指夜盤 ─────────────────────────────────────────────────────────────────
+function renderFutures(items, twiiRef) {
+  const el = document.getElementById('tw-futures-list');
+  // append 收盤指數 from existing tw data
+  const all = twiiRef
+    ? [...items, { symbol: '^TWII', name: '收盤指數', price: twiiRef.price,
+                   change: twiiRef.change, pct: twiiRef.pct, contract: twiiRef.date || '' }]
+    : items;
+  el.innerHTML = all.map(s => {
+    const c = cls(s.pct), sign = s.pct !== null && s.pct >= 0 ? '+' : '';
+    const chgStr = s.pct !== null
+      ? `${arrow(s.pct)} ${sign}${fmt(s.change, 0)} (${sign}${fmt(s.pct)}%)`
+      : '–';
+    const sub = s.contract
+      ? `<span style="color:#94a3b8;font-size:.72rem;margin-left:.25rem">${String(s.contract).slice(-4)}</span>`
+      : '';
+    return `<div class="idx-card">
+      <div class="idx-name">${s.name}${sub}</div>
+      <div class="idx-price ${c}">${fmt(s.price, s.price > 999 ? 0 : 2)}</div>
+      <div class="idx-chg ${c}">${chgStr}</div>
+    </div>`;
+  }).join('');
+}
+
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an] = await Promise.all([
+  const [us, tw, jp, an, fut] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw_analysis.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/tw_futures.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
 
   renderIdx(us.indices, 'us-indices');
@@ -445,6 +477,17 @@ async function loadAll() {
   renderIdx(jp.indices, 'jp-indices');
   renderStocks(jp.stocks, 'jp-stocks');
   switchToLatest(us, tw, jp);
+
+  // 台指夜盤
+  const futSec = document.getElementById('tw-futures-section');
+  if (fut && fut.futures && fut.futures.some(f => f.price !== null)) {
+    const twiiRef = tw.indices ? tw.indices.find(x => x.symbol === '^TWII') : null;
+    renderFutures(fut.futures, twiiRef);
+    document.getElementById('futures-updated').textContent = fut.updated ? `（${fut.updated}）` : '';
+    futSec.style.display = '';
+  } else {
+    futSec.style.display = 'none';
+  }
 
   // 顯示最晚更新時間
   const times = [us.updated, tw.updated, jp.updated].filter(Boolean);

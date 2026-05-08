@@ -185,15 +185,41 @@ def load_existing(path):
         return {}
 
 
+def _is_newer_date(new_date, old_date):
+    """Return True if new_date ('MM/DD') >= old_date. Handles month/year wrap."""
+    if not new_date or not old_date:
+        return True
+    try:
+        m1, d1 = int(new_date[:2]), int(new_date[3:5])
+        m2, d2 = int(old_date[:2]), int(old_date[3:5])
+        if abs(m1 - m2) > 6:   # year boundary (e.g. Dec vs Jan)
+            if m1 < m2:
+                m1 += 12
+            else:
+                m2 += 12
+        return (m1, d1) >= (m2, d2)
+    except Exception:
+        return True
+
+
 def merge_with_old(new_data, old_lookup):
-    """Replace null-price items with cached data so stale fetches don't erase good prices."""
+    """Replace null-price items with cached data so stale fetches don't erase good prices.
+    Also keeps cached data when new data has an older date—yfinance sometimes returns NaN
+    for the most-recent trading day during Yahoo Finance's post-close correction window,
+    causing _parse_col to fall back one trading day."""
     merged = {}
     for gname, items in new_data.items():
         merged[gname] = []
         for item in items:
             sym = item['symbol']
             if item.get('price') is not None:
-                merged[gname].append(item)
+                old = old_lookup.get(sym)
+                if (old and old.get('price') is not None and
+                        not _is_newer_date(item.get('date'), old.get('date'))):
+                    print(f'  {sym}: new date {item.get("date")} < cached {old.get("date")}, keeping cache')
+                    merged[gname].append(old)
+                else:
+                    merged[gname].append(item)
             elif sym in old_lookup and old_lookup[sym].get('price') is not None:
                 print(f'  {sym}: keeping cached data ({old_lookup[sym].get("date")})')
                 merged[gname].append(old_lookup[sym])
@@ -462,6 +488,78 @@ def fetch_chart_data():
     return result
 
 
+def fetch_tw_futures_night():
+    """Fetch Taiwan futures night-session prices from TAIFEX MIS API."""
+    import requests, urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+    PRODUCTS = [
+        {'id': 'TX',  'name': '台指期'},
+        {'id': 'MTX', 'name': '小台'},
+        {'id': 'MXF', 'name': '微台'},
+        {'id': 'TE',  'name': '電子期'},
+    ]
+
+    def to_f(v):
+        try:
+            return float(str(v).replace(',', '').replace('%', '').strip())
+        except Exception:
+            return None
+
+    result = []
+    for p in PRODUCTS:
+        fetched = False
+        for attempt in range(2):
+            verify = attempt == 0  # first try with SSL verify, then without
+            try:
+                r = requests.get(
+                    'https://mis.taifex.com.tw/futures/api/getQuoteList',
+                    params={'MarketType': '1', 'CommodityID': p['id']},
+                    timeout=10,
+                    verify=verify,
+                    headers={
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                        'Referer':    'https://mis.taifex.com.tw/futures/',
+                        'Accept':     'application/json, text/plain, */*',
+                        'Origin':     'https://mis.taifex.com.tw',
+                    },
+                )
+                print(f"  {p['id']}: HTTP {r.status_code}, verify={verify}, len={len(r.text)}")
+                if r.status_code != 200:
+                    print(f"    body: {r.text[:300]}")
+                    continue
+                data   = r.json()
+                quotes = data.get('RtData', {}).get('QuoteList', [])
+                print(f"  {p['id']}: {len(quotes)} quote(s)")
+                if quotes:
+                    q      = quotes[0]
+                    price  = to_f(q.get('LastPrice') or q.get('ClosePrice'))
+                    change = to_f(q.get('PriceChange'))
+                    pct    = to_f(q.get('PriceChangePercent'))
+                    result.append({
+                        'symbol':   p['id'],
+                        'name':     p['name'],
+                        'price':    price,
+                        'change':   change,
+                        'pct':      round(pct, 2) if pct is not None else None,
+                        'contract': q.get('ContractDate', ''),
+                    })
+                    print(f"    price={price} change={change}")
+                else:
+                    result.append({'symbol': p['id'], 'name': p['name'],
+                                   'price': None, 'change': None, 'pct': None, 'contract': ''})
+                fetched = True
+                break
+            except Exception as e:
+                print(f'  futures {p["id"]} attempt {attempt+1} (verify={verify}): {e}')
+        if not fetched:
+            result.append({'symbol': p['id'], 'name': p['name'],
+                           'price': None, 'change': None, 'pct': None, 'contract': ''})
+        time.sleep(0.5)
+
+    return result
+
+
 if __name__ == '__main__':
     now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
     print(f'=== fetch_data {now} ===')
@@ -501,5 +599,13 @@ if __name__ == '__main__':
         save('data/chart.json', {'updated': now, **chart})
     else:
         print('  chart: no data, skipping')
+
+    time.sleep(1)
+    print('--- TW Futures (Night) ---')
+    futures = fetch_tw_futures_night()
+    if any(f.get('price') is not None for f in futures):
+        save('data/tw_futures.json', {'updated': now, 'futures': futures})
+    else:
+        print('  tw_futures: no live data, skipping save')
 
     print('done')

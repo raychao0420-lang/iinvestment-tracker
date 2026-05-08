@@ -5,6 +5,7 @@ on:
     - cron: '50 22 * * 0-4'  # 06:50 台灣時間 週一~五（週四 UTC = 週五台灣）
     - cron: '50 22 * * 5'    # 06:50 台灣時間 週六（週五 UTC = 週五美股收盤後）
     - cron: '5 6 * * 1-5'    # 14:05 台灣時間 週一~五
+    - cron: '30 7 * * 1-5'   # 15:30 台灣時間 週一~五（收盤後 2h，yfinance 資料較穩定）
     - cron: '5 9 * * 1-5'    # 17:05 台灣時間 週一~五
   workflow_dispatch:           # 手動觸發
 
@@ -22,7 +23,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install yfinance pytz
+        run: pip install yfinance pytz requests urllib3
 
       - name: Fetch stock data
         run: python fetch_data.py
