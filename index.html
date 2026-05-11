@@ -114,12 +114,18 @@
   .an-bias .row-lbl { text-align:left; font-weight:600; color:#475569; white-space:nowrap; }
   .an-bias .ma-val  { color:#64748b; font-size:.8rem; }
 
-  /* 乖離率色階：正負均套用，絕對值判斷 */
-  .b-0  { color:#475569; }
-  .b-10 { background:#fef9c3; color:#854d0e; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-15 { background:#ffedd5; color:#9a3412; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-20 { background:#fee2e2; color:#dc2626; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-25 { background:#fecaca; color:#991b1b; font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  /* 乖離率色階：正乖離紅，負乖離綠 */
+  .b-0      { color:#475569; }
+  .b-pos    { color:var(--up); }
+  .b-neg    { color:var(--down); }
+  .b-pos-10 { background:#fee2e2; color:var(--up);   font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-neg-10 { background:#dcfce7; color:var(--down); font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-pos-15 { background:#fecaca; color:#b91c1c;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-neg-15 { background:#bbf7d0; color:#15803d;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-pos-20 { background:#fca5a5; color:#991b1b;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-neg-20 { background:#86efac; color:#14532d;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-pos-25 { background:#ef4444; color:#fff;        font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
+  .b-neg-25 { background:#22c55e; color:#fff;        font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
 
   .an-vol { font-size:.8rem; color:#475569; border-top:1px solid #f1f5f9; padding-top:.5rem; }
   .an-vol-title { font-weight:700; color:#64748b; margin-bottom:.25rem; }
@@ -157,6 +163,41 @@
 
   /* ── 台指夜盤 ────────────────────────────────────────── */
   .futures-updated { font-size:.7rem; color:#94a3b8; font-weight:400; margin-left:.5rem; }
+
+  /* ── 財報 EPS ─────────────────────────────────────────── */
+  .eps-toggle-btn {
+    background:none; border:none; cursor:pointer;
+    font-size:.95rem; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:#94a3b8; padding:.7rem 1rem .4rem;
+    display:flex; align-items:center; gap:.4rem; width:100%;
+  }
+  .eps-toggle-btn:hover { color:#64748b; }
+  .eps-toggle-icon { transition:transform .2s; font-size:.85rem; }
+  .eps-toggle-icon.open { transform:rotate(90deg); }
+  .eps-body { display:none; }
+  .eps-body.open { display:block; }
+  .eps-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:.3rem .75rem 0; }
+  .eps-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .eps-table th {
+    background:#f8fafc; color:#64748b; font-weight:700;
+    padding:.45rem .55rem; text-align:right; white-space:nowrap;
+    border-bottom:2px solid #e2e8f0; font-size:.72rem; position:sticky; top:0;
+  }
+  .eps-table th:first-child { text-align:left; min-width:90px; }
+  .eps-table td { padding:.38rem .55rem; text-align:right; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
+  .eps-table td:first-child { text-align:left; }
+  .eps-table tr:hover { background:#f8fafc; }
+  .eps-name { font-weight:600; color:#1e293b; font-size:.88rem; line-height:1.2; }
+  .eps-sym  { color:#94a3b8; font-size:.7rem; }
+  .eps-fy   { color:#cbd5e1; font-size:.65rem; }
+  .eps-val  { color:#475569; }
+  .eps-up   { color:#dc2626; font-weight:600; }
+  .eps-down { color:#16a34a; font-weight:600; }
+  .eps-pub  { background:#eff6ff; color:#1d4ed8; font-weight:700; border-radius:3px; padding:.05rem .3rem; display:inline-block; }
+  .eps-est  { color:#7c3aed; font-style:italic; }
+  .eps-note { font-size:.65rem; color:#94a3b8; display:block; margin-top:1px; white-space:nowrap; }
+  .eps-null { color:#cbd5e1; }
+  .eps-footer { font-size:.68rem; color:#94a3b8; text-align:right; padding:.3rem 1rem .5rem; }
 </style>
 </head>
 <body>
@@ -200,6 +241,13 @@
     <div class="stock-grid" id="us-cloud"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">台灣相關 & ETF</div>
     <div class="stock-grid" id="us-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <button class="eps-toggle-btn" onclick="toggleEPS('us')">
+      <i class="bi bi-journal-text"></i>財報 EPS
+      <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-us"></i>
+    </button>
+    <div class="eps-body" id="eps-body-us">
+      <div class="eps-table-wrap"><div id="us-eps"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
+    </div>
   </div>
   <div class="tab-pane fade" id="tw-panel" role="tabpanel">
     <div id="tw-futures-section" style="display:none">
@@ -219,12 +267,26 @@
     <div class="stock-grid" id="tw-drone"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">ETF</div>
     <div class="stock-grid" id="tw-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <button class="eps-toggle-btn" onclick="toggleEPS('tw')">
+      <i class="bi bi-journal-text"></i>財報 EPS
+      <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-tw"></i>
+    </button>
+    <div class="eps-body" id="eps-body-tw">
+      <div class="eps-table-wrap"><div id="tw-eps"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
+    </div>
   </div>
   <div class="tab-pane fade" id="jp-panel" role="tabpanel">
     <div class="section-title">指數</div>
     <div class="idx-grid"  id="jp-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">半導體相關</div>
     <div class="stock-grid" id="jp-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <button class="eps-toggle-btn" onclick="toggleEPS('jp')">
+      <i class="bi bi-journal-text"></i>財報 EPS
+      <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-jp"></i>
+    </button>
+    <div class="eps-body" id="eps-body-jp">
+      <div class="eps-table-wrap"><div id="jp-eps"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
+    </div>
   </div>
 </div>
 
@@ -340,11 +402,12 @@ function fmtAmt(v) {
 function biasClass(b) {
   if (b === null || b === undefined) return 'b-0';
   const a = Math.abs(b);
-  if (a >= 25) return 'b-25';
-  if (a >= 20) return 'b-20';
-  if (a >= 15) return 'b-15';
-  if (a >= 10) return 'b-10';
-  return 'b-0';
+  const dir = b > 0 ? 'pos' : 'neg';
+  if (a >= 25) return `b-${dir}-25`;
+  if (a >= 20) return `b-${dir}-20`;
+  if (a >= 15) return `b-${dir}-15`;
+  if (a >= 10) return `b-${dir}-10`;
+  return `b-${dir}`;
 }
 
 function renderAnalysisCard(d, id) {
@@ -400,7 +463,12 @@ function renderAnalysisCard(d, id) {
         </div>
         <div class="an-sub">${d.symbol} · ${d.date || '–'}</div>
       </div>
-      <div class="an-price ${cls(d.bias20)}">${fmt(d.price, d.price > 999 ? 0 : 2)}</div>
+      <div style="text-align:right">
+        <div class="an-price ${cls(d.pct)}">${fmt(d.price, d.price > 999 ? 0 : 2)}</div>
+        <div class="idx-chg ${cls(d.pct)}" style="font-size:1rem">${d.pct !== null && d.pct !== undefined
+          ? arrow(d.pct) + ' ' + (d.pct >= 0 ? '+' : '') + fmt(d.change, 2) + ' (' + (d.pct >= 0 ? '+' : '') + fmt(d.pct) + '%)'
+          : '–'}</div>
+      </div>
     </div>
     <table class="an-bias">
       <thead>
@@ -454,6 +522,69 @@ function renderFutures(items, twiiRef) {
   }).join('');
 }
 
+// ── 財報 EPS ─────────────────────────────────────────────────────────────────
+let _epsData = null;
+
+function toggleEPS(market) {
+  const body = document.getElementById(`eps-body-${market}`);
+  const icon = document.getElementById(`eps-icon-${market}`);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  icon.classList.toggle('open', !isOpen);
+}
+
+function fmtEPS(v, prev, decimals) {
+  if (v === null || v === undefined) return '<span class="eps-null">—</span>';
+  const n = parseFloat(v);
+  const d = decimals !== undefined ? decimals : (Math.abs(n) >= 100 ? 1 : 2);
+  const str = n.toFixed(d);
+  if (prev === null || prev === undefined) return `<span class="eps-val">${str}</span>`;
+  const cls = n > parseFloat(prev) ? 'eps-up' : n < parseFloat(prev) ? 'eps-down' : 'eps-val';
+  return `<span class="${cls}">${str}</span>`;
+}
+
+function renderEPS(items, id, headers) {
+  const el = document.getElementById(id);
+  if (!items || !items.length) {
+    el.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:1rem;font-size:.85rem">暫無資料</div>';
+    return;
+  }
+  const [h22, h23, h24, h25, hPub, hEst] = headers;
+  const rows = items.map(s => {
+    const d = Math.abs(Math.max(s.y22||0, s.y23||0, s.y24||0, s.y25||0)) >= 100 ? 1 : 2;
+    const pubNum = s.pub !== null && s.pub !== undefined;
+    const estNum = s.est !== null && s.est !== undefined;
+    return `<tr>
+      <td>
+        <div class="eps-name">${s.name}</div>
+        <div class="eps-sym">${s.symbol}${s.fy ? ` · <span class="eps-fy">${s.fy}</span>` : ''}</div>
+      </td>
+      <td>${fmtEPS(s.y22, null, d)}</td>
+      <td>${fmtEPS(s.y23, s.y22, d)}</td>
+      <td>${fmtEPS(s.y24, s.y23, d)}</td>
+      <td>${fmtEPS(s.y25, s.y24, d)}</td>
+      <td>
+        ${pubNum ? `<span class="eps-pub">${parseFloat(s.pub).toFixed(d)}</span>` : '<span class="eps-null">—</span>'}
+        ${s.pub_note ? `<span class="eps-note">${s.pub_note}</span>` : ''}
+      </td>
+      <td>
+        ${estNum ? `<span class="eps-est">${parseFloat(s.est).toFixed(d)}</span>` : '<span class="eps-null">—</span>'}
+        ${s.est_note ? `<span class="eps-note">${s.est_note}</span>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `<table class="eps-table">
+    <thead><tr>
+      <th style="text-align:left">公司</th>
+      <th>${h22}</th><th>${h23}</th><th>${h24}</th><th>${h25}</th>
+      <th>${hPub}</th><th>${hEst}</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="eps-footer">單位：各欄幣種｜更新：${_epsData ? _epsData.updated : '–'}｜部分為估算，請至財報狗/goodinfo/macrotrends核實</div>`;
+}
+
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
@@ -490,9 +621,20 @@ async function loadAll() {
   }
 
   // 顯示最晚更新時間
-  const times = [us.updated, tw.updated, jp.updated].filter(Boolean);
   document.getElementById('last-update').textContent =
     `資料時間｜美股 ${us.updated||'–'} ／ 台股 ${tw.updated||'–'} ／ 日股 ${jp.updated||'–'}`;
+
+  // EPS（只在第一次載入時抓，之後用快取）
+  if (!_epsData) {
+    try {
+      _epsData = await fetch(`data/eps.json?t=${ts}`).then(r => r.json());
+    } catch { _epsData = null; }
+  }
+  if (_epsData) {
+    renderEPS(_epsData.us, 'us-eps', ['2022','2023','2024','2025','今年已公布','今年預估 E']);
+    renderEPS(_epsData.tw, 'tw-eps', ['2022','2023','2024','2025','今年已公布','今年預估 E']);
+    renderEPS(_epsData.jp, 'jp-eps', ['FY22','FY23','FY24','FY25','今年(FY26)','FY27E']);
+  }
 }
 
 // ── 手動更新 ──────────────────────────────────────────────────────────────────
@@ -502,6 +644,7 @@ async function manualRefresh() {
   btn.disabled = true;
   icon.classList.add('spin');
   _chartCache = null;   // 清除 K 線快取
+  _epsData = null;      // 清除 EPS 快取
   try {
     await loadAll();
   } catch {

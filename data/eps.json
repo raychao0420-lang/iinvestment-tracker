@@ -1,0 +1,208 @@
+{
+  "updated": "2026/05/11",
+  "note": "手動維護，每季財報公布後更新。y22-y25 = 各年度全年EPS；pub = 今年已公布（季報或完整FY）；est = 今年全年預估。部分值為估算，請至財報狗/goodinfo/macrotrends核實。",
+  "us": [
+    {
+      "symbol": "NVDA", "name": "NVIDIA", "fy": "FY 1月",
+      "y22": 0.18, "y23": 0.17, "y24": 1.19, "y25": 2.94,
+      "pub": 4.90, "pub_note": "FY26 ✓ 已結束",
+      "est": null, "est_note": "FY27 進行中"
+    },
+    {
+      "symbol": "AAPL", "name": "Apple", "fy": "FY 9月",
+      "y22": 6.11, "y23": 6.13, "y24": 6.08, "y25": 7.46,
+      "pub": null, "pub_note": "Q1+Q2已報 EPS+22%",
+      "est": 9.0, "est_note": "FY26 全年E"
+    },
+    {
+      "symbol": "MSFT", "name": "Microsoft", "fy": "FY 6月",
+      "y22": 9.21, "y23": 9.68, "y24": 11.80, "y25": 13.64,
+      "pub": null, "pub_note": "Q1-Q3已報 Q3+33%",
+      "est": 16.8, "est_note": "FY26 全年E"
+    },
+    {
+      "symbol": "GOOGL", "name": "Alphabet", "fy": "CY 12月",
+      "y22": 4.56, "y23": 5.80, "y24": 8.04, "y25": 10.81,
+      "pub": 2.62, "pub_note": "Q1 ✓",
+      "est": 12.5, "est_note": "全年E"
+    },
+    {
+      "symbol": "AMZN", "name": "Amazon", "fy": "CY 12月",
+      "y22": -0.27, "y23": 2.90, "y24": 5.66, "y25": 7.29,
+      "pub": 2.78, "pub_note": "Q1 ✓",
+      "est": 9.5, "est_note": "全年E"
+    },
+    {
+      "symbol": "META", "name": "Meta", "fy": "CY 12月",
+      "y22": 8.59, "y23": 14.87, "y24": 23.86, "y25": 23.49,
+      "pub": 7.31, "pub_note": "Q1 ✓ 非GAAP",
+      "est": 30.0, "est_note": "全年E"
+    },
+    {
+      "symbol": "TSLA", "name": "Tesla", "fy": "CY 12月",
+      "y22": 3.62, "y23": 4.30, "y24": 2.04, "y25": 1.08,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "TSM", "name": "台積電 ADR", "fy": "CY 12月",
+      "y22": 6.23, "y23": 5.36, "y24": 6.81, "y25": 10.64,
+      "pub": null, "pub_note": "Q1 TWD=22.08元",
+      "est": 13.0, "est_note": "全年E"
+    },
+    {
+      "symbol": "MU", "name": "Micron", "fy": "FY 8月",
+      "y22": null, "y23": -5.36, "y24": 0.70, "y25": 7.59,
+      "pub": null, "pub_note": "TTM~$21",
+      "est": null, "est_note": "FY26 進行中"
+    },
+    {
+      "symbol": "ORCL", "name": "Oracle", "fy": "FY 5月",
+      "y22": null, "y23": null, "y24": 3.82, "y25": 4.46,
+      "pub": null, "pub_note": "FY26 近尾聲",
+      "est": 5.7, "est_note": "FY26E"
+    },
+    {
+      "symbol": "IBM", "name": "IBM", "fy": "CY 12月",
+      "y22": 1.80, "y23": 8.14, "y24": 6.54, "y25": 8.50,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    }
+  ],
+  "tw": [
+    {
+      "symbol": "2330", "name": "台積電", "fy": null,
+      "y22": 39.2, "y23": 32.34, "y24": 45.25, "y25": 66.24,
+      "pub": 22.08, "pub_note": "Q1 ✓ 創紀錄",
+      "est": 90.0, "est_note": "全年E"
+    },
+    {
+      "symbol": "2454", "name": "聯發科", "fy": null,
+      "y22": 79.7, "y23": 44.0, "y24": 63.0, "y25": 65.98,
+      "pub": null, "pub_note": "Q1 待公布",
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "3711", "name": "ASE 日月光", "fy": null,
+      "y22": 7.0, "y23": 5.0, "y24": 8.0, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "2303", "name": "聯電", "fy": null,
+      "y22": 7.09, "y23": 4.93, "y24": 3.80, "y25": 3.31,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "3008", "name": "大立光", "fy": null,
+      "y22": 169.52, "y23": 135.0, "y24": 157.0, "y25": 157.76,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "2308", "name": "台達電", "fy": null,
+      "y22": 18.6, "y23": 14.5, "y24": 13.56, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": 37.0, "est_note": "全年E"
+    },
+    {
+      "symbol": "2382", "name": "廣達", "fy": null,
+      "y22": 7.0, "y23": 9.0, "y24": 14.0, "y25": 19.41,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "2603", "name": "長榮", "fy": null,
+      "y22": 76.0, "y23": 20.0, "y24": 64.87, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": 31.0, "est_note": "全年E"
+    },
+    {
+      "symbol": "2881", "name": "富邦金", "fy": null,
+      "y22": 8.7, "y23": 8.6, "y24": 15.0, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "2882", "name": "國泰金", "fy": null,
+      "y22": 3.5, "y23": 5.0, "y24": 6.0, "y25": 5.6,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "2891", "name": "中信金", "fy": null,
+      "y22": 2.0, "y23": 3.0, "y24": 3.5, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "1802", "name": "台玻", "fy": null,
+      "y22": 2.0, "y23": 1.0, "y24": 1.0, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "6770", "name": "力積電", "fy": null,
+      "y22": 3.0, "y23": -1.0, "y24": -2.0, "y25": -2.06,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "2634", "name": "漢翔航空", "fy": null,
+      "y22": 1.5, "y23": 2.0, "y24": 2.5, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "8033", "name": "雷虎科技", "fy": null,
+      "y22": null, "y23": null, "y24": null, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "4961", "name": "鼎天國際", "fy": null,
+      "y22": null, "y23": null, "y24": null, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    }
+  ],
+  "jp": [
+    {
+      "symbol": "8035", "name": "東京威力科創", "fy": "FY 3月",
+      "y22": null, "y23": 508, "y24": 387, "y25": 603,
+      "pub": null, "pub_note": "FY26結果公布中",
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "6857", "name": "Advantest", "fy": "FY 3月",
+      "y22": null, "y23": 218, "y24": 244, "y25": null,
+      "pub": null, "pub_note": "FY25 Q4=175 大幅超標",
+      "est": null, "est_note": "FY25全年~500+"
+    },
+    {
+      "symbol": "4063", "name": "信越化學", "fy": "FY 3月",
+      "y22": null, "y23": 1200, "y24": 950, "y25": 1100,
+      "pub": null, "pub_note": "FY26結果公布中",
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "6758", "name": "Sony", "fy": "FY 3月",
+      "y22": null, "y23": null, "y24": null, "y25": 950,
+      "pub": null, "pub_note": "FY26結果公布中",
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "6861", "name": "Keyence", "fy": "FY 3月",
+      "y22": null, "y23": 1497, "y24": 1524, "y25": null,
+      "pub": null, "pub_note": "FY26結果公布中",
+      "est": null, "est_note": null
+    },
+    {
+      "symbol": "4452", "name": "花王 Kao", "fy": "CY 12月",
+      "y22": 75, "y23": 45, "y24": 80, "y25": null,
+      "pub": null, "pub_note": null,
+      "est": null, "est_note": null
+    }
+  ]
+}
