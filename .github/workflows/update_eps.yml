@@ -1,0 +1,35 @@
+name: Update EPS Data
+
+on:
+  workflow_dispatch:   # 手動觸發（財報季後執行）
+  schedule:
+    - cron: '0 2 15 1,4,7,10 *'  # 每季財報月15號 02:00 UTC（1/4/7/10月）
+
+jobs:
+  update-eps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests yfinance
+
+      - name: Fetch EPS data
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: python fetch_eps.py
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/eps.json
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "data: EPS update $(date -u '+%Y-%m-%d')"
+          git push
