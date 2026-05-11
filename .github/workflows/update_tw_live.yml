@@ -1,0 +1,43 @@
+name: Update TW Live
+
+on:
+  schedule:
+    - cron: '*/5 1-5 * * 1-5'  # 每5分鐘，UTC 01:00-05:59，週一~五（台灣 09:00-13:59）
+  workflow_dispatch:
+
+concurrency:
+  group: update-tw-live
+  cancel-in-progress: true  # 直接取代，不排隊
+
+jobs:
+  update-tw-live:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests pytz
+
+      - name: Fetch TW live data
+        run: python fetch_tw_live.py
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/tw.json
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "data: TW live $(date -u '+%H:%M UTC')"
+          for attempt in 1 2 3; do
+            git push && exit 0
+            echo "push attempt $attempt failed, retrying..."
+            sleep 3
+            git pull --rebase
+          done
+          git push
