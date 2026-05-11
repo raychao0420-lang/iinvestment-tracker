@@ -582,7 +582,9 @@ function renderEPS(items, id, headers) {
     </tr></thead>
     <tbody>${rows}</tbody>
   </table>
-  <div class="eps-footer">單位：各欄幣種｜更新：${_epsData ? _epsData.updated : '–'}｜部分為估算，請至財報狗/goodinfo/macrotrends核實</div>`;
+  <div class="eps-footer">
+    <span style="color:#dc2626">▲ 紅色</span>＝年增　<span style="color:#16a34a">▼ 綠色</span>＝年減　｜　單位：各欄幣種　｜　更新：${_epsData ? _epsData.updated : '–'}　｜　部分為估算，請至財報狗/goodinfo/macrotrends核實
+  </div>`;
 }
 
 // ── 載入資料 ──────────────────────────────────────────────────────────────────

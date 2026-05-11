@@ -2,12 +2,17 @@ name: Update Stock Data
 
 on:
   schedule:
+    - cron: '50 20 * * 1-5'  # 04:50 台灣時間 週二~六（夜盤 05:00 收盤前 10 分）
     - cron: '50 22 * * 0-4'  # 06:50 台灣時間 週一~五（週四 UTC = 週五台灣）
     - cron: '50 22 * * 5'    # 06:50 台灣時間 週六（週五 UTC = 週五美股收盤後）
     - cron: '5 6 * * 1-5'    # 14:05 台灣時間 週一~五
     - cron: '30 7 * * 1-5'   # 15:30 台灣時間 週一~五（收盤後 2h，yfinance 資料較穩定）
     - cron: '5 9 * * 1-5'    # 17:05 台灣時間 週一~五
   workflow_dispatch:           # 手動觸發
+
+concurrency:
+  group: update-stock-data
+  cancel-in-progress: false   # 排隊等待，不取消進行中的 job
 
 jobs:
   update:
@@ -32,5 +37,12 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/
-          git diff --staged --quiet || git commit -m "data: $(date -u '+%Y-%m-%d %H:%M UTC')"
-          git push || (git pull --rebase && git push)
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "data: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          for attempt in 1 2 3; do
+            git push && exit 0
+            echo "push attempt $attempt failed, pulling and retrying..."
+            sleep 5
+            git pull --rebase
+          done
+          git push
