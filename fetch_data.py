@@ -858,19 +858,21 @@ def fetch_stock_charts():
 
 
 def fetch_stock_margin():
-    """Fetch per-stock 融資餘額 for TW stocks via FinMind API.
+    """Fetch per-stock 融資餘額 for TW stocks via FinMind API (incremental).
+    Free plan limits each request to ~30 days; builds up to 90-day history across runs.
     Requires FINMIND_TOKEN env var; skipped silently when unset.
-    Saves data/stock_margin.json with structure {updated, stocks:{code:{series:[{time,value}]}}}.
+    Saves data/stock_margin.json.
     """
     import requests
-    from datetime import date as _date, timedelta
+    from datetime import date as _date, timedelta, datetime as _dt
 
     if not FINMIND_TOKEN:
         print('  stock_margin: FINMIND_TOKEN not set, skipping')
         return {}
 
-    start = (_date.today() - timedelta(days=120)).isoformat()
-    tw_targets = TW_STOCKS + TW_DRONE + TW_ETF
+    tw_targets    = TW_STOCKS + TW_DRONE + TW_ETF
+    today         = _date.today()
+    default_start = (today - timedelta(days=29)).isoformat()
 
     existing = {}
     path = 'data/stock_margin.json'
@@ -883,7 +885,20 @@ def fetch_stock_margin():
 
     result = {}
     for s in tw_targets:
-        code = s['symbol'].replace('.TW', '')
+        code      = s['symbol'].replace('.TW', '')
+        ex        = existing.get(code, {})
+        ex_series = ex.get('series', [])
+
+        # Incremental: start from day after last known record
+        if ex_series:
+            last_dt = _dt.strptime(ex_series[-1]['time'], '%Y-%m-%d').date()
+            if last_dt >= today:
+                result[code] = ex
+                continue
+            start = (last_dt + timedelta(days=1)).isoformat()
+        else:
+            start = default_start
+
         try:
             r = requests.get(
                 'https://api.finmindtrade.com/api/v4/data',
@@ -898,22 +913,26 @@ def fetch_stock_margin():
             r.raise_for_status()
             rows = r.json().get('data', [])
             if not rows:
-                print(f'  stock_margin {code}: no data')
-                if code in existing:
-                    result[code] = existing[code]
+                print(f'  stock_margin {code}: no new data since {start}')
+                if ex_series:
+                    result[code] = ex
                 continue
-            series = sorted(
+
+            new_series = sorted(
                 [{'time': row['date'], 'value': int(row['MarginPurchaseTodayBalance'])}
                  for row in rows
                  if 'date' in row and 'MarginPurchaseTodayBalance' in row],
                 key=lambda x: x['time'],
             )
-            result[code] = {'series': series[-90:]}
-            print(f'  stock_margin {code}: {len(series)} records')
+            existing_times = {x['time'] for x in ex_series}
+            merged = ex_series + [x for x in new_series if x['time'] not in existing_times]
+            merged.sort(key=lambda x: x['time'])
+            result[code] = {'series': merged[-90:]}
+            print(f'  stock_margin {code}: +{len(new_series)} → total {len(merged[-90:])}')
         except Exception as e:
             print(f'  stock_margin {code}: {e}')
-            if code in existing:
-                result[code] = existing[code]
+            if ex_series:
+                result[code] = ex
         time.sleep(0.5)
 
     print(f'  stock_margin: {len(result)}/{len(tw_targets)} fetched')
