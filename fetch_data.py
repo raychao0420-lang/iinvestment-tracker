@@ -641,6 +641,73 @@ def fetch_margin_balance(target_days=90):
     return [{'time': k, 'value': v} for k, v in sorted_items]
 
 
+def fetch_signals():
+    """Calculate short/medium-term signals for all individual stocks (excl. indices).
+    Short:  RSI(14) + MA20 bias  → buy <35/<-8%, sell >65/>+8%
+    Medium: RSI(21) + MA60 bias  → buy <35/<-12%, sell >65/>+12%
+    Downloads 6 months of daily closes in one batch.
+    """
+    import pandas as pd
+
+    targets = US_STOCKS + US_CLOUD + TW_STOCKS + TW_DRONE + TW_ETF
+    symbols = [s['symbol'] for s in targets]
+
+    print(f'  signals: downloading {len(symbols)} symbols (6mo)...')
+    raw = None
+    for attempt in range(3):
+        try:
+            raw = yf.download(symbols, period='6mo', interval='1d',
+                              progress=False, auto_adjust=True)
+            break
+        except Exception as e:
+            print(f'  signals attempt {attempt + 1}: {e}')
+            if attempt < 2:
+                time.sleep(5)
+    if raw is None:
+        return {}
+
+    closes = raw['Close']
+    if len(symbols) == 1:
+        closes = closes.to_frame(name=symbols[0])
+
+    def calc_rsi(series, period):
+        delta = series.diff()
+        gain = delta.clip(lower=0).ewm(alpha=1 / period, adjust=False).mean()
+        loss = (-delta.clip(upper=0)).ewm(alpha=1 / period, adjust=False).mean()
+        rs = gain / loss.where(loss > 0, other=1e-10)
+        return 100 - 100 / (1 + rs)
+
+    result = {}
+    for sym in symbols:
+        try:
+            close = closes[sym].dropna()
+            if len(close) < 30:
+                print(f'  signals {sym}: insufficient data ({len(close)} rows)')
+                continue
+            price = float(close.iloc[-1])
+
+            rsi14 = round(float(calc_rsi(close, 14).iloc[-1]), 1)
+            rsi21 = round(float(calc_rsi(close, 21).iloc[-1]), 1)
+
+            ma20 = float(close.rolling(20).mean().iloc[-1]) if len(close) >= 20 else None
+            ma60 = float(close.rolling(60).mean().iloc[-1]) if len(close) >= 60 else None
+
+            bias20 = round((price - ma20) / ma20 * 100, 1) if ma20 else None
+            bias60 = round((price - ma60) / ma60 * 100, 1) if ma60 else None
+
+            result[sym] = {
+                'rsi14':  rsi14,
+                'rsi21':  rsi21,
+                'bias20': bias20,
+                'bias60': bias60,
+            }
+        except Exception as e:
+            print(f'  signals {sym}: {e}')
+
+    print(f'  signals: computed {len(result)}/{len(symbols)} symbols')
+    return result
+
+
 if __name__ == '__main__':
     now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
     print(f'=== fetch_data {now} ===')
@@ -700,5 +767,13 @@ if __name__ == '__main__':
         save('data/margin.json', {'updated': now, 'series': margin})
     else:
         print('  margin: no data')
+
+    time.sleep(2)
+    print('--- Signals ---')
+    signals = fetch_signals()
+    if signals:
+        save('data/signals.json', {'updated': now, 'stocks': signals})
+    else:
+        print('  signals: no data')
 
     print('done')
