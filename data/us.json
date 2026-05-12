@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/12 20:38",
+  "updated": "2026/05/12 20:47",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -49,6 +49,14 @@
       "price": 219.44,
       "change": 4.24,
       "pct": 1.97,
+      "date": "05/11"
+    },
+    {
+      "symbol": "INTC",
+      "name": "Intel",
+      "price": 129.44,
+      "change": 4.52,
+      "pct": 3.62,
       "date": "05/11"
     },
     {
