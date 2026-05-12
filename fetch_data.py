@@ -641,6 +641,56 @@ def fetch_margin_balance(target_days=90):
     return [{'time': k, 'value': v} for k, v in sorted_items]
 
 
+def fetch_fundamentals():
+    """Fetch valuation & fundamental metrics via yfinance .info (parallel, 5 workers).
+    Metrics: trailing P/E, forward P/E, P/B, ROE, dividend yield, gross margin, revenue growth.
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    import math
+
+    targets = US_STOCKS + US_CLOUD + TW_STOCKS + TW_DRONE + TW_ETF
+    symbols = [s['symbol'] for s in targets]
+
+    def _get(sym):
+        try:
+            info = yf.Ticker(sym).info
+
+            def pf(key, mul=1.0, digits=1):
+                v = info.get(key)
+                try:
+                    f = float(v)
+                    if math.isnan(f) or math.isinf(f):
+                        return None
+                    return round(f * mul, digits)
+                except (TypeError, ValueError):
+                    return None
+
+            return sym, {
+                'pe':         pf('trailingPE'),
+                'fpe':        pf('forwardPE'),
+                'pb':         pf('priceToBook'),
+                'roe':        pf('returnOnEquity', 100),
+                'div_yield':  pf('dividendYield', 100),
+                'gm':         pf('grossMargins', 100),
+                'rev_growth': pf('revenueGrowth', 100),
+            }
+        except Exception as e:
+            print(f'  fund {sym}: {e}')
+            return sym, None
+
+    result = {}
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        futures = {executor.submit(_get, sym): sym for sym in symbols}
+        for future in as_completed(futures):
+            sym, data = future.result()
+            if data:
+                result[sym] = data
+                print(f'  {sym}: PE={data["pe"]}, ROE={data["roe"]}%, yld={data["div_yield"]}%')
+
+    print(f'  fundamentals: {len(result)}/{len(symbols)} fetched')
+    return result
+
+
 def fetch_signals():
     """Calculate short/medium-term signals for all individual stocks (excl. indices).
     Short:  RSI(14) + MA20 bias  → buy <35/<-8%, sell >65/>+8%
@@ -775,5 +825,13 @@ if __name__ == '__main__':
         save('data/signals.json', {'updated': now, 'stocks': signals})
     else:
         print('  signals: no data')
+
+    time.sleep(1)
+    print('--- Fundamentals ---')
+    fund = fetch_fundamentals()
+    if fund:
+        save('data/fundamentals.json', {'updated': now, 'stocks': fund})
+    else:
+        print('  fundamentals: no data')
 
     print('done')

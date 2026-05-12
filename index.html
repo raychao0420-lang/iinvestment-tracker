@@ -213,6 +213,12 @@
   .eps-note { font-size:.65rem; color:#94a3b8; display:block; margin-top:1px; white-space:nowrap; }
   .eps-null { color:#cbd5e1; }
   .eps-footer { font-size:.68rem; color:#94a3b8; text-align:right; padding:.3rem 1rem .5rem; }
+
+  /* 基本面估值表 */
+  .fund-good { color:#16a34a; font-weight:600; }
+  .fund-warn { color:#dc2626; font-weight:600; }
+  .fund-null { color:#cbd5e1; }
+  .fund-group { background:#f8fafc; color:#64748b; font-weight:700; font-size:.72rem; padding:.3rem .55rem; }
 </style>
 </head>
 <body>
@@ -256,6 +262,13 @@
     <div class="stock-grid" id="us-cloud"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">台灣相關 & ETF</div>
     <div class="stock-grid" id="us-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <button class="eps-toggle-btn" onclick="toggleFund('us')">
+      <i class="bi bi-bar-chart-steps"></i>基本面估值
+      <i class="bi bi-chevron-right eps-toggle-icon" id="fund-icon-us"></i>
+    </button>
+    <div class="eps-body" id="fund-body-us">
+      <div class="eps-table-wrap"><div id="us-fund"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
+    </div>
     <button class="eps-toggle-btn" onclick="toggleEPS('us')">
       <i class="bi bi-journal-text"></i>財報 EPS
       <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-us"></i>
@@ -294,6 +307,13 @@
     <div class="stock-grid" id="tw-drone"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">ETF</div>
     <div class="stock-grid" id="tw-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <button class="eps-toggle-btn" onclick="toggleFund('tw')">
+      <i class="bi bi-bar-chart-steps"></i>基本面估值
+      <i class="bi bi-chevron-right eps-toggle-icon" id="fund-icon-tw"></i>
+    </button>
+    <div class="eps-body" id="fund-body-tw">
+      <div class="eps-table-wrap"><div id="tw-fund"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
+    </div>
     <button class="eps-toggle-btn" onclick="toggleEPS('tw')">
       <i class="bi bi-journal-text"></i>財報 EPS
       <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-tw"></i>
@@ -585,6 +605,73 @@ function toggleEPS(market) {
   icon.classList.toggle('open', !isOpen);
 }
 
+function toggleFund(market) {
+  const body = document.getElementById(`fund-body-${market}`);
+  const icon = document.getElementById(`fund-icon-${market}`);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  icon.classList.toggle('open', !isOpen);
+  if (!isOpen) renderFundamentals(market);
+}
+
+function renderFundamentals(market) {
+  const el = document.getElementById(`${market}-fund`);
+  if (!el) return;
+
+  const src  = market === 'us' ? _usData : _twData;
+  const updated = _fundData._updated || '–';
+
+  if (!src || !Object.keys(_fundData).length) {
+    el.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:1rem;font-size:.85rem">暫無資料，請觸發重抓</div>';
+    return;
+  }
+
+  const groups = market === 'us'
+    ? [{ label:'個股 & ETF', items: src.stocks || [] }, { label:'雲端服務', items: src.cloud || [] }]
+    : [{ label:'個股', items: src.stocks || [] }, { label:'無人機概念', items: src.drone || [] }, { label:'ETF', items: src.etf || [] }];
+
+  const fv  = v => v != null ? v.toFixed(1) : '<span class="fund-null">—</span>';
+  const fp  = v => v != null ? v.toFixed(1) + '%' : '<span class="fund-null">—</span>';
+  const pe  = v => v == null ? '' : v < 15 ? 'fund-good' : v > 50 ? 'fund-warn' : '';
+  const roe = v => v == null ? '' : v > 20 ? 'fund-good' : '';
+  const yld = v => v == null ? '' : v > 4  ? 'fund-good' : '';
+  const gm  = v => v == null ? '' : v > 40 ? 'fund-good' : '';
+  const rev = v => v == null ? '' : v > 20 ? 'fund-good' : v < 0 ? 'fund-warn' : '';
+
+  let rows = '';
+  for (const { label, items } of groups) {
+    if (!items.length) continue;
+    rows += `<tr><td colspan="8" class="fund-group">${label}</td></tr>`;
+    for (const s of items) {
+      const d = _fundData[s.symbol] || {};
+      rows += `<tr>
+        <td><div class="eps-name">${s.name}</div><div class="eps-sym">${s.symbol}</div></td>
+        <td class="${pe(d.pe)}">${fv(d.pe)}</td>
+        <td class="${pe(d.fpe)}">${fv(d.fpe)}</td>
+        <td>${fv(d.pb)}</td>
+        <td class="${roe(d.roe)}">${fp(d.roe)}</td>
+        <td class="${yld(d.div_yield)}">${fp(d.div_yield)}</td>
+        <td class="${gm(d.gm)}">${fp(d.gm)}</td>
+        <td class="${rev(d.rev_growth)}">${fp(d.rev_growth)}</td>
+      </tr>`;
+    }
+  }
+
+  el.innerHTML = `<table class="eps-table">
+    <thead><tr>
+      <th style="text-align:left">公司</th>
+      <th>P/E</th><th>遠P/E</th><th>P/B</th>
+      <th>ROE</th><th>殖利率</th><th>毛利率</th><th>營收年增</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="eps-footer">
+    <span style="color:#16a34a">■ 綠</span>＝優　<span style="color:#dc2626">■ 紅</span>＝偏貴/負成長　｜
+    P/E &lt;15綠 &gt;50紅 ｜ ROE &gt;20%綠 ｜ 殖利率 &gt;4%綠 ｜ 毛利率 &gt;40%綠 ｜ 營收年增 &gt;20%綠 &lt;0紅
+    ｜ 更新：${updated}　｜　來源：yfinance，僅供參考
+  </div>`;
+}
+
 function fmtEPS(v, prev, decimals) {
   if (v === null || v === undefined) return '<span class="eps-null">—</span>';
   const n = parseFloat(v);
@@ -642,7 +729,7 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut, marginData, chartData, signalsData] = await Promise.all([
+  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
@@ -651,10 +738,15 @@ async function loadAll() {
     fetch(`data/margin.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/chart.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/signals.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/fundamentals.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
   _marginData = marginData;
   _chartCache = chartData;
   _signals    = (signalsData && signalsData.stocks) || {};
+  _fundData   = (fundRaw && fundRaw.stocks) || {};
+  if (fundRaw) _fundData._updated = fundRaw.updated;
+  _usData = us;
+  _twData = tw;
 
   renderIdx(us.indices, 'us-indices');
   renderStocks(us.cloud,  'us-cloud');
@@ -811,6 +903,9 @@ let _marginData  = null;
 let _marginChart = null;
 let _klineChart  = null;
 let _signals     = {};
+let _fundData    = {};
+let _usData      = null;
+let _twData      = null;
 
 async function openChart(key) {
   const modal = document.getElementById('chart-modal');
