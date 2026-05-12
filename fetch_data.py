@@ -14,6 +14,7 @@ US_INDICES = [
 US_STOCKS = [
     {'symbol': 'TSM',  'name': '台積電 ADR'},
     {'symbol': 'NVDA', 'name': '輝達 NVDA'},
+    {'symbol': 'INTC', 'name': 'Intel'},
     {'symbol': 'MU',   'name': '美光 MU'},
     {'symbol': 'TSLA', 'name': '特斯拉 TSLA'},
     {'symbol': 'EWT',  'name': '摩台指 EWT'},
