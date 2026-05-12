@@ -4,9 +4,11 @@ Taiwan live quote update via TWSE MIS real-time API.
 Runs every 5 min during market hours (09:00-13:30 TWN).
 Only updates data/tw.json; skips analysis/chart/futures.
 """
-import requests, json, os, time
+import requests, json, os, time, urllib3
 from datetime import datetime
 import pytz
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 TZ = pytz.timezone('Asia/Taipei')
 
@@ -51,9 +53,10 @@ def query_mis(market, codes):
     url   = 'https://mis.twse.com.tw/stock/api/getStockInfo.jsp'
     for attempt in range(3):
         try:
+            verify = attempt == 0
             r = requests.get(url,
                 params={'ex_ch': ex_ch, 'json': '1', 'delay': '0'},
-                headers=HEADERS, timeout=10)
+                headers=HEADERS, timeout=10, verify=verify)
             r.raise_for_status()
             result = {}
             for item in r.json().get('msgArray', []):

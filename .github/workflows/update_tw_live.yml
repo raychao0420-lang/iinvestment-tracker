@@ -7,7 +7,7 @@ on:
 
 concurrency:
   group: update-tw-live
-  cancel-in-progress: true  # 直接取代，不排隊
+  cancel-in-progress: false  # 排隊等待，不取消
 
 jobs:
   update-tw-live:
