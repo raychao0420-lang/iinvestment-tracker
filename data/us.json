@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/12 10:10",
+  "updated": "2026/05/12 16:14",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -12,8 +12,8 @@
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 26274.12,
-      "change": 27.04,
+      "price": 26274.13,
+      "change": 27.05,
       "pct": 0.1,
       "date": "05/11"
     },
@@ -153,8 +153,8 @@
       "symbol": "AAPL",
       "name": "Apple",
       "price": 292.68,
-      "change": -0.64,
-      "pct": -0.22,
+      "change": -0.37,
+      "pct": -0.13,
       "date": "05/11"
     }
   ]
