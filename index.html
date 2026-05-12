@@ -259,6 +259,13 @@
       <div id="an-twii"><div class="an-card"><div class="skeleton" style="height:10rem"></div></div></div>
       <div id="an-etf0050"><div class="an-card"><div class="skeleton" style="height:10rem"></div></div></div>
     </div>
+    <div class="section-title mt-1">融資餘額趨勢<span id="margin-updated" style="font-size:.7rem;color:#94a3b8;font-weight:400;margin-left:.4rem"></span></div>
+    <div style="margin:.2rem .75rem .5rem;background:#1e293b;border-radius:10px;overflow:hidden">
+      <div style="padding:.4rem .75rem .2rem;font-size:.76rem;color:#94a3b8;display:flex;justify-content:space-between;align-items:center">
+        <span id="margin-latest">載入中…</span><span id="margin-change"></span>
+      </div>
+      <div id="margin-chart" style="height:150px"></div>
+    </div>
     <div class="section-title mt-1">指數</div>
     <div class="idx-grid"  id="tw-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">個股</div>
@@ -590,13 +597,15 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut] = await Promise.all([
+  const [us, tw, jp, an, fut, marginData] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw_analysis.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/tw_futures.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/margin.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
+  _marginData = marginData;
 
   renderIdx(us.indices, 'us-indices');
   renderStocks(us.cloud,  'us-cloud');
@@ -610,6 +619,9 @@ async function loadAll() {
   renderIdx(jp.indices, 'jp-indices');
   renderStocks(jp.stocks, 'jp-stocks');
   switchToLatest(us, tw, jp);
+  if (document.getElementById('tw-panel').classList.contains('active') && _marginData && !_marginChart) {
+    initMarginChart();
+  }
 
   // 台指夜盤
   const futSec = document.getElementById('tw-futures-section');
@@ -645,8 +657,10 @@ async function manualRefresh() {
   const icon = document.getElementById('refresh-icon');
   btn.disabled = true;
   icon.classList.add('spin');
-  _chartCache = null;   // 清除 K 線快取
-  _epsData = null;      // 清除 EPS 快取
+  _chartCache = null;
+  _epsData = null;
+  if (_marginChart) { _marginChart.remove(); _marginChart = null; }
+  _marginData = null;
   try {
     await loadAll();
   } catch {
@@ -743,6 +757,8 @@ document.getElementById('fetch-btn').addEventListener('click', () => {
 // ── K 線圖 ────────────────────────────────────────────────────────────────────
 let _chartInst  = null;
 let _chartCache = null;
+let _marginData  = null;
+let _marginChart = null;
 
 async function openChart(key) {
   const modal = document.getElementById('chart-modal');
@@ -864,6 +880,91 @@ function closeChart() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeChart(); });
+
+// ── 融資餘額趨勢圖 ────────────────────────────────────────────────────────────
+function initMarginChart() {
+  if (_marginChart) return;
+  const series = (_marginData && _marginData.series) || [];
+  if (!series.length) {
+    document.getElementById('margin-latest').textContent = '暫無資料';
+    return;
+  }
+
+  // Info bar
+  const latest = series[series.length - 1];
+  const prev20 = series.length >= 20 ? series[series.length - 20] : null;
+  document.getElementById('margin-updated').textContent = _marginData.updated ? `（${_marginData.updated}）` : '';
+  document.getElementById('margin-latest').textContent =
+    `${latest.value.toLocaleString('en-US', {minimumFractionDigits:1, maximumFractionDigits:1})} 億元  ${latest.time.slice(5).replace('-','/')}`;
+  if (prev20) {
+    const diff = Math.round(latest.value - prev20.value);
+    const sign = diff >= 0 ? '+' : '';
+    const col  = diff >= 0 ? '#ef4444' : '#22c55e';
+    document.getElementById('margin-change').innerHTML =
+      `月比 <span style="color:${col}">${sign}${diff.toLocaleString()} 億</span>`;
+  }
+
+  const cont = document.getElementById('margin-chart');
+  if (!cont || cont.clientWidth === 0) return;
+
+  const chart = LightweightCharts.createChart(cont, {
+    width:  cont.clientWidth,
+    height: 150,
+    layout:    { background: { color: '#1e293b' }, textColor: '#94a3b8' },
+    grid:      { vertLines: { color: '#334155' }, horzLines: { color: '#334155' } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: '#334155' },
+    timeScale: { borderColor: '#334155', timeVisible: false, fixLeftEdge: true, fixRightEdge: true },
+    handleScroll: { mouseWheel: false, pressedMouseMove: true },
+    handleScale:  { mouseWheel: false, pinch: false },
+  });
+  _marginChart = chart;
+
+  // MA20
+  if (series.length >= 20) {
+    const ma20data = [];
+    for (let i = 19; i < series.length; i++) {
+      const avg = series.slice(i - 19, i + 1).reduce((s, v) => s + v.value, 0) / 20;
+      ma20data.push({ time: series[i].time, value: Math.round(avg * 10) / 10 });
+    }
+    chart.addLineSeries({
+      color: '#60a5fa', lineWidth: 1, title: 'MA20',
+      priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false,
+    }).setData(ma20data);
+  }
+
+  // Main line
+  const lineSeries = chart.addLineSeries({
+    color: '#f59e0b', lineWidth: 2,
+    priceFormat: { type: 'price', precision: 1, minMove: 0.1 },
+    priceLineVisible: false, lastValueVisible: true,
+  });
+  lineSeries.setData(series);
+
+  // Crosshair tooltip on info bar
+  chart.subscribeCrosshairMove(param => {
+    if (!param.time || !param.seriesData.get(lineSeries)) {
+      document.getElementById('margin-latest').textContent =
+        `${latest.value.toLocaleString('en-US', {minimumFractionDigits:1, maximumFractionDigits:1})} 億元  ${latest.time.slice(5).replace('-','/')}`;
+      return;
+    }
+    const v = param.seriesData.get(lineSeries).value;
+    const t = typeof param.time === 'string' ? param.time
+      : `${param.time.year}-${String(param.time.month).padStart(2,'0')}-${String(param.time.day).padStart(2,'0')}`;
+    document.getElementById('margin-latest').textContent =
+      `${v.toLocaleString('en-US', {minimumFractionDigits:1, maximumFractionDigits:1})} 億元  ${t.slice(5).replace('-','/')}`;
+  });
+
+  new ResizeObserver(() => {
+    if (_marginChart) _marginChart.applyOptions({ width: cont.clientWidth });
+  }).observe(cont);
+
+  chart.timeScale().fitContent();
+}
+
+document.getElementById('tw-tab').addEventListener('shown.bs.tab', () => {
+  if (_marginData && !_marginChart) initMarginChart();
+});
 
 // ── 初始化 ────────────────────────────────────────────────────────────────────
 updateClock();

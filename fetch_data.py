@@ -584,6 +584,63 @@ def fetch_tw_futures_night():
     return result
 
 
+def fetch_margin_balance(target_days=90):
+    """Fetch total market 融資餘額 (億元) from TWSE MI_MARGN?selectType=MS.
+    Loads existing data/margin.json to skip already-fetched dates (incremental).
+    """
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    import requests as _req
+    from datetime import date as _date, timedelta
+
+    existing = {}
+    margin_path = 'data/margin.json'
+    if os.path.exists(margin_path):
+        try:
+            with open(margin_path, 'r', encoding='utf-8') as f:
+                for item in json.load(f).get('series', []):
+                    existing[item['time']] = item['value']
+        except Exception:
+            pass
+
+    today      = _date.today()
+    offset     = 1
+    scanned    = 0
+    scan_limit = target_days if len(existing) < 30 else 10
+
+    while scanned < scan_limit and offset <= scan_limit * 3:
+        d      = today - timedelta(days=offset)
+        offset += 1
+        if d.weekday() >= 5:
+            continue
+        scanned += 1
+        d_str = d.isoformat()
+        if d_str in existing:
+            continue
+        try:
+            r = _req.get(
+                'https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN',
+                params={'date': d.strftime('%Y%m%d'), 'response': 'json', 'selectType': 'MS'},
+                timeout=12, verify=False,
+                headers={'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'},
+            )
+            tables = r.json().get('tables', [])
+            if tables and tables[0].get('data'):
+                for row in tables[0]['data']:
+                    if '融資金額' in str(row[0]):
+                        amt = int(str(row[5]).replace(',', ''))
+                        if amt > 50_000_000:   # sanity: > 500億 仟元
+                            existing[d_str] = round(amt / 100_000, 1)
+                        break
+        except Exception as e:
+            print(f'  margin {d_str}: {e}')
+        time.sleep(0.3)
+
+    print(f'  margin: scanned {scanned} trading days, {len(existing)} total records')
+    sorted_items = sorted(existing.items())[-target_days:]
+    return [{'time': k, 'value': v} for k, v in sorted_items]
+
+
 if __name__ == '__main__':
     now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
     print(f'=== fetch_data {now} ===')
@@ -635,5 +692,13 @@ if __name__ == '__main__':
         save('data/tw_futures.json', {'updated': now, 'futures': futures})
     else:
         print('  tw_futures: no live data, skipping save')
+
+    time.sleep(1)
+    print('--- 融資餘額 ---')
+    margin = fetch_margin_balance()
+    if margin:
+        save('data/margin.json', {'updated': now, 'series': margin})
+    else:
+        print('  margin: no data')
 
     print('done')
