@@ -144,6 +144,19 @@
       "pub_note": null,
       "est": null,
       "est_note": null
+    },
+    {
+      "symbol": "INTC",
+      "name": "Intel",
+      "fy": "CY 12月",
+      "y22": 1.94,
+      "y23": 0.4,
+      "y24": -4.38,
+      "y25": -0.06,
+      "pub": null,
+      "pub_note": "Q1 待確認",
+      "est": null,
+      "est_note": null
     }
   ],
   "tw": [
