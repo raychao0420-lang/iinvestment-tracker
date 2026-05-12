@@ -317,6 +317,9 @@ def fetch_tw_analysis(mkt_series=None):
 
             price = float(close.iloc[-1])
             date_str = close.index[-1].strftime('%m/%d')
+            prev_price = float(close.iloc[-2]) if len(close) >= 2 else None
+            change = round(price - prev_price, 2) if prev_price is not None else None
+            pct = round((price - prev_price) / prev_price * 100, 2) if prev_price is not None else None
 
             def sma(n):
                 return float(close.rolling(n).mean().iloc[-1]) if len(close) >= n else None
@@ -328,6 +331,8 @@ def fetch_tw_analysis(mkt_series=None):
                 'name':    name,
                 'symbol':  sym,
                 'price':   round(price, 2),
+                'change':  change,
+                'pct':     pct,
                 'date':    date_str,
                 'ma5':     round(ma5,   2) if ma5   is not None else None,
                 'ma20':    round(ma20,  2) if ma20  is not None else None,
@@ -506,73 +511,75 @@ def fetch_chart_data(mkt_series=None):
 
 
 def fetch_tw_futures_night():
-    """Fetch Taiwan futures night-session prices from TAIFEX MIS API."""
-    import requests, urllib3
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    """Fetch Taiwan futures night-session closing prices from TAIFEX Open API.
+    Uses DailyMarketReportFut with TradingSession='盤後' — works from any IP.
+    """
+    import requests
 
     PRODUCTS = [
         {'id': 'TX',  'name': '台指期'},
         {'id': 'MTX', 'name': '小台'},
-        {'id': 'MXF', 'name': '微台'},
+        {'id': 'TMF', 'name': '微台'},
         {'id': 'TE',  'name': '電子期'},
     ]
 
     def to_f(v):
         try:
-            return float(str(v).replace(',', '').replace('%', '').strip())
+            s = str(v).replace(',', '').replace('%', '').strip()
+            return float(s) if s and s not in ('-', '') else None
         except Exception:
             return None
 
+    empty = [{'symbol': p['id'], 'name': p['name'],
+              'price': None, 'change': None, 'pct': None, 'contract': ''} for p in PRODUCTS]
+
+    try:
+        r = requests.get(
+            'https://openapi.taifex.com.tw/v1/DailyMarketReportFut',
+            timeout=15,
+            headers={'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json'},
+        )
+        r.raise_for_status()
+        data = r.json()
+        print(f'  Open API: {len(data)} records')
+    except Exception as e:
+        print(f'  Open API fetch failed: {e}')
+        return empty
+
+    # Build lookup: contract_id -> sorted list of night-session records (front-month first)
+    night = {}
+    for row in data:
+        if row.get('TradingSession') == '盤後':
+            cid = row.get('Contract', '')
+            night.setdefault(cid, []).append(row)
+    for cid in night:
+        night[cid].sort(key=lambda x: x.get('ContractMonth(Week)', ''))
+
     result = []
     for p in PRODUCTS:
-        fetched = False
-        for attempt in range(2):
-            verify = attempt == 0  # first try with SSL verify, then without
-            try:
-                r = requests.get(
-                    'https://mis.taifex.com.tw/futures/api/getQuoteList',
-                    params={'MarketType': '1', 'CommodityID': p['id']},
-                    timeout=10,
-                    verify=verify,
-                    headers={
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                        'Referer':    'https://mis.taifex.com.tw/futures/',
-                        'Accept':     'application/json, text/plain, */*',
-                        'Origin':     'https://mis.taifex.com.tw',
-                    },
-                )
-                print(f"  {p['id']}: HTTP {r.status_code}, verify={verify}, len={len(r.text)}")
-                if r.status_code != 200:
-                    print(f"    body: {r.text[:300]}")
-                    continue
-                data   = r.json()
-                quotes = data.get('RtData', {}).get('QuoteList', [])
-                print(f"  {p['id']}: {len(quotes)} quote(s)")
-                if quotes:
-                    q      = quotes[0]
-                    price  = to_f(q.get('LastPrice') or q.get('ClosePrice'))
-                    change = to_f(q.get('PriceChange'))
-                    pct    = to_f(q.get('PriceChangePercent'))
-                    result.append({
-                        'symbol':   p['id'],
-                        'name':     p['name'],
-                        'price':    price,
-                        'change':   change,
-                        'pct':      round(pct, 2) if pct is not None else None,
-                        'contract': q.get('ContractDate', ''),
-                    })
-                    print(f"    price={price} change={change}")
-                else:
-                    result.append({'symbol': p['id'], 'name': p['name'],
-                                   'price': None, 'change': None, 'pct': None, 'contract': ''})
-                fetched = True
-                break
-            except Exception as e:
-                print(f'  futures {p["id"]} attempt {attempt+1} (verify={verify}): {e}')
-        if not fetched:
+        rows = night.get(p['id'], [])
+        if not rows:
+            print(f"  {p['id']}: no 盤後 data")
             result.append({'symbol': p['id'], 'name': p['name'],
                            'price': None, 'change': None, 'pct': None, 'contract': ''})
-        time.sleep(0.5)
+            continue
+        row      = rows[0]
+        price    = to_f(row.get('Last') or row.get('SettlementPrice'))
+        change   = to_f(row.get('Change'))
+        pct      = to_f(row.get('%'))
+        contract = row.get('ContractMonth(Week)', '')
+        date_raw = row.get('Date', '')
+        date_s   = f'{date_raw[4:6]}/{date_raw[6:8]}' if len(date_raw) == 8 else ''
+        result.append({
+            'symbol':   p['id'],
+            'name':     p['name'],
+            'price':    price,
+            'change':   change,
+            'pct':      round(pct, 2) if pct is not None else None,
+            'contract': contract,
+            'date':     date_s,
+        })
+        print(f"  {p['id']}: price={price} change={change} date={date_s}")
 
     return result
 
