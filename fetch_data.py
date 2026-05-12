@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 
 TZ = pytz.timezone('Asia/Taipei')
+FINMIND_TOKEN = os.environ.get('FINMIND_TOKEN', '')
 
 US_INDICES = [
     {'symbol': '^GSPC',  'name': 'S&P 500'},
@@ -759,6 +760,166 @@ def fetch_signals():
     return result
 
 
+def fetch_stock_charts():
+    """Download 6mo OHLCV for all individual stocks; compute MA5/20/60.
+    Saves data/stock_charts.json with structure {updated, stocks:{symbol:{...}}}.
+    """
+    import pandas as pd, math
+
+    all_groups = [
+        (US_STOCKS, None),
+        (US_CLOUD,  None),
+        (TW_STOCKS, '張'),
+        (TW_DRONE,  '張'),
+        (TW_ETF,    '張'),
+        (JP_STOCKS, None),
+    ]
+    targets   = [(s['symbol'], s['name'], vu) for grp, vu in all_groups for s in grp]
+    symbols   = [t[0] for t in targets]
+    name_map  = {t[0]: t[1] for t in targets}
+    unit_map  = {t[0]: t[2] for t in targets}
+
+    print(f'  stock_charts: downloading {len(symbols)} symbols (6mo)...')
+    raw = None
+    for attempt in range(3):
+        try:
+            raw = yf.download(symbols, period='6mo', interval='1d',
+                              progress=False, auto_adjust=True)
+            break
+        except Exception as e:
+            print(f'  stock_charts attempt {attempt + 1}: {e}')
+            if attempt < 2:
+                time.sleep(5)
+    if raw is None:
+        return {}
+
+    def to_line(s):
+        return [{'time': ts.strftime('%Y-%m-%d'), 'value': round(float(v), 2)}
+                for ts, v in s.items() if pd.notna(v)]
+
+    result = {}
+    for sym in symbols:
+        try:
+            if len(symbols) == 1:
+                df = pd.DataFrame({k: raw[k] for k in ('Open','High','Low','Close','Volume')}).dropna()
+            else:
+                df = pd.DataFrame({
+                    'Open':   raw['Open'][sym],
+                    'High':   raw['High'][sym],
+                    'Low':    raw['Low'][sym],
+                    'Close':  raw['Close'][sym],
+                    'Volume': raw['Volume'][sym],
+                }).dropna()
+
+            if len(df) < 5:
+                print(f'  stock_charts {sym}: insufficient ({len(df)} rows)')
+                continue
+
+            ma5  = df['Close'].rolling(5).mean()
+            ma20 = df['Close'].rolling(20).mean()
+            ma60 = df['Close'].rolling(60).mean()
+
+            is_tw = unit_map[sym] == '張'
+            candles, volume = [], []
+            for ts in df.index:
+                row = df.loc[ts]
+                o, h, l, c = float(row['Open']), float(row['High']), float(row['Low']), float(row['Close'])
+                if any(math.isnan(v) for v in [o, h, l, c]):
+                    continue
+                d_str = ts.strftime('%Y-%m-%d')
+                candles.append({'time': d_str,
+                                'open': round(o, 2), 'high': round(h, 2),
+                                'low':  round(l, 2), 'close': round(c, 2)})
+                vol = float(row['Volume'])
+                if not math.isnan(vol):
+                    volume.append({
+                        'time':  d_str,
+                        'value': round(vol / 1000) if is_tw else round(vol),
+                        'color': 'rgba(220,38,38,0.55)' if c >= o else 'rgba(22,163,74,0.55)',
+                    })
+
+            entry = {
+                'name':    name_map[sym],
+                'candles': candles,
+                'volume':  volume,
+                'ma5':     to_line(ma5),
+                'ma20':    to_line(ma20),
+                'ma60':    to_line(ma60),
+            }
+            if unit_map[sym]:
+                entry['vol_unit'] = unit_map[sym]
+            result[sym] = entry
+            print(f'  stock_charts {sym}: {len(candles)} candles')
+        except Exception as e:
+            print(f'  stock_charts {sym}: {e}')
+
+    print(f'  stock_charts: {len(result)}/{len(symbols)} symbols processed')
+    return result
+
+
+def fetch_stock_margin():
+    """Fetch per-stock 融資餘額 for TW stocks via FinMind API.
+    Requires FINMIND_TOKEN env var; skipped silently when unset.
+    Saves data/stock_margin.json with structure {updated, stocks:{code:{series:[{time,value}]}}}.
+    """
+    import requests
+    from datetime import date as _date, timedelta
+
+    if not FINMIND_TOKEN:
+        print('  stock_margin: FINMIND_TOKEN not set, skipping')
+        return {}
+
+    start = (_date.today() - timedelta(days=120)).isoformat()
+    tw_targets = TW_STOCKS + TW_DRONE + TW_ETF
+
+    existing = {}
+    path = 'data/stock_margin.json'
+    if os.path.exists(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                existing = json.load(f).get('stocks', {})
+        except Exception:
+            pass
+
+    result = {}
+    for s in tw_targets:
+        code = s['symbol'].replace('.TW', '')
+        try:
+            r = requests.get(
+                'https://api.finmindtrade.com/api/v4/data',
+                params={
+                    'dataset':    'TaiwanStockMarginPurchaseshortSale',
+                    'data_id':    code,
+                    'start_date': start,
+                    'token':      FINMIND_TOKEN,
+                },
+                timeout=20,
+            )
+            r.raise_for_status()
+            rows = r.json().get('data', [])
+            if not rows:
+                print(f'  stock_margin {code}: no data')
+                if code in existing:
+                    result[code] = existing[code]
+                continue
+            series = sorted(
+                [{'time': row['date'], 'value': int(row['MarginPurchaseTodayBalance'])}
+                 for row in rows
+                 if 'date' in row and 'MarginPurchaseTodayBalance' in row],
+                key=lambda x: x['time'],
+            )
+            result[code] = {'series': series[-90:]}
+            print(f'  stock_margin {code}: {len(series)} records')
+        except Exception as e:
+            print(f'  stock_margin {code}: {e}')
+            if code in existing:
+                result[code] = existing[code]
+        time.sleep(0.5)
+
+    print(f'  stock_margin: {len(result)}/{len(tw_targets)} fetched')
+    return result
+
+
 if __name__ == '__main__':
     now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
     print(f'=== fetch_data {now} ===')
@@ -834,5 +995,21 @@ if __name__ == '__main__':
         save('data/fundamentals.json', {'updated': now, 'stocks': fund})
     else:
         print('  fundamentals: no data')
+
+    time.sleep(2)
+    print('--- Stock Charts ---')
+    sc = fetch_stock_charts()
+    if sc:
+        save('data/stock_charts.json', {'updated': now, 'stocks': sc})
+    else:
+        print('  stock_charts: no data')
+
+    time.sleep(1)
+    print('--- Stock Margin (TW) ---')
+    sm = fetch_stock_margin()
+    if sm:
+        save('data/stock_margin.json', {'updated': now, 'stocks': sm})
+    else:
+        print('  stock_margin: no data (set FINMIND_TOKEN secret to enable)')
 
     print('done')

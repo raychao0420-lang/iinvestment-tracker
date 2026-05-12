@@ -175,6 +175,22 @@
     color:#94a3b8; font-size:.68rem; padding:.1rem .45rem; cursor:pointer; white-space:nowrap;
   }
   .btn-chart:hover { background:#334155; color:#e2e8f0; }
+  .btn-chart-card {
+    background:#f1f5f9; border:1px solid #e2e8f0; border-radius:4px;
+    color:#64748b; font-size:.65rem; padding:.1rem .35rem; cursor:pointer; flex-shrink:0;
+  }
+  .btn-chart-card:hover { background:#e2e8f0; color:#475569; }
+
+  /* ── 個股 Modal 融資餘額區 ── */
+  #stock-margin-section {
+    flex-shrink:0; flex-direction:column; background:#0f172a;
+    border-top:1px solid #1e293b;
+  }
+  #stock-margin-header {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:.3rem .75rem; font-size:.72rem; color:#94a3b8;
+  }
+  #stock-margin-chart { height:130px; width:100%; }
 
   /* ── 台指夜盤 ────────────────────────────────────────── */
   .futures-updated { font-size:.7rem; color:#94a3b8; font-weight:400; margin-left:.5rem; }
@@ -352,6 +368,13 @@
     <button id="chart-close" onclick="closeChart()">×</button>
   </div>
   <div id="chart-container"></div>
+  <div id="stock-margin-section" style="display:none">
+    <div id="stock-margin-header">
+      <span>融資餘額（張）</span>
+      <span id="stock-margin-info" style="font-family:'Courier New',monospace"></span>
+    </div>
+    <div id="stock-margin-chart"></div>
+  </div>
 </div>
 <script>
 // ── 時鐘 / Tab ────────────────────────────────────────────────────────────────
@@ -444,9 +467,13 @@ function renderStocks(items, id) {
       ? `<span class="chg-badge ${c}">${arrow(s.pct)} ${sign}${fmt(s.change)} (${sign}${fmt(s.pct)}%)</span>`
       : `<span class="chg-badge flat">–</span>`;
     const sigHtml = renderSignalBadges(_signals[s.symbol]);
+    const safeName = s.name.replace(/'/g, '&#39;');
     return `<div class="stock-card">
       <div>
-        <div class="stock-name">${s.name}</div>
+        <div style="display:flex;align-items:center;gap:.4rem">
+          <div class="stock-name">${s.name}</div>
+          <button class="btn-chart-card" onclick="openStockChart('${s.symbol}','${safeName}')" title="K線圖"><i class="bi bi-graph-up"></i></button>
+        </div>
         <div class="stock-sub">${s.symbol} · ${s.date||'–'}</div>
       </div>
       <div>
@@ -798,10 +825,13 @@ async function manualRefresh() {
   const icon = document.getElementById('refresh-icon');
   btn.disabled = true;
   icon.classList.add('spin');
-  _chartCache = null;
-  _epsData = null;
-  if (_klineChart)  { _klineChart.remove();  _klineChart  = null; }
-  if (_marginChart) { _marginChart.remove(); _marginChart = null; }
+  _chartCache  = null;
+  _epsData     = null;
+  _stockCharts = null;
+  _stockMargin = null;
+  if (_klineChart)   { _klineChart.remove();   _klineChart  = null; }
+  if (_marginChart)  { _marginChart.remove();  _marginChart = null; }
+  if (_stockChart2)  { _stockChart2.remove();  _stockChart2 = null; }
   _marginData = null;
   try {
     await loadAll();
@@ -906,6 +936,9 @@ let _signals     = {};
 let _fundData    = {};
 let _usData      = null;
 let _twData      = null;
+let _stockCharts = null;
+let _stockMargin = null;
+let _stockChart2 = null;
 
 async function openChart(key) {
   const modal = document.getElementById('chart-modal');
@@ -1019,14 +1052,199 @@ async function openChart(key) {
 
 function closeChart() {
   document.getElementById('chart-modal').style.display = 'none';
+  document.getElementById('stock-margin-section').style.display = 'none';
   if (_chartInst) {
     if (_chartInst._ro) _chartInst._ro.disconnect();
     _chartInst.remove();
     _chartInst = null;
   }
+  if (_stockChart2) { _stockChart2.remove(); _stockChart2 = null; }
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeChart(); });
+
+// ── 個股 K 線圖 + 融資餘額 ────────────────────────────────────────────────────
+async function openStockChart(symbol, name) {
+  const modal = document.getElementById('chart-modal');
+  modal.style.display = 'flex';
+  document.getElementById('chart-title').textContent = name;
+  document.getElementById('chart-ohlc').textContent = '';
+  document.getElementById('stock-margin-section').style.display = 'none';
+
+  const cont = document.getElementById('chart-container');
+  cont.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:3rem;font-size:.9rem">載入中…</div>';
+  if (_chartInst) { if (_chartInst._ro) _chartInst._ro.disconnect(); _chartInst.remove(); _chartInst = null; }
+  if (_stockChart2) { _stockChart2.remove(); _stockChart2 = null; }
+
+  if (!_stockCharts) {
+    try {
+      _stockCharts = await fetch(`data/stock_charts.json?t=${Date.now()}`).then(r => r.json());
+    } catch {
+      cont.innerHTML = '<div style="color:#ef4444;text-align:center;padding:3rem">K線資料載入失敗，請觸發重抓</div>';
+      return;
+    }
+  }
+
+  const data = _stockCharts.stocks && _stockCharts.stocks[symbol];
+  if (!data || !data.candles || !data.candles.length) {
+    cont.innerHTML = '<div style="color:#ef4444;text-align:center;padding:3rem">暫無資料，請觸發重抓</div>';
+    return;
+  }
+
+  cont.innerHTML = '';
+  const w = cont.clientWidth;
+  const h = cont.clientHeight || window.innerHeight - 80;
+
+  const chart = LightweightCharts.createChart(cont, {
+    width: w, height: h,
+    layout:    { background: { color: '#0f172a' }, textColor: '#94a3b8' },
+    grid:      { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: '#334155' },
+    timeScale: { borderColor: '#334155', timeVisible: false },
+  });
+  _chartInst = chart;
+
+  const volS = chart.addHistogramSeries({
+    color: 'rgba(100,116,139,0.4)', priceFormat: { type: 'volume' }, priceScaleId: 'vol',
+  });
+  chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.78, bottom: 0 } });
+  volS.setData(data.volume || []);
+
+  const mkLine = (color, title) => chart.addLineSeries({
+    color, lineWidth: 1, title,
+    lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false,
+  });
+  mkLine('#f59e0b', 'MA5').setData(data.ma5  || []);
+  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);
+  mkLine('#c084fc', 'MA60').setData(data.ma60 || []);
+
+  const candS = chart.addCandlestickSeries({
+    upColor: '#dc2626', downColor: '#16a34a',
+    borderUpColor: '#dc2626', borderDownColor: '#16a34a',
+    wickUpColor:   '#ef4444', wickDownColor:   '#22c55e',
+  });
+  candS.setData(data.candles);
+
+  const volMap = {};
+  (data.volume || []).forEach(v => { volMap[v.time] = v.value; });
+  const fv = v => v >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(2);
+  const lastBar = data.candles[data.candles.length - 1];
+
+  function showBarInfo(bar, dStr) {
+    const chg = bar.close - bar.open, pct = chg / bar.open * 100;
+    const sign = chg >= 0 ? '+' : '', col = chg >= 0 ? '#ef4444' : '#22c55e';
+    const vv = volMap[dStr];
+    const vStr = vv != null
+      ? ` 量${data.vol_unit === '張' ? Math.round(vv).toLocaleString()+'張' : Math.round(vv).toLocaleString()}`
+      : '';
+    document.getElementById('chart-ohlc').innerHTML =
+      `<span style="color:#cbd5e1">${dStr.slice(5).replace('-','/')}</span> ` +
+      `開<b>${fv(bar.open)}</b> 高<b>${fv(bar.high)}</b> 低<b>${fv(bar.low)}</b> 收<b>${fv(bar.close)}</b> ` +
+      `<span style="color:${col}">${sign}${fv(chg)}(${sign}${pct.toFixed(1)}%)</span>${vStr}`;
+  }
+  showBarInfo(lastBar, lastBar.time);
+
+  chart.subscribeCrosshairMove(param => {
+    if (!param.time) { showBarInfo(lastBar, lastBar.time); return; }
+    const bar = param.seriesData.get(candS);
+    if (!bar) return;
+    const dStr = typeof param.time === 'string' ? param.time
+      : `${param.time.year}-${String(param.time.month).padStart(2,'0')}-${String(param.time.day).padStart(2,'0')}`;
+    showBarInfo(bar, dStr);
+  });
+
+  const ro = new ResizeObserver(() => {
+    if (_chartInst) _chartInst.applyOptions({ width: cont.clientWidth, height: cont.clientHeight });
+  });
+  ro.observe(cont);
+  _chartInst._ro = ro;
+  chart.timeScale().fitContent();
+
+  // 台股才顯示融資餘額
+  if (!symbol.endsWith('.TW')) return;
+
+  if (!_stockMargin) {
+    try {
+      _stockMargin = await fetch(`data/stock_margin.json?t=${Date.now()}`).then(r => r.json());
+    } catch { _stockMargin = {}; }
+  }
+
+  const code   = symbol.replace('.TW', '');
+  const mData  = _stockMargin.stocks && _stockMargin.stocks[code];
+  if (!mData || !mData.series || !mData.series.length) return;
+
+  const ms = document.getElementById('stock-margin-section');
+  ms.style.display = 'flex';
+  renderStockMarginChart(mData.series);
+}
+
+function renderStockMarginChart(series) {
+  if (_stockChart2) { _stockChart2.remove(); _stockChart2 = null; }
+  const cont = document.getElementById('stock-margin-chart');
+  if (!cont || cont.clientWidth === 0) return;
+
+  const latest = series[series.length - 1];
+  const prev   = series.length >= 2 ? series[series.length - 2] : null;
+  const diff   = prev ? latest.value - prev.value : 0;
+  const sign   = diff >= 0 ? '+' : '';
+  const col    = diff > 0 ? '#ef4444' : diff < 0 ? '#22c55e' : '#94a3b8';
+  document.getElementById('stock-margin-info').innerHTML =
+    `${latest.value.toLocaleString()} 張 ` +
+    `<span style="color:${col}">${sign}${diff.toLocaleString()}</span> ` +
+    `<span style="color:#64748b">${latest.time.slice(5).replace('-','/')}</span>`;
+
+  const chart = LightweightCharts.createChart(cont, {
+    width:  cont.clientWidth, height: 130,
+    layout:    { background: { color: '#0f172a' }, textColor: '#94a3b8' },
+    grid:      { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: '#334155' },
+    timeScale: { borderColor: '#334155', timeVisible: false, fixLeftEdge: true, fixRightEdge: true },
+    handleScroll: { mouseWheel: false, pressedMouseMove: true },
+    handleScale:  { mouseWheel: false, pinch: false },
+  });
+  _stockChart2 = chart;
+
+  // MA10
+  if (series.length >= 10) {
+    const ma10 = [];
+    for (let i = 9; i < series.length; i++) {
+      const avg = series.slice(i - 9, i + 1).reduce((s, v) => s + v.value, 0) / 10;
+      ma10.push({ time: series[i].time, value: Math.round(avg) });
+    }
+    chart.addLineSeries({ color:'#60a5fa', lineWidth:1, title:'MA10',
+      priceLineVisible:false, lastValueVisible:false, crosshairMarkerVisible:false,
+    }).setData(ma10);
+  }
+
+  const lineSeries = chart.addLineSeries({
+    color: '#f59e0b', lineWidth: 2,
+    priceFormat: { type: 'price', precision: 0, minMove: 1 },
+    priceLineVisible: false, lastValueVisible: true,
+  });
+  lineSeries.setData(series);
+
+  chart.subscribeCrosshairMove(param => {
+    if (!param.time || !param.seriesData.get(lineSeries)) {
+      document.getElementById('stock-margin-info').innerHTML =
+        `${latest.value.toLocaleString()} 張 <span style="color:${col}">${sign}${diff.toLocaleString()}</span> ` +
+        `<span style="color:#64748b">${latest.time.slice(5).replace('-','/')}</span>`;
+      return;
+    }
+    const v = param.seriesData.get(lineSeries).value;
+    const t = typeof param.time === 'string' ? param.time
+      : `${param.time.year}-${String(param.time.month).padStart(2,'0')}-${String(param.time.day).padStart(2,'0')}`;
+    document.getElementById('stock-margin-info').innerHTML =
+      `${v.toLocaleString()} 張 <span style="color:#64748b">${t.slice(5).replace('-','/')}</span>`;
+  });
+
+  new ResizeObserver(() => {
+    if (_stockChart2) _stockChart2.applyOptions({ width: cont.clientWidth });
+  }).observe(cont);
+
+  chart.timeScale().fitContent();
+}
 
 // ── 融資餘額 + 大盤K線 ───────────────────────────────────────────────────────
 function initMarginChart() {
