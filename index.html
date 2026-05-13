@@ -69,6 +69,18 @@
   .sig-sell  { color:#dc2626; }
   .sig-neutral { color:#94a3b8; font-weight:400; }
 
+  /* ETF 三大法人 */
+  .inst-bar {
+    width:100%; border-top:1px solid #f1f5f9;
+    padding-top:.28rem; margin-top:.22rem;
+    font-size:.68rem; display:flex; align-items:center; gap:.4rem; flex-wrap:wrap;
+  }
+  .inst-lbl { color:#94a3b8; font-size:.6rem; }
+  .inst-sep { color:#e2e8f0; }
+  .inst-up  { color:var(--up);   font-weight:700; font-family:'Courier New',monospace; }
+  .inst-dn  { color:var(--down); font-weight:700; font-family:'Courier New',monospace; }
+  .inst-flat{ color:#94a3b8;     font-family:'Courier New',monospace; }
+
   /* ETF 淨值溢折價 */
   .nav-bar {
     width:100%; border-top:1px solid #f1f5f9;
@@ -331,6 +343,8 @@
     <div class="stock-grid" id="tw-drone"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">ETF</div>
     <div class="stock-grid" id="tw-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1" id="etf-top3-title" style="display:none">今日成交量前三名</div>
+    <div class="stock-grid" id="etf-top3"></div>
     <button class="eps-toggle-btn" onclick="toggleFund('tw')">
       <i class="bi bi-bar-chart-steps"></i>基本面估值
       <i class="bi bi-chevron-right eps-toggle-icon" id="fund-icon-tw"></i>
@@ -483,6 +497,14 @@ function renderStocks(items, id) {
       const pSign  = s.premium >= 0 ? '+' : '';
       navHtml = `<div class="nav-bar">淨值 ${fmt(s.nav, 2)} ｜ <span class="nav-prem ${pc}">${pLabel} ${pSign}${fmt(s.premium)}%</span></div>`;
     }
+    let instHtml = '';
+    if (_etfTrading && _etfTrading.tracked) {
+      const code = s.symbol.replace('.TW', '');
+      const td = _etfTrading.tracked[code];
+      if (td != null) {
+        instHtml = `<div class="inst-bar">${fmtInst3(td)}<span style="color:#cbd5e1;font-size:.6rem;margin-left:auto">(張)</span></div>`;
+      }
+    }
     return `<div class="stock-card">
       <div>
         <div style="display:flex;align-items:center;gap:.4rem">
@@ -495,9 +517,52 @@ function renderStocks(items, id) {
         <div class="stock-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
         <div style="text-align:right">${badge}</div>
       </div>
-      ${sigHtml}${navHtml}
+      ${sigHtml}${navHtml}${instHtml}
     </div>`;
   }).join('');
+}
+
+// ── ETF 三大法人 ─────────────────────────────────────────────────────────────
+function fmtInstVal(v) {
+  if (v == null) return '<span class="inst-flat">–</span>';
+  const t = Math.round(v / 1000);
+  if (t === 0) return '<span class="inst-flat">0</span>';
+  return t > 0
+    ? `<span class="inst-up">+${t.toLocaleString()}</span>`
+    : `<span class="inst-dn">${t.toLocaleString()}</span>`;
+}
+function fmtInst3(td) {
+  return `<span class="inst-lbl">外資</span>${fmtInstVal(td.fi)}`
+       + `<span class="inst-sep">｜</span>`
+       + `<span class="inst-lbl">投信</span>${fmtInstVal(td.sit)}`
+       + `<span class="inst-sep">｜</span>`
+       + `<span class="inst-lbl">自營</span>${fmtInstVal(td.dealer)}`;
+}
+function renderTop3ETF() {
+  const titleEl = document.getElementById('etf-top3-title');
+  const el      = document.getElementById('etf-top3');
+  if (!el) return;
+  if (!_etfTrading || !_etfTrading.top3 || !_etfTrading.top3.length) {
+    if (titleEl) titleEl.style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
+  if (titleEl) titleEl.style.display = '';
+  const fmtVols = v => Math.round(v / 1000).toLocaleString() + '張';
+  el.innerHTML = _etfTrading.top3.map((e, i) => `
+    <div class="stock-card">
+      <div style="width:100%">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+          <span style="font-size:.65rem;font-weight:700;background:#e2e8f0;color:#64748b;padding:.1rem .45rem;border-radius:99px">#${i+1}</span>
+          <span class="stock-name">${e.name}</span>
+          <span class="stock-sub" style="margin:0">${e.code}</span>
+        </div>
+        <div class="stock-sub">成交量 ${fmtVols(e.volume || 0)}</div>
+      </div>
+      <div class="inst-bar" style="border-top:none;padding-top:.1rem;margin-top:.1rem">
+        ${fmtInst3(e)}<span style="color:#cbd5e1;font-size:.6rem;margin-left:auto">(張)</span>
+      </div>
+    </div>`).join('');
 }
 
 // ── 大盤技術分析 ─────────────────────────────────────────────────────────────
@@ -771,7 +836,7 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw] = await Promise.all([
+  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
@@ -781,7 +846,9 @@ async function loadAll() {
     fetch(`data/chart.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/signals.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/fundamentals.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/etf_trading.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
+  _etfTrading = etfTradingRaw;
   _marginData = marginData;
   _chartCache = chartData;
   _signals    = (signalsData && signalsData.stocks) || {};
@@ -799,6 +866,7 @@ async function loadAll() {
   renderStocks(tw.stocks, 'tw-stocks');
   renderStocks(tw.drone,  'tw-drone');
   renderStocks(tw.etf,    'tw-etf');
+  renderTop3ETF();
   renderIdx(jp.indices, 'jp-indices');
   renderStocks(jp.stocks, 'jp-stocks');
   switchToLatest(us, tw, jp);
@@ -950,6 +1018,7 @@ let _klineChart  = null;
 let _signals     = {};
 let _fundData    = {};
 let _usData      = null;
+let _etfTrading  = null;
 let _twData      = null;
 let _stockCharts = null;
 let _stockMargin = null;

@@ -66,6 +66,23 @@ TW_ETF = [
     {'symbol': '00940.TW',  'name': '元大台灣價值高息'},
 ]
 
+# Extended ETF universe for top-3-by-volume discovery (superset of TW_ETF)
+ETF_UNIVERSE = [
+    {'symbol': '0050.TW',   'code': '0050',   'name': '元大台灣50'},
+    {'symbol': '006208.TW', 'code': '006208', 'name': '富邦台50'},
+    {'symbol': '00878.TW',  'code': '00878',  'name': '國泰永續高股息'},
+    {'symbol': '00919.TW',  'code': '00919',  'name': '群益台灣精選高息'},
+    {'symbol': '00929.TW',  'code': '00929',  'name': '復華台灣科技優息'},
+    {'symbol': '00940.TW',  'code': '00940',  'name': '元大台灣價值高息'},
+    {'symbol': '00631L.TW', 'code': '00631L', 'name': '元大台灣50正2'},
+    {'symbol': '00713.TW',  'code': '00713',  'name': '元大高息低波'},
+    {'symbol': '00900.TW',  'code': '00900',  'name': '富邦特選高股息'},
+    {'symbol': '00915.TW',  'code': '00915',  'name': '凱基優選高股息30'},
+    {'symbol': '00934.TW',  'code': '00934',  'name': '中信成長高股息'},
+    {'symbol': '00936.TW',  'code': '00936',  'name': '台新永續高息'},
+    {'symbol': '00939.TW',  'code': '00939',  'name': '統一台灣高息動能'},
+]
+
 JP_INDICES = [
     {'symbol': '^N225', 'name': '日經 225'},
     {'symbol': 'EWJ',   'name': '日股 ETF (EWJ)'},
@@ -605,6 +622,84 @@ def fetch_etf_nav():
     return result
 
 
+def fetch_etf_trading():
+    """Fetch ETF 三大法人 daily buy/sell (外資/投信/自營商) and top-3 ETFs by volume.
+    Volume from yfinance fast_info; institutional data from FinMind (free tier, no token needed).
+    Returns dict for data/etf_trading.json.
+    """
+    import requests as _req
+    from datetime import date as _date, timedelta
+
+    TRACKED_CODES = [s['symbol'].replace('.TW', '') for s in TW_ETF]
+
+    # Step 1: Get today's volume for all ETFs in universe to find top 3
+    vol_map = {}
+    for etf in ETF_UNIVERSE:
+        try:
+            vol = yf.Ticker(etf['symbol']).fast_info.last_volume or 0
+            vol_map[etf['code']] = {'volume': int(vol), 'name': etf['name']}
+        except Exception as e:
+            print(f'  etf_trading vol {etf["code"]}: {e}')
+    top3_codes = [k for k, _ in sorted(vol_map.items(), key=lambda x: x[1]['volume'], reverse=True)[:3]]
+    print(f'  etf_trading top3: {[(c, vol_map.get(c, {}).get("volume", 0)) for c in top3_codes]}')
+
+    # Step 2: Most recent trading date (skip weekends)
+    today = _date.today()
+    query_date = next(
+        (today - timedelta(days=d)).isoformat()
+        for d in range(7)
+        if (today - timedelta(days=d)).weekday() < 5
+    )
+
+    # Step 3: 三大法人 from FinMind (free tier, no auth needed for basic access)
+    all_codes = list(dict.fromkeys(TRACKED_CODES + top3_codes))
+    inst = {}
+    for code in all_codes:
+        try:
+            r = _req.get(
+                'https://api.finmindtrade.com/api/v4/data',
+                params={
+                    'dataset': 'TaiwanStockInstitutionalInvestorsBuySell',
+                    'data_id':  code,
+                    'start_date': query_date,
+                    'token':    FINMIND_TOKEN or '',
+                },
+                timeout=20,
+            )
+            rows = r.json().get('data', [])
+            if not rows:
+                print(f'  etf_trading {code}: no data ({query_date})')
+                continue
+            fi = sit = dealer = 0
+            for row in rows:
+                net = int(row.get('buy', 0)) - int(row.get('sell', 0))
+                n   = row.get('name', '')
+                if n in ('Foreign_Investor', 'Foreign_Dealer_Self'):
+                    fi += net
+                elif n == 'Investment_Trust':
+                    sit += net
+                elif n in ('Dealer_self', 'Dealer_Hedging'):
+                    dealer += net
+            inst[code] = {'fi': fi, 'sit': sit, 'dealer': dealer}
+            print(f'  {code}: fi={fi:+,} sit={sit:+,} dealer={dealer:+,}')
+            time.sleep(0.3)
+        except Exception as e:
+            print(f'  etf_trading {code}: {e}')
+
+    if not inst:
+        return {}
+
+    tracked = {c: inst[c] for c in TRACKED_CODES if c in inst}
+    top3 = [
+        {'code': c,
+         'name':   vol_map.get(c, {}).get('name', c),
+         'volume': vol_map.get(c, {}).get('volume', 0),
+         **inst.get(c, {})}
+        for c in top3_codes
+    ]
+    return {'date': query_date, 'tracked': tracked, 'top3': top3}
+
+
 def fetch_margin_balance(target_days=90):
     """Fetch total market 融資餘額 (億元) from TWSE MI_MARGN?selectType=MS.
     Loads existing data/margin.json to skip already-fetched dates (incremental).
@@ -1067,5 +1162,13 @@ if __name__ == '__main__':
         save('data/stock_margin.json', {'updated': now, 'stocks': sm})
     else:
         print('  stock_margin: no data (set FINMIND_TOKEN secret to enable)')
+
+    time.sleep(1)
+    print('--- ETF Trading (三大法人) ---')
+    etf_trading = fetch_etf_trading()
+    if etf_trading and (etf_trading.get('tracked') or etf_trading.get('top3')):
+        save('data/etf_trading.json', {'updated': now, **etf_trading})
+    else:
+        print('  etf_trading: no data')
 
     print('done')
