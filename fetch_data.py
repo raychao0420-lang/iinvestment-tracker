@@ -587,53 +587,22 @@ def fetch_tw_futures_night():
 
 
 def fetch_etf_nav():
-    """Fetch Taiwan listed ETF NAV from TWSE TWT38U (works from overseas IPs).
+    """Fetch Taiwan listed ETF NAV via yfinance .info['navPrice'].
     Returns dict: ETF code (without .TW) -> NAV float.
     """
-    import requests, urllib3
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-    TARGET = {'0050', '006208', '00878', '00919', '00929', '00940'}
-
-    try:
-        r = requests.get(
-            'https://www.twse.com.tw/rwd/zh/fund/TWT38U',
-            params={'response': 'json'},
-            timeout=12, verify=False,
-            headers={'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'},
-        )
-        d = r.json()
-        if d.get('stat') != 'OK':
-            print(f'  etf_nav: stat={d.get("stat")}')
-            return {}
-
-        fields = d.get('fields', [])
-        data   = d.get('data', [])
-        print(f'  etf_nav fields: {fields}')
-
-        nav_col = next((i for i, f in enumerate(fields) if '淨值' in str(f)), None)
-        if nav_col is None:
-            print('  etf_nav: 找不到淨值欄位')
-            return {}
-
-        result = {}
-        for row in data:
-            code = str(row[0]).strip()
-            if code not in TARGET:
-                continue
-            try:
-                nav = float(str(row[nav_col]).replace(',', '').strip())
-                if nav > 0:
-                    result[code] = nav
-                    print(f'  etf_nav {code}: {nav}')
-            except (ValueError, TypeError):
-                pass
-
-        print(f'  etf_nav: {len(result)}/{len(TARGET)} 筆')
-        return result
-    except Exception as e:
-        print(f'  etf_nav: {e}')
-        return {}
+    result = {}
+    for s in TW_ETF:
+        sym = s['symbol']
+        try:
+            nav = yf.Ticker(sym).info.get('navPrice')
+            if nav and float(nav) > 0:
+                code = sym.replace('.TW', '')
+                result[code] = float(nav)
+                print(f'  etf_nav {code}: {nav}')
+        except Exception as e:
+            print(f'  etf_nav {sym}: {e}')
+    print(f'  etf_nav: {len(result)}/{len(TW_ETF)} 筆')
+    return result
 
 
 def fetch_margin_balance(target_days=90):
