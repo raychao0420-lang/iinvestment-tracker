@@ -1,0 +1,659 @@
+{
+  "updated": "2026/05/13 20:31",
+  "etfs": {
+    "0050": {
+      "holdings": [
+        {
+          "symbol": "2330.TW",
+          "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+          "pct": 63.15
+        },
+        {
+          "symbol": "2308.TW",
+          "name": "Delta Electronics Inc",
+          "pct": 3.93
+        },
+        {
+          "symbol": "2317.TW",
+          "name": "Hon Hai Precision Industry Co Ltd",
+          "pct": 3.37
+        },
+        {
+          "symbol": "2454.TW",
+          "name": "MediaTek Inc",
+          "pct": 3.23
+        },
+        {
+          "symbol": "3711.TW",
+          "name": "ASE Technology Holding Co Ltd",
+          "pct": 1.58
+        },
+        {
+          "symbol": "2891.TW",
+          "name": "CTBC Financial Holding Co Ltd",
+          "pct": 1.34
+        },
+        {
+          "symbol": "2345.TW",
+          "name": "Accton Technology Corp",
+          "pct": 1.1
+        },
+        {
+          "symbol": "2383.TW",
+          "name": "Elite Material Co Ltd",
+          "pct": 1.09
+        },
+        {
+          "symbol": "2382.TW",
+          "name": "Quanta Computer Inc",
+          "pct": 1.08
+        },
+        {
+          "symbol": "2881.TW",
+          "name": "Fubon Financial Holdings Co Ltd",
+          "pct": 1.05
+        }
+      ],
+      "diff": {
+        "in": [
+          {
+            "symbol": "2330.TW",
+            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+            "pct": 63.15
+          },
+          {
+            "symbol": "2308.TW",
+            "name": "Delta Electronics Inc",
+            "pct": 3.93
+          },
+          {
+            "symbol": "2317.TW",
+            "name": "Hon Hai Precision Industry Co Ltd",
+            "pct": 3.37
+          },
+          {
+            "symbol": "2454.TW",
+            "name": "MediaTek Inc",
+            "pct": 3.23
+          },
+          {
+            "symbol": "3711.TW",
+            "name": "ASE Technology Holding Co Ltd",
+            "pct": 1.58
+          },
+          {
+            "symbol": "2891.TW",
+            "name": "CTBC Financial Holding Co Ltd",
+            "pct": 1.34
+          },
+          {
+            "symbol": "2345.TW",
+            "name": "Accton Technology Corp",
+            "pct": 1.1
+          },
+          {
+            "symbol": "2383.TW",
+            "name": "Elite Material Co Ltd",
+            "pct": 1.09
+          },
+          {
+            "symbol": "2382.TW",
+            "name": "Quanta Computer Inc",
+            "pct": 1.08
+          },
+          {
+            "symbol": "2881.TW",
+            "name": "Fubon Financial Holdings Co Ltd",
+            "pct": 1.05
+          }
+        ],
+        "out": []
+      }
+    },
+    "006208": {
+      "holdings": [
+        {
+          "symbol": "2330.TW",
+          "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+          "pct": 63.36
+        },
+        {
+          "symbol": "2308.TW",
+          "name": "Delta Electronics Inc",
+          "pct": 3.92
+        },
+        {
+          "symbol": "2317.TW",
+          "name": "Hon Hai Precision Industry Co Ltd",
+          "pct": 3.37
+        },
+        {
+          "symbol": "2454.TW",
+          "name": "MediaTek Inc",
+          "pct": 3.23
+        },
+        {
+          "symbol": "3711.TW",
+          "name": "ASE Technology Holding Co Ltd",
+          "pct": 1.59
+        },
+        {
+          "symbol": "2891.TW",
+          "name": "CTBC Financial Holding Co Ltd",
+          "pct": 1.33
+        },
+        {
+          "symbol": "2345.TW",
+          "name": "Accton Technology Corp",
+          "pct": 1.1
+        },
+        {
+          "symbol": "2383.TW",
+          "name": "Elite Material Co Ltd",
+          "pct": 1.1
+        },
+        {
+          "symbol": "2382.TW",
+          "name": "Quanta Computer Inc",
+          "pct": 1.08
+        },
+        {
+          "symbol": "2881.TW",
+          "name": "Fubon Financial Holdings Co Ltd",
+          "pct": 1.06
+        }
+      ],
+      "diff": {
+        "in": [
+          {
+            "symbol": "2330.TW",
+            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+            "pct": 63.36
+          },
+          {
+            "symbol": "2308.TW",
+            "name": "Delta Electronics Inc",
+            "pct": 3.92
+          },
+          {
+            "symbol": "2317.TW",
+            "name": "Hon Hai Precision Industry Co Ltd",
+            "pct": 3.37
+          },
+          {
+            "symbol": "2454.TW",
+            "name": "MediaTek Inc",
+            "pct": 3.23
+          },
+          {
+            "symbol": "3711.TW",
+            "name": "ASE Technology Holding Co Ltd",
+            "pct": 1.59
+          },
+          {
+            "symbol": "2891.TW",
+            "name": "CTBC Financial Holding Co Ltd",
+            "pct": 1.33
+          },
+          {
+            "symbol": "2345.TW",
+            "name": "Accton Technology Corp",
+            "pct": 1.1
+          },
+          {
+            "symbol": "2383.TW",
+            "name": "Elite Material Co Ltd",
+            "pct": 1.1
+          },
+          {
+            "symbol": "2382.TW",
+            "name": "Quanta Computer Inc",
+            "pct": 1.08
+          },
+          {
+            "symbol": "2881.TW",
+            "name": "Fubon Financial Holdings Co Ltd",
+            "pct": 1.06
+          }
+        ],
+        "out": []
+      }
+    },
+    "00878": {
+      "holdings": [
+        {
+          "symbol": "2882.TW",
+          "name": "Cathay Financial Holding Co Ltd",
+          "pct": 9.94
+        },
+        {
+          "symbol": "2891.TW",
+          "name": "CTBC Financial Holding Co Ltd",
+          "pct": 9.94
+        },
+        {
+          "symbol": "2881.TW",
+          "name": "Fubon Financial Holdings Co Ltd",
+          "pct": 8.05
+        },
+        {
+          "symbol": "2303.TW",
+          "name": "United Microelectronics Corp",
+          "pct": 7.07
+        },
+        {
+          "symbol": "2454.TW",
+          "name": "MediaTek Inc",
+          "pct": 5.26
+        },
+        {
+          "symbol": "3711.TW",
+          "name": "ASE Technology Holding Co Ltd",
+          "pct": 4.49
+        },
+        {
+          "symbol": "2357.TW",
+          "name": "Asustek Computer Inc",
+          "pct": 4.02
+        },
+        {
+          "symbol": "2885.TW",
+          "name": "Yuanta Financial Holdings Co Ltd",
+          "pct": 3.37
+        },
+        {
+          "symbol": "2449.TW",
+          "name": "King Yuan Electronics Co Ltd",
+          "pct": 3.21
+        },
+        {
+          "symbol": "2382.TW",
+          "name": "Quanta Computer Inc",
+          "pct": 2.89
+        }
+      ],
+      "diff": {
+        "in": [
+          {
+            "symbol": "2882.TW",
+            "name": "Cathay Financial Holding Co Ltd",
+            "pct": 9.94
+          },
+          {
+            "symbol": "2891.TW",
+            "name": "CTBC Financial Holding Co Ltd",
+            "pct": 9.94
+          },
+          {
+            "symbol": "2881.TW",
+            "name": "Fubon Financial Holdings Co Ltd",
+            "pct": 8.05
+          },
+          {
+            "symbol": "2303.TW",
+            "name": "United Microelectronics Corp",
+            "pct": 7.07
+          },
+          {
+            "symbol": "2454.TW",
+            "name": "MediaTek Inc",
+            "pct": 5.26
+          },
+          {
+            "symbol": "3711.TW",
+            "name": "ASE Technology Holding Co Ltd",
+            "pct": 4.49
+          },
+          {
+            "symbol": "2357.TW",
+            "name": "Asustek Computer Inc",
+            "pct": 4.02
+          },
+          {
+            "symbol": "2885.TW",
+            "name": "Yuanta Financial Holdings Co Ltd",
+            "pct": 3.37
+          },
+          {
+            "symbol": "2449.TW",
+            "name": "King Yuan Electronics Co Ltd",
+            "pct": 3.21
+          },
+          {
+            "symbol": "2382.TW",
+            "name": "Quanta Computer Inc",
+            "pct": 2.89
+          }
+        ],
+        "out": []
+      }
+    },
+    "00919": {
+      "holdings": [
+        {
+          "symbol": "2891.TW",
+          "name": "CTBC Financial Holding Co Ltd",
+          "pct": 12.85
+        },
+        {
+          "symbol": "2882.TW",
+          "name": "Cathay Financial Holding Co Ltd",
+          "pct": 12.4
+        },
+        {
+          "symbol": "2881.TW",
+          "name": "Fubon Financial Holdings Co Ltd",
+          "pct": 9.93
+        },
+        {
+          "symbol": "2303.TW",
+          "name": "United Microelectronics Corp",
+          "pct": 8.67
+        },
+        {
+          "symbol": "2887.TW",
+          "name": "TS Financial Holding Co Ltd",
+          "pct": 7.89
+        },
+        {
+          "symbol": "2603.TW",
+          "name": "Evergreen Marine Corp (Taiwan) Ltd",
+          "pct": 5.65
+        },
+        {
+          "symbol": "2357.TW",
+          "name": "Asustek Computer Inc",
+          "pct": 5.24
+        },
+        {
+          "symbol": "3034.TW",
+          "name": "Novatek Microelectronics Corp",
+          "pct": 3.71
+        },
+        {
+          "symbol": "2609.TW",
+          "name": "Yang Ming Marine Transport Corp",
+          "pct": 2.92
+        },
+        {
+          "symbol": "3036.TW",
+          "name": "WT Microelectronics Co Ltd",
+          "pct": 2.88
+        }
+      ],
+      "diff": {
+        "in": [
+          {
+            "symbol": "2891.TW",
+            "name": "CTBC Financial Holding Co Ltd",
+            "pct": 12.85
+          },
+          {
+            "symbol": "2882.TW",
+            "name": "Cathay Financial Holding Co Ltd",
+            "pct": 12.4
+          },
+          {
+            "symbol": "2881.TW",
+            "name": "Fubon Financial Holdings Co Ltd",
+            "pct": 9.93
+          },
+          {
+            "symbol": "2303.TW",
+            "name": "United Microelectronics Corp",
+            "pct": 8.67
+          },
+          {
+            "symbol": "2887.TW",
+            "name": "TS Financial Holding Co Ltd",
+            "pct": 7.89
+          },
+          {
+            "symbol": "2603.TW",
+            "name": "Evergreen Marine Corp (Taiwan) Ltd",
+            "pct": 5.65
+          },
+          {
+            "symbol": "2357.TW",
+            "name": "Asustek Computer Inc",
+            "pct": 5.24
+          },
+          {
+            "symbol": "3034.TW",
+            "name": "Novatek Microelectronics Corp",
+            "pct": 3.71
+          },
+          {
+            "symbol": "2609.TW",
+            "name": "Yang Ming Marine Transport Corp",
+            "pct": 2.92
+          },
+          {
+            "symbol": "3036.TW",
+            "name": "WT Microelectronics Co Ltd",
+            "pct": 2.88
+          }
+        ],
+        "out": []
+      }
+    },
+    "00929": {
+      "holdings": [
+        {
+          "symbol": "2303.TW",
+          "name": "United Microelectronics Corp",
+          "pct": 8.87
+        },
+        {
+          "symbol": "2357.TW",
+          "name": "Asustek Computer Inc",
+          "pct": 7.08
+        },
+        {
+          "symbol": "2454.TW",
+          "name": "MediaTek Inc",
+          "pct": 5.51
+        },
+        {
+          "symbol": "3008.TW",
+          "name": "Largan Precision Co Ltd",
+          "pct": 5.01
+        },
+        {
+          "symbol": "6239.TW",
+          "name": "Powertech Technology Inc",
+          "pct": 4.61
+        },
+        {
+          "symbol": "2404.TW",
+          "name": "United Integrated Services Co Ltd",
+          "pct": 4.36
+        },
+        {
+          "symbol": "3034.TW",
+          "name": "Novatek Microelectronics Corp",
+          "pct": 3.89
+        },
+        {
+          "symbol": "3036.TW",
+          "name": "WT Microelectronics Co Ltd",
+          "pct": 3.73
+        },
+        {
+          "symbol": "3260.TWO",
+          "name": "AData Technology Co Ltd",
+          "pct": 3.36
+        },
+        {
+          "symbol": "3044.TW",
+          "name": "Tripod Technology Corp",
+          "pct": 2.98
+        }
+      ],
+      "diff": {
+        "in": [
+          {
+            "symbol": "2303.TW",
+            "name": "United Microelectronics Corp",
+            "pct": 8.87
+          },
+          {
+            "symbol": "2357.TW",
+            "name": "Asustek Computer Inc",
+            "pct": 7.08
+          },
+          {
+            "symbol": "2454.TW",
+            "name": "MediaTek Inc",
+            "pct": 5.51
+          },
+          {
+            "symbol": "3008.TW",
+            "name": "Largan Precision Co Ltd",
+            "pct": 5.01
+          },
+          {
+            "symbol": "6239.TW",
+            "name": "Powertech Technology Inc",
+            "pct": 4.61
+          },
+          {
+            "symbol": "2404.TW",
+            "name": "United Integrated Services Co Ltd",
+            "pct": 4.36
+          },
+          {
+            "symbol": "3034.TW",
+            "name": "Novatek Microelectronics Corp",
+            "pct": 3.89
+          },
+          {
+            "symbol": "3036.TW",
+            "name": "WT Microelectronics Co Ltd",
+            "pct": 3.73
+          },
+          {
+            "symbol": "3260.TWO",
+            "name": "AData Technology Co Ltd",
+            "pct": 3.36
+          },
+          {
+            "symbol": "3044.TW",
+            "name": "Tripod Technology Corp",
+            "pct": 2.98
+          }
+        ],
+        "out": []
+      }
+    },
+    "00940": {
+      "holdings": [
+        {
+          "symbol": "2603.TW",
+          "name": "Evergreen Marine Corp (Taiwan) Ltd",
+          "pct": 7.0
+        },
+        {
+          "symbol": "3702.TW",
+          "name": "WPG Holding Co Ltd",
+          "pct": 3.36
+        },
+        {
+          "symbol": "2891.TW",
+          "name": "CTBC Financial Holding Co Ltd",
+          "pct": 3.34
+        },
+        {
+          "symbol": "2385.TW",
+          "name": "Chicony Electronics Co Ltd",
+          "pct": 2.98
+        },
+        {
+          "symbol": "3034.TW",
+          "name": "Novatek Microelectronics Corp",
+          "pct": 2.91
+        },
+        {
+          "symbol": "3036.TW",
+          "name": "WT Microelectronics Co Ltd",
+          "pct": 2.88
+        },
+        {
+          "symbol": "2618.TW",
+          "name": "Eva Airways Corp",
+          "pct": 2.83
+        },
+        {
+          "symbol": "2454.TW",
+          "name": "MediaTek Inc",
+          "pct": 2.79
+        },
+        {
+          "symbol": "2379.TW",
+          "name": "Realtek Semiconductor Corp",
+          "pct": 2.55
+        },
+        {
+          "symbol": "3293.TWO",
+          "name": "International Games System Co Ltd",
+          "pct": 2.5
+        }
+      ],
+      "diff": {
+        "in": [
+          {
+            "symbol": "2603.TW",
+            "name": "Evergreen Marine Corp (Taiwan) Ltd",
+            "pct": 7.0
+          },
+          {
+            "symbol": "3702.TW",
+            "name": "WPG Holding Co Ltd",
+            "pct": 3.36
+          },
+          {
+            "symbol": "2891.TW",
+            "name": "CTBC Financial Holding Co Ltd",
+            "pct": 3.34
+          },
+          {
+            "symbol": "2385.TW",
+            "name": "Chicony Electronics Co Ltd",
+            "pct": 2.98
+          },
+          {
+            "symbol": "3034.TW",
+            "name": "Novatek Microelectronics Corp",
+            "pct": 2.91
+          },
+          {
+            "symbol": "3036.TW",
+            "name": "WT Microelectronics Co Ltd",
+            "pct": 2.88
+          },
+          {
+            "symbol": "2618.TW",
+            "name": "Eva Airways Corp",
+            "pct": 2.83
+          },
+          {
+            "symbol": "2454.TW",
+            "name": "MediaTek Inc",
+            "pct": 2.79
+          },
+          {
+            "symbol": "2379.TW",
+            "name": "Realtek Semiconductor Corp",
+            "pct": 2.55
+          },
+          {
+            "symbol": "3293.TWO",
+            "name": "International Games System Co Ltd",
+            "pct": 2.5
+          }
+        ],
+        "out": []
+      }
+    }
+  }
+}
