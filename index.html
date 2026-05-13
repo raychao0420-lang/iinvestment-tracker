@@ -69,6 +69,16 @@
   .sig-sell  { color:#dc2626; }
   .sig-neutral { color:#94a3b8; font-weight:400; }
 
+  /* ETF 持股明細 */
+  .holding-table { width:100%; border-collapse:collapse; font-size:.72rem; }
+  .holding-table th { color:#94a3b8; font-weight:600; font-size:.65rem; padding:.25rem .4rem; text-align:left; border-bottom:1px solid #e2e8f0; }
+  .holding-table th.r { text-align:right; }
+  .holding-table td { padding:.25rem .4rem; border-top:1px solid #f8fafc; }
+  .holding-table td.r { text-align:right; font-family:'Courier New',monospace; }
+  .holding-in  { background:#dcfce7; }
+  .holding-out { background:#fee2e2; opacity:.7; text-decoration:line-through; }
+  .diff-badge { font-size:.6rem; font-weight:700; background:#fef3c7; color:#b45309; padding:.1rem .4rem; border-radius:99px; margin-left:.35rem; }
+
   /* ETF 三大法人 */
   .inst-bar {
     width:100%; border-top:1px solid #f1f5f9;
@@ -345,6 +355,11 @@
     <div class="stock-grid" id="tw-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1" id="etf-top3-title" style="display:none">今日成交量前三名</div>
     <div class="stock-grid" id="etf-top3"></div>
+    <button class="eps-toggle-btn" onclick="toggleHoldings()">
+      <i class="bi bi-pie-chart"></i>ETF 持股 TOP 10
+      <i class="bi bi-chevron-right eps-toggle-icon" id="holdings-icon"></i>
+    </button>
+    <div class="eps-body" id="holdings-body" style="display:none"></div>
     <button class="eps-toggle-btn" onclick="toggleFund('tw')">
       <i class="bi bi-bar-chart-steps"></i>基本面估值
       <i class="bi bi-chevron-right eps-toggle-icon" id="fund-icon-tw"></i>
@@ -520,6 +535,65 @@ function renderStocks(items, id) {
       ${sigHtml}${navHtml}${instHtml}
     </div>`;
   }).join('');
+}
+
+// ── ETF 持股明細 ─────────────────────────────────────────────────────────────
+const ETF_NAMES = {
+  '0050':'元大台灣50','006208':'富邦台50','00878':'國泰永續高股息',
+  '00919':'群益台灣精選高息','00929':'復華台灣科技優息','00940':'元大台灣價值高息',
+};
+
+function toggleHoldings() {
+  const body = document.getElementById('holdings-body');
+  const icon = document.getElementById('holdings-icon');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  icon.style.transform = open ? '' : 'rotate(90deg)';
+  if (!open) renderEtfHoldings();
+}
+
+function renderEtfHoldings() {
+  const el = document.getElementById('holdings-body');
+  if (!el) return;
+  if (!_etfHoldings || !_etfHoldings.etfs) {
+    el.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:1rem;font-size:.8rem">無持股資料（待首次 Actions 跑完後產生）</div>';
+    return;
+  }
+
+  const sections = Object.entries(_etfHoldings.etfs).map(([code, data]) => {
+    const name     = ETF_NAMES[code] || code;
+    const holdings = data.holdings || [];
+    const diff     = data.diff || {};
+    const inSyms   = new Set((diff.in  || []).map(x => x.symbol));
+    const outSyms  = new Set((diff.out || []).map(x => x.symbol));
+    const hasChg   = inSyms.size > 0 || outSyms.size > 0;
+
+    const badge = hasChg
+      ? `<span class="diff-badge">異動 +${inSyms.size}/-${outSyms.size}</span>`
+      : '';
+
+    const rows = holdings.map(h => {
+      const cls = inSyms.has(h.symbol) ? ' class="holding-in"' : '';
+      const codeTW = h.symbol.replace(/\.(TW|TWO)$/, '');
+      return `<tr${cls}><td>${codeTW}</td><td>${h.name}</td><td class="r">${h.pct.toFixed(2)}%</td></tr>`;
+    }).join('');
+
+    const outRows = (diff.out || []).map(h => {
+      const codeTW = h.symbol.replace(/\.(TW|TWO)$/, '');
+      return `<tr class="holding-out"><td>${codeTW}</td><td>${h.name}</td><td class="r">退場</td></tr>`;
+    }).join('');
+
+    return `<div style="margin:.25rem .75rem .6rem">
+      <div style="font-size:.82rem;font-weight:700;color:#475569;padding:.3rem 0 .2rem">${name}${badge}</div>
+      <table class="holding-table">
+        <thead><tr><th>代號</th><th>名稱</th><th class="r">比重</th></tr></thead>
+        <tbody>${rows}${outRows}</tbody>
+      </table>
+    </div>`;
+  }).join('<div style="height:.4rem"></div>');
+
+  const upd = _etfHoldings.updated || '';
+  el.innerHTML = `<div style="font-size:.68rem;color:#94a3b8;text-align:right;padding:.25rem 1rem .1rem">更新：${upd}　｜　僅含 Yahoo Finance top 10</div>${sections}`;
 }
 
 // ── ETF 三大法人 ─────────────────────────────────────────────────────────────
@@ -836,7 +910,7 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw] = await Promise.all([
+  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
@@ -847,8 +921,10 @@ async function loadAll() {
     fetch(`data/signals.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/fundamentals.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/etf_trading.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/etf_holdings.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
-  _etfTrading = etfTradingRaw;
+  _etfTrading  = etfTradingRaw;
+  _etfHoldings = etfHoldingsRaw;
   _marginData = marginData;
   _chartCache = chartData;
   _signals    = (signalsData && signalsData.stocks) || {};
@@ -1019,6 +1095,7 @@ let _signals     = {};
 let _fundData    = {};
 let _usData      = null;
 let _etfTrading  = null;
+let _etfHoldings = null;
 let _twData      = null;
 let _stockCharts = null;
 let _stockMargin = null;

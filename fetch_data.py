@@ -622,6 +622,61 @@ def fetch_etf_nav():
     return result
 
 
+def fetch_etf_holdings():
+    """Fetch top-10 holdings for each tracked ETF via yfinance funds_data.
+    Compares to stored data to detect changes (additions/removals) in top-10 composition.
+    Returns dict for data/etf_holdings.json.
+    """
+    HOLDINGS_PATH = 'data/etf_holdings.json'
+
+    existing = {}
+    if os.path.exists(HOLDINGS_PATH):
+        try:
+            with open(HOLDINGS_PATH, encoding='utf-8') as f:
+                existing = json.load(f).get('etfs', {})
+        except Exception:
+            pass
+
+    result = {}
+    for s in TW_ETF:
+        sym  = s['symbol']
+        code = sym.replace('.TW', '')
+        try:
+            h = yf.Ticker(sym).funds_data.top_holdings
+            if h is None or h.empty:
+                print(f'  etf_holdings {code}: empty')
+                if code in existing:
+                    result[code] = existing[code]
+                continue
+
+            holdings = [
+                {'symbol': idx,
+                 'name':   row['Name'],
+                 'pct':    round(float(row['Holding Percent']) * 100, 2)}
+                for idx, row in h.iterrows()
+            ]
+
+            old_syms = {x['symbol'] for x in existing.get(code, {}).get('holdings', [])}
+            new_syms = {x['symbol'] for x in holdings}
+            added   = [x for x in holdings if x['symbol'] not in old_syms]
+            old_map = {x['symbol']: x for x in existing.get(code, {}).get('holdings', [])}
+            removed = [old_map[k] for k in old_syms if k not in new_syms]
+
+            result[code] = {'holdings': holdings}
+            if added or removed:
+                result[code]['diff'] = {'in': added, 'out': removed}
+
+            status = f"+{len(added)}/-{len(removed)}" if (added or removed) else "無異動"
+            print(f'  etf_holdings {code}: {len(holdings)} 筆, {status}')
+            time.sleep(0.5)
+        except Exception as e:
+            print(f'  etf_holdings {code}: {e}')
+            if code in existing:
+                result[code] = existing[code]
+
+    return result
+
+
 def fetch_etf_trading():
     """Fetch ETF 三大法人 daily buy/sell (外資/投信/自營商) and top-3 ETFs by volume.
     Volume from yfinance fast_info; institutional data from FinMind (free tier, no token needed).
@@ -1162,6 +1217,14 @@ if __name__ == '__main__':
         save('data/stock_margin.json', {'updated': now, 'stocks': sm})
     else:
         print('  stock_margin: no data (set FINMIND_TOKEN secret to enable)')
+
+    time.sleep(1)
+    print('--- ETF Holdings ---')
+    etf_holdings = fetch_etf_holdings()
+    if etf_holdings:
+        save('data/etf_holdings.json', {'updated': now, 'etfs': etf_holdings})
+    else:
+        print('  etf_holdings: no data')
 
     time.sleep(1)
     print('--- ETF Trading (三大法人) ---')
