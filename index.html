@@ -692,7 +692,7 @@ function renderFundamentals(market) {
         <td class="${pe(d.fpe)}">${fv(d.fpe)}</td>
         <td>${fv(d.pb)}</td>
         <td class="${roe(d.roe)}">${fp(d.roe)}</td>
-        <td class="${yld(d.div_yield)}">${fp(d.div_yield)}</td>
+        <td class="${yld(d.div_yield)}">${d.div_yield != null ? d.div_yield.toFixed(2)+'%' : '<span class="fund-null">—</span>'}</td>
         <td class="${gm(d.gm)}">${fp(d.gm)}</td>
         <td class="${rev(d.rev_growth)}">${fp(d.rev_growth)}</td>
       </tr>`;

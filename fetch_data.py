@@ -722,7 +722,7 @@ def fetch_fundamentals():
                 'fpe':        pf('forwardPE'),
                 'pb':         pf('priceToBook'),
                 'roe':        pf('returnOnEquity', 100),
-                'div_yield':  pf('dividendYield', 100),
+                'div_yield':  pf('dividendYield', 1.0, 2),
                 'gm':         pf('grossMargins', 100),
                 'rev_growth': pf('revenueGrowth', 100),
             }
