@@ -1,20 +1,20 @@
 {
-  "updated": "2026/05/13 01:22",
+  "updated": "2026/05/13 08:15",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 62742.57,
-      "change": 324.69,
-      "pct": 0.52,
-      "date": "05/12"
+      "price": 62409.85,
+      "change": -8.03,
+      "pct": -0.01,
+      "date": "05/13"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF (EWJ)",
-      "price": 91.74,
-      "change": -0.52,
-      "pct": -0.56,
+      "price": 92.06,
+      "change": -0.2,
+      "pct": -0.22,
       "date": "05/12"
     }
   ],
@@ -23,9 +23,9 @@
       "symbol": "8035.T",
       "name": "東京威力科創",
       "price": 52160.0,
-      "change": 80.0,
-      "pct": 0.15,
-      "date": "05/12"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/13"
     },
     {
       "symbol": "6857.T",
@@ -39,9 +39,9 @@
       "symbol": "4063.T",
       "name": "信越化學",
       "price": 7520.0,
-      "change": -54.0,
-      "pct": -0.71,
-      "date": "05/12"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/13"
     },
     {
       "symbol": "6758.T",
@@ -55,9 +55,9 @@
       "symbol": "6861.T",
       "name": "Keyence",
       "price": 79260.0,
-      "change": -3040.0,
-      "pct": -3.69,
-      "date": "05/12"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/13"
     },
     {
       "symbol": "4452.T",
