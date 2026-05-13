@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/12",
+  "updated": "2026/05/13",
   "note": "手動維護，每季財報公布後更新。y22-y25 = 各年度全年EPS；pub = 今年已公布（季報或完整FY）；est = 今年全年預估。部分值為估算，請至財報狗/goodinfo/macrotrends核實。",
   "us": [
     {
@@ -194,8 +194,8 @@
       "y23": 7.39,
       "y24": 7.53,
       "y25": 9.37,
-      "pub": null,
-      "pub_note": null,
+      "pub": 3.24,
+      "pub_note": "Q1 ✓",
       "est": null,
       "est_note": null
     },
@@ -350,8 +350,8 @@
       "y23": -0.18,
       "y24": 0.5,
       "y25": 0.58,
-      "pub": null,
-      "pub_note": null,
+      "pub": 0.34,
+      "pub_note": "Q1 ✓",
       "est": null,
       "est_note": null
     },
