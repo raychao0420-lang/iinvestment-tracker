@@ -775,7 +775,7 @@ def fetch_margin_balance(target_days=90):
             pass
 
     today      = _date.today()
-    offset     = 1
+    offset     = 0
     scanned    = 0
     scan_limit = target_days if len(existing) < 30 else 10
 
@@ -1026,6 +1026,69 @@ def fetch_stock_charts():
     return result
 
 
+def fetch_stock_institutional():
+    """Fetch 三大法人 daily buy/sell for TW individual stocks + drone stocks via FinMind.
+    Same dataset as ETF trading: TaiwanStockInstitutionalInvestorsBuySell.
+    Requires FINMIND_TOKEN; skipped silently when unset.
+    Saves data/stock_inst.json.
+    """
+    import requests as _req
+    from datetime import date as _date, timedelta
+
+    if not FINMIND_TOKEN:
+        print('  stock_inst: FINMIND_TOKEN not set, skipping')
+        return {}
+
+    tw_targets = TW_STOCKS + TW_DRONE
+    codes = [s['symbol'].replace('.TW', '') for s in tw_targets]
+
+    today = _date.today()
+    query_date = next(
+        (today - timedelta(days=d)).isoformat()
+        for d in range(7)
+        if (today - timedelta(days=d)).weekday() < 5
+    )
+
+    inst = {}
+    for code in codes:
+        try:
+            r = _req.get(
+                'https://api.finmindtrade.com/api/v4/data',
+                params={
+                    'dataset':    'TaiwanStockInstitutionalInvestorsBuySell',
+                    'data_id':    code,
+                    'start_date': query_date,
+                    'token':      FINMIND_TOKEN,
+                },
+                timeout=20,
+            )
+            rows = r.json().get('data', [])
+            if not rows:
+                print(f'  stock_inst {code}: no data ({query_date})')
+                continue
+            fi = sit = dealer = 0
+            for row in rows:
+                net = int(row.get('buy', 0)) - int(row.get('sell', 0))
+                n   = row.get('name', '')
+                if n in ('Foreign_Investor', 'Foreign_Dealer_Self'):
+                    fi += net
+                elif n == 'Investment_Trust':
+                    sit += net
+                elif n in ('Dealer_self', 'Dealer_Hedging'):
+                    dealer += net
+            inst[code] = {'fi': fi, 'sit': sit, 'dealer': dealer}
+            print(f'  {code}: fi={fi:+,} sit={sit:+,} dealer={dealer:+,}')
+            time.sleep(0.3)
+        except Exception as e:
+            print(f'  stock_inst {code}: {e}')
+
+    if not inst:
+        return {}
+
+    print(f'  stock_inst: {len(inst)}/{len(codes)} fetched ({query_date})')
+    return {'date': query_date, 'stocks': inst}
+
+
 def fetch_stock_margin():
     """Fetch per-stock 融資餘額 for TW stocks via FinMind API (incremental).
     Free plan limits each request to ~30 days; builds up to 90-day history across runs.
@@ -1217,6 +1280,14 @@ if __name__ == '__main__':
         save('data/stock_margin.json', {'updated': now, 'stocks': sm})
     else:
         print('  stock_margin: no data (set FINMIND_TOKEN secret to enable)')
+
+    time.sleep(1)
+    print('--- Stock Institutional (三大法人) ---')
+    stock_inst = fetch_stock_institutional()
+    if stock_inst and stock_inst.get('stocks'):
+        save('data/stock_inst.json', {'updated': now, **stock_inst})
+    else:
+        print('  stock_inst: no data (set FINMIND_TOKEN secret to enable)')
 
     time.sleep(1)
     print('--- ETF Holdings ---')

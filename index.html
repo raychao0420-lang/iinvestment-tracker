@@ -513,12 +513,13 @@ function renderStocks(items, id) {
       navHtml = `<div class="nav-bar">淨值 ${fmt(s.nav, 2)} ｜ <span class="nav-prem ${pc}">${pLabel} ${pSign}${fmt(s.premium)}%</span></div>`;
     }
     let instHtml = '';
-    if (_etfTrading && _etfTrading.tracked) {
-      const code = s.symbol.replace('.TW', '');
-      const td = _etfTrading.tracked[code];
-      if (td != null) {
-        instHtml = `<div class="inst-bar">${fmtInst3(td)}<span style="color:#cbd5e1;font-size:.6rem;margin-left:auto">(張)</span></div>`;
-      }
+    const _instCode = s.symbol.replace('.TW', '');
+    if (_etfTrading && _etfTrading.tracked && _etfTrading.tracked[_instCode] != null) {
+      const td = _etfTrading.tracked[_instCode];
+      instHtml = `<div class="inst-bar">${fmtInst3(td)}<span style="color:#cbd5e1;font-size:.6rem;margin-left:auto">(張)</span></div>`;
+    } else if (_stockInst && _stockInst.stocks && _stockInst.stocks[_instCode] != null) {
+      const td = _stockInst.stocks[_instCode];
+      instHtml = `<div class="inst-bar">${fmtInst3(td)}<span style="color:#cbd5e1;font-size:.6rem;margin-left:auto">(張)</span></div>`;
     }
     return `<div class="stock-card">
       <div>
@@ -910,7 +911,7 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw] = await Promise.all([
+  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw, stockInstRaw] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
@@ -922,9 +923,11 @@ async function loadAll() {
     fetch(`data/fundamentals.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/etf_trading.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/etf_holdings.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/stock_inst.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
   _etfTrading  = etfTradingRaw;
   _etfHoldings = etfHoldingsRaw;
+  _stockInst   = stockInstRaw;
   _marginData = marginData;
   _chartCache = chartData;
   _signals    = (signalsData && signalsData.stocks) || {};
@@ -988,6 +991,7 @@ async function manualRefresh() {
   _epsData     = null;
   _stockCharts = null;
   _stockMargin = null;
+  _stockInst   = null;
   if (_klineChart)   { _klineChart.remove();   _klineChart  = null; }
   if (_marginChart)  { _marginChart.remove();  _marginChart = null; }
   if (_stockChart2)  { _stockChart2.remove();  _stockChart2 = null; }
@@ -1096,6 +1100,7 @@ let _fundData    = {};
 let _usData      = null;
 let _etfTrading  = null;
 let _etfHoldings = null;
+let _stockInst   = null;
 let _twData      = null;
 let _stockCharts = null;
 let _stockMargin = null;
