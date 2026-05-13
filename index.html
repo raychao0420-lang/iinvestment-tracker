@@ -69,6 +69,14 @@
   .sig-sell  { color:#dc2626; }
   .sig-neutral { color:#94a3b8; font-weight:400; }
 
+  /* ETF 淨值溢折價 */
+  .nav-bar {
+    width:100%; border-top:1px solid #f1f5f9;
+    padding-top:.28rem; margin-top:.22rem;
+    font-size:.72rem; color:#94a3b8; display:flex; align-items:center; gap:.4rem;
+  }
+  .nav-prem { font-weight:700; }
+
   /* 指數大卡 */
   .idx-card {
     background:#fff; border-radius:12px; padding:1rem 1.1rem;
@@ -468,6 +476,13 @@ function renderStocks(items, id) {
       : `<span class="chg-badge flat">–</span>`;
     const sigHtml = renderSignalBadges(_signals[s.symbol]);
     const safeName = s.name.replace(/'/g, '&#39;');
+    let navHtml = '';
+    if (s.nav != null && s.premium != null) {
+      const pc = s.premium >= 0 ? 'up' : 'down';
+      const pLabel = s.premium >= 0 ? '溢價' : '折價';
+      const pSign  = s.premium >= 0 ? '+' : '';
+      navHtml = `<div class="nav-bar">淨值 ${fmt(s.nav, 2)} ｜ <span class="nav-prem ${pc}">${pLabel} ${pSign}${fmt(s.premium)}%</span></div>`;
+    }
     return `<div class="stock-card">
       <div>
         <div style="display:flex;align-items:center;gap:.4rem">
@@ -480,7 +495,7 @@ function renderStocks(items, id) {
         <div class="stock-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
         <div style="text-align:right">${badge}</div>
       </div>
-      ${sigHtml}
+      ${sigHtml}${navHtml}
     </div>`;
   }).join('');
 }

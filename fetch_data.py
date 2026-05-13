@@ -586,6 +586,56 @@ def fetch_tw_futures_night():
     return result
 
 
+def fetch_etf_nav():
+    """Fetch Taiwan listed ETF NAV from TWSE TWT38U (works from overseas IPs).
+    Returns dict: ETF code (without .TW) -> NAV float.
+    """
+    import requests, urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+    TARGET = {'0050', '006208', '00878', '00919', '00929', '00940'}
+
+    try:
+        r = requests.get(
+            'https://www.twse.com.tw/rwd/zh/fund/TWT38U',
+            params={'response': 'json'},
+            timeout=12, verify=False,
+            headers={'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'},
+        )
+        d = r.json()
+        if d.get('stat') != 'OK':
+            print(f'  etf_nav: stat={d.get("stat")}')
+            return {}
+
+        fields = d.get('fields', [])
+        data   = d.get('data', [])
+        print(f'  etf_nav fields: {fields}')
+
+        nav_col = next((i for i, f in enumerate(fields) if '淨值' in str(f)), None)
+        if nav_col is None:
+            print('  etf_nav: 找不到淨值欄位')
+            return {}
+
+        result = {}
+        for row in data:
+            code = str(row[0]).strip()
+            if code not in TARGET:
+                continue
+            try:
+                nav = float(str(row[nav_col]).replace(',', '').strip())
+                if nav > 0:
+                    result[code] = nav
+                    print(f'  etf_nav {code}: {nav}')
+            except (ValueError, TypeError):
+                pass
+
+        print(f'  etf_nav: {len(result)}/{len(TARGET)} 筆')
+        return result
+    except Exception as e:
+        print(f'  etf_nav: {e}')
+        return {}
+
+
 def fetch_margin_balance(target_days=90):
     """Fetch total market 融資餘額 (億元) from TWSE MI_MARGN?selectType=MS.
     Loads existing data/margin.json to skip already-fetched dates (incremental).
@@ -954,6 +1004,24 @@ if __name__ == '__main__':
     old_tw = load_existing('data/tw.json')
     tw = fetch_market({'indices': TW_INDICES, 'stocks': TW_STOCKS, 'drone': TW_DRONE, 'etf': TW_ETF})
     tw = merge_with_old(tw, old_tw)
+
+    # Carry forward old nav for ETFs that got a fresh price (merge returns new item without nav)
+    for item in tw.get('etf', []):
+        if 'nav' not in item:
+            old_item = old_tw.get(item['symbol'])
+            if old_item and 'nav' in old_item:
+                item['nav'] = old_item['nav']
+
+    print('--- ETF NAV ---')
+    nav_map = fetch_etf_nav()
+    for item in tw.get('etf', []):
+        code = item['symbol'].replace('.TW', '')
+        if nav_map.get(code):
+            item['nav'] = nav_map[code]
+        nav   = item.get('nav')
+        price = item.get('price')
+        item['premium'] = round((price - nav) / nav * 100, 2) if nav and price and nav > 0 else None
+
     save('data/tw.json', {'updated': now, **tw})
 
     time.sleep(2)
