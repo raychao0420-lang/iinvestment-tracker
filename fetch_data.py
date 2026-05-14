@@ -624,10 +624,13 @@ def fetch_etf_nav():
 
 def fetch_etf_holdings():
     """Fetch top-10 holdings for each tracked ETF via yfinance funds_data.
-    Compares to stored data to detect changes (additions/removals) in top-10 composition.
+    Tracks when holdings actually changed (changed_at) vs. when we last fetched.
     Returns dict for data/etf_holdings.json.
     """
+    import pytz
     HOLDINGS_PATH = 'data/etf_holdings.json'
+    tw_tz = pytz.timezone('Asia/Taipei')
+    today_str = datetime.now(tw_tz).strftime('%Y/%m/%d')
 
     existing = {}
     if os.path.exists(HOLDINGS_PATH):
@@ -662,12 +665,28 @@ def fetch_etf_holdings():
             old_map = {x['symbol']: x for x in existing.get(code, {}).get('holdings', [])}
             removed = [old_map[k] for k in old_syms if k not in new_syms]
 
-            result[code] = {'holdings': holdings}
+            # Compare pct values to detect weight changes even without composition change
+            pct_changed = False
+            if not added and not removed:
+                old_pcts = {x['symbol']: x['pct'] for x in existing.get(code, {}).get('holdings', [])}
+                for h_item in holdings:
+                    if abs(h_item['pct'] - old_pcts.get(h_item['symbol'], -1)) >= 0.5:
+                        pct_changed = True
+                        break
+
+            composition_changed = bool(added or removed or pct_changed)
+            prev_changed_at = existing.get(code, {}).get('changed_at', '')
+            changed_at = today_str if composition_changed else prev_changed_at
+
+            result[code] = {'holdings': holdings, 'changed_at': changed_at}
             if added or removed:
                 result[code]['diff'] = {'in': added, 'out': removed}
 
-            status = f"+{len(added)}/-{len(removed)}" if (added or removed) else "無異動"
-            print(f'  etf_holdings {code}: {len(holdings)} 筆, {status}')
+            if composition_changed:
+                status = f"+{len(added)}/-{len(removed)}" if (added or removed) else "比重異動"
+                print(f'  etf_holdings {code}: {len(holdings)} 筆, {status} → changed_at={today_str}')
+            else:
+                print(f'  etf_holdings {code}: {len(holdings)} 筆, 無異動 (基準日:{changed_at})')
             time.sleep(0.5)
         except Exception as e:
             print(f'  etf_holdings {code}: {e}')

@@ -572,6 +572,7 @@ function renderEtfHoldings() {
     const badge = hasChg
       ? `<span class="diff-badge">異動 +${inSyms.size}/-${outSyms.size}</span>`
       : '';
+    const changedAt = data.changed_at ? `<span style="font-size:.68rem;font-weight:400;color:#94a3b8;margin-left:.4rem">基準日 ${data.changed_at}</span>` : '';
 
     const rows = holdings.map(h => {
       const cls = inSyms.has(h.symbol) ? ' class="holding-in"' : '';
@@ -585,7 +586,7 @@ function renderEtfHoldings() {
     }).join('');
 
     return `<div style="margin:.25rem .75rem .6rem">
-      <div style="font-size:.82rem;font-weight:700;color:#475569;padding:.3rem 0 .2rem">${name}${badge}</div>
+      <div style="font-size:.82rem;font-weight:700;color:#475569;padding:.3rem 0 .2rem">${name}${badge}${changedAt}</div>
       <table class="holding-table">
         <thead><tr><th>代號</th><th>名稱</th><th class="r">比重</th></tr></thead>
         <tbody>${rows}${outRows}</tbody>
@@ -593,8 +594,7 @@ function renderEtfHoldings() {
     </div>`;
   }).join('<div style="height:.4rem"></div>');
 
-  const upd = _etfHoldings.updated || '';
-  el.innerHTML = `<div style="font-size:.68rem;color:#94a3b8;text-align:right;padding:.25rem 1rem .1rem">更新：${upd}　｜　僅含 Yahoo Finance top 10</div>${sections}`;
+  el.innerHTML = `<div style="font-size:.68rem;color:#94a3b8;text-align:right;padding:.25rem 1rem .1rem">來源：Yahoo Finance top 10（季度更新）</div>${sections}`;
 }
 
 // ── ETF 三大法人 ─────────────────────────────────────────────────────────────

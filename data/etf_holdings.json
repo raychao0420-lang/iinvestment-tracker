@@ -53,7 +53,8 @@
           "name": "Fubon Financial Holdings Co Ltd",
           "pct": 1.05
         }
-      ]
+      ],
+      "changed_at": "2026/05/14"
     },
     "006208": {
       "holdings": [
@@ -107,7 +108,8 @@
           "name": "Fubon Financial Holdings Co Ltd",
           "pct": 1.06
         }
-      ]
+      ],
+      "changed_at": "2026/05/14"
     },
     "00878": {
       "holdings": [
@@ -161,7 +163,8 @@
           "name": "Quanta Computer Inc",
           "pct": 2.89
         }
-      ]
+      ],
+      "changed_at": "2026/05/14"
     },
     "00919": {
       "holdings": [
@@ -215,7 +218,8 @@
           "name": "WT Microelectronics Co Ltd",
           "pct": 2.88
         }
-      ]
+      ],
+      "changed_at": "2026/05/14"
     },
     "00929": {
       "holdings": [
@@ -269,7 +273,8 @@
           "name": "Tripod Technology Corp",
           "pct": 2.98
         }
-      ]
+      ],
+      "changed_at": "2026/05/14"
     },
     "00940": {
       "holdings": [
@@ -323,7 +328,8 @@
           "name": "International Games System Co Ltd",
           "pct": 2.5
         }
-      ]
+      ],
+      "changed_at": "2026/05/14"
     }
   }
 }
