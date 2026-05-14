@@ -1236,6 +1236,141 @@ def fetch_stock_margin():
     return result, rank_data
 
 
+def fetch_inst_rank():
+    """Fetch 三大法人買賣超日報 from TWSE TWT44U (all listed stocks).
+    Returns summary totals + buy/sell top-10 rankings by institution + ETF sub-ranking.
+    Unit: 千股 (= 張 for most stocks).
+    """
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    import requests as _req
+    from datetime import date as _date, timedelta
+
+    today = _date.today()
+    query_date = None
+    for offset in range(7):
+        d = today - timedelta(days=offset)
+        if d.weekday() < 5:
+            query_date = d
+            break
+    if query_date is None:
+        return None
+
+    date_str = query_date.isoformat()
+
+    # Skip if we already have today's data
+    path = 'data/inst_rank.json'
+    if os.path.exists(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                ex = json.load(f)
+            if ex.get('date') == date_str:
+                print(f'  inst_rank: already have {date_str}')
+                return ex
+        except Exception:
+            pass
+
+    try:
+        r = _req.get(
+            'https://www.twse.com.tw/rwd/zh/fund/TWT44U',
+            params={'date': query_date.strftime('%Y%m%d'), 'response': 'json'},
+            timeout=25, verify=False,
+            headers={'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'},
+        )
+        payload = r.json()
+    except Exception as e:
+        print(f'  inst_rank: TWT44U failed: {e}')
+        return None
+
+    if payload.get('stat') != 'OK':
+        print(f'  inst_rank: no data for {date_str} (stat={payload.get("stat")})')
+        return None
+
+    rows = payload.get('data', [])
+    if not rows:
+        print(f'  inst_rank: empty ({date_str})')
+        return None
+
+    # TWT44U column layout (18 cols, unit: 千股):
+    # [0] code  [1] name
+    # [2/3/4]  外資(不含自營) buy/sell/net
+    # [5/6/7]  外資自營商     buy/sell/net
+    # [8/9/10] 投信           buy/sell/net
+    # [11/12/13] 自營(自行)   buy/sell/net
+    # [14/15/16] 自營(避險)   buy/sell/net
+    # [17] 三大合計
+    def to_i(s):
+        try:
+            return int(str(s).replace(',', '').strip())
+        except (ValueError, TypeError):
+            return 0
+
+    stocks = []
+    fi_sum = sit_sum = dealer_sum = 0
+
+    for row in rows:
+        if len(row) < 11:
+            continue
+        code = str(row[0]).strip()
+        name = str(row[1]).strip()
+        if not code or not code[0].isdigit():
+            continue
+
+        if len(row) >= 18:
+            fi_net     = to_i(row[4]) + to_i(row[7])
+            sit_net    = to_i(row[10])
+            dealer_net = to_i(row[13]) + to_i(row[16])
+            total_net  = to_i(row[17])
+        else:
+            fi_net = to_i(row[4]) if len(row) > 4 else 0
+            sit_net = to_i(row[7]) if len(row) > 7 else 0
+            dealer_net = to_i(row[10]) if len(row) > 10 else 0
+            total_net = fi_net + sit_net + dealer_net
+
+        fi_sum     += fi_net
+        sit_sum    += sit_net
+        dealer_sum += dealer_net
+
+        if fi_net != 0 or sit_net != 0 or dealer_net != 0:
+            stocks.append({'code': code, 'name': name,
+                           'fi': fi_net, 'sit': sit_net,
+                           'dealer': dealer_net, 'total': total_net})
+
+    if not stocks:
+        print(f'  inst_rank: parsed 0 active stocks')
+        return None
+
+    print(f'  inst_rank: {len(stocks)} active / {len(rows)} total stocks ({date_str})')
+    print(f'  inst_rank: 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
+
+    def rank(key, n=10):
+        srt = sorted(stocks, key=lambda x: x[key], reverse=True)
+        return {
+            'top': [s for s in srt if s[key] > 0][:n],
+            'bot': [s for s in reversed(srt) if s[key] < 0][:n],
+        }
+
+    # ETF codes start with '0' and are ≥ 4 chars (0050, 006208, 00878, 00631L …)
+    etf_list = [s for s in stocks if len(s['code']) >= 4 and s['code'][0] == '0']
+    etf_srt  = sorted(etf_list, key=lambda x: x['total'], reverse=True)
+    print(f'  inst_rank: {len(etf_list)} ETFs identified')
+
+    return {
+        'date':    date_str,
+        'unit':    '千股',
+        'summary': {'fi': fi_sum, 'sit': sit_sum,
+                    'dealer': dealer_sum, 'total': fi_sum + sit_sum + dealer_sum},
+        'fi':      rank('fi'),
+        'sit':     rank('sit'),
+        'dealer':  rank('dealer'),
+        'total':   rank('total'),
+        'etf': {
+            'top': [s for s in etf_srt if s['total'] > 0][:15],
+            'bot': [s for s in reversed(etf_srt) if s['total'] < 0][:15],
+        },
+    }
+
+
 if __name__ == '__main__':
     now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
     print(f'=== fetch_data {now} ===')
@@ -1371,5 +1506,13 @@ if __name__ == '__main__':
         save('data/etf_trading.json', {'updated': now, **etf_trading})
     else:
         print('  etf_trading: no data')
+
+    time.sleep(1)
+    print('--- Institutional Rank 三大法人買賣超 ---')
+    inst_rank = fetch_inst_rank()
+    if inst_rank:
+        save('data/inst_rank.json', inst_rank)
+    else:
+        print('  inst_rank: no data')
 
     print('done')

@@ -356,6 +356,74 @@
   }
   .tw-chart-panel-row + .tw-chart-panel-row { border-top: 1px solid var(--bdr); }
   .tw-chart-panel-label { font-weight: 600; color: var(--t2); }
+
+  /* ── INSTITUTIONAL RANK ──────────────────────────────────────── */
+  .irank-summary {
+    margin: .2rem .7rem .15rem;
+    background: var(--c1); border: 1px solid var(--bdr); border-radius: 10px;
+    display: flex; align-items: stretch; overflow: hidden;
+  }
+  .irank-sum-cell {
+    flex: 1; padding: .55rem .5rem; text-align: center;
+    border-right: 1px solid var(--bdr);
+  }
+  .irank-sum-cell:last-child { border-right: none; }
+  .irank-sum-label { font-size: .6rem; font-weight: 700; color: var(--t3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .18rem; }
+  .irank-sum-val   { font-size: .88rem; font-weight: 800; font-family: 'Courier New', monospace; }
+
+  .irank-tabs {
+    display: flex; margin: .35rem .7rem .1rem;
+    background: var(--c2); border-radius: 7px; overflow: hidden;
+    border: 1px solid var(--bdr);
+  }
+  .irank-tab {
+    flex: 1; padding: .3rem 0; font-size: .7rem; font-weight: 700;
+    text-align: center; cursor: pointer; color: var(--t3);
+    border: none; background: none; transition: background .15s, color .15s;
+  }
+  .irank-tab.active { background: var(--acc); color: #fff; }
+
+  .irank-grid  { display: grid; grid-template-columns: 1fr 1fr; margin: 0 .7rem .2rem; gap: .4rem; }
+  .irank-col   { background: var(--c1); border: 1px solid var(--bdr); border-radius: 8px; overflow: hidden; }
+  .irank-col-hd {
+    font-size: .66rem; font-weight: 700; padding: .3rem .6rem;
+    border-bottom: 1px solid var(--bdr); display: flex; align-items: center; gap: .25rem;
+  }
+  .irank-col-hd.buy  { color: var(--up); }
+  .irank-col-hd.sell { color: var(--down); }
+  .irank-row {
+    display: flex; align-items: center; padding: .18rem .55rem;
+    border-top: 1px solid var(--c2); font-size: .69rem;
+  }
+  .irank-rank { color: var(--t3); font-size: .6rem; min-width: 1.1rem; text-align: right; margin-right: .35rem; }
+  .irank-code { color: var(--t2); font-weight: 700; min-width: 2.8rem; font-size: .68rem; }
+  .irank-name { color: var(--t3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .64rem; margin: 0 .2rem; }
+  .irank-val  { font-family: 'Courier New', monospace; font-size: .67rem; white-space: nowrap; }
+  .irank-val.buy  { color: var(--up); }
+  .irank-val.sell { color: var(--down); }
+
+  .irank-etf  { margin: 0 .7rem .4rem; background: var(--c1); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; }
+  .irank-etf-hd {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .42rem .75rem .3rem; border-bottom: 1px solid var(--bdr);
+  }
+  .irank-etf-title { font-size: .72rem; font-weight: 700; color: var(--t1); letter-spacing: .03em; }
+  .irank-etf-date  { font-size: .63rem; color: var(--t3); }
+  .irank-etf-grid  { display: grid; grid-template-columns: 1fr 1fr; }
+  .irank-etf-col   { padding: .25rem .55rem .45rem; }
+  .irank-etf-col:first-child { border-right: 1px solid var(--bdr); }
+  .irank-etf-col-hd { font-size: .65rem; font-weight: 700; padding: .12rem 0 .25rem; }
+  .irank-etf-col-hd.buy  { color: var(--up); }
+  .irank-etf-col-hd.sell { color: var(--down); }
+  .irank-etf-row {
+    display: flex; align-items: center; padding: .1rem 0;
+    border-top: 1px solid var(--c2); font-size: .68rem;
+  }
+  .irank-etf-code { color: var(--t2); font-weight: 700; min-width: 3.2rem; font-size: .67rem; }
+  .irank-etf-name { color: var(--t3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .62rem; margin: 0 .2rem; }
+  .irank-etf-val  { font-family: 'Courier New', monospace; font-size: .66rem; white-space: nowrap; }
+  .irank-etf-val.buy  { color: var(--up); }
+  .irank-etf-val.sell { color: var(--down); }
 </style>
 </head>
 <body>
@@ -454,6 +522,7 @@
         </div>
       </div>
     </div>
+    <div id="inst-rank-section" style="display:none"></div>
     <div class="section-title mt-1">指數</div>
     <div class="idx-grid"  id="tw-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">個股</div>
@@ -775,6 +844,126 @@ function renderMarginRank(data) {
   document.getElementById('mrank-sub').innerHTML = rows(data.top_sub, false);
 }
 
+// ── 三大法人買賣超排行 ────────────────────────────────────────────────────────
+let _instRank = null;
+let _instTab  = 'fi';
+
+function renderInstRank(data) {
+  const sec = document.getElementById('inst-rank-section');
+  if (!sec) return;
+  if (!data || !data.summary) { sec.style.display = 'none'; return; }
+  _instRank = data;
+  sec.style.display = '';
+
+  const fmtK = v => {
+    if (v == null) return '–';
+    const abs = Math.abs(Math.round(v)).toLocaleString();
+    return v >= 0
+      ? `<span class="irank-sum-val up">+${abs}</span>`
+      : `<span class="irank-sum-val down">-${abs}</span>`;
+  };
+  const s = data.summary;
+
+  sec.innerHTML = `
+    <div class="section-title mt-1">三大法人今日動向
+      <span style="font-size:.6rem;font-weight:400;color:var(--t3);margin-left:.3rem">${data.date||''} ${data.unit||'千股'}</span>
+    </div>
+    <div class="irank-summary">
+      <div class="irank-sum-cell"><div class="irank-sum-label">外資</div>${fmtK(s.fi)}</div>
+      <div class="irank-sum-cell"><div class="irank-sum-label">投信</div>${fmtK(s.sit)}</div>
+      <div class="irank-sum-cell"><div class="irank-sum-label">自營</div>${fmtK(s.dealer)}</div>
+      <div class="irank-sum-cell"><div class="irank-sum-label">合計</div>${fmtK(s.total)}</div>
+    </div>
+    <div class="section-title" style="padding-top:.6rem">買賣超排行</div>
+    <div class="irank-tabs" id="irank-tabs">
+      <button class="irank-tab" data-k="fi"     onclick="switchInstTab('fi')">外資</button>
+      <button class="irank-tab" data-k="sit"    onclick="switchInstTab('sit')">投信</button>
+      <button class="irank-tab" data-k="dealer" onclick="switchInstTab('dealer')">自營</button>
+      <button class="irank-tab" data-k="total"  onclick="switchInstTab('total')">合計</button>
+    </div>
+    <div id="irank-content"></div>
+    <div class="section-title" style="padding-top:.6rem">ETF 建倉減倉排行</div>
+    <div id="irank-etf-content"></div>`;
+
+  switchInstTab(_instTab);
+  renderInstEtf(data.etf, data.date);
+}
+
+function switchInstTab(key) {
+  _instTab = key;
+  // highlight tab
+  document.querySelectorAll('.irank-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.k === key);
+  });
+  if (!_instRank) return;
+  const data = _instRank[key] || {};
+  const top  = data.top || [];
+  const bot  = data.bot || [];
+  const labels = { fi:'外資', sit:'投信', dealer:'自營', total:'合計' };
+  const lbl = labels[key] || key;
+
+  const mkRow = (list, isBuy) => list.map((r, i) => {
+    const v = r[key] ?? r.total;
+    const abs = Math.abs(Math.round(v)).toLocaleString();
+    const valCls = isBuy ? 'buy' : 'sell';
+    const sign   = isBuy ? '+' : '-';
+    return `<div class="irank-row">
+      <span class="irank-rank">${i+1}</span>
+      <span class="irank-code">${r.code}</span>
+      <span class="irank-name">${r.name}</span>
+      <span class="irank-val ${valCls}">${sign}${abs}</span>
+    </div>`;
+  }).join('') || '<div style="color:var(--t3);font-size:.7rem;padding:.5rem .7rem">無資料</div>';
+
+  document.getElementById('irank-content').innerHTML = `
+    <div class="irank-grid">
+      <div class="irank-col">
+        <div class="irank-col-hd buy">▲ ${lbl}買超前${top.length} <span style="font-weight:400;font-size:.6rem;color:var(--t3)">(千股)</span></div>
+        ${mkRow(top, true)}
+      </div>
+      <div class="irank-col">
+        <div class="irank-col-hd sell">▼ ${lbl}賣超前${bot.length} <span style="font-weight:400;font-size:.6rem;color:var(--t3)">(千股)</span></div>
+        ${mkRow(bot, false)}
+      </div>
+    </div>`;
+}
+
+function renderInstEtf(etf, date) {
+  const el = document.getElementById('irank-etf-content');
+  if (!el || !etf) return;
+  const top = etf.top || [];
+  const bot = etf.bot || [];
+
+  const mkRow = (list, isBuy) => list.map(r => {
+    const v = r.total;
+    const abs = Math.abs(Math.round(v)).toLocaleString();
+    const valCls = isBuy ? 'buy' : 'sell';
+    const sign   = isBuy ? '+' : '-';
+    return `<div class="irank-etf-row">
+      <span class="irank-etf-code">${r.code}</span>
+      <span class="irank-etf-name">${r.name}</span>
+      <span class="irank-etf-val ${valCls}">${sign}${abs}</span>
+    </div>`;
+  }).join('') || '<div style="color:var(--t3);font-size:.7rem;padding:.4rem .5rem">無資料</div>';
+
+  el.innerHTML = `<div class="irank-etf">
+    <div class="irank-etf-hd">
+      <span class="irank-etf-title">ETF 三大合計買賣超</span>
+      <span class="irank-etf-date">${date||''} 千股</span>
+    </div>
+    <div class="irank-etf-grid">
+      <div class="irank-etf-col">
+        <div class="irank-etf-col-hd buy">▲ 建倉前${top.length}</div>
+        ${mkRow(top, true)}
+      </div>
+      <div class="irank-etf-col">
+        <div class="irank-etf-col-hd sell">▼ 減倉前${bot.length}</div>
+        ${mkRow(bot, false)}
+      </div>
+    </div>
+  </div>`;
+}
+
 // ── 大盤技術分析 ─────────────────────────────────────────────────────────────
 function fmtVol(v) {
   if (!v && v !== 0) return '–';
@@ -1046,7 +1235,7 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw, stockInstRaw, marginRankRaw] = await Promise.all([
+  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw, stockInstRaw, marginRankRaw, instRankRaw] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
@@ -1060,6 +1249,7 @@ async function loadAll() {
     fetch(`data/etf_holdings.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/stock_inst.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/margin_rank.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/inst_rank.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
   _etfTrading  = etfTradingRaw;
   _etfHoldings = etfHoldingsRaw;
@@ -1083,6 +1273,7 @@ async function loadAll() {
   renderStocks(tw.etf,    'tw-etf');
   renderTop3ETF();
   renderMarginRank(marginRankRaw);
+  renderInstRank(instRankRaw);
   renderIdx(jp.indices, 'jp-indices');
   renderStocks(jp.stocks, 'jp-stocks');
   switchToLatest(us, tw, jp);
@@ -1129,6 +1320,7 @@ async function manualRefresh() {
   _stockCharts = null;
   _stockMargin = null;
   _stockInst   = null;
+  _instRank    = null;
   if (_klineChart)   { _klineChart.remove();   _klineChart  = null; }
   if (_marginChart)  { _marginChart.remove();  _marginChart = null; }
   if (_stockChart2)  { _stockChart2.remove();  _stockChart2 = null; }
