@@ -1350,63 +1350,63 @@ def fetch_inst_rank():
     except Exception as e:
         print(f'  inst_rank: FinMind failed: {e}')
 
-    # ── Fallback: TWSE TWT44U ───────────────────────────────────────────────
+    # ── Fallback: TWSE per-institution endpoints ────────────────────────────
+    # TWT44U (combined), TWT38U (外資), TWT41U (投信), TWT42U (自營)
+    # Actual response format (rwd): 6 cols [space, code, name, buy, sell, net], unit=股 → ÷1000=千股
     if not finmind_ok:
-        print(f'  inst_rank: trying TWSE TWT44U fallback…')
-        twse_urls = [
-            ('https://www.twse.com.tw/rwd/zh/fund/TWT44U',
-             {'date': query_date.strftime('%Y%m%d'), 'response': 'json'}),
-            ('https://www.twse.com.tw/fund/TWT44U',
-             {'date': query_date.strftime('%Y%m%d'), 'response': 'json'}),
-        ]
-        payload = None
-        for url, params in twse_urls:
-            try:
-                r = _req.get(url, params=params, timeout=25, verify=False,
-                             headers={'User-Agent': 'Mozilla/5.0',
-                                      'Referer': 'https://www.twse.com.tw/'})
-                print(f'  inst_rank: TWT44U HTTP {r.status_code} body={len(r.content)}B')
-                payload = r.json()
-                if payload.get('stat') == 'OK':
-                    break
-            except Exception as e:
-                print(f'  inst_rank: TWT44U failed ({url}): {e}')
+        print(f'  inst_rank: trying TWSE fallback (3 endpoints)…')
+        date_param = query_date.strftime('%Y%m%d')
+        hdrs = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'}
 
-        if payload and payload.get('stat') == 'OK':
-            rows = payload.get('data', [])
-            if rows:
-                print(f'  inst_rank: TWT44U {len(rows)} rows, cols={len(rows[0])}, first={rows[0][:6]}')
-            # TWT44U column layout (18 cols, unit already 千股):
-            # [0]code [1]name [2/3/4]外資(不含自營) buy/sell/net
-            # [5/6/7]外資自營 [8/9/10]投信 [11/12/13]自營(自行) [14/15/16]自營(避險) [17]合計
-            for row in rows:
-                if len(row) < 11:
-                    continue
-                code = str(row[0]).strip()
-                name = str(row[1]).strip()
-                if not code or not code[0].isdigit():
-                    continue
-                if len(row) >= 18:
-                    fi_net     = to_i(row[4]) + to_i(row[7])
-                    sit_net    = to_i(row[10])
-                    dealer_net = to_i(row[13]) + to_i(row[16])
-                    total_net  = to_i(row[17])
-                else:
-                    fi_net     = to_i(row[4]) if len(row) > 4 else 0
-                    sit_net    = to_i(row[7]) if len(row) > 7 else 0
-                    dealer_net = to_i(row[10]) if len(row) > 10 else 0
-                    total_net  = fi_net + sit_net + dealer_net
-                fi_sum     += fi_net
-                sit_sum    += sit_net
-                dealer_sum += dealer_net
-                if fi_net != 0 or sit_net != 0 or dealer_net != 0:
-                    stocks.append({'code': code, 'name': name,
-                                   'fi': fi_net, 'sit': sit_net,
-                                   'dealer': dealer_net, 'total': total_net})
-            if stocks:
-                print(f'  inst_rank: TWT44U 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
-        else:
-            print(f'  inst_rank: TWT44U also failed — no data available')
+        def fetch_twse_ep(ep, label):
+            url = f'https://www.twse.com.tw/rwd/zh/fund/{ep}'
+            try:
+                r = _req.get(url, params={'date': date_param, 'response': 'json'},
+                             timeout=20, verify=False, headers=hdrs)
+                pld = r.json()
+                rows = pld.get('data', []) if pld.get('stat') == 'OK' else []
+                print(f'  inst_rank: {ep} HTTP={r.status_code} rows={len(rows)}')
+                result = {}
+                for row in rows:
+                    if len(row) < 6:
+                        continue
+                    code = str(row[1]).strip()   # col 1 = code
+                    name = str(row[2]).strip()   # col 2 = name
+                    if not code or not code[0].isdigit():
+                        continue
+                    net = to_i(row[5]) // 1000   # col 5 = net shares → 千股
+                    result[code] = (name, net)
+                return result
+            except Exception as e:
+                print(f'  inst_rank: {ep} failed: {e}')
+                return {}
+
+        fi_map     = fetch_twse_ep('TWT38U', '外資')
+        sit_map    = fetch_twse_ep('TWT41U', '投信')
+        dealer_map = fetch_twse_ep('TWT42U', '自營')
+
+        # Fallback to combined if individual endpoints empty
+        if not fi_map and not sit_map and not dealer_map:
+            total_map = fetch_twse_ep('TWT44U', '合計')
+            fi_map = total_map  # treat combined as fi so at least total ranking works
+
+        # Merge by code
+        all_codes = set(fi_map) | set(sit_map) | set(dealer_map)
+        for code in all_codes:
+            fi_name,  fi_net     = fi_map.get(code,     (code, 0))
+            sit_name, sit_net    = sit_map.get(code,    (code, 0))
+            dl_name,  dealer_net = dealer_map.get(code, (code, 0))
+            name = fi_name or sit_name or dl_name
+            total_net = fi_net + sit_net + dealer_net
+            fi_sum     += fi_net
+            sit_sum    += sit_net
+            dealer_sum += dealer_net
+            if fi_net != 0 or sit_net != 0 or dealer_net != 0:
+                stocks.append({'code': code, 'name': name,
+                               'fi': fi_net, 'sit': sit_net,
+                               'dealer': dealer_net, 'total': total_net})
+        if stocks:
+            print(f'  inst_rank: TWSE 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
 
     if not stocks:
         print(f'  inst_rank: no active stocks found')
