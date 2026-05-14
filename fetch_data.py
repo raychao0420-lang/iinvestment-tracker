@@ -1144,7 +1144,9 @@ def fetch_stock_margin():
         print(f'  stock_margin: already up to date ({latest_date})')
         return existing, None
 
-    start_date = (today - timedelta(days=29)) if latest_date is None else (latest_date + timedelta(days=1))
+    # Start from latest_date (not +1) so the last known day is always re-fetched
+    # for full-market ranking data; merge deduplication prevents double entries.
+    start_date = (today - timedelta(days=29)) if latest_date is None else latest_date
 
     # Fetch one TWSE page per trading day → collect new data
     new_by_date = {}        # date_str -> {code -> balance_in_張}
