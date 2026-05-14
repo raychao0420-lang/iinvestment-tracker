@@ -1142,12 +1142,13 @@ def fetch_stock_margin():
 
     if latest_date is not None and latest_date >= today:
         print(f'  stock_margin: already up to date ({latest_date})')
-        return existing
+        return existing, None
 
     start_date = (today - timedelta(days=29)) if latest_date is None else (latest_date + timedelta(days=1))
 
     # Fetch one TWSE page per trading day → collect new data
-    new_by_date = {}  # date_str -> {code -> balance_in_張}
+    new_by_date = {}        # date_str -> {code -> balance_in_張}
+    latest_full_day = None  # (date_str, [{code,name,prev,value,chg}]) for ranking
     current = start_date
     fetched = 0
     while current <= today and fetched < 30:
@@ -1166,18 +1167,31 @@ def fetch_stock_margin():
             if stock_table:
                 date_str = current.isoformat()
                 new_by_date[date_str] = {}
+                all_rows = []
                 for row in stock_table['data']:
                     if len(row) < 7:
                         continue
                     code = str(row[0]).strip().replace('　', '')
-                    if code not in target_codes or not code.isdigit():
+                    if not code.isdigit():
                         continue
                     try:
-                        new_by_date[date_str][code] = int(str(row[6]).replace(',', ''))
+                        prev  = int(str(row[5]).replace(',', ''))
+                        value = int(str(row[6]).replace(',', ''))
+                        if code in target_codes:
+                            new_by_date[date_str][code] = value
+                        if prev > 0:  # only stocks with prior margin activity
+                            all_rows.append({
+                                'code':  code,
+                                'name':  str(row[1]).strip(),
+                                'prev':  prev,
+                                'value': value,
+                                'chg':   value - prev,
+                            })
                     except ValueError:
                         pass
+                latest_full_day = (date_str, all_rows)
                 fetched += 1
-                print(f'  stock_margin {current}: {len(new_by_date[date_str])} stocks')
+                print(f'  stock_margin {current}: {len(new_by_date[date_str])} tracked / {len(all_rows)} total')
             else:
                 print(f'  stock_margin {current}: no data (holiday?)')
         except Exception as e:
@@ -1204,8 +1218,20 @@ def fetch_stock_margin():
         elif code in existing:
             result[code] = existing[code]
 
+    # Build top-10 increase / decrease ranking from the latest trading day
+    rank_data = None
+    if latest_full_day:
+        date_str, all_rows = latest_full_day
+        sorted_rows = sorted(all_rows, key=lambda x: x['chg'], reverse=True)
+        rank_data = {
+            'date':    date_str,
+            'top_add': sorted_rows[:10],
+            'top_sub': sorted_rows[-10:][::-1],
+        }
+        print(f'  margin_rank {date_str}: top_add={sorted_rows[0]["chg"] if sorted_rows else 0} top_sub={sorted_rows[-1]["chg"] if sorted_rows else 0}')
+
     print(f'  stock_margin: {len(result)}/{len(tw_targets)} stocks')
-    return result
+    return result, rank_data
 
 
 if __name__ == '__main__':
@@ -1312,11 +1338,13 @@ if __name__ == '__main__':
 
     time.sleep(1)
     print('--- Stock Margin (TW) ---')
-    sm = fetch_stock_margin()
+    sm, rank = fetch_stock_margin()
     if sm:
         save('data/stock_margin.json', {'updated': now, 'stocks': sm})
     else:
         print('  stock_margin: no data')
+    if rank:
+        save('data/margin_rank.json', rank)
 
     time.sleep(1)
     print('--- Stock Institutional (三大法人) ---')

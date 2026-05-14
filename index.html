@@ -79,6 +79,22 @@
   .holding-out { background:#fee2e2; opacity:.7; text-decoration:line-through; }
   .diff-badge { font-size:.6rem; font-weight:700; background:#fef3c7; color:#b45309; padding:.1rem .4rem; border-radius:99px; margin-left:.35rem; }
 
+  /* 融資單日變化排行 */
+  .mrank-wrap { margin:.2rem .75rem .5rem; background:#fff; border-radius:10px; box-shadow:0 1px 3px rgba(0,0,0,.07); overflow:hidden; }
+  .mrank-header { display:flex; justify-content:space-between; align-items:center; padding:.45rem .75rem .3rem; }
+  .mrank-title { font-size:.78rem; font-weight:700; color:#475569; }
+  .mrank-date  { font-size:.65rem; color:#94a3b8; }
+  .mrank-grid  { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+  .mrank-col   { padding:.25rem .5rem .5rem; }
+  .mrank-col:first-child { border-right:1px solid #f1f5f9; }
+  .mrank-col-title { font-size:.68rem; font-weight:700; padding:.15rem 0 .3rem; }
+  .mrank-col-title.add { color:#dc2626; }
+  .mrank-col-title.sub { color:#16a34a; }
+  .mrank-row { display:flex; justify-content:space-between; align-items:center; padding:.1rem 0; border-top:1px solid #f8fafc; font-size:.7rem; }
+  .mrank-code { color:#475569; font-weight:600; min-width:2.8rem; }
+  .mrank-name { color:#64748b; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin:0 .3rem; font-size:.65rem; }
+  .mrank-chg  { font-family:'Courier New',monospace; font-size:.68rem; white-space:nowrap; }
+
   /* ETF 三大法人 */
   .inst-bar {
     width:100%; border-top:1px solid #f1f5f9;
@@ -344,6 +360,24 @@
         <span id="margin-latest">載入中…</span><span id="margin-change"></span>
       </div>
       <div id="margin-chart" style="height:130px"></div>
+    </div>
+    <div id="margin-rank-section" style="display:none">
+      <div class="mrank-wrap">
+        <div class="mrank-header">
+          <span class="mrank-title">融資單日變化前十</span>
+          <span class="mrank-date" id="mrank-date"></span>
+        </div>
+        <div class="mrank-grid">
+          <div class="mrank-col">
+            <div class="mrank-col-title add">▲ 增加前十（張）</div>
+            <div id="mrank-add"></div>
+          </div>
+          <div class="mrank-col">
+            <div class="mrank-col-title sub">▼ 減少前十（張）</div>
+            <div id="mrank-sub"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="section-title mt-1">指數</div>
     <div class="idx-grid"  id="tw-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
@@ -640,6 +674,32 @@ function renderTop3ETF() {
     </div>`).join('');
 }
 
+// ── 融資單日變化排行 ─────────────────────────────────────────────────────────
+function renderMarginRank(data) {
+  const sec = document.getElementById('margin-rank-section');
+  if (!sec) return;
+  if (!data || !data.top_add || !data.top_add.length) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  document.getElementById('mrank-date').textContent = data.date || '';
+
+  const fmtChg = (v, isAdd) => {
+    const abs = Math.abs(v).toLocaleString();
+    const col = isAdd ? '#dc2626' : '#16a34a';
+    const sign = isAdd ? '+' : '-';
+    return `<span class="mrank-chg" style="color:${col}">${sign}${abs}</span>`;
+  };
+  const rows = (list, isAdd) => list.map(r =>
+    `<div class="mrank-row">
+      <span class="mrank-code">${r.code}</span>
+      <span class="mrank-name">${r.name || ''}</span>
+      ${fmtChg(Math.abs(r.chg), isAdd)}
+    </div>`
+  ).join('');
+
+  document.getElementById('mrank-add').innerHTML = rows(data.top_add, true);
+  document.getElementById('mrank-sub').innerHTML = rows(data.top_sub, false);
+}
+
 // ── 大盤技術分析 ─────────────────────────────────────────────────────────────
 function fmtVol(v) {
   if (!v && v !== 0) return '–';
@@ -911,7 +971,7 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw, stockInstRaw] = await Promise.all([
+  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw, stockInstRaw, marginRankRaw] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
@@ -924,6 +984,7 @@ async function loadAll() {
     fetch(`data/etf_trading.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/etf_holdings.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/stock_inst.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
+    fetch(`data/margin_rank.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
   ]);
   _etfTrading  = etfTradingRaw;
   _etfHoldings = etfHoldingsRaw;
@@ -946,6 +1007,7 @@ async function loadAll() {
   renderStocks(tw.drone,  'tw-drone');
   renderStocks(tw.etf,    'tw-etf');
   renderTop3ETF();
+  renderMarginRank(marginRankRaw);
   renderIdx(jp.indices, 'jp-indices');
   renderStocks(jp.stocks, 'jp-stocks');
   switchToLatest(us, tw, jp);
@@ -1101,6 +1163,7 @@ let _usData      = null;
 let _etfTrading  = null;
 let _etfHoldings = null;
 let _stockInst   = null;
+let _marginRank  = null;
 let _twData      = null;
 let _stockCharts = null;
 let _stockMargin = null;
