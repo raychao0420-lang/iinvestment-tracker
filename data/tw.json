@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/14 21:03",
+  "updated": "2026/05/14 21:11",
   "indices": [
     {
       "symbol": "^TWII",
@@ -210,6 +210,35 @@
       "date": "05/14",
       "nav": 11.2,
       "premium": -0.27
+    },
+    {
+      "symbol": "00403A.TW",
+      "name": "統一台股升級50",
+      "price": 10.24,
+      "change": 0.06,
+      "pct": 0.59,
+      "date": "05/14",
+      "premium": null
+    },
+    {
+      "symbol": "00988A.TW",
+      "name": "主動統一全球創新",
+      "price": 20.03,
+      "change": 0.11,
+      "pct": 0.55,
+      "date": "05/14",
+      "nav": 19.18,
+      "premium": 4.43
+    },
+    {
+      "symbol": "00981A.TW",
+      "name": "主動統一台股增長",
+      "price": 29.44,
+      "change": 0.16,
+      "pct": 0.55,
+      "date": "05/14",
+      "nav": 29.31,
+      "premium": 0.44
     }
   ]
 }
