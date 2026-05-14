@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/14 21:39",
+  "updated": "2026/05/14 22:31",
   "etfs": {
     "0050": {
       "holdings": [
@@ -440,6 +440,226 @@
         }
       ],
       "changed_at": "2026/05/14"
+    },
+    "00935": {
+      "holdings": [
+        {
+          "symbol": "2330.TW",
+          "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+          "pct": 28.14
+        },
+        {
+          "symbol": "2308.TW",
+          "name": "Delta Electronics Inc",
+          "pct": 13.2
+        },
+        {
+          "symbol": "2454.TW",
+          "name": "MediaTek Inc",
+          "pct": 10.21
+        },
+        {
+          "symbol": "3711.TW",
+          "name": "ASE Technology Holding Co Ltd",
+          "pct": 4.88
+        },
+        {
+          "symbol": "2345.TW",
+          "name": "Accton Technology Corp",
+          "pct": 3.78
+        },
+        {
+          "symbol": "2303.TW",
+          "name": "United Microelectronics Corp",
+          "pct": 3.0
+        },
+        {
+          "symbol": "3017.TW",
+          "name": "Asia Vital Components Co Ltd",
+          "pct": 2.96
+        },
+        {
+          "symbol": "3037.TW",
+          "name": "Unimicron Technology Corp",
+          "pct": 2.6
+        },
+        {
+          "symbol": "2360.TW",
+          "name": "Chroma Ate Inc",
+          "pct": 2.58
+        },
+        {
+          "symbol": "2327.TW",
+          "name": "Yageo Corp",
+          "pct": 2.11
+        }
+      ],
+      "changed_at": "2026/05/14",
+      "diff": {
+        "in": [
+          {
+            "symbol": "2330.TW",
+            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+            "pct": 28.14
+          },
+          {
+            "symbol": "2308.TW",
+            "name": "Delta Electronics Inc",
+            "pct": 13.2
+          },
+          {
+            "symbol": "2454.TW",
+            "name": "MediaTek Inc",
+            "pct": 10.21
+          },
+          {
+            "symbol": "3711.TW",
+            "name": "ASE Technology Holding Co Ltd",
+            "pct": 4.88
+          },
+          {
+            "symbol": "2345.TW",
+            "name": "Accton Technology Corp",
+            "pct": 3.78
+          },
+          {
+            "symbol": "2303.TW",
+            "name": "United Microelectronics Corp",
+            "pct": 3.0
+          },
+          {
+            "symbol": "3017.TW",
+            "name": "Asia Vital Components Co Ltd",
+            "pct": 2.96
+          },
+          {
+            "symbol": "3037.TW",
+            "name": "Unimicron Technology Corp",
+            "pct": 2.6
+          },
+          {
+            "symbol": "2360.TW",
+            "name": "Chroma Ate Inc",
+            "pct": 2.58
+          },
+          {
+            "symbol": "2327.TW",
+            "name": "Yageo Corp",
+            "pct": 2.11
+          }
+        ],
+        "out": []
+      }
+    },
+    "00980A": {
+      "holdings": [
+        {
+          "symbol": "2330.TW",
+          "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+          "pct": 8.93
+        },
+        {
+          "symbol": "2308.TW",
+          "name": "Delta Electronics Inc",
+          "pct": 3.67
+        },
+        {
+          "symbol": "2317.TW",
+          "name": "Hon Hai Precision Industry Co Ltd",
+          "pct": 3.11
+        },
+        {
+          "symbol": "3017.TW",
+          "name": "Asia Vital Components Co Ltd",
+          "pct": 3.05
+        },
+        {
+          "symbol": "6669.TW",
+          "name": "Wiwynn Corp Ordinary Shares",
+          "pct": 2.99
+        },
+        {
+          "symbol": "2382.TW",
+          "name": "Quanta Computer Inc",
+          "pct": 2.94
+        },
+        {
+          "symbol": "8210.TW",
+          "name": "Chenbro Micom Co Ltd",
+          "pct": 2.78
+        },
+        {
+          "symbol": "2345.TW",
+          "name": "Accton Technology Corp",
+          "pct": 2.73
+        },
+        {
+          "symbol": "7769.TW",
+          "name": "Hon Precision Inc",
+          "pct": 2.62
+        },
+        {
+          "symbol": "2408.TW",
+          "name": "Nanya Technology Corp",
+          "pct": 2.61
+        }
+      ],
+      "changed_at": "2026/05/14",
+      "diff": {
+        "in": [
+          {
+            "symbol": "2330.TW",
+            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+            "pct": 8.93
+          },
+          {
+            "symbol": "2308.TW",
+            "name": "Delta Electronics Inc",
+            "pct": 3.67
+          },
+          {
+            "symbol": "2317.TW",
+            "name": "Hon Hai Precision Industry Co Ltd",
+            "pct": 3.11
+          },
+          {
+            "symbol": "3017.TW",
+            "name": "Asia Vital Components Co Ltd",
+            "pct": 3.05
+          },
+          {
+            "symbol": "6669.TW",
+            "name": "Wiwynn Corp Ordinary Shares",
+            "pct": 2.99
+          },
+          {
+            "symbol": "2382.TW",
+            "name": "Quanta Computer Inc",
+            "pct": 2.94
+          },
+          {
+            "symbol": "8210.TW",
+            "name": "Chenbro Micom Co Ltd",
+            "pct": 2.78
+          },
+          {
+            "symbol": "2345.TW",
+            "name": "Accton Technology Corp",
+            "pct": 2.73
+          },
+          {
+            "symbol": "7769.TW",
+            "name": "Hon Precision Inc",
+            "pct": 2.62
+          },
+          {
+            "symbol": "2408.TW",
+            "name": "Nanya Technology Corp",
+            "pct": 2.61
+          }
+        ],
+        "out": []
+      }
     }
   }
 }
