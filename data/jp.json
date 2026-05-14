@@ -1,20 +1,20 @@
 {
-  "updated": "2026/05/14 01:24",
+  "updated": "2026/05/14 11:44",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 63272.11,
-      "change": 529.54,
-      "pct": 0.84,
-      "date": "05/13"
+      "price": 63448.87,
+      "change": 176.76,
+      "pct": 0.28,
+      "date": "05/14"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF (EWJ)",
-      "price": 93.15,
-      "change": 1.1,
-      "pct": 1.19,
+      "price": 93.09,
+      "change": 1.03,
+      "pct": 1.12,
       "date": "05/13"
     }
   ],
@@ -22,50 +22,50 @@
     {
       "symbol": "8035.T",
       "name": "東京威力科創",
-      "price": 51340.0,
-      "change": -820.0,
-      "pct": -1.57,
-      "date": "05/13"
+      "price": 52320.0,
+      "change": 980.0,
+      "pct": 1.91,
+      "date": "05/14"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
-      "price": 28290.0,
-      "change": -415.0,
-      "pct": -1.45,
-      "date": "05/13"
+      "price": 29305.0,
+      "change": 1015.0,
+      "pct": 3.59,
+      "date": "05/14"
     },
     {
       "symbol": "4063.T",
       "name": "信越化學",
-      "price": 7417.0,
-      "change": -103.0,
-      "pct": -1.37,
-      "date": "05/13"
+      "price": 7479.0,
+      "change": 62.0,
+      "pct": 0.84,
+      "date": "05/14"
     },
     {
       "symbol": "6758.T",
       "name": "Sony",
-      "price": 3660.0,
-      "change": 176.0,
-      "pct": 5.05,
-      "date": "05/13"
+      "price": 3442.0,
+      "change": -218.0,
+      "pct": -5.96,
+      "date": "05/14"
     },
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 79440.0,
-      "change": 180.0,
-      "pct": 0.23,
-      "date": "05/13"
+      "price": 79310.0,
+      "change": -130.0,
+      "pct": -0.16,
+      "date": "05/14"
     },
     {
       "symbol": "4452.T",
       "name": "花王",
-      "price": 5825.0,
-      "change": 16.0,
-      "pct": 0.28,
-      "date": "05/13"
+      "price": 5855.0,
+      "change": 30.0,
+      "pct": 0.52,
+      "date": "05/14"
     }
   ]
 }

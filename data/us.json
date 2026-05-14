@@ -1,36 +1,36 @@
 {
-  "updated": "2026/05/14 01:24",
+  "updated": "2026/05/14 11:44",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7446.78,
-      "change": 45.82,
-      "pct": 0.62,
+      "price": 7444.25,
+      "change": 43.29,
+      "pct": 0.58,
       "date": "05/13"
     },
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 26401.33,
-      "change": 313.13,
+      "price": 26402.34,
+      "change": 314.14,
       "pct": 1.2,
       "date": "05/13"
     },
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 49629.04,
-      "change": -131.52,
-      "pct": -0.26,
+      "price": 49693.2,
+      "change": -67.36,
+      "pct": -0.14,
       "date": "05/13"
     },
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2843.35,
-      "change": 0.52,
-      "pct": 0.02,
+      "price": 2843.93,
+      "change": 1.1,
+      "pct": 0.04,
       "date": "05/13"
     }
   ],
@@ -38,73 +38,73 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR",
-      "price": 403.88,
-      "change": 6.6,
-      "pct": 1.66,
+      "price": 399.8,
+      "change": 2.52,
+      "pct": 0.63,
       "date": "05/13"
     },
     {
       "symbol": "NVDA",
       "name": "輝達 NVDA",
-      "price": 227.14,
-      "change": 6.36,
-      "pct": 2.88,
+      "price": 225.83,
+      "change": 5.05,
+      "pct": 2.29,
       "date": "05/13"
     },
     {
       "symbol": "INTC",
       "name": "Intel",
-      "price": 121.96,
-      "change": 1.35,
-      "pct": 1.12,
+      "price": 120.29,
+      "change": -0.32,
+      "pct": -0.27,
       "date": "05/13"
     },
     {
       "symbol": "MU",
       "name": "美光 MU",
-      "price": 801.74,
-      "change": 35.16,
-      "pct": 4.59,
+      "price": 803.63,
+      "change": 37.05,
+      "pct": 4.83,
       "date": "05/13"
     },
     {
       "symbol": "TSLA",
       "name": "特斯拉 TSLA",
-      "price": 449.04,
-      "change": 15.59,
-      "pct": 3.6,
+      "price": 445.27,
+      "change": 11.82,
+      "pct": 2.73,
       "date": "05/13"
     },
     {
       "symbol": "EWT",
       "name": "摩台指 EWT",
-      "price": 94.96,
-      "change": 1.19,
-      "pct": 1.27,
+      "price": 94.86,
+      "change": 1.09,
+      "pct": 1.16,
       "date": "05/13"
     },
     {
       "symbol": "VOO",
       "name": "VOO",
-      "price": 682.65,
-      "change": 3.98,
-      "pct": 0.59,
+      "price": 682.41,
+      "change": 3.74,
+      "pct": 0.55,
       "date": "05/13"
     },
     {
       "symbol": "QQQ",
       "name": "QQQ",
-      "price": 714.53,
-      "change": 7.29,
-      "pct": 1.03,
+      "price": 714.71,
+      "change": 7.47,
+      "pct": 1.06,
       "date": "05/13"
     },
     {
       "symbol": "SCHD",
       "name": "SCHD",
-      "price": 31.72,
-      "change": -0.04,
-      "pct": -0.13,
+      "price": 31.75,
+      "change": -0.01,
+      "pct": -0.03,
       "date": "05/13"
     }
   ],
@@ -112,57 +112,57 @@
     {
       "symbol": "AMZN",
       "name": "亞馬遜 AWS",
-      "price": 269.48,
-      "change": 3.66,
-      "pct": 1.38,
+      "price": 270.13,
+      "change": 4.31,
+      "pct": 1.62,
       "date": "05/13"
     },
     {
       "symbol": "MSFT",
       "name": "微軟 Azure",
-      "price": 404.42,
-      "change": -3.35,
-      "pct": -0.82,
+      "price": 405.21,
+      "change": -2.56,
+      "pct": -0.63,
       "date": "05/13"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet GCP",
-      "price": 401.16,
-      "change": 13.81,
-      "pct": 3.57,
+      "price": 402.62,
+      "change": 15.27,
+      "pct": 3.94,
       "date": "05/13"
     },
     {
       "symbol": "ORCL",
       "name": "Oracle Cloud",
-      "price": 188.95,
-      "change": 2.12,
-      "pct": 1.13,
+      "price": 189.76,
+      "change": 2.93,
+      "pct": 1.57,
       "date": "05/13"
     },
     {
       "symbol": "META",
       "name": "Meta",
-      "price": 615.03,
-      "change": 12.03,
-      "pct": 2.0,
+      "price": 616.63,
+      "change": 13.63,
+      "pct": 2.26,
       "date": "05/13"
     },
     {
       "symbol": "IBM",
       "name": "IBM Cloud",
-      "price": 213.77,
-      "change": -5.45,
-      "pct": -2.49,
+      "price": 214.64,
+      "change": -4.58,
+      "pct": -2.09,
       "date": "05/13"
     },
     {
       "symbol": "AAPL",
       "name": "Apple",
-      "price": 299.32,
-      "change": 4.52,
-      "pct": 1.53,
+      "price": 298.87,
+      "change": 4.07,
+      "pct": 1.38,
       "date": "05/13"
     }
   ]
