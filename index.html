@@ -702,7 +702,7 @@ function renderStocks(items, id) {
     return `<div class="stock-card">
       <div>
         <div style="display:flex;align-items:center;gap:.4rem">
-          <div class="stock-name">${s.name}</div>
+          <div class="stock-name"${etfTipAttr(s.symbol)}>${s.name}</div>
           <button class="btn-chart-card" onclick="openStockChart('${s.symbol}','${safeName}')" title="K線圖"><i class="bi bi-graph-up"></i></button>
         </div>
         <div class="stock-sub">${s.symbol} · ${s.date||'–'}</div>
@@ -721,6 +721,33 @@ const ETF_NAMES = {
   '0050':'元大台灣50','006208':'富邦台50','00878':'國泰永續高股息',
   '00919':'群益台灣精選高息','00929':'復華台灣科技優息','00940':'元大台灣價值高息',
 };
+
+const ETF_DESC = {
+  '0050':   '被動式管理，追蹤台灣50指數（市值前50大）。<br>台積電權重通常逾30%，低費用率（0.43%）。<br>台灣最大規模指數ETF，適合長期核心配置。',
+  '006208': '被動式管理，追蹤台灣50指數，標的與0050相同。<br>費用率約0.39%，略低於0050。<br>適合長期核心持有。',
+  '00878':  '被動式管理，ESG永續篩選＋高股息因子。<br>季配息，成分股約30支。<br>以傳產、金融高息股為主，剔除爭議產業。',
+  '00919':  '被動式管理，台灣高股息精選策略。<br>月配息，成分股約30支。<br>篩選近期高殖利率且股價波動較低的個股。',
+  '00929':  '被動式管理，科技＋高息雙因子。<br>月配息，成分股集中在半導體、電子科技。<br>殖利率較其他高息ETF偏低，科技成長色彩較重。',
+  '00940':  '被動式管理，「低本益比＋高股息」雙因子篩選。<br>月配息，成分股約50支。<br>偏傳產、金融股，價值型風格。',
+  '00403A': '主動式管理（統一投信）。<br>從台股市值前50大中，經理人動態調整成分，<br>非完全複製指數，可靈活增減個股。',
+  '00988A': '主動式管理（統一投信），全球創新科技主題。<br>跨市場配置台股＋美股創新龍頭，<br>非固定指數追蹤，經理人主動選股。',
+  '00981A': '主動式管理（統一投信），台股成長型主題。<br>聚焦半導體、AI電子相關成長股，<br>動態調整持股比重，非指數複製。',
+  '00935':  '被動式管理（野村投信），追蹤台灣新科技50指數。<br>涵蓋半導體、AI、電動車等新興科技產業。<br>成分股50支，定期審查調整。',
+  '00980A': '主動式管理（野村投信）。<br>經理人根據基本面動態調整成分股，非完全複製指數。<br>產業集中：半導體、AI電子相關熱門產業。<br>前十大持股合計不超過60%，單一成分股上限10%。',
+};
+
+function etfTipAttr(symbol) {
+  const code = (symbol || '').replace('.TW', '');
+  const desc = ETF_DESC[code];
+  if (!desc) return '';
+  return ` data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="${desc.replace(/"/g, '&quot;')}"`;
+}
+
+function initTooltips() {
+  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+    bootstrap.Tooltip.getOrCreateInstance(el, {trigger: 'hover'});
+  });
+}
 
 function toggleHoldings() {
   const body = document.getElementById('holdings-body');
@@ -1307,6 +1334,8 @@ async function loadAll() {
     renderEPS(_epsData.tw, 'tw-eps', ['2022','2023','2024','2025','今年已公布','今年預估 E']);
     renderEPS(_epsData.jp, 'jp-eps', ['FY22','FY23','FY24','FY25','今年(FY26)','FY27E']);
   }
+
+  initTooltips();
 }
 
 // ── 手動更新 ──────────────────────────────────────────────────────────────────
