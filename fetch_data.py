@@ -1302,6 +1302,7 @@ def fetch_inst_rank():
             timeout=60,
         )
         payload = r.json()
+        print(f'  inst_rank: FinMind HTTP={r.status_code} msg={payload.get("msg","")} total={payload.get("total","")}')
         fm_data = payload.get('data', [])
         # Pick the most recent date that has data
         available_dates = sorted(set(rec.get('date', '') for rec in fm_data), reverse=True)
@@ -1373,6 +1374,8 @@ def fetch_inst_rank():
 
         if payload and payload.get('stat') == 'OK':
             rows = payload.get('data', [])
+            if rows:
+                print(f'  inst_rank: TWT44U {len(rows)} rows, cols={len(rows[0])}, first={rows[0][:6]}')
             # TWT44U column layout (18 cols, unit already 千股):
             # [0]code [1]name [2/3/4]外資(不含自營) buy/sell/net
             # [5/6/7]外資自營 [8/9/10]投信 [11/12/13]自營(自行) [14/15/16]自營(避險) [17]合計
