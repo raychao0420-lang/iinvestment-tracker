@@ -1297,6 +1297,7 @@ def fetch_inst_rank():
             r = _req.get(f'https://www.twse.com.tw/rwd/zh/fund/{ep}',
                          params={'date': date_param, 'response': 'json'},
                          timeout=20, verify=False, headers=hdrs)
+            r.encoding = 'utf-8'  # TWSE JSON is UTF-8; prevent chardet guessing wrong
             pld = r.json()
             rows = pld.get('data', []) if pld.get('stat') == 'OK' else []
             print(f'  inst_rank: {ep} HTTP={r.status_code} rows={len(rows)}')
