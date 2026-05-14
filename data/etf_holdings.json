@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/14 21:11",
+  "updated": "2026/05/14 21:18",
   "etfs": {
     "0050": {
       "holdings": [
@@ -384,62 +384,7 @@
           "pct": 3.11
         }
       ],
-      "changed_at": "2026/05/14",
-      "diff": {
-        "in": [
-          {
-            "symbol": "LITE",
-            "name": "Lumentum Holdings Inc",
-            "pct": 8.43
-          },
-          {
-            "symbol": "SNDK",
-            "name": "SanDisk Corp Ordinary Shares",
-            "pct": 4.57
-          },
-          {
-            "symbol": "MU",
-            "name": "Micron Technology Inc",
-            "pct": 4.46
-          },
-          {
-            "symbol": "GLW",
-            "name": "Corning Inc",
-            "pct": 3.94
-          },
-          {
-            "symbol": "CIEN",
-            "name": "Ciena Corp",
-            "pct": 3.54
-          },
-          {
-            "symbol": "6787.T",
-            "name": "Meiko Electronics Co Ltd",
-            "pct": 3.52
-          },
-          {
-            "symbol": "GEV",
-            "name": "GE Vernova Inc",
-            "pct": 3.44
-          },
-          {
-            "symbol": "6515.TW",
-            "name": "WinWay Technology Co Ltd Ordinary Shares",
-            "pct": 3.22
-          },
-          {
-            "symbol": "3017.TW",
-            "name": "Asia Vital Components Co Ltd",
-            "pct": 3.21
-          },
-          {
-            "symbol": "5801.T",
-            "name": "Furukawa Electric Co Ltd",
-            "pct": 3.11
-          }
-        ],
-        "out": []
-      }
+      "changed_at": "2026/05/14"
     },
     "00981A": {
       "holdings": [
@@ -494,62 +439,7 @@
           "pct": 3.41
         }
       ],
-      "changed_at": "2026/05/14",
-      "diff": {
-        "in": [
-          {
-            "symbol": "2330.TW",
-            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
-            "pct": 9.57
-          },
-          {
-            "symbol": "2383.TW",
-            "name": "Elite Material Co Ltd",
-            "pct": 7.02
-          },
-          {
-            "symbol": "2308.TW",
-            "name": "Delta Electronics Inc",
-            "pct": 6.05
-          },
-          {
-            "symbol": "3017.TW",
-            "name": "Asia Vital Components Co Ltd",
-            "pct": 6.03
-          },
-          {
-            "symbol": "3653.TW",
-            "name": "Jentech Precision Industrial Co Ltd",
-            "pct": 5.77
-          },
-          {
-            "symbol": "2345.TW",
-            "name": "Accton Technology Corp",
-            "pct": 5.29
-          },
-          {
-            "symbol": "2368.TW",
-            "name": "Gold Circuit Electronics Ltd",
-            "pct": 5.24
-          },
-          {
-            "symbol": "3665.TW",
-            "name": "Bizlink Holding Inc",
-            "pct": 5.14
-          },
-          {
-            "symbol": "6223.TWO",
-            "name": "MPI Corp",
-            "pct": 5.09
-          },
-          {
-            "symbol": "5274.TWO",
-            "name": "Aspeed Technology Inc",
-            "pct": 3.41
-          }
-        ],
-        "out": []
-      }
+      "changed_at": "2026/05/14"
     }
   }
 }
