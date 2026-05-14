@@ -7,291 +7,366 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
-  :root { --up:#dc2626; --down:#16a34a; --flat:#6b7280; }
+  /* ══ PROFESSIONAL DARK THEME ══════════════════════════════════════════════ */
+  :root {
+    --up:   #ef4444;   /* red-500  */
+    --down: #22c55e;   /* green-500 */
+    --flat: #64748b;   /* slate-500 */
+    --bg:   #0f172a;   /* slate-900 — page bg */
+    --c1:   #1e293b;   /* slate-800 — card bg */
+    --c2:   #263545;   /* card hover / alt row */
+    --bdr:  #334155;   /* slate-700 — border */
+    --t1:   #e2e8f0;   /* slate-200 — primary text */
+    --t2:   #94a3b8;   /* slate-400 — secondary text */
+    --t3:   #64748b;   /* slate-500 — muted text */
+    --acc:  #3b82f6;   /* blue-500 — accent */
+    --acc2: rgba(59,130,246,.09);
+  }
 
-  body { background:#f1f5f9; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--t1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+  }
 
+  /* ── TOP BAR ─────────────────────────────────────────────────── */
   .top-bar {
-    background:linear-gradient(135deg,#1e293b 0%,#334155 100%);
-    color:#fff; padding:.6rem 1rem;
-    position:sticky; top:0; z-index:99;
-    display:flex; align-items:center; justify-content:space-between;
+    background: #080f1d;
+    border-bottom: 1px solid var(--bdr);
+    color: var(--t1); padding: .55rem 1rem;
+    position: sticky; top: 0; z-index: 99;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 16px rgba(0,0,0,.5);
   }
-  .top-bar h1 { font-size:1.15rem; font-weight:700; margin:0; }
+  .top-bar h1 {
+    font-size: 1rem; font-weight: 700; margin: 0;
+    letter-spacing: .02em; color: var(--t1);
+  }
   .top-bar .time-badge {
-    font-size:.75rem; background:rgba(255,255,255,.15);
-    border-radius:99px; padding:.2rem .65rem; white-space:nowrap;
+    font-size: .7rem; background: var(--c2);
+    border: 1px solid var(--bdr); border-radius: 5px;
+    padding: .18rem .6rem; white-space: nowrap;
+    color: var(--t2); font-family: 'Courier New', monospace;
   }
+  .top-bar-btns { display: flex; align-items: center; gap: .45rem; }
+  .top-bar-btns button {
+    background: var(--c2) !important; border: 1px solid var(--bdr) !important;
+    border-radius: 5px !important; color: var(--t2) !important;
+    font-size: .75rem !important; padding: .2rem .7rem !important;
+    cursor: pointer; display: flex; align-items: center; gap: .3rem;
+    transition: border-color .15s, color .15s;
+  }
+  .top-bar-btns button:hover { border-color: var(--acc) !important; color: var(--t1) !important; }
+  .top-bar-btns button:disabled { opacity: .5; cursor: not-allowed; }
 
-  .market-tabs { background:#fff; border-bottom:1px solid #e2e8f0; }
+  /* ── MARKET TABS ─────────────────────────────────────────────── */
+  .market-tabs { background: #080f1d; border-bottom: 1px solid var(--bdr); }
   .market-tabs .nav-link {
-    font-size:1.75rem; font-weight:700; padding:1rem 1.8rem;
-    border-radius:0; border-bottom:4px solid transparent; color:#475569;
+    font-size: .9rem; font-weight: 600; letter-spacing: .04em;
+    padding: .7rem 1.4rem;
+    border-radius: 0; border-bottom: 2px solid transparent;
+    color: var(--t3); transition: color .15s, background .15s;
   }
-  .market-tabs .nav-link.active { color:#1d4ed8; border-bottom-color:#1d4ed8; background:none; }
-  .badge-dot { display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:7px; vertical-align:middle; }
-  .dot-us{background:#f59e0b;} .dot-tw{background:#10b981;} .dot-jp{background:#f43f5e;}
+  .market-tabs .nav-link.active {
+    color: var(--acc); border-bottom-color: var(--acc);
+    background: var(--acc2);
+  }
+  .market-tabs .nav-link:hover:not(.active) { color: var(--t2); background: var(--c2); }
+  .badge-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dot-us { background: #f59e0b; } .dot-tw { background: #10b981; } .dot-jp { background: #f43f5e; }
 
+  /* ── SECTION TITLE ───────────────────────────────────────────── */
   .section-title {
-    font-size:.95rem; font-weight:700; letter-spacing:.06em;
-    text-transform:uppercase; color:#94a3b8; padding:.7rem 1rem .4rem;
+    font-size: .67rem; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--t3);
+    padding: .8rem 1rem .35rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .section-title::before {
+    content: ''; display: inline-block; width: 2px; height: .85em;
+    background: var(--acc); border-radius: 2px; flex-shrink: 0;
   }
 
-  /* 股票卡片 */
-  .stock-card {
-    background:#fff; border-radius:12px; padding:.85rem 1rem;
-    margin:.4rem .75rem; box-shadow:0 1px 3px rgba(0,0,0,.07);
-    display:flex; align-items:center; justify-content:space-between;
-    flex-wrap:wrap;
-  }
-  .stock-name  { font-size:1.6rem; font-weight:600; color:#1e293b; }
-  .stock-sub   { font-size:1.1rem; color:#94a3b8; margin-top:4px; }
-  .stock-price { font-size:2rem; font-weight:700; text-align:right; }
-  .chg-badge {
-    display:inline-block; font-size:1.25rem; font-weight:700;
-    padding:.32rem .85rem; border-radius:6px; margin-top:6px;
-  }
-  .chg-badge.up   { background:#fee2e2; color:var(--up); }
-  .chg-badge.down { background:#dcfce7; color:var(--down); }
-  .chg-badge.flat { background:#f1f5f9; color:var(--flat); }
-
-  /* 買賣訊號 */
-  .sig-bar {
-    width:100%; border-top:1px solid #f1f5f9;
-    padding-top:.3rem; margin-top:.25rem;
-    display:flex; flex-direction:column; gap:.18rem;
-  }
-  .sig-row { display:flex; align-items:center; gap:.35rem; font-size:.68rem; }
-  .sig-label { color:#94a3b8; font-weight:700; font-size:.6rem; min-width:1.4rem; }
-  .sig-sep   { color:#e2e8f0; }
-  .sig-val   { font-family:'Courier New',monospace; font-weight:600; }
-  .sig-buy   { color:#16a34a; }
-  .sig-sell  { color:#dc2626; }
-  .sig-neutral { color:#94a3b8; font-weight:400; }
-
-  /* ETF 持股明細 */
-  .holding-table { width:100%; border-collapse:collapse; font-size:.72rem; }
-  .holding-table th { color:#94a3b8; font-weight:600; font-size:.65rem; padding:.25rem .4rem; text-align:left; border-bottom:1px solid #e2e8f0; }
-  .holding-table th.r { text-align:right; }
-  .holding-table td { padding:.25rem .4rem; border-top:1px solid #f8fafc; }
-  .holding-table td.r { text-align:right; font-family:'Courier New',monospace; }
-  .holding-in  { background:#dcfce7; }
-  .holding-out { background:#fee2e2; opacity:.7; text-decoration:line-through; }
-  .diff-badge { font-size:.6rem; font-weight:700; background:#fef3c7; color:#b45309; padding:.1rem .4rem; border-radius:99px; margin-left:.35rem; }
-
-  /* 融資單日變化排行 */
-  .mrank-wrap { margin:.2rem .75rem .5rem; background:#fff; border-radius:10px; box-shadow:0 1px 3px rgba(0,0,0,.07); overflow:hidden; }
-  .mrank-header { display:flex; justify-content:space-between; align-items:center; padding:.45rem .75rem .3rem; }
-  .mrank-title { font-size:.78rem; font-weight:700; color:#475569; }
-  .mrank-date  { font-size:.65rem; color:#94a3b8; }
-  .mrank-grid  { display:grid; grid-template-columns:1fr 1fr; gap:0; }
-  .mrank-col   { padding:.25rem .5rem .5rem; }
-  .mrank-col:first-child { border-right:1px solid #f1f5f9; }
-  .mrank-col-title { font-size:.68rem; font-weight:700; padding:.15rem 0 .3rem; }
-  .mrank-col-title.add { color:#dc2626; }
-  .mrank-col-title.sub { color:#16a34a; }
-  .mrank-row { display:flex; justify-content:space-between; align-items:center; padding:.1rem 0; border-top:1px solid #f8fafc; font-size:.7rem; }
-  .mrank-code { color:#475569; font-weight:600; min-width:2.8rem; }
-  .mrank-name { color:#64748b; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin:0 .3rem; font-size:.65rem; }
-  .mrank-chg  { font-family:'Courier New',monospace; font-size:.68rem; white-space:nowrap; }
-
-  /* ETF 三大法人 */
-  .inst-bar {
-    width:100%; border-top:1px solid #f1f5f9;
-    padding-top:.28rem; margin-top:.22rem;
-    font-size:.68rem; display:flex; align-items:center; gap:.4rem; flex-wrap:wrap;
-  }
-  .inst-lbl { color:#94a3b8; font-size:.6rem; }
-  .inst-sep { color:#e2e8f0; }
-  .inst-up  { color:var(--up);   font-weight:700; font-family:'Courier New',monospace; }
-  .inst-dn  { color:var(--down); font-weight:700; font-family:'Courier New',monospace; }
-  .inst-flat{ color:#94a3b8;     font-family:'Courier New',monospace; }
-
-  /* ETF 淨值溢折價 */
-  .nav-bar {
-    width:100%; border-top:1px solid #f1f5f9;
-    padding-top:.28rem; margin-top:.22rem;
-    font-size:.72rem; color:#94a3b8; display:flex; align-items:center; gap:.4rem;
-  }
-  .nav-prem { font-weight:700; }
-
-  /* 指數大卡 */
+  /* ── INDEX CARDS ─────────────────────────────────────────────── */
   .idx-card {
-    background:#fff; border-radius:12px; padding:1rem 1.1rem;
-    margin:.4rem .75rem; box-shadow:0 1px 3px rgba(0,0,0,.07);
+    background: var(--c1); border: 1px solid var(--bdr);
+    border-radius: 10px; padding: .95rem 1.1rem;
+    margin: .35rem .7rem; transition: border-color .2s;
   }
-  .idx-name  { font-size:1.3rem; color:#64748b; font-weight:600; }
-  .idx-price { font-size:2.6rem; font-weight:800; margin:.25rem 0; }
-  .idx-chg   { font-size:1.35rem; font-weight:600; }
+  .idx-card:hover { border-color: var(--acc); }
+  .idx-name  { font-size: .72rem; color: var(--t3); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .idx-price { font-size: 2rem; font-weight: 800; margin: .3rem 0 .05rem; letter-spacing: -.02em; }
+  .idx-chg   { font-size: .9rem; font-weight: 500; }
 
-  .up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--flat);}
+  .up   { color: var(--up); }
+  .down { color: var(--down); }
+  .flat { color: var(--flat); }
 
-  /* 電腦版 */
+  /* ── STOCK CARDS ─────────────────────────────────────────────── */
+  .stock-card {
+    background: var(--c1); border: 1px solid var(--bdr);
+    border-radius: 10px; padding: .8rem 1rem;
+    margin: .35rem .7rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; transition: border-color .2s;
+  }
+  .stock-card:hover { border-color: #2d4f70; }
+  .stock-name  { font-size: .9rem; font-weight: 700; color: var(--t1); }
+  .stock-sub   { font-size: .68rem; color: var(--t3); margin-top: 2px; }
+  .stock-price { font-size: 1.35rem; font-weight: 800; text-align: right; letter-spacing: -.01em; }
+  .chg-badge {
+    display: inline-block; font-size: .72rem; font-weight: 700;
+    padding: .18rem .55rem; border-radius: 4px; margin-top: 5px;
+    font-family: 'Courier New', monospace;
+  }
+  .chg-badge.up   { background: rgba(239,68,68,.12);  color: var(--up); }
+  .chg-badge.down { background: rgba(34,197,94,.12);   color: var(--down); }
+  .chg-badge.flat { background: var(--c2); color: var(--flat); }
+
+  /* ── SIGNALS ─────────────────────────────────────────────────── */
+  .sig-bar {
+    width: 100%; border-top: 1px solid var(--bdr);
+    padding-top: .28rem; margin-top: .22rem;
+    display: flex; flex-direction: column; gap: .15rem;
+  }
+  .sig-row   { display: flex; align-items: center; gap: .35rem; font-size: .67rem; }
+  .sig-label { color: var(--t3); font-weight: 700; font-size: .59rem; min-width: 1.4rem; }
+  .sig-sep   { color: var(--bdr); }
+  .sig-val   { font-family: 'Courier New', monospace; font-weight: 600; }
+  .sig-buy     { color: var(--down); }
+  .sig-sell    { color: var(--up); }
+  .sig-neutral { color: var(--t3); font-weight: 400; }
+
+  /* ── ETF NAV ─────────────────────────────────────────────────── */
+  .nav-bar {
+    width: 100%; border-top: 1px solid var(--bdr);
+    padding-top: .24rem; margin-top: .2rem;
+    font-size: .7rem; color: var(--t3);
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .nav-prem { font-weight: 700; }
+
+  /* ── ETF 法人 ────────────────────────────────────────────────── */
+  .inst-bar {
+    width: 100%; border-top: 1px solid var(--bdr);
+    padding-top: .24rem; margin-top: .2rem;
+    font-size: .67rem; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
+  }
+  .inst-lbl  { color: var(--t3); font-size: .59rem; }
+  .inst-sep  { color: var(--bdr); }
+  .inst-up   { color: var(--up);   font-weight: 700; font-family: 'Courier New', monospace; }
+  .inst-dn   { color: var(--down); font-weight: 700; font-family: 'Courier New', monospace; }
+  .inst-flat { color: var(--t3);   font-family: 'Courier New', monospace; }
+
+  /* ── ETF HOLDINGS ────────────────────────────────────────────── */
+  .holding-table { width: 100%; border-collapse: collapse; font-size: .72rem; }
+  .holding-table th { color: var(--t3); font-weight: 600; font-size: .64rem; padding: .25rem .4rem; text-align: left; border-bottom: 1px solid var(--bdr); }
+  .holding-table th.r { text-align: right; }
+  .holding-table td { padding: .25rem .4rem; border-top: 1px solid var(--bdr); color: var(--t2); }
+  .holding-table td.r { text-align: right; font-family: 'Courier New', monospace; }
+  .holding-in  { background: rgba(34,197,94,.08);  color: var(--down) !important; }
+  .holding-out { background: rgba(239,68,68,.08);   opacity: .7; text-decoration: line-through; }
+  .diff-badge { font-size: .6rem; font-weight: 700; background: rgba(251,191,36,.12); color: #fbbf24; padding: .1rem .4rem; border-radius: 99px; margin-left: .35rem; }
+
+  /* ── MARGIN RANK ─────────────────────────────────────────────── */
+  .mrank-wrap { margin: .2rem .7rem .5rem; background: var(--c1); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; }
+  .mrank-header { display: flex; justify-content: space-between; align-items: center; padding: .5rem .75rem .35rem; border-bottom: 1px solid var(--bdr); }
+  .mrank-title { font-size: .72rem; font-weight: 700; color: var(--t1); letter-spacing: .03em; }
+  .mrank-date  { font-size: .64rem; color: var(--t3); }
+  .mrank-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .mrank-col   { padding: .3rem .6rem .5rem; }
+  .mrank-col:first-child { border-right: 1px solid var(--bdr); }
+  .mrank-col-title { font-size: .67rem; font-weight: 700; padding: .15rem 0 .3rem; }
+  .mrank-col-title.add { color: var(--up); }
+  .mrank-col-title.sub { color: var(--down); }
+  .mrank-row { display: flex; justify-content: space-between; align-items: center; padding: .1rem 0; border-top: 1px solid var(--c2); font-size: .69rem; }
+  .mrank-code { color: var(--t2); font-weight: 600; min-width: 2.8rem; }
+  .mrank-name { color: var(--t3); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 .3rem; font-size: .64rem; }
+  .mrank-chg  { font-family: 'Courier New', monospace; font-size: .67rem; white-space: nowrap; }
+
+  /* ── ANALYSIS CARD ───────────────────────────────────────────── */
+  .an-card {
+    background: var(--c1); border: 1px solid var(--bdr);
+    border-radius: 10px; padding: 1rem;
+    margin: .35rem .7rem;
+  }
+  .an-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: .7rem; }
+  .an-name  { font-size: .95rem; font-weight: 700; color: var(--t1); }
+  .an-sub   { font-size: .7rem; color: var(--t3); }
+  .an-price { font-size: 1.65rem; font-weight: 800; letter-spacing: -.02em; }
+
+  .an-bias { width: 100%; border-collapse: collapse; font-size: .8rem; margin-bottom: .65rem; }
+  .an-bias th { color: var(--t3); font-weight: 600; padding: .2rem .3rem; text-align: center; font-size: .68rem; border-bottom: 1px solid var(--bdr); }
+  .an-bias td { padding: .22rem .3rem; text-align: center; color: var(--t2); }
+  .an-bias .row-lbl { text-align: left; font-weight: 600; color: var(--t2); white-space: nowrap; }
+  .an-bias .ma-val  { color: var(--t2); font-size: .76rem; }
+
+  /* 乖離率色階（深色版）*/
+  .b-0      { color: var(--t2); }
+  .b-pos    { color: var(--up); }
+  .b-neg    { color: var(--down); }
+  .b-pos-10 { background: rgba(239,68,68,.14);  color: #fca5a5; font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+  .b-neg-10 { background: rgba(34,197,94,.14);   color: #86efac; font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+  .b-pos-15 { background: rgba(239,68,68,.22);  color: #fca5a5; font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+  .b-neg-15 { background: rgba(34,197,94,.22);   color: #86efac; font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+  .b-pos-20 { background: rgba(239,68,68,.32);  color: #fecaca; font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+  .b-neg-20 { background: rgba(34,197,94,.32);   color: #bbf7d0; font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+  .b-pos-25 { background: rgba(239,68,68,.55);  color: #fff;    font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+  .b-neg-25 { background: rgba(34,197,94,.55);   color: #fff;    font-weight: 700; border-radius: 4px; padding: .08rem .3rem; display: inline-block; }
+
+  .an-vol { font-size: .77rem; color: var(--t2); border-top: 1px solid var(--bdr); padding-top: .5rem; }
+  .an-vol-title { font-weight: 700; color: var(--t2); margin-bottom: .25rem; font-size: .72rem; }
+  .vol-hi { color: var(--up);   font-weight: 600; }
+  .vol-lo { color: var(--down); font-weight: 600; }
+
+  /* ── GRID ────────────────────────────────────────────────────── */
   @media(min-width:768px){
-    .idx-grid   { display:grid; grid-template-columns:repeat(2,1fr); }
-    .stock-grid { display:grid; grid-template-columns:repeat(2,1fr); }
-    .idx-card,.stock-card { margin:.4rem; }
-    .stock-name  { font-size:1rem; }
-    .stock-price { font-size:1.25rem; }
+    .idx-grid   { display: grid; grid-template-columns: repeat(2,1fr); }
+    .stock-grid { display: grid; grid-template-columns: repeat(2,1fr); }
+    .an-grid    { display: grid; grid-template-columns: repeat(2,1fr); }
+    .idx-card, .stock-card, .an-card { margin: .35rem; }
+    .stock-name  { font-size: 1rem; }
+    .stock-price { font-size: 1.35rem; }
   }
   @media(min-width:1200px){
-    .idx-grid   { grid-template-columns:repeat(4,1fr); }
-    .stock-grid { grid-template-columns:repeat(3,1fr); }
+    .idx-grid   { grid-template-columns: repeat(4,1fr); }
+    .stock-grid { grid-template-columns: repeat(3,1fr); }
   }
 
-  /* 底部 */
+  /* ── BOTTOM BAR ──────────────────────────────────────────────── */
   .update-bar {
-    background:#fff; border-top:1px solid #e2e8f0; text-align:center;
-    padding:.6rem; font-size:.8rem; color:#94a3b8; position:sticky; bottom:0;
+    background: #080f1d; border-top: 1px solid var(--bdr);
+    text-align: center; padding: .55rem;
+    font-size: .72rem; color: var(--t3); position: sticky; bottom: 0;
   }
 
-  /* 更新時段標籤 */
-  .session-tag { font-size:.7rem; font-weight:700; padding:.15rem .5rem; border-radius:99px; margin-left:.4rem; vertical-align:middle; }
-  .tag-live  { background:#dcfce7; color:#16a34a; }
-  .tag-wait  { background:#fef3c7; color:#b45309; }
+  /* ── SESSION TAGS ────────────────────────────────────────────── */
+  .session-tag { font-size: .63rem; font-weight: 700; padding: .1rem .42rem; border-radius: 4px; margin-left: .4rem; vertical-align: middle; }
+  .tag-live { background: rgba(34,197,94,.15);  color: var(--down); }
+  .tag-wait { background: rgba(251,191,36,.15); color: #fbbf24; }
 
-  /* 骨架 */
-  .skeleton { background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);
-    background-size:200% 100%; animation:shimmer 1.5s infinite;
-    border-radius:6px; height:1.2em; width:70%; }
-  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-  .spin{display:inline-block;animation:spin .8s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg)}}
-
-  /* ── 大盤技術分析 ─────────────────────────────────── */
-  .an-card {
-    background:#fff; border-radius:12px; padding:1rem;
-    margin:.4rem .75rem; box-shadow:0 1px 3px rgba(0,0,0,.07);
+  /* ── SKELETON ────────────────────────────────────────────────── */
+  .skeleton {
+    background: linear-gradient(90deg, var(--c1) 25%, var(--c2) 50%, var(--c1) 75%);
+    background-size: 200% 100%; animation: shimmer 1.5s infinite;
+    border-radius: 6px; height: 1.2em; width: 70%;
   }
-  .an-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.7rem; }
-  .an-name { font-size:1.1rem; font-weight:700; color:#1e293b; }
-  .an-sub  { font-size:.75rem; color:#94a3b8; }
-  .an-price{ font-size:1.8rem; font-weight:800; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .spin { display: inline-block; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  .an-bias { width:100%; border-collapse:collapse; font-size:.82rem; margin-bottom:.65rem; }
-  .an-bias th { color:#94a3b8; font-weight:600; padding:.2rem .3rem; text-align:center; font-size:.75rem; }
-  .an-bias td { padding:.22rem .3rem; text-align:center; }
-  .an-bias .row-lbl { text-align:left; font-weight:600; color:#475569; white-space:nowrap; }
-  .an-bias .ma-val  { color:#64748b; font-size:.8rem; }
+  /* ── FUTURES ─────────────────────────────────────────────────── */
+  .futures-updated { font-size: .68rem; color: var(--t3); font-weight: 400; margin-left: .5rem; }
 
-  /* 乖離率色階：正乖離紅，負乖離綠 */
-  .b-0      { color:#475569; }
-  .b-pos    { color:var(--up); }
-  .b-neg    { color:var(--down); }
-  .b-pos-10 { background:#fee2e2; color:var(--up);   font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-neg-10 { background:#dcfce7; color:var(--down); font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-pos-15 { background:#fecaca; color:#b91c1c;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-neg-15 { background:#bbf7d0; color:#15803d;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-pos-20 { background:#fca5a5; color:#991b1b;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-neg-20 { background:#86efac; color:#14532d;     font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-pos-25 { background:#ef4444; color:#fff;        font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-  .b-neg-25 { background:#22c55e; color:#fff;        font-weight:700; border-radius:4px; padding:.1rem .3rem; display:inline-block; }
-
-  .an-vol { font-size:.8rem; color:#475569; border-top:1px solid #f1f5f9; padding-top:.5rem; }
-  .an-vol-title { font-weight:700; color:#64748b; margin-bottom:.25rem; }
-  .vol-hi { color:#dc2626; font-weight:600; }
-  .vol-lo { color:#16a34a; font-weight:600; }
-
-  @media(min-width:768px){
-    .an-grid { display:grid; grid-template-columns:repeat(2,1fr); }
-    .an-card { margin:.4rem; }
+  /* ── EPS / FUND TOGGLE ───────────────────────────────────────── */
+  .eps-toggle-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: .67rem; font-weight: 700; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--t3);
+    padding: .7rem 1rem .4rem;
+    display: flex; align-items: center; gap: .4rem; width: 100%;
+    transition: color .15s;
   }
+  .eps-toggle-btn:hover { color: var(--t2); }
+  .eps-toggle-icon { transition: transform .2s; font-size: .85rem; }
+  .eps-toggle-icon.open { transform: rotate(90deg); }
+  .eps-body { display: none; }
+  .eps-body.open { display: block; }
+  .eps-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: .3rem .7rem 0; }
+  .eps-table { width: 100%; border-collapse: collapse; font-size: .79rem; }
+  .eps-table th {
+    background: var(--c2); color: var(--t2); font-weight: 700;
+    padding: .4rem .55rem; text-align: right; white-space: nowrap;
+    border-bottom: 1px solid var(--bdr); font-size: .68rem; position: sticky; top: 0;
+  }
+  .eps-table th:first-child { text-align: left; min-width: 90px; }
+  .eps-table td { padding: .35rem .55rem; text-align: right; border-bottom: 1px solid var(--bdr); vertical-align: middle; color: var(--t2); }
+  .eps-table td:first-child { text-align: left; }
+  .eps-table tr:hover { background: var(--c2); }
+  .eps-name { font-weight: 600; color: var(--t1); font-size: .85rem; line-height: 1.2; }
+  .eps-sym  { color: var(--t3); font-size: .68rem; }
+  .eps-fy   { color: var(--t3); font-size: .65rem; }
+  .eps-val  { color: var(--t2); }
+  .eps-up   { color: var(--up);   font-weight: 600; }
+  .eps-down { color: var(--down); font-weight: 600; }
+  .eps-pub  { background: rgba(59,130,246,.15); color: #60a5fa; font-weight: 700; border-radius: 3px; padding: .04rem .3rem; display: inline-block; }
+  .eps-est  { color: #a78bfa; font-style: italic; }
+  .eps-note { font-size: .64rem; color: var(--t3); display: block; margin-top: 1px; white-space: nowrap; }
+  .eps-null { color: var(--bdr); }
+  .eps-footer { font-size: .67rem; color: var(--t3); text-align: right; padding: .3rem 1rem .5rem; }
 
-  /* ── K 線圖 Modal ─────────────────────────────────── */
+  /* ── FUNDAMENTALS ────────────────────────────────────────────── */
+  .fund-good { color: var(--down); font-weight: 600; }
+  .fund-warn { color: var(--up);   font-weight: 600; }
+  .fund-null { color: var(--bdr); }
+  .fund-group { background: var(--c2); color: var(--t3); font-weight: 700; font-size: .7rem; padding: .3rem .55rem; }
+
+  /* ── K-LINE MODAL ────────────────────────────────────────────── */
   #chart-modal {
-    display:none; position:fixed; inset:0; z-index:9999;
-    background:#0f172a; flex-direction:column;
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: #080f1d; flex-direction: column;
   }
   #chart-header {
-    display:flex; align-items:center; gap:.5rem;
-    padding:.55rem .85rem; border-bottom:1px solid #1e293b; flex-shrink:0;
-    flex-wrap:wrap;
+    display: flex; align-items: center; gap: .5rem;
+    padding: .5rem .85rem; border-bottom: 1px solid var(--bdr); flex-shrink: 0;
+    flex-wrap: wrap;
   }
-  #chart-title { color:#f1f5f9; font-size:.95rem; font-weight:700; white-space:nowrap; }
-  #chart-ohlc  { flex:1; font-size:.72rem; color:#94a3b8; font-family:'Courier New',monospace;
-    min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  #chart-close { margin-left:auto; background:none; border:none; color:#64748b;
-    font-size:1.5rem; line-height:1; cursor:pointer; padding:0 .2rem; flex-shrink:0; }
-  #chart-close:hover { color:#94a3b8; }
-  #chart-container { flex:1; min-height:0; width:100%; }
+  #chart-title { color: var(--t1); font-size: .9rem; font-weight: 700; white-space: nowrap; }
+  #chart-ohlc  { flex: 1; font-size: .7rem; color: var(--t2); font-family: 'Courier New', monospace;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #chart-close { margin-left: auto; background: none; border: none; color: var(--t3);
+    font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 0 .2rem; flex-shrink: 0; }
+  #chart-close:hover { color: var(--t1); }
+  #chart-container { flex: 1; min-height: 0; width: 100%; }
 
   .btn-chart {
-    background:#1e293b; border:1px solid #334155; border-radius:5px;
-    color:#94a3b8; font-size:.68rem; padding:.1rem .45rem; cursor:pointer; white-space:nowrap;
+    background: var(--c2); border: 1px solid var(--bdr); border-radius: 4px;
+    color: var(--t2); font-size: .64rem; padding: .1rem .42rem; cursor: pointer; white-space: nowrap;
+    transition: border-color .15s, color .15s;
   }
-  .btn-chart:hover { background:#334155; color:#e2e8f0; }
+  .btn-chart:hover { border-color: var(--acc); color: var(--acc); }
   .btn-chart-card {
-    background:#f1f5f9; border:1px solid #e2e8f0; border-radius:4px;
-    color:#64748b; font-size:.65rem; padding:.1rem .35rem; cursor:pointer; flex-shrink:0;
+    background: var(--c2); border: 1px solid var(--bdr); border-radius: 4px;
+    color: var(--t3); font-size: .63rem; padding: .08rem .3rem; cursor: pointer; flex-shrink: 0;
+    transition: border-color .15s, color .15s;
   }
-  .btn-chart-card:hover { background:#e2e8f0; color:#475569; }
+  .btn-chart-card:hover { border-color: var(--acc); color: var(--acc); }
 
-  /* ── 個股 Modal 融資餘額區 ── */
+  /* ── STOCK MARGIN IN MODAL ───────────────────────────────────── */
   #stock-margin-section {
-    flex-shrink:0; flex-direction:column; background:#0f172a;
-    border-top:1px solid #1e293b;
+    flex-shrink: 0; flex-direction: column; background: #080f1d;
+    border-top: 1px solid var(--bdr);
   }
   #stock-margin-header {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:.3rem .75rem; font-size:.72rem; color:#94a3b8;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .3rem .75rem; font-size: .7rem; color: var(--t3);
   }
-  #stock-margin-chart { height:130px; width:100%; }
+  #stock-margin-chart { height: 130px; width: 100%; }
 
-  /* ── 台指夜盤 ────────────────────────────────────────── */
-  .futures-updated { font-size:.7rem; color:#94a3b8; font-weight:400; margin-left:.5rem; }
-
-  /* ── 財報 EPS ─────────────────────────────────────────── */
-  .eps-toggle-btn {
-    background:none; border:none; cursor:pointer;
-    font-size:.95rem; font-weight:700; letter-spacing:.06em;
-    text-transform:uppercase; color:#94a3b8; padding:.7rem 1rem .4rem;
-    display:flex; align-items:center; gap:.4rem; width:100%;
+  /* ── INLINE CHART PANEL (台股大盤區) ─────────────────────────── */
+  .tw-chart-panel {
+    margin: .2rem .7rem .5rem; background: var(--c1);
+    border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden;
   }
-  .eps-toggle-btn:hover { color:#64748b; }
-  .eps-toggle-icon { transition:transform .2s; font-size:.85rem; }
-  .eps-toggle-icon.open { transform:rotate(90deg); }
-  .eps-body { display:none; }
-  .eps-body.open { display:block; }
-  .eps-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:.3rem .75rem 0; }
-  .eps-table { width:100%; border-collapse:collapse; font-size:.82rem; }
-  .eps-table th {
-    background:#f8fafc; color:#64748b; font-weight:700;
-    padding:.45rem .55rem; text-align:right; white-space:nowrap;
-    border-bottom:2px solid #e2e8f0; font-size:.72rem; position:sticky; top:0;
+  .tw-chart-panel-row {
+    padding: .35rem .75rem .18rem; font-size: .7rem; color: var(--t3);
+    display: flex; justify-content: space-between; align-items: center;
   }
-  .eps-table th:first-child { text-align:left; min-width:90px; }
-  .eps-table td { padding:.38rem .55rem; text-align:right; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
-  .eps-table td:first-child { text-align:left; }
-  .eps-table tr:hover { background:#f8fafc; }
-  .eps-name { font-weight:600; color:#1e293b; font-size:.88rem; line-height:1.2; }
-  .eps-sym  { color:#94a3b8; font-size:.7rem; }
-  .eps-fy   { color:#cbd5e1; font-size:.65rem; }
-  .eps-val  { color:#475569; }
-  .eps-up   { color:#dc2626; font-weight:600; }
-  .eps-down { color:#16a34a; font-weight:600; }
-  .eps-pub  { background:#eff6ff; color:#1d4ed8; font-weight:700; border-radius:3px; padding:.05rem .3rem; display:inline-block; }
-  .eps-est  { color:#7c3aed; font-style:italic; }
-  .eps-note { font-size:.65rem; color:#94a3b8; display:block; margin-top:1px; white-space:nowrap; }
-  .eps-null { color:#cbd5e1; }
-  .eps-footer { font-size:.68rem; color:#94a3b8; text-align:right; padding:.3rem 1rem .5rem; }
-
-  /* 基本面估值表 */
-  .fund-good { color:#16a34a; font-weight:600; }
-  .fund-warn { color:#dc2626; font-weight:600; }
-  .fund-null { color:#cbd5e1; }
-  .fund-group { background:#f8fafc; color:#64748b; font-weight:700; font-size:.72rem; padding:.3rem .55rem; }
+  .tw-chart-panel-row + .tw-chart-panel-row { border-top: 1px solid var(--bdr); }
+  .tw-chart-panel-label { font-weight: 600; color: var(--t2); }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
   <h1><i class="bi bi-bar-chart-fill me-2" style="color:#60a5fa"></i>投資小幫手</h1>
-  <div style="display:flex;align-items:center;gap:.5rem">
-    <button id="fetch-btn" title="觸發 GitHub Actions 重新抓取（長按清除 Token）" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:99px;padding:.2rem .75rem;font-size:.8rem;cursor:pointer;display:flex;align-items:center;gap:.3rem">
+  <div class="top-bar-btns">
+    <button id="fetch-btn" title="觸發 GitHub Actions 重新抓取（長按清除 Token）">
       <i class="bi bi-cloud-download" id="fetch-icon"></i><span id="fetch-label">重抓</span>
     </button>
-    <button id="refresh-btn" onclick="manualRefresh()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:99px;padding:.2rem .75rem;font-size:.8rem;cursor:pointer;display:flex;align-items:center;gap:.3rem">
+    <button id="refresh-btn" onclick="manualRefresh()">
       <i class="bi bi-arrow-clockwise" id="refresh-icon"></i>更新
     </button>
     <span class="time-badge" id="clock">--:--</span>
@@ -350,13 +425,13 @@
       <div id="an-etf0050"><div class="an-card"><div class="skeleton" style="height:10rem"></div></div></div>
     </div>
     <div class="section-title mt-1">融資餘額 vs 大盤<span id="margin-updated" style="font-size:.7rem;color:#94a3b8;font-weight:400;margin-left:.4rem"></span></div>
-    <div style="margin:.2rem .75rem .5rem;background:#1e293b;border-radius:10px;overflow:hidden">
-      <div style="padding:.35rem .75rem .15rem;font-size:.72rem;color:#94a3b8;display:flex;justify-content:space-between;align-items:center">
-        <span style="font-weight:600;color:#cbd5e1">台股大盤 K線 (^TWII)</span>
-        <span id="kline-ohlc" style="font-family:'Courier New',monospace;font-size:.68rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:.5rem"></span>
+    <div class="tw-chart-panel">
+      <div class="tw-chart-panel-row">
+        <span class="tw-chart-panel-label">台股大盤 K線 (^TWII)</span>
+        <span id="kline-ohlc" style="font-family:'Courier New',monospace;font-size:.67rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:.5rem;color:#94a3b8"></span>
       </div>
       <div id="twii-kline-chart" style="height:180px"></div>
-      <div style="padding:.35rem .75rem .15rem;font-size:.72rem;color:#94a3b8;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #334155">
+      <div class="tw-chart-panel-row">
         <span id="margin-latest">載入中…</span><span id="margin-change"></span>
       </div>
       <div id="margin-chart" style="height:130px"></div>
