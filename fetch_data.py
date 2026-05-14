@@ -64,6 +64,9 @@ TW_ETF = [
     {'symbol': '00919.TW',  'name': '群益台灣精選高息'},
     {'symbol': '00929.TW',  'name': '復華台灣科技優息'},
     {'symbol': '00940.TW',  'name': '元大台灣價值高息'},
+    {'symbol': '00403A.TW', 'name': '00403A'},
+    {'symbol': '00988A.TW', 'name': '00988A'},
+    {'symbol': '00981A.TW', 'name': '00981A'},
 ]
 
 # Extended ETF universe for top-3-by-volume discovery (superset of TW_ETF)
@@ -81,6 +84,9 @@ ETF_UNIVERSE = [
     {'symbol': '00934.TW',  'code': '00934',  'name': '中信成長高股息'},
     {'symbol': '00936.TW',  'code': '00936',  'name': '台新永續高息'},
     {'symbol': '00939.TW',  'code': '00939',  'name': '統一台灣高息動能'},
+    {'symbol': '00403A.TW', 'code': '00403A', 'name': '00403A'},
+    {'symbol': '00988A.TW', 'code': '00988A', 'name': '00988A'},
+    {'symbol': '00981A.TW', 'code': '00981A', 'name': '00981A'},
 ]
 
 JP_INDICES = [
