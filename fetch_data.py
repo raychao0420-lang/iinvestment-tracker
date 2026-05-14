@@ -64,9 +64,9 @@ TW_ETF = [
     {'symbol': '00919.TW',  'name': '群益台灣精選高息'},
     {'symbol': '00929.TW',  'name': '復華台灣科技優息'},
     {'symbol': '00940.TW',  'name': '元大台灣價值高息'},
-    {'symbol': '00403A.TW', 'name': '00403A'},
-    {'symbol': '00988A.TW', 'name': '00988A'},
-    {'symbol': '00981A.TW', 'name': '00981A'},
+    {'symbol': '00403A.TW', 'name': '統一台股升級50'},
+    {'symbol': '00988A.TW', 'name': '主動統一全球創新'},
+    {'symbol': '00981A.TW', 'name': '主動統一台股增長'},
 ]
 
 # Extended ETF universe for top-3-by-volume discovery (superset of TW_ETF)
@@ -84,9 +84,9 @@ ETF_UNIVERSE = [
     {'symbol': '00934.TW',  'code': '00934',  'name': '中信成長高股息'},
     {'symbol': '00936.TW',  'code': '00936',  'name': '台新永續高息'},
     {'symbol': '00939.TW',  'code': '00939',  'name': '統一台灣高息動能'},
-    {'symbol': '00403A.TW', 'code': '00403A', 'name': '00403A'},
-    {'symbol': '00988A.TW', 'code': '00988A', 'name': '00988A'},
-    {'symbol': '00981A.TW', 'code': '00981A', 'name': '00981A'},
+    {'symbol': '00403A.TW', 'code': '00403A', 'name': '統一台股升級50'},
+    {'symbol': '00988A.TW', 'code': '00988A', 'name': '主動統一全球創新'},
+    {'symbol': '00981A.TW', 'code': '00981A', 'name': '主動統一台股增長'},
 ]
 
 JP_INDICES = [
@@ -1286,22 +1286,30 @@ def fetch_inst_rank():
     fi_sum = sit_sum = dealer_sum = 0
 
     # ── Primary: FinMind TaiwanStockInstitutionalInvestorsBuySell ──────────
-    # No data_id = returns ALL stocks for the date. Data unit: 股 → ÷1000 = 千股.
-    # Free tier works without token.
+    # Query last 5 trading days so we always get the latest available date
+    # (today's data often isn't posted until after market close).
+    # No data_id = returns ALL stocks. Data unit: 股 → ÷1000 = 千股.
     finmind_ok = False
     try:
+        start_range = (query_date - timedelta(days=7)).isoformat()
         r = _req.get(
             'https://api.finmindtrade.com/api/v4/data',
             params={
                 'dataset': 'TaiwanStockInstitutionalInvestorsBuySell',
-                'start_date': date_str,
+                'start_date': start_range,
                 'end_date': date_str,
             },
-            timeout=30,
+            timeout=60,
         )
         payload = r.json()
         fm_data = payload.get('data', [])
-        print(f'  inst_rank: FinMind returned {len(fm_data)} records for {date_str}')
+        # Pick the most recent date that has data
+        available_dates = sorted(set(rec.get('date', '') for rec in fm_data), reverse=True)
+        print(f'  inst_rank: FinMind returned {len(fm_data)} records, dates={available_dates[:3]}')
+        if available_dates:
+            best_date = available_dates[0]
+            date_str = best_date  # use most recent available date
+            fm_data = [r for r in fm_data if r.get('date') == best_date]
         if fm_data:
             # Aggregate by stock code (multiple rows per code: one per institution type)
             agg = {}
