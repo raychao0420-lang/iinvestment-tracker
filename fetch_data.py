@@ -1237,7 +1237,7 @@ def fetch_stock_margin():
 
 
 def fetch_inst_rank():
-    """Fetch 三大法人買賣超日報 from TWSE TWT44U (all listed stocks).
+    """Fetch 三大法人買賣超日報 — FinMind primary, TWSE TWT44U fallback.
     Returns summary totals + buy/sell top-10 rankings by institution + ETF sub-ranking.
     Unit: 千股 (= 張 for most stocks).
     """
@@ -1270,35 +1270,6 @@ def fetch_inst_rank():
         except Exception:
             pass
 
-    try:
-        r = _req.get(
-            'https://www.twse.com.tw/rwd/zh/fund/TWT44U',
-            params={'date': query_date.strftime('%Y%m%d'), 'response': 'json'},
-            timeout=25, verify=False,
-            headers={'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'},
-        )
-        payload = r.json()
-    except Exception as e:
-        print(f'  inst_rank: TWT44U failed: {e}')
-        return None
-
-    if payload.get('stat') != 'OK':
-        print(f'  inst_rank: no data for {date_str} (stat={payload.get("stat")})')
-        return None
-
-    rows = payload.get('data', [])
-    if not rows:
-        print(f'  inst_rank: empty ({date_str})')
-        return None
-
-    # TWT44U column layout (18 cols, unit: 千股):
-    # [0] code  [1] name
-    # [2/3/4]  外資(不含自營) buy/sell/net
-    # [5/6/7]  外資自營商     buy/sell/net
-    # [8/9/10] 投信           buy/sell/net
-    # [11/12/13] 自營(自行)   buy/sell/net
-    # [14/15/16] 自營(避險)   buy/sell/net
-    # [17] 三大合計
     def to_i(s):
         try:
             return int(str(s).replace(',', '').strip())
@@ -1308,40 +1279,123 @@ def fetch_inst_rank():
     stocks = []
     fi_sum = sit_sum = dealer_sum = 0
 
-    for row in rows:
-        if len(row) < 11:
-            continue
-        code = str(row[0]).strip()
-        name = str(row[1]).strip()
-        if not code or not code[0].isdigit():
-            continue
+    # ── Primary: FinMind TaiwanStockInstitutionalInvestorsBuySell ──────────
+    # No data_id = returns ALL stocks for the date. Data unit: 股 → ÷1000 = 千股.
+    # Free tier works without token.
+    finmind_ok = False
+    try:
+        r = _req.get(
+            'https://api.finmindtrade.com/api/v4/data',
+            params={
+                'dataset': 'TaiwanStockInstitutionalInvestorsBuySell',
+                'start_date': date_str,
+                'end_date': date_str,
+            },
+            timeout=30,
+        )
+        payload = r.json()
+        fm_data = payload.get('data', [])
+        print(f'  inst_rank: FinMind returned {len(fm_data)} records for {date_str}')
+        if fm_data:
+            # Aggregate by stock code (multiple rows per code: one per institution type)
+            agg = {}
+            for rec in fm_data:
+                code = str(rec.get('stock_id', '')).strip()
+                name = str(rec.get('stock_name', code)).strip()
+                itype = str(rec.get('institutional_investors', '')).strip()
+                buy  = int(rec.get('buy', 0) or 0)
+                sell = int(rec.get('sell', 0) or 0)
+                net  = buy - sell
+                if code not in agg:
+                    agg[code] = {'code': code, 'name': name, 'fi': 0, 'sit': 0, 'dealer': 0}
+                if itype in ('外資', '外資及陸資(不含外資自營商)', '外資及陸資'):
+                    agg[code]['fi'] += net
+                elif itype == '外資自營商':
+                    agg[code]['fi'] += net
+                elif itype in ('投信',):
+                    agg[code]['sit'] += net
+                elif itype in ('自營商(自行買賣)', '自營商(避險)', '自營商'):
+                    agg[code]['dealer'] += net
 
-        if len(row) >= 18:
-            fi_net     = to_i(row[4]) + to_i(row[7])
-            sit_net    = to_i(row[10])
-            dealer_net = to_i(row[13]) + to_i(row[16])
-            total_net  = to_i(row[17])
+            for code, s in agg.items():
+                # Convert shares → 千股
+                s['fi']     = s['fi']     // 1000
+                s['sit']    = s['sit']    // 1000
+                s['dealer'] = s['dealer'] // 1000
+                s['total']  = s['fi'] + s['sit'] + s['dealer']
+                fi_sum     += s['fi']
+                sit_sum    += s['sit']
+                dealer_sum += s['dealer']
+                if s['fi'] != 0 or s['sit'] != 0 or s['dealer'] != 0:
+                    stocks.append(s)
+
+            if stocks:
+                finmind_ok = True
+                print(f'  inst_rank: FinMind 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
+    except Exception as e:
+        print(f'  inst_rank: FinMind failed: {e}')
+
+    # ── Fallback: TWSE TWT44U ───────────────────────────────────────────────
+    if not finmind_ok:
+        print(f'  inst_rank: trying TWSE TWT44U fallback…')
+        twse_urls = [
+            ('https://www.twse.com.tw/rwd/zh/fund/TWT44U',
+             {'date': query_date.strftime('%Y%m%d'), 'response': 'json'}),
+            ('https://www.twse.com.tw/fund/TWT44U',
+             {'date': query_date.strftime('%Y%m%d'), 'response': 'json'}),
+        ]
+        payload = None
+        for url, params in twse_urls:
+            try:
+                r = _req.get(url, params=params, timeout=25, verify=False,
+                             headers={'User-Agent': 'Mozilla/5.0',
+                                      'Referer': 'https://www.twse.com.tw/'})
+                print(f'  inst_rank: TWT44U HTTP {r.status_code} body={len(r.content)}B')
+                payload = r.json()
+                if payload.get('stat') == 'OK':
+                    break
+            except Exception as e:
+                print(f'  inst_rank: TWT44U failed ({url}): {e}')
+
+        if payload and payload.get('stat') == 'OK':
+            rows = payload.get('data', [])
+            # TWT44U column layout (18 cols, unit already 千股):
+            # [0]code [1]name [2/3/4]外資(不含自營) buy/sell/net
+            # [5/6/7]外資自營 [8/9/10]投信 [11/12/13]自營(自行) [14/15/16]自營(避險) [17]合計
+            for row in rows:
+                if len(row) < 11:
+                    continue
+                code = str(row[0]).strip()
+                name = str(row[1]).strip()
+                if not code or not code[0].isdigit():
+                    continue
+                if len(row) >= 18:
+                    fi_net     = to_i(row[4]) + to_i(row[7])
+                    sit_net    = to_i(row[10])
+                    dealer_net = to_i(row[13]) + to_i(row[16])
+                    total_net  = to_i(row[17])
+                else:
+                    fi_net     = to_i(row[4]) if len(row) > 4 else 0
+                    sit_net    = to_i(row[7]) if len(row) > 7 else 0
+                    dealer_net = to_i(row[10]) if len(row) > 10 else 0
+                    total_net  = fi_net + sit_net + dealer_net
+                fi_sum     += fi_net
+                sit_sum    += sit_net
+                dealer_sum += dealer_net
+                if fi_net != 0 or sit_net != 0 or dealer_net != 0:
+                    stocks.append({'code': code, 'name': name,
+                                   'fi': fi_net, 'sit': sit_net,
+                                   'dealer': dealer_net, 'total': total_net})
+            if stocks:
+                print(f'  inst_rank: TWT44U 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
         else:
-            fi_net = to_i(row[4]) if len(row) > 4 else 0
-            sit_net = to_i(row[7]) if len(row) > 7 else 0
-            dealer_net = to_i(row[10]) if len(row) > 10 else 0
-            total_net = fi_net + sit_net + dealer_net
-
-        fi_sum     += fi_net
-        sit_sum    += sit_net
-        dealer_sum += dealer_net
-
-        if fi_net != 0 or sit_net != 0 or dealer_net != 0:
-            stocks.append({'code': code, 'name': name,
-                           'fi': fi_net, 'sit': sit_net,
-                           'dealer': dealer_net, 'total': total_net})
+            print(f'  inst_rank: TWT44U also failed — no data available')
 
     if not stocks:
-        print(f'  inst_rank: parsed 0 active stocks')
+        print(f'  inst_rank: no active stocks found')
         return None
 
-    print(f'  inst_rank: {len(stocks)} active / {len(rows)} total stocks ({date_str})')
-    print(f'  inst_rank: 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
+    print(f'  inst_rank: {len(stocks)} active stocks ({date_str})')
 
     def rank(key, n=10):
         srt = sorted(stocks, key=lambda x: x[key], reverse=True)
