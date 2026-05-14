@@ -1243,8 +1243,11 @@ def fetch_stock_margin():
 
 
 def fetch_inst_rank():
-    """Fetch 三大法人買賣超日報 — FinMind primary, TWSE TWT44U fallback.
-    Returns summary totals + buy/sell top-10 rankings by institution + ETF sub-ranking.
+    """Fetch 三大法人買賣超日報.
+    Strategy:
+      1. TWSE TWT38U/41U/42U — full market, per-institution breakdown (works when IP not blocked)
+      2. TWSE TWT44U — full market, combined total only (fallback when individual endpoints fail)
+      3. FinMind per-stock — tracked stocks only (always works with free tier using data_id)
     Unit: 千股 (= 張 for most stocks).
     """
     import urllib3
@@ -1253,12 +1256,10 @@ def fetch_inst_rank():
     from datetime import date as _date, timedelta
 
     today = _date.today()
-    query_date = None
-    for offset in range(7):
-        d = today - timedelta(days=offset)
-        if d.weekday() < 5:
-            query_date = d
-            break
+    query_date = next(
+        (today - timedelta(days=d) for d in range(7) if (today - timedelta(days=d)).weekday() < 5),
+        None
+    )
     if query_date is None:
         return None
 
@@ -1284,135 +1285,113 @@ def fetch_inst_rank():
 
     stocks = []
     fi_sum = sit_sum = dealer_sum = 0
+    source = None
 
-    # ── Primary: FinMind TaiwanStockInstitutionalInvestorsBuySell ──────────
-    # Query last 5 trading days so we always get the latest available date
-    # (today's data often isn't posted until after market close).
-    # No data_id = returns ALL stocks. Data unit: 股 → ÷1000 = 千股.
-    finmind_ok = False
-    try:
-        start_range = (query_date - timedelta(days=7)).isoformat()
-        r = _req.get(
-            'https://api.finmindtrade.com/api/v4/data',
-            params={
-                'dataset': 'TaiwanStockInstitutionalInvestorsBuySell',
-                'start_date': start_range,
-                'end_date': date_str,
-            },
-            timeout=60,
-        )
-        payload = r.json()
-        print(f'  inst_rank: FinMind HTTP={r.status_code} msg={payload.get("msg","")} total={payload.get("total","")}')
-        fm_data = payload.get('data', [])
-        # Pick the most recent date that has data
-        available_dates = sorted(set(rec.get('date', '') for rec in fm_data), reverse=True)
-        print(f'  inst_rank: FinMind returned {len(fm_data)} records, dates={available_dates[:3]}')
-        if available_dates:
-            best_date = available_dates[0]
-            date_str = best_date  # use most recent available date
-            fm_data = [r for r in fm_data if r.get('date') == best_date]
-        if fm_data:
-            # Aggregate by stock code (multiple rows per code: one per institution type)
-            agg = {}
-            for rec in fm_data:
-                code = str(rec.get('stock_id', '')).strip()
-                name = str(rec.get('stock_name', code)).strip()
-                itype = str(rec.get('institutional_investors', '')).strip()
-                buy  = int(rec.get('buy', 0) or 0)
-                sell = int(rec.get('sell', 0) or 0)
-                net  = buy - sell
-                if code not in agg:
-                    agg[code] = {'code': code, 'name': name, 'fi': 0, 'sit': 0, 'dealer': 0}
-                if itype in ('外資', '外資及陸資(不含外資自營商)', '外資及陸資'):
-                    agg[code]['fi'] += net
-                elif itype == '外資自營商':
-                    agg[code]['fi'] += net
-                elif itype in ('投信',):
-                    agg[code]['sit'] += net
-                elif itype in ('自營商(自行買賣)', '自營商(避險)', '自營商'):
-                    agg[code]['dealer'] += net
+    # ── Layer 1: TWSE individual institution endpoints ──────────────────────
+    # rwd format: 6 cols [space, code, name, buy_shares, sell_shares, net_shares], unit=股 → ÷1000
+    date_param = query_date.strftime('%Y%m%d')
+    hdrs = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'}
 
-            for code, s in agg.items():
-                # Convert shares → 千股
-                s['fi']     = s['fi']     // 1000
-                s['sit']    = s['sit']    // 1000
-                s['dealer'] = s['dealer'] // 1000
-                s['total']  = s['fi'] + s['sit'] + s['dealer']
-                fi_sum     += s['fi']
-                sit_sum    += s['sit']
-                dealer_sum += s['dealer']
-                if s['fi'] != 0 or s['sit'] != 0 or s['dealer'] != 0:
-                    stocks.append(s)
+    def twse_ep(ep):
+        try:
+            r = _req.get(f'https://www.twse.com.tw/rwd/zh/fund/{ep}',
+                         params={'date': date_param, 'response': 'json'},
+                         timeout=20, verify=False, headers=hdrs)
+            pld = r.json()
+            rows = pld.get('data', []) if pld.get('stat') == 'OK' else []
+            print(f'  inst_rank: {ep} HTTP={r.status_code} rows={len(rows)}')
+            result = {}
+            for row in rows:
+                if len(row) < 6:
+                    continue
+                code = str(row[1]).strip()
+                name = str(row[2]).strip()
+                if not code or not code[0].isdigit():
+                    continue
+                result[code] = (name, to_i(row[5]) // 1000)  # net shares → 千股
+            return result
+        except Exception as e:
+            print(f'  inst_rank: {ep} failed: {e}')
+            return {}
 
-            if stocks:
-                finmind_ok = True
-                print(f'  inst_rank: FinMind 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
-    except Exception as e:
-        print(f'  inst_rank: FinMind failed: {e}')
+    fi_map     = twse_ep('TWT38U')
+    sit_map    = twse_ep('TWT41U')
+    dealer_map = twse_ep('TWT42U')
 
-    # ── Fallback: TWSE per-institution endpoints ────────────────────────────
-    # TWT44U (combined), TWT38U (外資), TWT41U (投信), TWT42U (自營)
-    # Actual response format (rwd): 6 cols [space, code, name, buy, sell, net], unit=股 → ÷1000=千股
-    if not finmind_ok:
-        print(f'  inst_rank: trying TWSE fallback (3 endpoints)…')
-        date_param = query_date.strftime('%Y%m%d')
-        hdrs = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.twse.com.tw/'}
-
-        def fetch_twse_ep(ep, label):
-            url = f'https://www.twse.com.tw/rwd/zh/fund/{ep}'
-            try:
-                r = _req.get(url, params={'date': date_param, 'response': 'json'},
-                             timeout=20, verify=False, headers=hdrs)
-                pld = r.json()
-                rows = pld.get('data', []) if pld.get('stat') == 'OK' else []
-                print(f'  inst_rank: {ep} HTTP={r.status_code} rows={len(rows)}')
-                result = {}
-                for row in rows:
-                    if len(row) < 6:
-                        continue
-                    code = str(row[1]).strip()   # col 1 = code
-                    name = str(row[2]).strip()   # col 2 = name
-                    if not code or not code[0].isdigit():
-                        continue
-                    net = to_i(row[5]) // 1000   # col 5 = net shares → 千股
-                    result[code] = (name, net)
-                return result
-            except Exception as e:
-                print(f'  inst_rank: {ep} failed: {e}')
-                return {}
-
-        fi_map     = fetch_twse_ep('TWT38U', '外資')
-        sit_map    = fetch_twse_ep('TWT41U', '投信')
-        dealer_map = fetch_twse_ep('TWT42U', '自營')
-
-        # Fallback to combined if individual endpoints empty
-        if not fi_map and not sit_map and not dealer_map:
-            total_map = fetch_twse_ep('TWT44U', '合計')
-            fi_map = total_map  # treat combined as fi so at least total ranking works
-
-        # Merge by code
+    if fi_map or sit_map or dealer_map:
+        source = 'TWSE(breakdown)'
         all_codes = set(fi_map) | set(sit_map) | set(dealer_map)
         for code in all_codes:
-            fi_name,  fi_net     = fi_map.get(code,     (code, 0))
-            sit_name, sit_net    = sit_map.get(code,    (code, 0))
-            dl_name,  dealer_net = dealer_map.get(code, (code, 0))
-            name = fi_name or sit_name or dl_name
-            total_net = fi_net + sit_net + dealer_net
-            fi_sum     += fi_net
-            sit_sum    += sit_net
-            dealer_sum += dealer_net
-            if fi_net != 0 or sit_net != 0 or dealer_net != 0:
+            fi_n,  fi_v  = fi_map.get(code,     (code, 0))
+            si_n,  si_v  = sit_map.get(code,    (code, 0))
+            dl_n,  dl_v  = dealer_map.get(code, (code, 0))
+            name = fi_n or si_n or dl_n
+            total_v = fi_v + si_v + dl_v
+            fi_sum += fi_v; sit_sum += si_v; dealer_sum += dl_v
+            if fi_v or si_v or dl_v:
                 stocks.append({'code': code, 'name': name,
-                               'fi': fi_net, 'sit': sit_net,
-                               'dealer': dealer_net, 'total': total_net})
-        if stocks:
-            print(f'  inst_rank: TWSE 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
+                               'fi': fi_v, 'sit': si_v, 'dealer': dl_v, 'total': total_v})
+    else:
+        # ── Layer 2: TWSE combined (TWT44U) ────────────────────────────────
+        total_map = twse_ep('TWT44U')
+        if total_map:
+            source = 'TWSE(combined)'
+            for code, (name, net) in total_map.items():
+                fi_sum += net
+                if net:
+                    stocks.append({'code': code, 'name': name,
+                                   'fi': net, 'sit': 0, 'dealer': 0, 'total': net})
 
     if not stocks:
-        print(f'  inst_rank: no active stocks found')
+        # ── Layer 3: FinMind per-stock (tracked universe, always works) ─────
+        print(f'  inst_rank: TWSE unavailable, using FinMind per-stock for tracked stocks…')
+        source = 'FinMind(tracked)'
+        name_map = {s['symbol'].replace('.TW', ''): s['name']
+                    for s in TW_STOCKS + TW_DRONE + TW_ETF}
+        all_tw_codes = list(name_map.keys())
+        for code in all_tw_codes:
+            try:
+                r = _req.get(
+                    'https://api.finmindtrade.com/api/v4/data',
+                    params={
+                        'dataset': 'TaiwanStockInstitutionalInvestorsBuySell',
+                        'data_id':  code,
+                        'start_date': date_str,
+                        'token': FINMIND_TOKEN or '',
+                    },
+                    timeout=15,
+                )
+                rows = r.json().get('data', [])
+                if not rows:
+                    continue
+                fi_v = si_v = dl_v = 0
+                for row in rows:
+                    net  = int(row.get('buy', 0)) - int(row.get('sell', 0))
+                    itype = row.get('institutional_investors', row.get('name', ''))
+                    if itype in ('Foreign_Investor', 'Foreign_Dealer_Self',
+                                 '外資及陸資(不含外資自營商)', '外資自營商', '外資及陸資', '外資'):
+                        fi_v += net
+                    elif itype in ('Investment_Trust', '投信'):
+                        si_v += net
+                    elif itype in ('Dealer_self', 'Dealer_Hedging',
+                                   '自營商(自行買賣)', '自營商(避險)', '自營商'):
+                        dl_v += net
+                fi_v //= 1000; si_v //= 1000; dl_v //= 1000
+                fi_sum += fi_v; sit_sum += si_v; dealer_sum += dl_v
+                total_v = fi_v + si_v + dl_v
+                if fi_v or si_v or dl_v:
+                    stocks.append({'code': code, 'name': name_map.get(code, code),
+                                   'fi': fi_v, 'sit': si_v, 'dealer': dl_v, 'total': total_v})
+                time.sleep(0.3)
+            except Exception as e:
+                print(f'  inst_rank: FinMind {code}: {e}')
+
+    if not stocks:
+        print(f'  inst_rank: no data from any source')
         return None
 
-    print(f'  inst_rank: {len(stocks)} active stocks ({date_str})')
+    print(f'  inst_rank: {len(stocks)} stocks via {source} ({date_str})')
+    print(f'  inst_rank: 外資{fi_sum:+,} 投信{sit_sum:+,} 自營{dealer_sum:+,} 千股')
 
     def rank(key, n=10):
         srt = sorted(stocks, key=lambda x: x[key], reverse=True)
@@ -1421,13 +1400,13 @@ def fetch_inst_rank():
             'bot': [s for s in reversed(srt) if s[key] < 0][:n],
         }
 
-    # ETF codes start with '0' and are ≥ 4 chars (0050, 006208, 00878, 00631L …)
     etf_list = [s for s in stocks if len(s['code']) >= 4 and s['code'][0] == '0']
     etf_srt  = sorted(etf_list, key=lambda x: x['total'], reverse=True)
-    print(f'  inst_rank: {len(etf_list)} ETFs identified')
+    print(f'  inst_rank: {len(etf_list)} ETFs in data')
 
     return {
         'date':    date_str,
+        'source':  source,
         'unit':    '千股',
         'summary': {'fi': fi_sum, 'sit': sit_sum,
                     'dealer': dealer_sum, 'total': fi_sum + sit_sum + dealer_sum},
