@@ -447,6 +447,29 @@
   .irank-etf-val  { font-family: 'Courier New', monospace; font-size: .66rem; white-space: nowrap; }
   .irank-etf-val.buy  { color: var(--up); }
   .irank-etf-val.sell { color: var(--down); }
+
+  /* ── 法人連買連賣 streak ── */
+  .streak-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+  .streak-col-hd { font-size: .65rem; font-weight: 700; padding: .12rem 0 .25rem; }
+  .streak-col-hd.buy  { color: var(--up); }
+  .streak-col-hd.sell { color: var(--down); }
+  .streak-row {
+    display: flex; align-items: center; padding: .1rem 0;
+    border-top: 1px solid var(--c2); font-size: .68rem;
+  }
+  .streak-code { color: var(--t2); font-weight: 700; min-width: 3.2rem; font-size: .67rem; }
+  .streak-name { color: var(--t3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .62rem; margin: 0 .2rem; }
+  .streak-tags { display: flex; gap: .15rem; flex-shrink: 0; flex-wrap: wrap; }
+  .streak-tag  { font-size: .55rem; padding: .05rem .22rem; border-radius: 3px; font-weight: 700; }
+  .streak-tag.fi.s2   { background: #1e3a5f; color: #7bb3f0; }
+  .streak-tag.fi.s3   { background: #1a4a80; color: #93c5fd; }
+  .streak-tag.fi.s4   { background: #1d4ed8; color: #bfdbfe; }
+  .streak-tag.fi.s5   { background: #2563eb; color: #fff; }
+  .streak-tag.sit.s2  { background: #422006; color: #f59e4a; }
+  .streak-tag.sit.s3  { background: #7c2d12; color: #fb923c; }
+  .streak-tag.sit.s4  { background: #c2410c; color: #fed7aa; }
+  .streak-tag.sit.s5  { background: #ea580c; color: #fff; }
+  .streak-sync { font-size: .52rem; padding: .04rem .18rem; border-radius: 3px; background: #2d1b69; color: #a78bfa; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -1043,10 +1066,12 @@ function renderInstRank(data) {
     </div>
     <div id="irank-content"></div>
     <div class="section-title" style="padding-top:.6rem">ETF 建倉減倉排行</div>
-    <div id="irank-etf-content"></div>`;
+    <div id="irank-etf-content"></div>
+    <div id="irank-streak-content"></div>`;
 
   switchInstTab(_instTab);
   renderInstEtf(data.etf, data.date);
+  renderInstStreak(data.history);
 }
 
 function switchInstTab(key) {
@@ -1122,6 +1147,94 @@ function renderInstEtf(etf, date) {
       </div>
     </div>
   </div>`;
+}
+
+function renderInstStreak(history) {
+  const el = document.getElementById('irank-streak-content');
+  if (!el) return;
+  if (!history || history.length < 2) { el.innerHTML = ''; return; }
+
+  // Sort newest-first
+  const sorted = [...history].sort((a, b) => (b.date > a.date ? 1 : -1));
+
+  // Build per-day sets for fast lookup
+  const dayData = sorted.map(e => ({
+    date:  e.date,
+    fi_b:  new Set((e.fi_b  || []).map(r => r[0])),
+    fi_s:  new Set((e.fi_s  || []).map(r => r[0])),
+    sit_b: new Set((e.sit_b || []).map(r => r[0])),
+    sit_s: new Set((e.sit_s || []).map(r => r[0])),
+  }));
+
+  // Collect all known codes + names
+  const allCodes = {};
+  sorted.forEach(e => {
+    ['fi_b','fi_s','sit_b','sit_s'].forEach(k => {
+      (e[k] || []).forEach(([code, name]) => { allCodes[code] = name; });
+    });
+  });
+
+  // Count consecutive days from newest for each field
+  const streaks = [];
+  const fieldMap = { fi_buy: 'fi_b', fi_sell: 'fi_s', sit_buy: 'sit_b', sit_sell: 'sit_s' };
+  Object.entries(allCodes).forEach(([code, name]) => {
+    const s = { code, name, fi_buy: 0, fi_sell: 0, sit_buy: 0, sit_sell: 0 };
+    Object.entries(fieldMap).forEach(([sf, df]) => {
+      for (const day of dayData) {
+        if (day[df].has(code)) s[sf]++;
+        else break;
+      }
+    });
+    const maxBuy  = Math.max(s.fi_buy,  s.sit_buy);
+    const maxSell = Math.max(s.fi_sell, s.sit_sell);
+    if (maxBuy >= 2 || maxSell >= 2) streaks.push(s);
+  });
+
+  const buyList  = streaks.filter(s => Math.max(s.fi_buy,  s.sit_buy)  >= 2)
+                          .sort((a, b) => Math.max(b.fi_buy, b.sit_buy) - Math.max(a.fi_buy, a.sit_buy));
+  const sellList = streaks.filter(s => Math.max(s.fi_sell, s.sit_sell) >= 2)
+                          .sort((a, b) => Math.max(b.fi_sell, b.sit_sell) - Math.max(a.fi_sell, a.sit_sell));
+
+  if (!buyList.length && !sellList.length) { el.innerHTML = ''; return; }
+
+  const tag = (label, count, dir) => {
+    if (!count) return '';
+    const lvl = count >= 5 ? 5 : count >= 4 ? 4 : count >= 3 ? 3 : 2;
+    return `<span class="streak-tag ${dir} s${lvl}">${label}×${count}</span>`;
+  };
+
+  const mkRow = (s, isBuy) => {
+    const tags = isBuy
+      ? tag('外資', s.fi_buy,  'fi') + tag('投信', s.sit_buy,  'sit')
+      : tag('外資', s.fi_sell, 'fi') + tag('投信', s.sit_sell, 'sit');
+    const sync = (isBuy ? (s.fi_buy >= 2 && s.sit_buy >= 2) : (s.fi_sell >= 2 && s.sit_sell >= 2))
+      ? '<span class="streak-sync">共振</span>' : '';
+    return `<div class="streak-row">
+      <span class="streak-code">${s.code}</span>
+      <span class="streak-name">${s.name}</span>
+      <span class="streak-tags">${tags}${sync}</span>
+    </div>`;
+  };
+
+  const col = (list, isBuy, n = 10) => {
+    const hd  = isBuy ? '▲ 連續買超' : '▼ 連續賣超';
+    const cls = isBuy ? 'buy' : 'sell';
+    const rows = list.slice(0, n).map(s => mkRow(s, isBuy)).join('') ||
+      '<div style="color:var(--t3);font-size:.7rem;padding:.4rem .5rem">無資料</div>';
+    return `<div class="streak-col">
+      <div class="streak-col-hd ${cls}">${hd}</div>
+      ${rows}
+    </div>`;
+  };
+
+  el.innerHTML = `
+    <div class="section-title" style="padding-top:.6rem">法人連買／連賣個股
+      <span style="font-size:.6rem;font-weight:400;color:var(--t3);margin-left:.3rem">連續≥2日</span>
+    </div>
+    <div class="streak-grid">
+      ${col(buyList,  true)}
+      ${col(sellList, false)}
+    </div>`;
 }
 
 // ── 大盤技術分析 ─────────────────────────────────────────────────────────────

@@ -1292,12 +1292,14 @@ def fetch_inst_rank():
 
     date_str = query_date.isoformat()
 
-    # Skip if we already have today's data
+    # Load existing (extract history before early-return)
     path = 'data/inst_rank.json'
+    existing_history = []
     if os.path.exists(path):
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 ex = json.load(f)
+            existing_history = ex.get('history', [])
             if ex.get('date') == date_str:
                 print(f'  inst_rank: already have {date_str}')
                 return ex
@@ -1432,20 +1434,42 @@ def fetch_inst_rank():
     etf_srt  = sorted(etf_list, key=lambda x: x['total'], reverse=True)
     print(f'  inst_rank: {len(etf_list)} ETFs in data')
 
+    r_fi     = rank('fi')
+    r_sit    = rank('sit')
+    r_dlr    = rank('dealer')
+    r_tot    = rank('total')
+
+    def compact(lst, key, n=10):
+        return [[s['code'], s['name'], s[key]] for s in lst[:n]]
+
+    hist_entry = {
+        'date':  date_str,
+        'fi_b':  compact(r_fi['top'],  'fi'),
+        'fi_s':  compact(r_fi['bot'],  'fi'),
+        'sit_b': compact(r_sit['top'], 'sit'),
+        'sit_s': compact(r_sit['bot'], 'sit'),
+    }
+
+    # Merge into history: deduplicate by date, keep last 30
+    history = [e for e in existing_history if e.get('date') != date_str]
+    history.append(hist_entry)
+    history = history[-30:]
+
     return {
         'date':    date_str,
         'source':  source,
         'unit':    '千股',
         'summary': {'fi': fi_sum, 'sit': sit_sum,
                     'dealer': dealer_sum, 'total': fi_sum + sit_sum + dealer_sum},
-        'fi':      rank('fi'),
-        'sit':     rank('sit'),
-        'dealer':  rank('dealer'),
-        'total':   rank('total'),
+        'fi':      r_fi,
+        'sit':     r_sit,
+        'dealer':  r_dlr,
+        'total':   r_tot,
         'etf': {
             'top': [s for s in etf_srt if s['total'] > 0][:15],
             'bot': [s for s in reversed(etf_srt) if s['total'] < 0][:15],
         },
+        'history': history,
     }
 
 
