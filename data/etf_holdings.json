@@ -1,60 +1,312 @@
 {
-  "updated": "2026/05/17 21:13",
+  "updated": "2026/05/17 23:56",
   "etfs": {
     "0050": {
       "holdings": [
         {
-          "symbol": "2330.TW",
-          "name": "Taiwan Semiconductor Manufacturing Co Ltd",
-          "pct": 63.15
+          "symbol": "1216.TW",
+          "name": "UNI-PRESIDENT ENTERPRISES CORP.",
+          "pct": null
+        },
+        {
+          "symbol": "1301.TW",
+          "name": "Formosa Plastics Corporation",
+          "pct": null
+        },
+        {
+          "symbol": "1303.TW",
+          "name": "NAN YA PLASTICS CORPORATION",
+          "pct": null
+        },
+        {
+          "symbol": "2002.TW",
+          "name": "China Steel Corporation",
+          "pct": null
+        },
+        {
+          "symbol": "2059.TW",
+          "name": "KING SLIDE WORKS CO.LTD",
+          "pct": null
+        },
+        {
+          "symbol": "2207.TW",
+          "name": "HOTAI MOTOR CO.LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "2301.TW",
+          "name": "LITE-ON TECHNOLOGY CORP.",
+          "pct": null
+        },
+        {
+          "symbol": "2303.TW",
+          "name": "UNITED MICROELECTRONICS CORP.",
+          "pct": null
         },
         {
           "symbol": "2308.TW",
-          "name": "Delta Electronics Inc",
-          "pct": 3.93
+          "name": "DELTA ELECTRONICS INC.",
+          "pct": null
         },
         {
           "symbol": "2317.TW",
-          "name": "Hon Hai Precision Industry Co Ltd",
-          "pct": 3.37
+          "name": "HON HAI PRECISION IND. CO. LTD.",
+          "pct": null
         },
         {
-          "symbol": "2454.TW",
-          "name": "MediaTek Inc",
-          "pct": 3.23
+          "symbol": "2327.TW",
+          "name": "YAGEO CORPORATION",
+          "pct": null
         },
         {
-          "symbol": "3711.TW",
-          "name": "ASE Technology Holding Co Ltd",
-          "pct": 1.58
+          "symbol": "2330.TW",
+          "name": "Taiwan Semiconductor Manufacturing Co. Ltd.",
+          "pct": null
         },
         {
-          "symbol": "2891.TW",
-          "name": "CTBC Financial Holding Co Ltd",
-          "pct": 1.34
+          "symbol": "2344.TW",
+          "name": "Winbond Electronics Corporation",
+          "pct": null
         },
         {
           "symbol": "2345.TW",
-          "name": "Accton Technology Corp",
-          "pct": 1.1
+          "name": "Accton Technology Corp.",
+          "pct": null
         },
         {
-          "symbol": "2383.TW",
-          "name": "Elite Material Co Ltd",
-          "pct": 1.09
+          "symbol": "2357.TW",
+          "name": "ASUSTEK COMPUTER INC.",
+          "pct": null
+        },
+        {
+          "symbol": "2360.TW",
+          "name": "CHROMA ATE INC.",
+          "pct": null
+        },
+        {
+          "symbol": "2368.TW",
+          "name": "GOLD CIRCUIT ELECTRONICS LTD",
+          "pct": null
         },
         {
           "symbol": "2382.TW",
-          "name": "Quanta Computer Inc",
-          "pct": 1.08
+          "name": "QUANTA COMPUTER INC.",
+          "pct": null
+        },
+        {
+          "symbol": "2383.TW",
+          "name": "ELITE  MATERIAL CO. LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "2395.TW",
+          "name": "ADVANTECH Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "2408.TW",
+          "name": "NANYA TECHNOLOGY CORPORATION",
+          "pct": null
+        },
+        {
+          "symbol": "2412.TW",
+          "name": "Chunghwa Telecom Co. Ltd",
+          "pct": null
+        },
+        {
+          "symbol": "2449.TW",
+          "name": "KING YUAN ELECTRONICS CO. LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "2454.TW",
+          "name": "MediaTek Inc.",
+          "pct": null
+        },
+        {
+          "symbol": "2603.TW",
+          "name": "EVERGREEN MARINE CORP. (TAIWAN) LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "2880.TW",
+          "name": "HUA NAN FINANCIAL HOLDINGS CO. LTD.",
+          "pct": null
         },
         {
           "symbol": "2881.TW",
-          "name": "Fubon Financial Holdings Co Ltd",
-          "pct": 1.05
+          "name": "Fubon Financial Holding Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "2882.TW",
+          "name": "CATHAY FINANCIAL HOLDING CO. LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "2883.TW",
+          "name": "KGI Financial Holding Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "2884.TW",
+          "name": "E.SUN FINANCIAL HOLDING COMPANYLTD.",
+          "pct": null
+        },
+        {
+          "symbol": "2885.TW",
+          "name": "Yuanta Financial Holding Co. Ltd",
+          "pct": null
+        },
+        {
+          "symbol": "2886.TW",
+          "name": "Mega Financial Holding Company Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "2887.TW",
+          "name": "TS Financial Holding Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "2890.TW",
+          "name": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
+          "pct": null
+        },
+        {
+          "symbol": "2891.TW",
+          "name": "CTBC FINANCIAL HOLDING CO. LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "2892.TW",
+          "name": "First  Financial  Holding  Co.  Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "3008.TW",
+          "name": "LARGAN Precision Co.Ltd",
+          "pct": null
+        },
+        {
+          "symbol": "3017.TW",
+          "name": "Asia Vital Components Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "3037.TW",
+          "name": "Unimicron Technology Corp.",
+          "pct": null
+        },
+        {
+          "symbol": "3045.TW",
+          "name": "TAIWAN  MOBILE  CO. LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "3231.TW",
+          "name": "Wistron Corporation",
+          "pct": null
+        },
+        {
+          "symbol": "3653.TW",
+          "name": "JENTECH PRECISION INDUSTRIAL CO. LTD.",
+          "pct": null
+        },
+        {
+          "symbol": "3661.TW",
+          "name": "Alchip Technologies Limited",
+          "pct": null
+        },
+        {
+          "symbol": "3711.TW",
+          "name": "ASE Technology Holding Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "4904.TW",
+          "name": "Far EasTone Telecommunications Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "5880.TW",
+          "name": "Taiwan Cooperative Financial Holding Co.Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "6505.TW",
+          "name": "Formosa Petrochemical Corp",
+          "pct": null
+        },
+        {
+          "symbol": "6669.TW",
+          "name": "Wiwynn Corporation",
+          "pct": null
+        },
+        {
+          "symbol": "6919.TW",
+          "name": "Caliway Biopharmaceuticals Co. Ltd.",
+          "pct": null
+        },
+        {
+          "symbol": "7769.TW",
+          "name": "Hon.Precision Inc.",
+          "pct": null
         }
       ],
-      "changed_at": "2026/05/14"
+      "changed_at": "2026-05-15",
+      "pcf_stocks": [
+        "1216",
+        "1301",
+        "1303",
+        "2002",
+        "2059",
+        "2207",
+        "2301",
+        "2303",
+        "2308",
+        "2317",
+        "2327",
+        "2330",
+        "2344",
+        "2345",
+        "2357",
+        "2360",
+        "2368",
+        "2382",
+        "2383",
+        "2395",
+        "2408",
+        "2412",
+        "2449",
+        "2454",
+        "2603",
+        "2880",
+        "2881",
+        "2882",
+        "2883",
+        "2884",
+        "2885",
+        "2886",
+        "2887",
+        "2890",
+        "2891",
+        "2892",
+        "3008",
+        "3017",
+        "3037",
+        "3045",
+        "3231",
+        "3653",
+        "3661",
+        "3711",
+        "4904",
+        "5880",
+        "6505",
+        "6669",
+        "6919",
+        "7769"
+      ]
     },
     "006208": {
       "holdings": [
