@@ -1393,9 +1393,21 @@ def fetch_inst_rank():
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 ex = json.load(f)
-            existing_history = ex.get('history', [])
+            existing_history = ex.get('history') or []
             if ex.get('date') == date_str:
                 print(f'  inst_rank: already have {date_str}')
+                # Patch history if missing (code added after initial write)
+                if not ex.get('history') and ex.get('fi'):
+                    def _compact(lst, key, n=10):
+                        return [[s['code'], s['name'], s[key]] for s in (lst or [])[:n]]
+                    h = {
+                        'date':  date_str,
+                        'fi_b':  _compact(ex['fi'].get('top',[]),  'fi'),
+                        'fi_s':  _compact(ex['fi'].get('bot',[]),  'fi'),
+                        'sit_b': _compact(ex['sit'].get('top',[]), 'sit'),
+                        'sit_s': _compact(ex['sit'].get('bot',[]), 'sit'),
+                    }
+                    ex['history'] = [h]
                 return ex
         except Exception:
             pass
