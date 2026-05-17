@@ -635,12 +635,15 @@ def fetch_etf_nav():
 def fetch_etf_holdings():
     """Fetch top-10 holdings for each tracked ETF via yfinance funds_data.
     Tracks when holdings actually changed (changed_at) vs. when we last fetched.
+    Persists a changes history (last 60 entries) capturing stocks entering/leaving
+    the top-10 and significant weight shifts (>= 0.5 pct-pt).
     Returns dict for data/etf_holdings.json.
     """
     import pytz
     HOLDINGS_PATH = 'data/etf_holdings.json'
     tw_tz = pytz.timezone('Asia/Taipei')
-    today_str = datetime.now(tw_tz).strftime('%Y/%m/%d')
+    today_str  = datetime.now(tw_tz).strftime('%Y/%m/%d')
+    today_date = datetime.now(tw_tz).strftime('%Y-%m-%d')
 
     existing = {}
     if os.path.exists(HOLDINGS_PATH):
@@ -669,31 +672,51 @@ def fetch_etf_holdings():
                 for idx, row in h.iterrows()
             ]
 
-            old_syms = {x['symbol'] for x in existing.get(code, {}).get('holdings', [])}
+            old_holdings = existing.get(code, {}).get('holdings', [])
+            old_syms = {x['symbol'] for x in old_holdings}
             new_syms = {x['symbol'] for x in holdings}
-            added   = [x for x in holdings if x['symbol'] not in old_syms]
-            old_map = {x['symbol']: x for x in existing.get(code, {}).get('holdings', [])}
-            removed = [old_map[k] for k in old_syms if k not in new_syms]
+            added    = [x for x in holdings if x['symbol'] not in old_syms]
+            old_map  = {x['symbol']: x for x in old_holdings}
+            removed  = [old_map[k] for k in old_syms if k not in new_syms]
 
-            # Compare pct values to detect weight changes even without composition change
-            pct_changed = False
-            if not added and not removed:
-                old_pcts = {x['symbol']: x['pct'] for x in existing.get(code, {}).get('holdings', [])}
-                for h_item in holdings:
-                    if abs(h_item['pct'] - old_pcts.get(h_item['symbol'], -1)) >= 0.5:
-                        pct_changed = True
-                        break
+            # Weight shifts for stocks that stayed in top-10
+            old_pcts = {x['symbol']: x['pct'] for x in old_holdings}
+            pct_up, pct_dn = [], []
+            for h_item in holdings:
+                s_sym = h_item['symbol']
+                if s_sym in old_pcts:
+                    delta = round(h_item['pct'] - old_pcts[s_sym], 2)
+                    if delta >= 0.5:
+                        pct_up.append({**h_item, 'from': old_pcts[s_sym], 'delta': delta})
+                    elif delta <= -0.5:
+                        pct_dn.append({**h_item, 'from': old_pcts[s_sym], 'delta': delta})
 
+            pct_changed        = bool(pct_up or pct_dn)
             composition_changed = bool(added or removed or pct_changed)
-            prev_changed_at = existing.get(code, {}).get('changed_at', '')
-            changed_at = today_str if composition_changed else prev_changed_at
+            prev_changed_at    = existing.get(code, {}).get('changed_at', '')
+            changed_at         = today_str if composition_changed else prev_changed_at
+
+            # Append to changes history (only when prior data exists, to skip first-run noise)
+            existing_changes = existing.get(code, {}).get('changes', [])
+            changes = list(existing_changes)
+            if composition_changed and old_holdings:
+                entry = {'date': today_date}
+                if added:   entry['in']  = added
+                if removed: entry['out'] = removed
+                if pct_up:  entry['up']  = pct_up
+                if pct_dn:  entry['dn']  = pct_dn
+                if not changes or changes[-1].get('date') != today_date:
+                    changes.append(entry)
+                    changes = changes[-60:]
 
             result[code] = {'holdings': holdings, 'changed_at': changed_at}
+            if changes:
+                result[code]['changes'] = changes
             if added or removed:
                 result[code]['diff'] = {'in': added, 'out': removed}
 
             if composition_changed:
-                status = f"+{len(added)}/-{len(removed)}" if (added or removed) else "比重異動"
+                status = f"+{len(added)}/-{len(removed)}" if (added or removed) else f"比重異動 ↑{len(pct_up)}/↓{len(pct_dn)}"
                 print(f'  etf_holdings {code}: {len(holdings)} 筆, {status} → changed_at={today_str}')
             else:
                 print(f'  etf_holdings {code}: {len(holdings)} 筆, 無異動 (基準日:{changed_at})')

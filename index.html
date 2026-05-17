@@ -170,6 +170,29 @@
   .holding-out { background: rgba(239,68,68,.08);   opacity: .7; text-decoration: line-through; }
   .diff-badge { font-size: .6rem; font-weight: 700; background: rgba(251,191,36,.12); color: #fbbf24; padding: .1rem .4rem; border-radius: 99px; margin-left: .35rem; }
 
+  /* ── ETF CHANGES ─────────────────────────────────────────────── */
+  .etfc-note  { font-size: .62rem; color: var(--t3); text-align: right; padding: .2rem .9rem .1rem; }
+  .etfc-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; padding: .2rem .5rem; }
+  .etfc-section { background: var(--card-bg); border-radius: .55rem; padding: .4rem .55rem .5rem; border: 1px solid var(--bdr); }
+  .etfc-sec-hd { font-size: .68rem; font-weight: 700; padding-bottom: .3rem; margin-bottom: .25rem; border-bottom: 1px solid var(--bdr); }
+  .etfc-sec-hd.in  { color: var(--down); }
+  .etfc-sec-hd.out { color: var(--up);   }
+  .etfc-sec-hd.up  { color: #2563eb;    }
+  .etfc-sec-hd.dn  { color: #7c3aed;    }
+  .etfc-row   { display: flex; align-items: baseline; gap: .3rem; padding: .2rem 0; border-top: 1px solid var(--bdr); font-size: .7rem; flex-wrap: wrap; }
+  .etfc-code  { font-weight: 700; color: var(--t1); min-width: 2.8rem; flex-shrink: 0; }
+  .etfc-name  { color: var(--t2); flex: 1; min-width: 4rem; font-size: .65rem; }
+  .etfc-tags  { display: flex; flex-wrap: wrap; gap: .2rem; }
+  .etfc-date  { font-size: .6rem; color: var(--t3); margin-left: auto; flex-shrink: 0; }
+  .etfc-tag   { font-size: .58rem; font-weight: 600; padding: .05rem .3rem; border-radius: 99px; white-space: nowrap; }
+  .etfc-tag-in  { background: rgba(34,197,94,.12);  color: var(--down); }
+  .etfc-tag-out { background: rgba(239,68,68,.12);  color: var(--up);   }
+  .etfc-tag-up  { background: rgba(37,99,235,.10);  color: #2563eb;    }
+  .etfc-tag-dn  { background: rgba(124,58,237,.10); color: #7c3aed;    }
+  .etfc-empty { text-align: center; color: var(--t3); padding: 1rem; font-size: .78rem; }
+  .etfc-none  { color: var(--t3); font-size: .68rem; padding: .3rem 0; }
+  @media (max-width: 480px) { .etfc-grid { grid-template-columns: 1fr; } }
+
   /* ── MARGIN RANK ─────────────────────────────────────────────── */
   .mrank-wrap { margin: .2rem .7rem .5rem; background: var(--c1); border: 1px solid var(--bdr); border-radius: 10px; overflow: hidden; }
   .mrank-header { display: flex; justify-content: space-between; align-items: center; padding: .5rem .75rem .35rem; border-bottom: 1px solid var(--bdr); }
@@ -538,6 +561,11 @@
       <i class="bi bi-chevron-right eps-toggle-icon" id="holdings-icon"></i>
     </button>
     <div class="eps-body" id="holdings-body" style="display:none"></div>
+    <button class="eps-toggle-btn" onclick="toggleEtfChanges()">
+      <i class="bi bi-arrow-left-right"></i>ETF 成分股異動
+      <i class="bi bi-chevron-right eps-toggle-icon" id="etf-changes-icon"></i>
+    </button>
+    <div class="eps-body" id="etf-changes-body" style="display:none"></div>
     <button class="eps-toggle-btn" onclick="toggleFund('tw')">
       <i class="bi bi-bar-chart-steps"></i>基本面估值
       <i class="bi bi-chevron-right eps-toggle-icon" id="fund-icon-tw"></i>
@@ -756,6 +784,111 @@ function toggleHoldings() {
   body.style.display = open ? 'none' : '';
   icon.style.transform = open ? '' : 'rotate(90deg)';
   if (!open) renderEtfHoldings();
+}
+
+function toggleEtfChanges() {
+  const body = document.getElementById('etf-changes-body');
+  const icon = document.getElementById('etf-changes-icon');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  icon.style.transform = open ? '' : 'rotate(90deg)';
+  if (!open) renderEtfChanges();
+}
+
+function renderEtfChanges() {
+  const el = document.getElementById('etf-changes-body');
+  if (!el) return;
+  if (!_etfHoldings || !_etfHoldings.etfs) {
+    el.innerHTML = '<div class="etfc-empty">無資料（待 Actions 累積異動紀錄後顯示）</div>';
+    return;
+  }
+
+  const ETF_SHORT = {
+    '0050':'元大50','006208':'富邦台50','00878':'國泰高息',
+    '00919':'群益精選','00929':'復華科技','00940':'元大價值',
+    '00403A':'統一升級50','00988A':'統一全球創新','00981A':'統一台股增長',
+    '00935':'野村新科技','00980A':'野村優選',
+  };
+
+  // Aggregate changes across all ETFs
+  // Structure: {symbol -> {name, events:[{date, etf, type, pct, from, delta}]}}
+  const stockMap = {};
+
+  const addEvent = (sym, name, date, etf, type, pct, from, delta) => {
+    if (!stockMap[sym]) stockMap[sym] = { name, events: [] };
+    stockMap[sym].events.push({ date, etf, type, pct, from, delta });
+  };
+
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 90);
+  const cutStr = cutoff.toISOString().slice(0, 10);
+
+  Object.entries(_etfHoldings.etfs).forEach(([code, data]) => {
+    const etfLabel = ETF_SHORT[code] || code;
+    (data.changes || []).forEach(entry => {
+      if (!entry.date || entry.date < cutStr) return;
+      (entry.in  || []).forEach(h => addEvent(h.symbol, h.name, entry.date, etfLabel, 'in',  h.pct, null,   null));
+      (entry.out || []).forEach(h => addEvent(h.symbol, h.name, entry.date, etfLabel, 'out', h.pct, null,   null));
+      (entry.up  || []).forEach(h => addEvent(h.symbol, h.name, entry.date, etfLabel, 'up',  h.pct, h.from, h.delta));
+      (entry.dn  || []).forEach(h => addEvent(h.symbol, h.name, entry.date, etfLabel, 'dn',  h.pct, h.from, h.delta));
+    });
+  });
+
+  if (!Object.keys(stockMap).length) {
+    el.innerHTML = '<div class="etfc-empty">暫無異動紀錄（資料將於每次 Actions 更新後逐步累積）</div>';
+    return;
+  }
+
+  // Bucket by type, sort each stock by latest date desc
+  const bucket = { in: [], out: [], up: [], dn: [] };
+  Object.entries(stockMap).forEach(([sym, d]) => {
+    const latest = d.events.reduce((a, b) => a.date > b.date ? a : b);
+    const byType = { in: [], out: [], up: [], dn: [] };
+    d.events.forEach(e => byType[e.type]?.push(e));
+    ['in','out','up','dn'].forEach(t => {
+      if (!byType[t].length) return;
+      byType[t].sort((a, b) => b.date.localeCompare(a.date));
+      bucket[t].push({ sym, name: d.name, events: byType[t], latestDate: byType[t][0].date });
+    });
+  });
+  ['in','out','up','dn'].forEach(t => bucket[t].sort((a, b) => b.latestDate.localeCompare(a.latestDate)));
+
+  const codeTW = s => s.replace(/\.(TW|TWO)$/, '');
+  const shortName = n => n.length > 16 ? n.slice(0, 16) + '…' : n;
+
+  const mkTag = (e, t) => {
+    if (t === 'in')  return `<span class="etfc-tag etfc-tag-in">${e.etf} +${e.pct?.toFixed(1)}%</span>`;
+    if (t === 'out') return `<span class="etfc-tag etfc-tag-out">${e.etf} 退出</span>`;
+    if (t === 'up')  return `<span class="etfc-tag etfc-tag-up">${e.etf} +${e.delta?.toFixed(1)}%▲</span>`;
+    if (t === 'dn')  return `<span class="etfc-tag etfc-tag-dn">${e.etf} ${e.delta?.toFixed(1)}%▼</span>`;
+    return '';
+  };
+
+  const mkRows = (list, t) => list.map(s =>
+    `<div class="etfc-row">
+      <span class="etfc-code">${codeTW(s.sym)}</span>
+      <span class="etfc-name">${shortName(s.name)}</span>
+      <span class="etfc-tags">${s.events.map(e => mkTag(e, t)).join('')}</span>
+      <span class="etfc-date">${s.latestDate.slice(5)}</span>
+    </div>`
+  ).join('') || '<div class="etfc-none">（近90日無紀錄）</div>';
+
+  const sec = (title, cls, list, t) =>
+    `<div class="etfc-section">
+      <div class="etfc-sec-hd ${cls}">${title}</div>
+      ${mkRows(list, t)}
+    </div>`;
+
+  el.innerHTML = `
+    <div class="etfc-note">來源：yfinance TOP 10 持股（季度更新）｜近 90 日異動</div>
+    <div class="etfc-grid">
+      ${sec('▲ 轉進個股（新入 TOP 10）', 'in',  bucket.in,  'in')}
+      ${sec('▼ 出脫個股（退出 TOP 10）', 'out', bucket.out, 'out')}
+    </div>
+    ${(bucket.up.length || bucket.dn.length) ? `<div class="etfc-grid">
+      ${sec('↑ 加碼個股（比重大增）', 'up', bucket.up, 'up')}
+      ${sec('↓ 減碼個股（比重縮減）', 'dn', bucket.dn, 'dn')}
+    </div>` : ''}`;
 }
 
 function renderEtfHoldings() {
