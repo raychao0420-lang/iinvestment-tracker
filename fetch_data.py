@@ -729,6 +729,100 @@ def fetch_etf_holdings():
     return result
 
 
+def fetch_yuanta_pcf(etf_holdings_result):
+    """Supplement yfinance holdings with Yuanta PCF full composition for 0050.
+
+    Calls the Yuanta ETF PCF/Daily API (works only for 0050) via Playwright.
+    Updates etf_holdings_result['0050'] in place:
+      - Replaces holdings with full PCF composition (all 50 stocks, pct=None)
+      - Detects daily composition changes (in/out)
+    Returns True if successful, False on any failure.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print('  yuanta_pcf: playwright not installed, skipping')
+        return False
+
+    import uuid, urllib.parse
+    import pytz
+
+    HOLDINGS_PATH = 'data/etf_holdings.json'
+    tw_tz = pytz.timezone('Asia/Taipei')
+    today_date = datetime.now(tw_tz).strftime('%Y-%m-%d')
+
+    prev_0050 = etf_holdings_result.get('0050', {})
+    prev_pcf_stocks = set(prev_0050.get('pcf_stocks', []))
+    prev_changes    = list(prev_0050.get('changes', []))
+
+    try:
+        with sync_playwright() as pw:
+            br = pw.chromium.launch(headless=True)
+            page = br.new_page()
+            page.set_extra_http_headers({'Referer': 'https://www.yuantaetfs.com/'})
+
+            dev_id = str(uuid.uuid4())
+            api_url = (
+                'https://etfapi.yuantaetfs.com/ectranslation/api/bridge'
+                '?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2F'
+                f'&DeviceId={dev_id}&FuncId=PCF%2FDaily'
+                '&AppName=ETF&Device=3&Platform=ETF&ticker=0050'
+            )
+            resp = page.request.get(api_url, timeout=15000)
+            data = resp.json()
+            br.close()
+
+        in_kind = data.get('InKind', {}).get('FundComposition', [])
+        if not in_kind:
+            print('  yuanta_pcf: empty FundComposition')
+            return False
+
+        pcf_date = data.get('PCF', {}).get('trandate', '')
+        if pcf_date:
+            pcf_date = f'{pcf_date[:4]}-{pcf_date[4:6]}-{pcf_date[6:]}'
+
+        # Build full holdings list (pct=None since we don't have weighted prices)
+        new_holdings = [
+            {'symbol': f'{s["stkcd"]}.TW', 'name': s.get('ename', s['stkcd']), 'pct': None}
+            for s in in_kind if s.get('stkcd')
+        ]
+        new_stocks = {s['stkcd'] for s in in_kind if s.get('stkcd')}
+
+        # Detect changes
+        added_codes   = new_stocks - prev_pcf_stocks
+        removed_codes = prev_pcf_stocks - new_stocks
+        added   = [s for s in new_holdings if s['symbol'].replace('.TW','') in added_codes]
+        removed = [{'symbol': f'{c}.TW', 'name': c, 'pct': None} for c in removed_codes]
+
+        changes = list(prev_changes)
+        if (added or removed) and prev_pcf_stocks:
+            entry = {'date': today_date, 'source': 'pcf'}
+            if added:   entry['in']  = added
+            if removed: entry['out'] = removed
+            if not changes or changes[-1].get('date') != today_date:
+                changes.append(entry)
+                changes = changes[-60:]
+
+        # Merge into etf_holdings_result in place
+        existing = dict(prev_0050)
+        existing['holdings']   = new_holdings
+        existing['pcf_stocks'] = sorted(new_stocks)
+        existing['changed_at'] = pcf_date or existing.get('changed_at', '')
+        if changes:
+            existing['changes'] = changes
+        etf_holdings_result['0050'] = existing
+
+        n_add = len(added)
+        n_rm  = len(removed)
+        status = f'+{n_add}/-{n_rm}' if (n_add or n_rm) else '無異動'
+        print(f'  yuanta_pcf 0050: {len(new_holdings)} 筆, {status} (date={pcf_date})')
+        return True
+
+    except Exception as e:
+        print(f'  yuanta_pcf: {e}')
+        return False
+
+
 def fetch_etf_trading():
     """Fetch ETF 三大法人 daily buy/sell (外資/投信/自營商) and top-3 ETFs by volume.
     Volume from yfinance fast_info; institutional data from FinMind (free tier, no token needed).
@@ -1597,6 +1691,8 @@ if __name__ == '__main__':
     print('--- ETF Holdings ---')
     etf_holdings = fetch_etf_holdings()
     if etf_holdings:
+        print('--- ETF PCF (Yuanta 0050 full composition) ---')
+        fetch_yuanta_pcf(etf_holdings)
         save('data/etf_holdings.json', {'updated': now, 'etfs': etf_holdings})
     else:
         print('  etf_holdings: no data')

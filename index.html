@@ -880,7 +880,8 @@ function renderEtfChanges() {
   const shortName = n => n.length > 16 ? n.slice(0, 16) + '…' : n;
 
   const mkTag = (e, t) => {
-    if (t === 'in')  return `<span class="etfc-tag etfc-tag-in">${e.etf} +${e.pct?.toFixed(1)}%</span>`;
+    const pctStr = e.pct != null ? ` +${e.pct.toFixed(1)}%` : '';
+    if (t === 'in')  return `<span class="etfc-tag etfc-tag-in">${e.etf}${pctStr}</span>`;
     if (t === 'out') return `<span class="etfc-tag etfc-tag-out">${e.etf} 退出</span>`;
     if (t === 'up')  return `<span class="etfc-tag etfc-tag-up">${e.etf} +${e.delta?.toFixed(1)}%▲</span>`;
     if (t === 'dn')  return `<span class="etfc-tag etfc-tag-dn">${e.etf} ${e.delta?.toFixed(1)}%▼</span>`;
@@ -903,7 +904,7 @@ function renderEtfChanges() {
     </div>`;
 
   el.innerHTML = `
-    <div class="etfc-note">來源：yfinance TOP 10 持股（季度更新）｜近 90 日異動</div>
+    <div class="etfc-note">來源：0050 PCF 全成分股（每日）｜其他 ETF yfinance TOP 10（季度）｜近 90 日異動</div>
     <div class="etfc-grid">
       ${sec('▲ 轉進個股（新入 TOP 10）', 'in',  bucket.in,  'in')}
       ${sec('▼ 出脫個股（退出 TOP 10）', 'out', bucket.out, 'out')}
@@ -938,7 +939,8 @@ function renderEtfHoldings() {
     const rows = holdings.map(h => {
       const cls = inSyms.has(h.symbol) ? ' class="holding-in"' : '';
       const codeTW = h.symbol.replace(/\.(TW|TWO)$/, '');
-      return `<tr${cls}><td>${codeTW}</td><td>${h.name}</td><td class="r">${h.pct.toFixed(2)}%</td></tr>`;
+      const pctStr = h.pct != null ? h.pct.toFixed(2) + '%' : '–';
+      return `<tr${cls}><td>${codeTW}</td><td>${h.name}</td><td class="r">${pctStr}</td></tr>`;
     }).join('');
 
     const outRows = (diff.out || []).map(h => {
@@ -955,7 +957,7 @@ function renderEtfHoldings() {
     </div>`;
   }).join('<div style="height:.4rem"></div>');
 
-  el.innerHTML = `<div style="font-size:.68rem;color:#94a3b8;text-align:right;padding:.25rem 1rem .1rem">來源：Yahoo Finance top 10（季度更新）</div>${sections}`;
+  el.innerHTML = `<div style="font-size:.68rem;color:#94a3b8;text-align:right;padding:.25rem 1rem .1rem">來源：0050=PCF全成分股（每日）｜其他=yfinance top 10（季度）</div>${sections}`;
 }
 
 // ── ETF 三大法人 ─────────────────────────────────────────────────────────────
