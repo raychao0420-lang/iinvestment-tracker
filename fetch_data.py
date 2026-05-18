@@ -1690,7 +1690,18 @@ if __name__ == '__main__':
     print('--- TW Futures (Night) ---')
     futures = fetch_tw_futures_night()
     if any(f.get('price') is not None for f in futures):
-        save('data/tw_futures.json', {'updated': now, 'futures': futures})
+        # Guard: during active night session (15:00-05:00 TWN), OpenAPI only has
+        # the previous completed session's data. Skip saving to avoid overwriting
+        # the real-time data already written by fetch_futures_live.py.
+        now_tw   = datetime.now(TZ)
+        h_tw     = now_tw.hour
+        in_night = (h_tw >= 15 or h_tw < 5)
+        api_date = futures[0].get('date', '') if futures else ''
+        today_mm = now_tw.strftime('%m/%d')
+        if in_night and api_date and api_date != today_mm:
+            print(f'  tw_futures: 夜盤進行中，Open API date={api_date} ≠ {today_mm}，保留即時資料')
+        else:
+            save('data/tw_futures.json', {'updated': now, 'futures': futures})
     else:
         print('  tw_futures: no live data, skipping save')
 
