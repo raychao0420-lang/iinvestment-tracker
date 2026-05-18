@@ -540,8 +540,9 @@ def fetch_chart_data(mkt_series=None):
 
 
 def fetch_tw_futures_night():
-    """Fetch Taiwan futures night-session closing prices from TAIFEX Open API.
-    Uses DailyMarketReportFut with TradingSession='盤後' — works from any IP.
+    """Fetch Taiwan futures night-session prices from TAIFEX Open API.
+    Change/pct are recalculated vs the same-day regular session settlement price,
+    not vs the previous night session (which is what the API's raw Change field uses).
     """
     import requests
 
@@ -555,7 +556,7 @@ def fetch_tw_futures_night():
     def to_f(v):
         try:
             s = str(v).replace(',', '').replace('%', '').strip()
-            return float(s) if s and s not in ('-', '') else None
+            return float(s) if s and s not in ('-', 'NULL', '') else None
         except Exception:
             return None
 
@@ -575,14 +576,27 @@ def fetch_tw_futures_night():
         print(f'  Open API fetch failed: {e}')
         return empty
 
-    # Build lookup: contract_id -> sorted list of night-session records (front-month first)
+    # Build lookups: contract_id -> front-month records, split by session
     night = {}
+    day   = {}
     for row in data:
-        if row.get('TradingSession') == '盤後':
-            cid = row.get('Contract', '')
+        session = row.get('TradingSession', '')
+        cid = row.get('Contract', '')
+        if session == '盤後':
             night.setdefault(cid, []).append(row)
+        elif session == '一般':
+            day.setdefault(cid, []).append(row)
     for cid in night:
         night[cid].sort(key=lambda x: x.get('ContractMonth(Week)', ''))
+    for cid in day:
+        day[cid].sort(key=lambda x: x.get('ContractMonth(Week)', ''))
+
+    # day_settlement[cid] = SettlementPrice of front-month regular session (same date)
+    day_settlement = {}
+    for cid, rows in day.items():
+        sp = to_f(rows[0].get('SettlementPrice'))
+        if sp is not None:
+            day_settlement[cid] = sp
 
     result = []
     for p in PRODUCTS:
@@ -593,22 +607,32 @@ def fetch_tw_futures_night():
                            'price': None, 'change': None, 'pct': None, 'contract': ''})
             continue
         row      = rows[0]
-        price    = to_f(row.get('Last') or row.get('SettlementPrice'))
-        change   = to_f(row.get('Change'))
-        pct      = to_f(row.get('%'))
+        price    = to_f(row.get('Last')) or to_f(row.get('SettlementPrice'))
         contract = row.get('ContractMonth(Week)', '')
         date_raw = row.get('Date', '')
         date_s   = f'{date_raw[4:6]}/{date_raw[6:8]}' if len(date_raw) == 8 else ''
+
+        # Recalculate vs same-day regular session settlement; fall back to API Change
+        ref = day_settlement.get(p['id'])
+        if price is not None and ref is not None:
+            change = round(price - ref, 0)
+            pct    = round(change / ref * 100, 2)
+            print(f"  {p['id']}: price={price} vs day_settlement={ref} → change={change:+.0f} ({pct:+.2f}%)")
+        else:
+            change = to_f(row.get('Change'))
+            pct    = to_f(row.get('%'))
+            pct    = round(pct, 2) if pct is not None else None
+            print(f"  {p['id']}: price={price} change={change} date={date_s} (no day settlement ref)")
+
         result.append({
             'symbol':   p['id'],
             'name':     p['name'],
             'price':    price,
             'change':   change,
-            'pct':      round(pct, 2) if pct is not None else None,
+            'pct':      pct,
             'contract': contract,
             'date':     date_s,
         })
-        print(f"  {p['id']}: price={price} change={change} date={date_s}")
 
     return result
 
