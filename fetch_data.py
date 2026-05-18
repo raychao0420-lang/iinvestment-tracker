@@ -591,12 +591,16 @@ def fetch_tw_futures_night():
     for cid in day:
         day[cid].sort(key=lambda x: x.get('ContractMonth(Week)', ''))
 
-    # day_settlement[cid] = SettlementPrice of front-month regular session (same date)
+    # Build day session lookups: settlement and open of front-month
     day_settlement = {}
+    day_open       = {}
     for cid, rows in day.items():
         sp = to_f(rows[0].get('SettlementPrice'))
+        op = to_f(rows[0].get('Open'))
         if sp is not None:
             day_settlement[cid] = sp
+        if op is not None:
+            day_open[cid] = op
 
     result = []
     for p in PRODUCTS:
@@ -604,7 +608,8 @@ def fetch_tw_futures_night():
         if not rows:
             print(f"  {p['id']}: no 盤後 data")
             result.append({'symbol': p['id'], 'name': p['name'],
-                           'price': None, 'change': None, 'pct': None, 'contract': ''})
+                           'price': None, 'change': None, 'pct': None,
+                           'change_open': None, 'pct_open': None, 'contract': ''})
             continue
         row      = rows[0]
         price    = to_f(row.get('Last')) or to_f(row.get('SettlementPrice'))
@@ -612,26 +617,36 @@ def fetch_tw_futures_night():
         date_raw = row.get('Date', '')
         date_s   = f'{date_raw[4:6]}/{date_raw[6:8]}' if len(date_raw) == 8 else ''
 
-        # Recalculate vs same-day regular session settlement; fall back to API Change
-        ref = day_settlement.get(p['id'])
-        if price is not None and ref is not None:
-            change = round(price - ref, 0)
-            pct    = round(change / ref * 100, 2)
-            print(f"  {p['id']}: price={price} vs day_settlement={ref} → change={change:+.0f} ({pct:+.2f}%)")
+        # vs 收盤（日盤結算）
+        ref_close = day_settlement.get(p['id'])
+        if price is not None and ref_close is not None:
+            change = round(price - ref_close, 0)
+            pct    = round(change / ref_close * 100, 2)
         else:
             change = to_f(row.get('Change'))
             pct    = to_f(row.get('%'))
             pct    = round(pct, 2) if pct is not None else None
-            print(f"  {p['id']}: price={price} change={change} date={date_s} (no day settlement ref)")
+
+        # vs 開盤（日盤開盤）
+        ref_open = day_open.get(p['id'])
+        if price is not None and ref_open is not None:
+            change_open = round(price - ref_open, 0)
+            pct_open    = round(change_open / ref_open * 100, 2)
+        else:
+            change_open = pct_open = None
+
+        print(f"  {p['id']}: {price} | vs收 {change:+.0f}({pct:+.2f}%) | vs開 {change_open:+.0f}({pct_open:+.2f}%)")
 
         result.append({
-            'symbol':   p['id'],
-            'name':     p['name'],
-            'price':    price,
-            'change':   change,
-            'pct':      pct,
-            'contract': contract,
-            'date':     date_s,
+            'symbol':      p['id'],
+            'name':        p['name'],
+            'price':       price,
+            'change':      change,
+            'pct':         pct,
+            'change_open': change_open,
+            'pct_open':    pct_open,
+            'contract':    contract,
+            'date':        date_s,
         })
 
     return result

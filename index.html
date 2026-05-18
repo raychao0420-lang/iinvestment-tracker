@@ -1370,10 +1370,17 @@ function renderFutures(items, twiiRef) {
     const sub = s.contract
       ? `<span style="color:#94a3b8;font-size:.72rem;margin-left:.25rem">${subText}</span>`
       : '';
+    const hasOpen = s.change_open !== null && s.change_open !== undefined;
+    const co = hasOpen ? cls(s.pct_open) : '';
+    const signO = hasOpen && s.pct_open >= 0 ? '+' : '';
+    const chgOpenStr = hasOpen
+      ? `${arrow(s.pct_open)} ${signO}${fmt(s.change_open, 0)} (${signO}${fmt(s.pct_open)}%)`
+      : '';
     return `<div class="idx-card">
       <div class="idx-name">${s.name}${sub}</div>
       <div class="idx-price ${c}">${fmt(s.price, s.price > 999 ? 0 : 2)}</div>
-      <div class="idx-chg ${c}">${chgStr}</div>
+      <div class="idx-chg ${c}"><span style="color:#64748b;font-size:.68rem;margin-right:.2rem">vs收</span>${chgStr}</div>
+      ${hasOpen ? `<div class="idx-chg ${co}" style="font-size:.78rem"><span style="color:#64748b;font-size:.68rem;margin-right:.2rem">vs開</span>${chgOpenStr}</div>` : ''}
     </div>`;
   }).join('');
 }
