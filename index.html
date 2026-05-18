@@ -1364,8 +1364,11 @@ function renderFutures(items, twiiRef) {
     const chgStr = s.pct !== null
       ? `${arrow(s.pct)} ${sign}${fmt(s.change, 0)} (${sign}${fmt(s.pct)}%)`
       : '–';
+    const subText = String(s.contract).includes('/')
+      ? s.contract
+      : String(s.contract).slice(-4);
     const sub = s.contract
-      ? `<span style="color:#94a3b8;font-size:.72rem;margin-left:.25rem">${String(s.contract).slice(-4)}</span>`
+      ? `<span style="color:#94a3b8;font-size:.72rem;margin-left:.25rem">${subText}</span>`
       : '';
     return `<div class="idx-card">
       <div class="idx-name">${s.name}${sub}</div>
@@ -1561,7 +1564,8 @@ async function loadAll() {
   if (fut && fut.futures && fut.futures.some(f => f.price !== null)) {
     const twiiRef = tw.indices ? tw.indices.find(x => x.symbol === '^TWII') : null;
     renderFutures(fut.futures, twiiRef);
-    document.getElementById('futures-updated').textContent = fut.updated ? `（${fut.updated}）` : '';
+    const futDate = fut.futures.find(f => f.date)?.date || '';
+    document.getElementById('futures-updated').textContent = futDate ? `（${futDate} 末次夜盤）` : (fut.updated ? `（${fut.updated}）` : '');
     futSec.style.display = '';
   } else {
     futSec.style.display = 'none';
