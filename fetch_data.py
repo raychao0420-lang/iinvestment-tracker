@@ -702,6 +702,9 @@ def fetch_etf_holdings():
                 print(f'  etf_holdings {code}: empty')
                 if code in existing:
                     result[code] = existing[code]
+                else:
+                    # Placeholder so the ETF shows in the frontend (no holdings yet)
+                    result[code] = {'holdings': [], 'changed_at': '', 'changes': []}
                 continue
 
             holdings = [
@@ -724,7 +727,10 @@ def fetch_etf_holdings():
             for h_item in holdings:
                 s_sym = h_item['symbol']
                 if s_sym in old_pcts:
-                    delta = round(h_item['pct'] - old_pcts[s_sym], 2)
+                    old_pct = old_pcts[s_sym]
+                    if h_item['pct'] is None or old_pct is None:
+                        continue
+                    delta = round(h_item['pct'] - old_pct, 2)
                     if delta >= 0.5:
                         pct_up.append({**h_item, 'from': old_pcts[s_sym], 'delta': delta})
                     elif delta <= -0.5:

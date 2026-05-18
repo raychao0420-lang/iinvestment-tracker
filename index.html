@@ -771,6 +771,8 @@ function renderStocks(items, id) {
 const ETF_NAMES = {
   '0050':'元大台灣50','006208':'富邦台50','00878':'國泰永續高股息',
   '00919':'群益台灣精選高息','00929':'復華台灣科技優息','00940':'元大台灣價值高息',
+  '00403A':'統一台股升級50','00988A':'統一全球創新','00981A':'統一台股增長',
+  '00935':'野村新科技50','00980A':'野村優選',
 };
 
 const ETF_DESC = {
@@ -948,6 +950,12 @@ function renderEtfHoldings() {
       return `<tr class="holding-out"><td>${codeTW}</td><td>${h.name}</td><td class="r">退場</td></tr>`;
     }).join('');
 
+    if (!holdings.length) {
+      return `<div style="margin:.25rem .75rem .6rem">
+        <div style="font-size:.82rem;font-weight:700;color:#475569;padding:.3rem 0 .2rem">${name}</div>
+        <div style="font-size:.7rem;color:#94a3b8;padding:.3rem .4rem">持股資料暫無（yfinance 尚未收錄此 ETF）</div>
+      </div>`;
+    }
     return `<div style="margin:.25rem .75rem .6rem">
       <div style="font-size:.82rem;font-weight:700;color:#475569;padding:.3rem 0 .2rem">${name}${badge}${changedAt}</div>
       <table class="holding-table">
