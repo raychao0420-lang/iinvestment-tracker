@@ -1139,6 +1139,12 @@ def fetch_stock_charts():
     name_map  = {t[0]: t[1] for t in targets}
     unit_map  = {t[0]: t[2] for t in targets}
 
+    try:
+        with open('data/stock_charts.json', 'r', encoding='utf-8') as _f:
+            cached = json.load(_f).get('stocks', {})
+    except Exception:
+        cached = {}
+
     print(f'  stock_charts: downloading {len(symbols)} symbols (6mo)...')
     raw = None
     for attempt in range(3):
@@ -1208,8 +1214,17 @@ def fetch_stock_charts():
             }
             if unit_map[sym]:
                 entry['vol_unit'] = unit_map[sym]
-            result[sym] = entry
-            print(f'  stock_charts {sym}: {len(candles)} candles')
+
+            old = cached.get(sym, {})
+            old_candles = old.get('candles', [])
+            new_last = candles[-1]['time'] if candles else ''
+            old_last = old_candles[-1]['time'] if old_candles else ''
+            if old_last and new_last < old_last:
+                print(f'  stock_charts {sym}: new {new_last} < cached {old_last}, keeping cache')
+                result[sym] = old
+            else:
+                result[sym] = entry
+                print(f'  stock_charts {sym}: {len(candles)} candles')
         except Exception as e:
             print(f'  stock_charts {sym}: {e}')
 
