@@ -1527,6 +1527,71 @@ def fetch_inst_rank():
             if fi_v or si_v or dl_v:
                 stocks.append({'code': code, 'name': name,
                                'fi': fi_v, 'sit': si_v, 'dealer': dl_v, 'total': total_v})
+
+        # ── Layer 1.5: supplement sit/dealer via FinMind when TWSE blocked ──
+        if stocks and (not sit_map or not dealer_map):
+            _need_sit    = not sit_map
+            _need_dealer = not dealer_map
+            _by_code = {s['code']: s for s in stocks}
+            _name_map_fm = {s['symbol'].replace('.TW', ''): s['name']
+                            for s in TW_STOCKS + TW_DRONE + TW_ETF}
+            _missing = ('sit ' if _need_sit else '') + ('dealer' if _need_dealer else '')
+            print(f'  inst_rank: Layer 1.5 — supplement {_missing.strip()} from FinMind ({len(_name_map_fm)} tracked stocks)…')
+            for _code in list(_name_map_fm.keys()):
+                try:
+                    _r = _req.get(
+                        'https://api.finmindtrade.com/api/v4/data',
+                        params={'dataset': 'TaiwanStockInstitutionalInvestorsBuySell',
+                                'data_id': _code, 'start_date': date_str,
+                                'token': FINMIND_TOKEN or ''},
+                        timeout=15,
+                    )
+                    _rows = _r.json().get('data', [])
+                    if not _rows:
+                        time.sleep(0.3)
+                        continue
+                    _fi_v = _si_v = _dl_v = 0
+                    for _row in _rows:
+                        _net = int(_row.get('buy', 0)) - int(_row.get('sell', 0))
+                        _itype = _row.get('institutional_investors', _row.get('name', ''))
+                        if _itype in ('Foreign_Investor', 'Foreign_Dealer_Self',
+                                      '外資及陸資(不含外資自營商)', '外資自營商', '外資及陸資', '外資'):
+                            _fi_v += _net
+                        elif _itype in ('Investment_Trust', '投信'):
+                            _si_v += _net
+                        elif _itype in ('Dealer_self', 'Dealer_Hedging',
+                                        '自營商(自行買賣)', '自營商(避險)', '自營商'):
+                            _dl_v += _net
+                    _fi_v //= 1000; _si_v //= 1000; _dl_v //= 1000
+                    if _code in _by_code:
+                        _entry = _by_code[_code]
+                        if _need_sit and _si_v:
+                            sit_sum += _si_v
+                            _entry['sit']   = _si_v
+                            _entry['total'] += _si_v
+                        if _need_dealer and _dl_v:
+                            dealer_sum += _dl_v
+                            _entry['dealer']  = _dl_v
+                            _entry['total']   += _dl_v
+                    else:
+                        _si_add = _si_v if _need_sit    else 0
+                        _dl_add = _dl_v if _need_dealer else 0
+                        if _si_add or _dl_add:
+                            sit_sum    += _si_add
+                            dealer_sum += _dl_add
+                            _fi_from_map = fi_map.get(_code, (_code, 0))[1] if fi_map else 0
+                            _new = {'code': _code, 'name': _name_map_fm[_code],
+                                    'fi': _fi_from_map, 'sit': _si_add, 'dealer': _dl_add,
+                                    'total': _fi_from_map + _si_add + _dl_add}
+                            stocks.append(_new)
+                            _by_code[_code] = _new
+                    time.sleep(0.3)
+                except Exception as _e:
+                    print(f'  inst_rank: Layer 1.5 FinMind {_code}: {_e}')
+            if _need_sit:
+                source += '+FinMind(sit)'
+            if _need_dealer:
+                source += '+FinMind(dealer)'
     else:
         # ── Layer 2: TWSE combined (TWT44U) ────────────────────────────────
         total_map = twse_ep('TWT44U')
