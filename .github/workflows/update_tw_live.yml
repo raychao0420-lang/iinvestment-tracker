@@ -1,8 +1,6 @@
 name: Update TW Live
 
 on:
-  schedule:
-    - cron: '*/5 1-5 * * 1-5'  # 每5分鐘，UTC 01:00-05:59，週一~五（台灣 09:00-13:59）
   workflow_dispatch:
 
 concurrency:
