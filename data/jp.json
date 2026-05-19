@@ -1,20 +1,20 @@
 {
-  "updated": "2026/05/19 01:38",
+  "updated": "2026/05/19 08:53",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 60815.95,
-      "change": -593.34,
-      "pct": -0.97,
-      "date": "05/18"
+      "price": 61294.21,
+      "change": -115.08,
+      "pct": -0.19,
+      "date": "05/19"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF (EWJ)",
-      "price": 90.66,
-      "change": -0.41,
-      "pct": -0.45,
+      "price": 90.92,
+      "change": -0.15,
+      "pct": -0.16,
       "date": "05/18"
     }
   ],
@@ -22,50 +22,50 @@
     {
       "symbol": "8035.T",
       "name": "東京威力科創",
-      "price": 49260.0,
-      "change": -1030.0,
-      "pct": -2.05,
-      "date": "05/18"
+      "price": 49150.0,
+      "change": -110.0,
+      "pct": -0.22,
+      "date": "05/19"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
-      "price": 26150.0,
-      "change": -210.0,
-      "pct": -0.8,
-      "date": "05/18"
+      "price": 26220.0,
+      "change": 70.0,
+      "pct": 0.27,
+      "date": "05/19"
     },
     {
       "symbol": "4063.T",
       "name": "信越化學",
-      "price": 7013.0,
-      "change": -92.0,
-      "pct": -1.29,
-      "date": "05/18"
+      "price": 7025.0,
+      "change": 12.0,
+      "pct": 0.17,
+      "date": "05/19"
     },
     {
       "symbol": "6758.T",
       "name": "Sony",
-      "price": 3596.0,
-      "change": 20.0,
-      "pct": 0.56,
-      "date": "05/18"
+      "price": 3629.0,
+      "change": 33.0,
+      "pct": 0.92,
+      "date": "05/19"
     },
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 76830.0,
-      "change": -350.0,
-      "pct": -0.45,
-      "date": "05/18"
+      "price": 75860.0,
+      "change": -970.0,
+      "pct": -1.26,
+      "date": "05/19"
     },
     {
       "symbol": "4452.T",
       "name": "花王",
-      "price": 5916.0,
-      "change": 33.0,
-      "pct": 0.56,
-      "date": "05/18"
+      "price": 6003.0,
+      "change": 87.0,
+      "pct": 1.47,
+      "date": "05/19"
     }
   ]
 }
