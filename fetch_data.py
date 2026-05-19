@@ -1455,20 +1455,24 @@ def fetch_inst_rank():
                 ex = json.load(f)
             existing_history = ex.get('history') or []
             if ex.get('date') == date_str:
-                print(f'  inst_rank: already have {date_str}')
-                # Patch history if missing (code added after initial write)
-                if not ex.get('history') and ex.get('fi'):
-                    def _compact(lst, key, n=10):
-                        return [[s['code'], s['name'], s[key]] for s in (lst or [])[:n]]
-                    h = {
-                        'date':  date_str,
-                        'fi_b':  _compact(ex['fi'].get('top',[]),  'fi'),
-                        'fi_s':  _compact(ex['fi'].get('bot',[]),  'fi'),
-                        'sit_b': _compact(ex['sit'].get('top',[]), 'sit'),
-                        'sit_s': _compact(ex['sit'].get('bot',[]), 'sit'),
-                    }
-                    ex['history'] = [h]
-                return ex
+                _sit_ok = bool(ex.get('sit', {}).get('top') or ex.get('sit', {}).get('bot'))
+                _dlr_ok = bool(ex.get('dealer', {}).get('top') or ex.get('dealer', {}).get('bot'))
+                if _sit_ok and _dlr_ok:
+                    print(f'  inst_rank: already have {date_str}')
+                    # Patch history if missing (code added after initial write)
+                    if not ex.get('history') and ex.get('fi'):
+                        def _compact(lst, key, n=10):
+                            return [[s['code'], s['name'], s[key]] for s in (lst or [])[:n]]
+                        h = {
+                            'date':  date_str,
+                            'fi_b':  _compact(ex['fi'].get('top',[]),  'fi'),
+                            'fi_s':  _compact(ex['fi'].get('bot',[]),  'fi'),
+                            'sit_b': _compact(ex['sit'].get('top',[]), 'sit'),
+                            'sit_s': _compact(ex['sit'].get('bot',[]), 'sit'),
+                        }
+                        ex['history'] = [h]
+                    return ex
+                print(f'  inst_rank: {date_str} has empty sit/dealer — re-fetching…')
         except Exception:
             pass
 
