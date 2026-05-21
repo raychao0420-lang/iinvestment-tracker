@@ -1,71 +1,71 @@
 {
-  "updated": "2026/05/21 02:08",
+  "updated": "2026/05/21 22:35",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 59804.41,
-      "change": -746.18,
-      "pct": -1.23,
-      "date": "05/20"
+      "price": 61684.14,
+      "change": 1879.73,
+      "pct": 3.14,
+      "date": "05/21"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF (EWJ)",
-      "price": 91.06,
-      "change": 0.76,
-      "pct": 0.85,
-      "date": "05/20"
+      "price": 90.5,
+      "change": -0.71,
+      "pct": -0.78,
+      "date": "05/21"
     }
   ],
   "stocks": [
     {
       "symbol": "8035.T",
       "name": "東京威力科創",
-      "price": 46100.0,
-      "change": -1060.0,
-      "pct": -2.25,
-      "date": "05/20"
+      "price": 48800.0,
+      "change": 2700.0,
+      "pct": 5.86,
+      "date": "05/21"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
-      "price": 25625.0,
-      "change": 335.0,
-      "pct": 1.32,
-      "date": "05/20"
+      "price": 26745.0,
+      "change": 1120.0,
+      "pct": 4.37,
+      "date": "05/21"
     },
     {
       "symbol": "4063.T",
       "name": "信越化學",
-      "price": 6845.0,
-      "change": -187.0,
-      "pct": -2.66,
-      "date": "05/20"
+      "price": 6857.0,
+      "change": 12.0,
+      "pct": 0.18,
+      "date": "05/21"
     },
     {
       "symbol": "6758.T",
       "name": "Sony",
-      "price": 3606.0,
-      "change": -114.0,
-      "pct": -3.06,
-      "date": "05/20"
+      "price": 3554.0,
+      "change": -52.0,
+      "pct": -1.44,
+      "date": "05/21"
     },
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 72910.0,
-      "change": -2090.0,
-      "pct": -2.79,
-      "date": "05/20"
+      "price": 76960.0,
+      "change": 4050.0,
+      "pct": 5.55,
+      "date": "05/21"
     },
     {
       "symbol": "4452.T",
       "name": "花王",
-      "price": 5919.0,
-      "change": -132.0,
-      "pct": -2.18,
-      "date": "05/20"
+      "price": 5934.0,
+      "change": 15.0,
+      "pct": 0.25,
+      "date": "05/21"
     }
   ]
 }
