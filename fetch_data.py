@@ -619,7 +619,7 @@ def fetch_tw_futures_night():
 
         # vs 收盤（日盤結算）
         ref_close = day_settlement.get(p['id'])
-        if price is not None and ref_close is not None:
+        if price is not None and ref_close:
             change = round(price - ref_close, 0)
             pct    = round(change / ref_close * 100, 2)
         else:
@@ -629,13 +629,14 @@ def fetch_tw_futures_night():
 
         # vs 開盤（日盤開盤）
         ref_open = day_open.get(p['id'])
-        if price is not None and ref_open is not None:
+        if price is not None and ref_open:
             change_open = round(price - ref_open, 0)
             pct_open    = round(change_open / ref_open * 100, 2)
         else:
             change_open = pct_open = None
 
-        print(f"  {p['id']}: {price} | vs收 {change:+.0f}({pct:+.2f}%) | vs開 {change_open:+.0f}({pct_open:+.2f}%)")
+        fmt = lambda v, f: f'{v:{f}}' if v is not None else 'N/A'
+        print(f"  {p['id']}: {price} | vs收 {fmt(change,'+.0f')}({fmt(pct,'+.2f')}%) | vs開 {fmt(change_open,'+.0f')}({fmt(pct_open,'+.2f')}%)")
 
         result.append({
             'symbol':      p['id'],
