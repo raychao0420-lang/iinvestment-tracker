@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/23 15:56",
+  "updated": "2026/05/24 17:14",
   "indices": [
     {
       "symbol": "^TWII",
@@ -158,8 +158,8 @@
       "change": 1.45,
       "pct": 1.51,
       "date": "05/22",
-      "nav": 95.39,
-      "premium": 2.0
+      "nav": 97.32,
+      "premium": -0.02
     },
     {
       "symbol": "006208.TW",
@@ -168,8 +168,8 @@
       "change": 3.5,
       "pct": 1.58,
       "date": "05/22",
-      "nav": 221.5,
-      "premium": 1.6
+      "nav": 225.98,
+      "premium": -0.41
     },
     {
       "symbol": "00878.TW",
@@ -178,8 +178,8 @@
       "change": 0.56,
       "pct": 2.02,
       "date": "05/22",
-      "nav": 27.81,
-      "premium": 1.65
+      "nav": 28.4,
+      "premium": -0.46
     },
     {
       "symbol": "00919.TW",
@@ -188,8 +188,8 @@
       "change": 0.2,
       "pct": 0.75,
       "date": "05/22",
-      "nav": 26.65,
-      "premium": 0.3
+      "nav": 26.84,
+      "premium": -0.41
     },
     {
       "symbol": "00929.TW",
@@ -198,8 +198,8 @@
       "change": 0.59,
       "pct": 2.23,
       "date": "05/22",
-      "nav": 26.55,
-      "premium": 2.0
+      "nav": 27.19,
+      "premium": -0.4
     },
     {
       "symbol": "00940.TW",
@@ -208,8 +208,8 @@
       "change": 0.17,
       "pct": 1.5,
       "date": "05/22",
-      "nav": 11.38,
-      "premium": 0.97
+      "nav": 11.55,
+      "premium": -0.52
     },
     {
       "symbol": "00403A.TW",
@@ -218,8 +218,8 @@
       "change": 0.19,
       "pct": 1.9,
       "date": "05/22",
-      "nav": 9.98,
-      "premium": 2.2
+      "nav": 10.25,
+      "premium": -0.49
     },
     {
       "symbol": "00988A.TW",
@@ -228,8 +228,8 @@
       "change": 1.18,
       "pct": 6.15,
       "date": "05/22",
-      "nav": 18.47,
-      "premium": 10.23
+      "nav": 19.43,
+      "premium": 4.79
     },
     {
       "symbol": "00981A.TW",
@@ -238,8 +238,8 @@
       "change": 1.09,
       "pct": 3.78,
       "date": "05/22",
-      "nav": 28.81,
-      "premium": 3.96
+      "nav": 30.03,
+      "premium": -0.27
     },
     {
       "symbol": "00935.TW",
@@ -248,8 +248,8 @@
       "change": 2.15,
       "pct": 3.97,
       "date": "05/22",
-      "nav": 53.96,
-      "premium": 4.43
+      "nav": 56.11,
+      "premium": 0.43
     },
     {
       "symbol": "00980A.TW",
@@ -258,8 +258,8 @@
       "change": 0.67,
       "pct": 2.98,
       "date": "05/22",
-      "nav": 22.52,
-      "premium": 2.84
+      "nav": 23.23,
+      "premium": -0.3
     }
   ]
 }
