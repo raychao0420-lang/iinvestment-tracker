@@ -1060,6 +1060,7 @@ function renderInstRank(data) {
   sec.innerHTML = `
     <div class="section-title mt-1">三大法人今日動向
       <span style="font-size:.6rem;font-weight:400;color:var(--t3);margin-left:.3rem">${data.date||''} ${data.unit||'千股'}</span>
+      ${data.updated ? `<span style="font-size:.55rem;font-weight:400;color:var(--t3);margin-left:.4rem">更新 ${data.updated}</span>` : ''}
     </div>
     <div class="irank-summary">
       <div class="irank-sum-cell"><div class="irank-sum-label">外資</div>${fmtK(s.fi)}</div>

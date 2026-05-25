@@ -1693,6 +1693,7 @@ def fetch_inst_rank():
 
     return {
         'date':    date_str,
+        'updated': datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC'),
         'source':  source,
         'unit':    '千股',
         'summary': {'fi': fi_sum, 'sit': sit_sum,
