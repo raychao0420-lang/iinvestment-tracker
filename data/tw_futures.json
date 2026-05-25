@@ -1,12 +1,12 @@
 {
-  "updated": "2026/05/25 20:10",
+  "updated": "2026/05/25 20:15",
   "futures": [
     {
       "symbol": "TX",
       "name": "台指期",
-      "price": 44088.0,
-      "change": 218.0,
-      "pct": 0.5,
+      "price": 44083.0,
+      "change": 213.0,
+      "pct": 0.49,
       "change_open": -405.0,
       "pct_open": -0.96,
       "contract": "202606",
@@ -15,9 +15,9 @@
     {
       "symbol": "MTX",
       "name": "小台",
-      "price": 44087.0,
-      "change": 217.0,
-      "pct": 0.49,
+      "price": 44080.0,
+      "change": 210.0,
+      "pct": 0.48,
       "change_open": -447.0,
       "pct_open": -1.06,
       "contract": "202606",
