@@ -1472,6 +1472,8 @@ def fetch_inst_rank():
                             'sit_s': _compact(ex['sit'].get('bot',[]), 'sit'),
                         }
                         ex['history'] = [h]
+                    if not ex.get('updated'):
+                        ex['updated'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
                     return ex
                 print(f'  inst_rank: {date_str} has empty sit/dealer — re-fetching…')
         except Exception:
