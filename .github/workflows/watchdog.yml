@@ -1,0 +1,60 @@
+name: Watchdog – 補跑漏掉的排程
+
+on:
+  schedule:
+    # 每兩小時，UTC 00-15 週一~五 (= TWN 08-23)
+    - cron: '30 0,2,4,6,8,10,12,14 * * 1-5'
+    # UTC 22-23 週日 (= TWN 06-07 週一，補週末後首跑)
+    - cron: '30 22,23 * * 0'
+  workflow_dispatch:
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Auto-trigger if update stale
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO="$GITHUB_REPOSITORY"
+
+          # 如果 update.yml 已在排隊或執行中，跳過
+          ACTIVE=$(gh run list \
+            --repo "$REPO" \
+            --workflow=update.yml \
+            --json status \
+            --jq '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
+
+          if [ "$ACTIVE" -gt 0 ]; then
+            echo "update.yml already active (${ACTIVE} job), skip."
+            exit 0
+          fi
+
+          # 取最後一次成功完成的時間
+          LAST=$(gh run list \
+            --repo "$REPO" \
+            --workflow=update.yml \
+            --status=success \
+            --limit=1 \
+            --json updatedAt \
+            --jq '.[0].updatedAt // empty')
+
+          if [ -z "$LAST" ]; then
+            echo "No prior success found, triggering..."
+            gh workflow run update.yml --repo "$REPO"
+            exit 0
+          fi
+
+          DIFF=$(( $(date +%s) - $(date -d "$LAST" +%s) ))
+          printf "Last success: %s  (%dh %dm ago)\n" \
+            "$LAST" "$((DIFF / 3600))" "$(( (DIFF % 3600) / 60 ))"
+
+          # 超過 3 小時沒更新就補跑
+          if [ "$DIFF" -gt 10800 ]; then
+            echo "Stale! Triggering update.yml..."
+            gh workflow run update.yml --repo "$REPO"
+          else
+            echo "Fresh enough, no action needed."
+          fi
