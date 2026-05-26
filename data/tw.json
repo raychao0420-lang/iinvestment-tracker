@@ -1,5 +1,5 @@
 {
-  "updated": "2026/05/26 12:26",
+  "updated": "2026/05/27 01:49",
   "indices": [
     {
       "symbol": "^TWII",
@@ -168,8 +168,8 @@
       "change": -0.2,
       "pct": -0.09,
       "date": "05/26",
-      "nav": 225.98,
-      "premium": 3.0
+      "nav": 234.04,
+      "premium": -0.55
     },
     {
       "symbol": "00878.TW",
@@ -198,48 +198,48 @@
       "change": 0.41,
       "pct": 1.43,
       "date": "05/26",
-      "nav": 27.19,
-      "premium": 7.21
+      "nav": 28.77,
+      "premium": 1.32
     },
     {
       "symbol": "00940.TW",
       "name": "元大台灣價值高息",
-      "price": 11.75,
-      "change": 0.02,
-      "pct": 0.17,
+      "price": 11.76,
+      "change": 0.03,
+      "pct": 0.26,
       "date": "05/26",
       "nav": 11.78,
-      "premium": -0.25
+      "premium": -0.17
     },
     {
       "symbol": "00403A.TW",
       "name": "統一台股升級50",
-      "price": 10.56,
-      "change": -0.02,
-      "pct": -0.19,
+      "price": 10.64,
+      "change": 0.06,
+      "pct": 0.57,
       "date": "05/26",
-      "nav": 10.25,
-      "premium": 3.02
+      "nav": 10.6,
+      "premium": 0.38
     },
     {
       "symbol": "00988A.TW",
       "name": "主動統一全球創新",
-      "price": 21.68,
-      "change": -0.4,
-      "pct": -1.81,
+      "price": 21.92,
+      "change": -0.16,
+      "pct": -0.72,
       "date": "05/26",
-      "nav": 19.43,
-      "premium": 11.58
+      "nav": 20.07,
+      "premium": 9.22
     },
     {
       "symbol": "00981A.TW",
       "name": "主動統一台股增長",
-      "price": 31.43,
-      "change": -0.18,
-      "pct": -0.57,
+      "price": 31.49,
+      "change": -0.12,
+      "pct": -0.38,
       "date": "05/26",
-      "nav": 30.03,
-      "premium": 4.66
+      "nav": 31.44,
+      "premium": 0.16
     },
     {
       "symbol": "00935.TW",
@@ -248,18 +248,18 @@
       "change": 3.55,
       "pct": 6.3,
       "date": "05/26",
-      "nav": 56.11,
-      "premium": 6.75
+      "nav": 59.31,
+      "premium": 0.99
     },
     {
       "symbol": "00980A.TW",
       "name": "主動野村臺灣優選",
-      "price": 24.09,
-      "change": 0.12,
-      "pct": 0.5,
+      "price": 24.24,
+      "change": 0.27,
+      "pct": 1.13,
       "date": "05/26",
       "nav": 24.03,
-      "premium": 0.25
+      "premium": 0.87
     }
   ]
 }
