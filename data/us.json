@@ -1,36 +1,36 @@
 {
-  "updated": "2026/05/27 01:49",
+  "updated": "2026/05/27 02:07",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7509.32,
-      "change": 35.85,
+      "price": 7509.5,
+      "change": 36.03,
       "pct": 0.48,
       "date": "05/26"
     },
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 26584.71,
-      "change": 240.73,
-      "pct": 0.91,
+      "price": 26586.88,
+      "change": 242.9,
+      "pct": 0.92,
       "date": "05/26"
     },
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 50395.21,
-      "change": -184.49,
-      "pct": -0.36,
+      "price": 50378.74,
+      "change": -200.96,
+      "pct": -0.4,
       "date": "05/26"
     },
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2912.85,
-      "change": 43.62,
-      "pct": 1.52,
+      "price": 2914.75,
+      "change": 45.52,
+      "pct": 1.59,
       "date": "05/26"
     }
   ],
@@ -38,73 +38,73 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR",
-      "price": 412.02,
-      "change": 7.5,
-      "pct": 1.85,
+      "price": 412.73,
+      "change": 8.21,
+      "pct": 2.03,
       "date": "05/26"
     },
     {
       "symbol": "NVDA",
       "name": "輝達 NVDA",
-      "price": 213.58,
-      "change": -1.75,
-      "pct": -0.81,
+      "price": 213.46,
+      "change": -1.87,
+      "pct": -0.87,
       "date": "05/26"
     },
     {
       "symbol": "INTC",
       "name": "Intel",
-      "price": 122.52,
-      "change": 2.68,
-      "pct": 2.24,
+      "price": 122.36,
+      "change": 2.52,
+      "pct": 2.1,
       "date": "05/26"
     },
     {
       "symbol": "MU",
       "name": "美光 MU",
-      "price": 898.81,
-      "change": 147.81,
-      "pct": 19.68,
+      "price": 895.99,
+      "change": 144.99,
+      "pct": 19.31,
       "date": "05/26"
     },
     {
       "symbol": "TSLA",
       "name": "特斯拉 TSLA",
-      "price": 432.15,
-      "change": 6.14,
-      "pct": 1.44,
+      "price": 432.33,
+      "change": 6.32,
+      "pct": 1.48,
       "date": "05/26"
     },
     {
       "symbol": "EWT",
       "name": "摩台指 EWT",
-      "price": 102.0,
-      "change": 5.16,
-      "pct": 5.33,
+      "price": 102.01,
+      "change": 5.18,
+      "pct": 5.34,
       "date": "05/26"
     },
     {
       "symbol": "VOO",
       "name": "VOO",
-      "price": 688.8,
-      "change": 3.25,
-      "pct": 0.47,
+      "price": 688.82,
+      "change": 3.27,
+      "pct": 0.48,
       "date": "05/26"
     },
     {
       "symbol": "QQQ",
       "name": "QQQ",
-      "price": 728.48,
-      "change": 10.94,
+      "price": 728.43,
+      "change": 10.89,
       "pct": 1.52,
       "date": "05/26"
     },
     {
       "symbol": "SCHD",
       "name": "SCHD",
-      "price": 32.7,
-      "change": -0.13,
-      "pct": -0.4,
+      "price": 32.69,
+      "change": -0.15,
+      "pct": -0.44,
       "date": "05/26"
     }
   ],
@@ -112,25 +112,25 @@
     {
       "symbol": "AMZN",
       "name": "亞馬遜 AWS",
-      "price": 262.29,
-      "change": -4.03,
-      "pct": -1.51,
+      "price": 262.59,
+      "change": -3.73,
+      "pct": -1.4,
       "date": "05/26"
     },
     {
       "symbol": "MSFT",
       "name": "微軟 Azure",
-      "price": 413.33,
-      "change": -5.24,
-      "pct": -1.25,
+      "price": 414.4,
+      "change": -4.17,
+      "pct": -1.0,
       "date": "05/26"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet GCP",
-      "price": 386.51,
-      "change": 3.54,
-      "pct": 0.92,
+      "price": 386.55,
+      "change": 3.58,
+      "pct": 0.93,
       "date": "05/26"
     },
     {
@@ -152,17 +152,17 @@
     {
       "symbol": "IBM",
       "name": "IBM Cloud",
-      "price": 249.89,
-      "change": -3.95,
-      "pct": -1.56,
+      "price": 250.12,
+      "change": -3.72,
+      "pct": -1.47,
       "date": "05/26"
     },
     {
       "symbol": "AAPL",
       "name": "Apple",
-      "price": 309.36,
-      "change": 0.54,
-      "pct": 0.17,
+      "price": 309.63,
+      "change": 0.81,
+      "pct": 0.26,
       "date": "05/26"
     }
   ]
