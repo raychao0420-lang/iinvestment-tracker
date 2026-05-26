@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Taiwan futures night session live update via TAIFEX MIS API.
-Runs every 5 minutes during night session (15:00-05:00 TWN, Mon-Fri).
+Taiwan futures live update via TAIFEX MIS API.
+- Day session   09:00-13:35 TWN: MarketType 0, regular contracts (no -M)
+- Night session 15:00-05:00 TWN: MarketType 1, night contracts (with -M)
 Updates data/tw_futures.json only.
 """
 import requests, json, os
@@ -25,7 +26,7 @@ PRODUCTS = [
 
 
 def parse_contract(symbol_id):
-    """TXFE6-M → '202605'"""
+    """TXFE6-M → '202605'  or  TXFE6 → '202605'"""
     try:
         base = symbol_id.split('-')[0]  # e.g. TXFE6
         month_char = base[-2]
@@ -36,14 +37,16 @@ def parse_contract(symbol_id):
         return ''
 
 
-def fetch_night_quotes():
+def fetch_quotes(is_night: bool):
+    market_type = '1' if is_night else '0'
+    session_label = '夜盤' if is_night else '日盤'
     result = {}
     for p in PRODUCTS:
         try:
             r = requests.post(
                 'https://mis.taifex.com.tw/futures/api/getQuoteList',
                 json={
-                    'MarketType': '1',
+                    'MarketType': market_type,
                     'CommodityID': p['symbol'],
                     'ContractDate': '',
                     'RowCount': 10,
@@ -58,22 +61,34 @@ def fetch_night_quotes():
                 timeout=10,
             )
             quotes = r.json().get('RtData', {}).get('QuoteList', [])
-            # Keep only outright night-session contracts (has -M, no spread '/')
-            contracts = [
-                q for q in quotes
-                if '-M' in q.get('SymbolID', '')
-                and '/' not in q.get('SymbolID', '')
-                and q.get('CLastPrice')
-            ]
+
+            if is_night:
+                # Night session: contracts marked with -M, no spreads
+                contracts = [
+                    q for q in quotes
+                    if '-M' in q.get('SymbolID', '')
+                    and '/' not in q.get('SymbolID', '')
+                    and q.get('CLastPrice')
+                ]
+            else:
+                # Day session: regular contracts (no -M), no spreads
+                contracts = [
+                    q for q in quotes
+                    if '-M' not in q.get('SymbolID', '')
+                    and '/' not in q.get('SymbolID', '')
+                    and q.get('CLastPrice')
+                ]
+
             if not contracts:
-                print(f'  {p["symbol"]}: 無夜盤資料')
+                print(f'  {p["symbol"]}: 無{session_label}資料')
                 continue
+
             # Front month = highest volume
             contracts.sort(key=lambda x: int(x.get('CTotalVolume') or 0), reverse=True)
             front = contracts[0]
 
-            price = float(front['CLastPrice'])
-            ref   = float(front['CRefPrice']) if front.get('CRefPrice') else None
+            price  = float(front['CLastPrice'])
+            ref    = float(front['CRefPrice']) if front.get('CRefPrice') else None
             change = round(price - ref, 0) if ref else None
             pct    = round(change / ref * 100, 2) if ref and ref > 0 else None
 
@@ -91,15 +106,20 @@ def fetch_night_quotes():
 
 if __name__ == '__main__':
     now = datetime.now(TZ)
-    h   = now.hour
+    h, m = now.hour, now.minute
+    total_min = h * 60 + m
 
-    if not (h >= 15 or h < 5):
-        print(f'非夜盤 ({now.strftime("%H:%M")} TWN)，跳過。')
+    is_day   = 9 * 60 <= total_min <= 13 * 60 + 35   # 09:00-13:35
+    is_night = h >= 15 or h < 5                        # 15:00-05:00
+
+    if not (is_day or is_night):
+        print(f'非交易時段 ({now.strftime("%H:%M")} TWN)，跳過。')
         exit(0)
 
+    session  = '日盤' if is_day else '夜盤'
     now_str  = now.strftime('%Y/%m/%d %H:%M')
     now_date = now.strftime('%m/%d')
-    print(f'=== fetch_futures_live {now_str} ===')
+    print(f'=== fetch_futures_live [{session}] {now_str} ===')
 
     FUTURES_PATH = 'data/tw_futures.json'
     if not os.path.exists(FUTURES_PATH):
@@ -109,9 +129,9 @@ if __name__ == '__main__':
     with open(FUTURES_PATH, 'r', encoding='utf-8') as f:
         existing = json.load(f)
 
-    live = fetch_night_quotes()
+    live = fetch_quotes(is_night=is_night)
     if not live:
-        print('未取得任何夜盤報價，保留現有資料。')
+        print('未取得任何報價，保留現有資料。')
         exit(0)
 
     updated = 0
