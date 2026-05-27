@@ -36,6 +36,6 @@ jobs:
             git push && exit 0
             echo "push attempt $attempt failed, retrying..."
             sleep 3
-            git pull --rebase
+            git pull --rebase -X theirs
           done
           git push
