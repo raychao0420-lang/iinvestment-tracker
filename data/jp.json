@@ -1,20 +1,20 @@
 {
-  "updated": "2026/05/27 02:14",
+  "updated": "2026/05/27 16:54",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 65095.46,
-      "change": -62.73,
-      "pct": -0.1,
-      "date": "05/26"
+      "price": 64999.41,
+      "change": 3.32,
+      "pct": 0.01,
+      "date": "05/27"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF (EWJ)",
-      "price": 92.77,
-      "change": 1.16,
-      "pct": 1.27,
+      "price": 92.9,
+      "change": 1.29,
+      "pct": 1.41,
       "date": "05/26"
     }
   ],
@@ -22,50 +22,50 @@
     {
       "symbol": "8035.T",
       "name": "東京威力科創",
-      "price": 51090.0,
-      "change": -1090.0,
-      "pct": -2.09,
-      "date": "05/26"
+      "price": 52500.0,
+      "change": 1080.0,
+      "pct": 2.1,
+      "date": "05/27"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
-      "price": 26335.0,
-      "change": -1420.0,
-      "pct": -5.12,
-      "date": "05/26"
+      "price": 27130.0,
+      "change": 1055.0,
+      "pct": 4.05,
+      "date": "05/27"
     },
     {
       "symbol": "4063.T",
       "name": "信越化學",
-      "price": 7169.0,
-      "change": 128.0,
-      "pct": 1.82,
-      "date": "05/26"
+      "price": 7406.0,
+      "change": 384.0,
+      "pct": 5.47,
+      "date": "05/27"
     },
     {
       "symbol": "6758.T",
       "name": "Sony",
-      "price": 3566.0,
-      "change": -32.0,
-      "pct": -0.89,
-      "date": "05/26"
+      "price": 3525.0,
+      "change": -23.0,
+      "pct": -0.65,
+      "date": "05/27"
     },
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 77490.0,
-      "change": -1370.0,
+      "price": 75780.0,
+      "change": -1340.0,
       "pct": -1.74,
-      "date": "05/26"
+      "date": "05/27"
     },
     {
       "symbol": "4452.T",
       "name": "花王",
-      "price": 5990.0,
-      "change": -10.0,
-      "pct": -0.17,
-      "date": "05/26"
+      "price": 5999.0,
+      "change": 58.0,
+      "pct": 0.98,
+      "date": "05/27"
     }
   ]
 }
