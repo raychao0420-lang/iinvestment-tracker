@@ -1,13 +1,13 @@
 {
-  "updated": "2026/05/28 05:24",
+  "updated": "2026/05/28 08:16",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 64999.41,
-      "change": 3.32,
-      "pct": 0.01,
-      "date": "05/27"
+      "price": 64853.21,
+      "change": -142.88,
+      "pct": -0.22,
+      "date": "05/28"
     },
     {
       "symbol": "EWJ",
@@ -23,25 +23,25 @@
       "symbol": "8035.T",
       "name": "東京威力科創",
       "price": 52500.0,
-      "change": 1080.0,
-      "pct": 2.1,
-      "date": "05/27"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/28"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
       "price": 27130.0,
-      "change": 1055.0,
-      "pct": 4.05,
-      "date": "05/27"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/28"
     },
     {
       "symbol": "4063.T",
       "name": "信越化學",
       "price": 7406.0,
-      "change": 384.0,
-      "pct": 5.47,
-      "date": "05/27"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/28"
     },
     {
       "symbol": "6758.T",
@@ -55,17 +55,17 @@
       "symbol": "6861.T",
       "name": "Keyence",
       "price": 75780.0,
-      "change": -1340.0,
-      "pct": -1.74,
-      "date": "05/27"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/28"
     },
     {
       "symbol": "4452.T",
       "name": "花王",
       "price": 5999.0,
-      "change": 58.0,
-      "pct": 0.98,
-      "date": "05/27"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "05/28"
     }
   ]
 }
