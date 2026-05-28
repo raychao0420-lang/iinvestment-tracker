@@ -1,12 +1,12 @@
 {
-  "updated": "2026/05/28 10:35",
+  "updated": "2026/05/28 10:40",
   "futures": [
     {
       "symbol": "TX",
       "name": "台指期",
-      "price": 44877.0,
-      "change": 83.0,
-      "pct": 0.19,
+      "price": 44870.0,
+      "change": 76.0,
+      "pct": 0.17,
       "change_open": -52.0,
       "pct_open": -0.12,
       "contract": "202606",
