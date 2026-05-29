@@ -1,12 +1,12 @@
 {
-  "updated": "2026/05/29 12:54",
+  "updated": "2026/05/29 16:59",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 66364.7,
-      "change": 1671.58,
-      "pct": 2.58,
+      "price": 66329.5,
+      "change": 1636.38,
+      "pct": 2.53,
       "date": "05/29"
     },
     {
@@ -22,49 +22,49 @@
     {
       "symbol": "8035.T",
       "name": "東京威力科創",
-      "price": 53000.0,
-      "change": 680.0,
-      "pct": 1.3,
+      "price": 52420.0,
+      "change": 100.0,
+      "pct": 0.19,
       "date": "05/29"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
-      "price": 26080.0,
-      "change": -260.0,
-      "pct": -0.99,
+      "price": 26170.0,
+      "change": -170.0,
+      "pct": -0.65,
       "date": "05/29"
     },
     {
       "symbol": "4063.T",
       "name": "信越化學",
-      "price": 7861.0,
-      "change": 517.0,
-      "pct": 7.04,
+      "price": 7758.0,
+      "change": 414.0,
+      "pct": 5.64,
       "date": "05/29"
     },
     {
       "symbol": "6758.T",
       "name": "Sony",
-      "price": 3423.0,
-      "change": -28.0,
-      "pct": -0.81,
+      "price": 3444.0,
+      "change": -7.0,
+      "pct": -0.2,
       "date": "05/29"
     },
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 80780.0,
-      "change": 5600.0,
-      "pct": 7.45,
+      "price": 80110.0,
+      "change": 4930.0,
+      "pct": 6.56,
       "date": "05/29"
     },
     {
       "symbol": "4452.T",
       "name": "花王",
-      "price": 6161.0,
-      "change": 82.0,
-      "pct": 1.35,
+      "price": 6115.0,
+      "change": 36.0,
+      "pct": 0.59,
       "date": "05/29"
     }
   ]
