@@ -68,7 +68,6 @@ US_CLOUD = [
 TW_INDICES = [
     {'symbol': '^TWII',     'name': '加權指數'},
     {'symbol': '00631L.TW', 'name': '元大台灣50正2'},
-    {'symbol': '^SOX',      'name': '費城半導體'},
 ]
 TW_STOCKS = [
     {'symbol': '2330.TW', 'name': '台積電'},
@@ -129,7 +128,6 @@ ETF_UNIVERSE = [
 JP_INDICES = [
     {'symbol': '^N225', 'name': '日經 225'},
     {'symbol': 'EWJ',   'name': '日股 ETF (EWJ)'},
-    {'symbol': '^SOX',  'name': '費城半導體'},
 ]
 JP_SEMIEQ = [
     {'symbol': '8035.T', 'name': '東京威力科創'},
