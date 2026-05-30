@@ -1762,6 +1762,17 @@ if __name__ == '__main__':
     print('--- TW Analysis ---')
     analysis = fetch_tw_analysis(mkt_series=mkt_series)
     if analysis:
+        try:
+            with open('data/tw_analysis.json', 'r', encoding='utf-8') as _f:
+                _old_a = json.load(_f)
+            _old_date = _old_a.get('twii', {}).get('date', '')
+            _new_date = analysis.get('twii', {}).get('date', '')
+            if _old_date and not _is_newer_date(_new_date, _old_date):
+                print(f'  tw_analysis: new date {_new_date} ≤ cached {_old_date}，跳過覆寫')
+                analysis = None
+        except Exception:
+            pass
+    if analysis:
         save('data/tw_analysis.json', {'updated': now, **analysis})
     else:
         print('  tw_analysis: no data returned, skipping')
@@ -1769,6 +1780,19 @@ if __name__ == '__main__':
     time.sleep(2)
     print('--- Chart Data ---')
     chart = fetch_chart_data(mkt_series=mkt_series)
+    if chart:
+        try:
+            with open('data/chart.json', 'r', encoding='utf-8') as _f:
+                _old_c = json.load(_f)
+            _old_candles = _old_c.get('twii', {}).get('candles', [])
+            _old_last = _old_candles[-1]['time'] if _old_candles else ''
+            _new_candles = chart.get('twii', {}).get('candles', [])
+            _new_last = _new_candles[-1]['time'] if _new_candles else ''
+            if _old_last and _new_last and _new_last < _old_last:
+                print(f'  chart: new last={_new_last} < cached {_old_last}，跳過覆寫')
+                chart = None
+        except Exception:
+            pass
     if chart:
         save('data/chart.json', {'updated': now, **chart})
     else:
@@ -1789,7 +1813,19 @@ if __name__ == '__main__':
         if in_night and api_date and api_date != today_mm:
             print(f'  tw_futures: 夜盤進行中，Open API date={api_date} ≠ {today_mm}，保留即時資料')
         else:
-            save('data/tw_futures.json', {'updated': now, 'futures': futures})
+            # Guard: don't overwrite cached live data with stale API data
+            _skip_fut = False
+            try:
+                with open('data/tw_futures.json', 'r', encoding='utf-8') as _f:
+                    _cf = json.load(_f)
+                _cached_date = (_cf.get('futures') or [{}])[0].get('date', '')
+                if _cached_date and not _is_newer_date(api_date, _cached_date):
+                    print(f'  tw_futures: API date {api_date} ≤ cached {_cached_date}，跳過覆寫')
+                    _skip_fut = True
+            except Exception:
+                pass
+            if not _skip_fut:
+                save('data/tw_futures.json', {'updated': now, 'futures': futures})
     else:
         print('  tw_futures: no live data, skipping save')
 
