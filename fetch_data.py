@@ -14,14 +14,45 @@ US_INDICES = [
 ]
 US_STOCKS = [
     {'symbol': 'TSM',  'name': '台積電 ADR'},
-    {'symbol': 'NVDA', 'name': '輝達 NVDA'},
-    {'symbol': 'INTC', 'name': 'Intel'},
     {'symbol': 'MU',   'name': '美光 MU'},
     {'symbol': 'TSLA', 'name': '特斯拉 TSLA'},
     {'symbol': 'EWT',  'name': '摩台指 EWT'},
-    {'symbol': 'VOO',  'name': 'VOO'},
-    {'symbol': 'QQQ',  'name': 'QQQ'},
-    {'symbol': 'SCHD', 'name': 'SCHD'},
+]
+US_GPU = [
+    {'symbol': 'NVDA', 'name': 'NVIDIA'},
+    {'symbol': 'AMD',  'name': 'AMD'},
+    {'symbol': 'AVGO', 'name': 'Broadcom'},
+    {'symbol': 'MRVL', 'name': 'Marvell'},
+]
+US_CPU = [
+    {'symbol': 'INTC', 'name': 'Intel'},
+    {'symbol': 'QCOM', 'name': 'Qualcomm'},
+    {'symbol': 'ARM',  'name': 'Arm Holdings'},
+]
+US_OPTICAL = [
+    {'symbol': 'COHR', 'name': 'Coherent'},
+    {'symbol': 'LITE', 'name': 'Lumentum'},
+    {'symbol': 'CIEN', 'name': 'Ciena'},
+    {'symbol': 'AAOI', 'name': 'Applied Optoelectronics'},
+    {'symbol': 'VIAV', 'name': 'Viavi Solutions'},
+]
+US_POWER = [
+    {'symbol': 'VST',  'name': 'Vistra'},
+    {'symbol': 'CEG',  'name': 'Constellation Energy'},
+    {'symbol': 'GEV',  'name': 'GE Vernova'},
+    {'symbol': 'ETN',  'name': 'Eaton'},
+    {'symbol': 'NEE',  'name': 'NextEra Energy'},
+]
+US_ETF_LIST = [
+    {'symbol': 'SPY',  'name': 'S&P 500 SPY'},
+    {'symbol': 'QQQ',  'name': 'Nasdaq 100 QQQ'},
+    {'symbol': 'VOO',  'name': 'Vanguard S&P VOO'},
+    {'symbol': 'SCHD', 'name': 'Dividend SCHD'},
+    {'symbol': 'VGT',  'name': 'Vanguard IT VGT'},
+    {'symbol': 'SOXX', 'name': 'Semiconductor SOXX'},
+    {'symbol': 'GLD',  'name': '黃金 GLD'},
+    {'symbol': 'TLT',  'name': '長債 TLT'},
+    {'symbol': 'ARKK', 'name': 'ARK Innovation'},
 ]
 US_CLOUD = [
     {'symbol': 'AMZN',  'name': '亞馬遜 AWS'},
@@ -1011,7 +1042,7 @@ def fetch_fundamentals():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import math
 
-    targets = US_STOCKS + US_CLOUD + TW_STOCKS + TW_DRONE + TW_ETF
+    targets = US_STOCKS + US_CLOUD + US_GPU + US_CPU + US_OPTICAL + US_POWER + TW_STOCKS + TW_DRONE + TW_ETF
     symbols = [s['symbol'] for s in targets]
 
     def _get(sym):
@@ -1062,7 +1093,7 @@ def fetch_signals():
     """
     import pandas as pd
 
-    targets = US_STOCKS + US_CLOUD + TW_STOCKS + TW_DRONE + TW_ETF
+    targets = US_STOCKS + US_CLOUD + US_GPU + US_CPU + US_OPTICAL + US_POWER + US_ETF_LIST + TW_STOCKS + TW_DRONE + TW_ETF
     symbols = [s['symbol'] for s in targets]
 
     print(f'  signals: downloading {len(symbols)} symbols (6mo)...')
@@ -1128,12 +1159,17 @@ def fetch_stock_charts():
     import pandas as pd, math
 
     all_groups = [
-        (US_STOCKS, None),
-        (US_CLOUD,  None),
-        (TW_STOCKS, '張'),
-        (TW_DRONE,  '張'),
-        (TW_ETF,    '張'),
-        (JP_STOCKS, None),
+        (US_STOCKS,   None),
+        (US_CLOUD,    None),
+        (US_GPU,      None),
+        (US_CPU,      None),
+        (US_OPTICAL,  None),
+        (US_POWER,    None),
+        (US_ETF_LIST, None),
+        (TW_STOCKS,   '張'),
+        (TW_DRONE,    '張'),
+        (TW_ETF,      '張'),
+        (JP_STOCKS,   None),
     ]
     targets   = [(s['symbol'], s['name'], vu) for grp, vu in all_groups for s in grp]
     symbols   = [t[0] for t in targets]
@@ -1718,7 +1754,16 @@ if __name__ == '__main__':
 
     print('--- US ---')
     old_us = load_existing('data/us.json')
-    us = fetch_market({'indices': US_INDICES, 'stocks': US_STOCKS, 'cloud': US_CLOUD})
+    us = fetch_market({
+        'indices': US_INDICES,
+        'stocks':  US_STOCKS,
+        'cloud':   US_CLOUD,
+        'gpu':     US_GPU,
+        'cpu':     US_CPU,
+        'optical': US_OPTICAL,
+        'power':   US_POWER,
+        'etf':     US_ETF_LIST,
+    })
     us = merge_with_old(us, old_us)
     save('data/us.json', {'updated': now, **us})
 

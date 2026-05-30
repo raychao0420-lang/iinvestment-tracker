@@ -509,10 +509,20 @@
   <div class="tab-pane fade" id="us-panel" role="tabpanel">
     <div class="section-title">指數</div>
     <div class="idx-grid"  id="us-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">GPU / AI 晶片</div>
+    <div class="stock-grid" id="us-gpu"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">CPU / 處理器</div>
+    <div class="stock-grid" id="us-cpu"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">光通訊</div>
+    <div class="stock-grid" id="us-optical"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">電力基礎設施</div>
+    <div class="stock-grid" id="us-power"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">雲端服務</div>
     <div class="stock-grid" id="us-cloud"><div class="stock-card"><div class="skeleton"></div></div></div>
-    <div class="section-title mt-1">台灣相關 & ETF</div>
+    <div class="section-title mt-1">台灣相關</div>
     <div class="stock-grid" id="us-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">美股 ETF</div>
+    <div class="stock-grid" id="us-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
     <button class="eps-toggle-btn" onclick="toggleFund('us')">
       <i class="bi bi-bar-chart-steps"></i>基本面估值
       <i class="bi bi-chevron-right eps-toggle-icon" id="fund-icon-us"></i>
@@ -753,7 +763,7 @@ function renderStocks(items, id) {
     return `<div class="stock-card">
       <div>
         <div style="display:flex;align-items:center;gap:.4rem">
-          <div class="stock-name"${etfTipAttr(s.symbol)}>${s.name}</div>
+          <div class="stock-name"${tipAttr(s.symbol)}>${s.name}</div>
           <button class="btn-chart-card" onclick="openStockChart('${s.symbol}','${safeName}')" title="K線圖"><i class="bi bi-graph-up"></i></button>
         </div>
         <div class="stock-sub">${s.symbol} · ${s.date||'–'}</div>
@@ -789,11 +799,57 @@ const ETF_DESC = {
   '00980A': '主動式管理（野村投信）。<br>經理人根據基本面動態調整成分股，非完全複製指數。<br>產業集中：半導體、AI電子相關熱門產業。<br>前十大持股合計不超過60%，單一成分股上限10%。',
 };
 
-function etfTipAttr(symbol) {
-  const code = (symbol || '').replace('.TW', '');
-  const desc = ETF_DESC[code];
+const US_STOCK_DESC = {
+  // GPU / AI
+  'NVDA': 'NVIDIA，全球最大 GPU 製造商。<br>AI 訓練/推理晶片市佔超過 80%，H100/B200 為主力。<br>資料中心營收佔比持續上升，CUDA 生態鎖定效應強。',
+  'AMD':  'Advanced Micro Devices。<br>CPU（Ryzen/EPYC）與 AI GPU（MI300X/MI350）雙線並進。<br>EPYC 伺服器市佔持續侵蝕 Intel，MI300X 為 NVDA 主要競爭者。',
+  'AVGO': 'Broadcom，網路晶片與訂製 AI 加速器龍頭。<br>Google TPU、Meta MTIA 主要供應商，<br>VMware 併購後軟體訂閱比重大增，股息成長穩健。',
+  'MRVL': 'Marvell Technology，資料中心網路 ASIC。<br>AI 訂製晶片（Custom AI Silicon）快速成長，<br>供應 Amazon Trainium 周邊與 5G 前傳晶片。',
+  // CPU
+  'INTC': 'Intel，x86 CPU 龍頭，轉型挑戰中。<br>代工業務（Intel Foundry）積極擴廠，<br>AI 晶片（Gaudi）市占承壓，PC/伺服器 CPU 仍為主力。',
+  'QCOM': 'Qualcomm，行動裝置 Snapdragon 處理器全球龍頭。<br>PC（Snapdragon X）、IoT、車用 CPU 擴張中，<br>AI 邊緣推理晶片積極布局。',
+  'ARM':  'Arm Holdings，CPU 指令集架構授權商。<br>全球 99% 以上行動裝置使用 Arm 架構，<br>AI 伺服器（Neoverse）與邊緣裝置滲透率持續提升。',
+  // 光通訊
+  'COHR': 'Coherent Corp，光通訊元件龍頭。<br>AI 資料中心 800G/1.6T 光收發器主要供應商，<br>客戶涵蓋 NVDA、AWS、Google 等超大規模雲端廠。',
+  'LITE': 'Lumentum Holdings，光纖通訊元件。<br>數據中心光收發器與 3D 感測雷射（iPhone Face ID）。<br>AI 基礎設施建設帶動光學元件需求激增。',
+  'CIEN': 'Ciena，光網路設備與軟體解決方案。<br>北美電信骨幹光纖系統主要供應商，<br>WaveLogic 調製技術業界領先，400G/800G 升級週期受惠。',
+  'AAOI': 'Applied Optoelectronics，AI 資料中心光收發模組。<br>聚焦超高速乙太網路光互連（100G/400G/800G），<br>AI 伺服器建設浪潮帶動訂單大增。',
+  'VIAV': 'Viavi Solutions，光纖網路測試設備。<br>同時生產光學濾波器（3D 感測/AR），<br>5G/資料中心基礎建設受惠，測試設備市場穩定。',
+  // 電力
+  'VST':  'Vistra Energy，美國最大自由化電力公司。<br>核電（Comanche Peak）+ 天然氣 + 再生能源組合，<br>AI 資料中心長期購電協議（PPA）帶動估值重評。',
+  'CEG':  'Constellation Energy，美國最大核電公司。<br>佔全美電網約 10%，核電近零碳排特性受青睞，<br>與 Microsoft 等科技巨頭簽訂長期核電 PPA。',
+  'GEV':  'GE Vernova，電力設備製造商（從奇異分拆）。<br>燃氣渦輪機、風電、電網設備全線產品，<br>全球電力基礎設施升級需求強勁，訂單能見度高。',
+  'ETN':  'Eaton，電力管理與工業自動化龍頭。<br>資料中心 UPS、配電盤、電網設備主要供應商，<br>AI 電力基礎設施需求爆發為主要受惠股之一。',
+  'NEE':  'NextEra Energy，全球最大可再生能源公司。<br>風電 + 太陽能裝機容量全球第一，<br>同時擁有佛州公用事業 FPL，股息穩定成長。',
+  // 台灣相關
+  'TSM':  '台積電 ADR（NYSE: TSM），= 2330.TW × 匯率 / 10。<br>全球晶圓代工龍頭，先進製程（3nm/2nm）近乎壟斷，<br>AI 加速器、手機、HPC 客戶涵蓋蘋果、NVDA、AMD。',
+  'MU':   '美光科技，全球三大 DRAM/NAND 廠之一。<br>HBM（高頻寬記憶體）為 AI 晶片關鍵配套，<br>HBM3E 產能快速擴張，AI 伺服器需求帶動報價回升。',
+  'TSLA': '特斯拉，電動車 + 能源儲存 + 自動駕駛。<br>FSD（完全自動駕駛）訂閱與 Robotaxi 為下一成長引擎，<br>Megapack 能源儲存業務毛利率持續改善。',
+  'EWT':  'iShares MSCI Taiwan ETF，追蹤台灣股市。<br>台積電權重約 24-28%，半導體合計佔比逾 60%，<br>為海外資金追蹤台股指標工具，費用率 0.57%。',
+};
+
+const US_ETF_DESC = {
+  'SPY':  'SPDR S&P 500 ETF，全球最大 ETF。<br>追蹤 S&P 500 指數，涵蓋美國 503 支大型股，<br>費用率 0.09%，流動性最佳，機構必備工具。',
+  'QQQ':  'Invesco Nasdaq-100 ETF。<br>追蹤 Nasdaq-100 前 100 大非金融股，科技股佔逾 60%，<br>費用率 0.20%，AAPL/MSFT/NVDA 三股合計逾 30%。',
+  'VOO':  'Vanguard S&P 500 ETF。<br>與 SPY 追蹤相同指數，費用率僅 0.03%，<br>長期持有成本最低，Vanguard 旗艦 ETF。',
+  'SCHD': 'Schwab US Dividend Equity ETF。<br>篩選高品質且持續成長的股息股（100 支），<br>費用率 0.06%，季配息，價值型長期持有最愛。',
+  'VGT':  'Vanguard Information Technology ETF。<br>追蹤 MSCI US IT 指數，AAPL+MSFT+NVDA 合計逾 40%，<br>費用率 0.10%，科技股集中度高。',
+  'SOXX': 'iShares Semiconductor ETF。<br>追蹤 ICE 半導體指數（30 支），<br>NVDA、AVGO、AMD、QCOM、INTC 等龍頭均入列，<br>費用率 0.35%，半導體週期受惠利器。',
+  'GLD':  'SPDR Gold Shares，全球最大黃金 ETF。<br>直接持有實物黃金，追蹤倫敦金現貨，<br>費用率 0.40%，避險/通膨保值首選。',
+  'TLT':  'iShares 20+ Year Treasury Bond ETF。<br>追蹤 20 年期以上美國公債，聯準會利率決策高度敏感，<br>降息預期時上漲、升息時下跌，存續期約 17 年。',
+  'ARKK': 'ARK Innovation ETF（主動式管理，Cathie Wood）。<br>聚焦顛覆式創新：AI、基因編輯、機器人、太空，<br>高波動、高持股集中度，長期持有須承受大幅回撤。',
+};
+
+function tipAttr(symbol) {
+  const sym = symbol || '';
+  const code = sym.replace('.TW', '');
+  const desc = ETF_DESC[code] || US_ETF_DESC[sym] || US_STOCK_DESC[sym];
   if (!desc) return '';
   return ` data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="${desc.replace(/"/g, '&quot;')}"`;
+}
+
+function etfTipAttr(symbol) {
+  return tipAttr(symbol);
 }
 
 function initTooltips() {
@@ -1427,7 +1483,14 @@ function renderFundamentals(market) {
   }
 
   const groups = market === 'us'
-    ? [{ label:'個股 & ETF', items: src.stocks || [] }, { label:'雲端服務', items: src.cloud || [] }]
+    ? [
+        { label: 'GPU / AI 晶片', items: src.gpu     || [] },
+        { label: 'CPU / 處理器',  items: src.cpu     || [] },
+        { label: '光通訊',        items: src.optical || [] },
+        { label: '電力',          items: src.power   || [] },
+        { label: '雲端服務',      items: src.cloud   || [] },
+        { label: '台灣相關',      items: src.stocks  || [] },
+      ]
     : [{ label:'個股', items: src.stocks || [] }, { label:'無人機概念', items: src.drone || [] }, { label:'ETF', items: src.etf || [] }];
 
   const fv  = v => v != null ? v.toFixed(1) : '<span class="fund-null">—</span>';
@@ -1556,9 +1619,14 @@ async function loadAll() {
   _usData = us;
   _twData = tw;
 
-  renderIdx(us.indices, 'us-indices');
-  renderStocks(us.cloud,  'us-cloud');
-  renderStocks(us.stocks, 'us-stocks');
+  renderIdx(us.indices,    'us-indices');
+  renderStocks(us.gpu,     'us-gpu');
+  renderStocks(us.cpu,     'us-cpu');
+  renderStocks(us.optical, 'us-optical');
+  renderStocks(us.power,   'us-power');
+  renderStocks(us.cloud,   'us-cloud');
+  renderStocks(us.stocks,  'us-stocks');
+  renderStocks(us.etf,     'us-etf');
   renderAnalysisCard(an ? an.twii    : null, 'an-twii');
   renderAnalysisCard(an ? an.etf0050 : null, 'an-etf0050');
   renderIdx(tw.indices,   'tw-indices');
