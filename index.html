@@ -698,8 +698,21 @@ function switchToLatest(us, tw, jp) {
 }
 
 // ── 渲染 ─────────────────────────────────────────────────────────────────────
-function cls(pct) { return pct===null ? 'flat' : pct>0 ? 'up' : pct<0 ? 'down' : 'flat'; }
-function arrow(pct) { return pct===null ? '' : pct>0 ? '▲' : pct<0 ? '▼' : '–'; }
+function cls(pct, chg) {
+  if (pct == null) return 'flat';
+  if (pct > 0) return 'up';
+  if (pct < 0) return 'down';
+  // pct rounds to 0.00 but change still has sign (e.g. ^SOX tiny move)
+  if (chg != null) return chg > 0 ? 'up' : chg < 0 ? 'down' : 'flat';
+  return 'flat';
+}
+function arrow(pct, chg) {
+  if (pct == null) return '';
+  if (pct > 0) return '▲';
+  if (pct < 0) return '▼';
+  if (chg != null) return chg > 0 ? '▲' : chg < 0 ? '▼' : '–';
+  return '–';
+}
 function fmt(v, d=2) {
   if (v===null||v===undefined) return '–';
   return Number(v).toLocaleString('en-US', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -707,9 +720,9 @@ function fmt(v, d=2) {
 
 function renderIdx(items, id) {
   document.getElementById(id).innerHTML = items.map(s => {
-    const c = cls(s.pct), sign = s.pct>=0 ? '+' : '';
-    const chgStr = s.pct!==null
-      ? `${arrow(s.pct)} ${sign}${fmt(s.change, s.price>999?2:2)} (${sign}${fmt(s.pct)}%)`
+    const c = cls(s.pct, s.change), sign = (s.pct ?? s.change ?? 0) >= 0 ? '+' : '';
+    const chgStr = s.pct !== null
+      ? `${arrow(s.pct, s.change)} ${sign}${fmt(s.change, s.price>999?2:2)} (${sign}${fmt(s.pct)}%)`
       : '–';
     return `<div class="idx-card">
       <div class="idx-name">${s.name}</div>
@@ -746,9 +759,9 @@ function renderSignalBadges(sig) {
 
 function renderStocks(items, id) {
   document.getElementById(id).innerHTML = items.map(s => {
-    const c = cls(s.pct), sign = s.pct>=0 ? '+' : '';
-    const badge = s.pct!==null
-      ? `<span class="chg-badge ${c}">${arrow(s.pct)} ${sign}${fmt(s.change)} (${sign}${fmt(s.pct)}%)</span>`
+    const c = cls(s.pct, s.change), sign = (s.pct ?? s.change ?? 0) >= 0 ? '+' : '';
+    const badge = s.pct !== null
+      ? `<span class="chg-badge ${c}">${arrow(s.pct, s.change)} ${sign}${fmt(s.change)} (${sign}${fmt(s.pct)}%)</span>`
       : `<span class="chg-badge flat">–</span>`;
     const sigHtml = renderSignalBadges(_signals[s.symbol]);
     const safeName = s.name.replace(/'/g, '&#39;');
