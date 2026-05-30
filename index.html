@@ -617,8 +617,16 @@
   <div class="tab-pane fade" id="jp-panel" role="tabpanel">
     <div class="section-title">指數</div>
     <div class="idx-grid"  id="jp-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
-    <div class="section-title mt-1">半導體相關</div>
-    <div class="stock-grid" id="jp-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">半導體設備</div>
+    <div class="stock-grid" id="jp-semieq"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">半導體材料</div>
+    <div class="stock-grid" id="jp-semimtl"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">精密・電子部品</div>
+    <div class="stock-grid" id="jp-tech"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">AI / DX</div>
+    <div class="stock-grid" id="jp-ai"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">自動車</div>
+    <div class="stock-grid" id="jp-auto"><div class="stock-card"><div class="skeleton"></div></div></div>
     <button class="eps-toggle-btn" onclick="toggleEPS('jp')">
       <i class="bi bi-journal-text"></i>財報 EPS
       <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-jp"></i>
@@ -821,6 +829,25 @@ const US_STOCK_DESC = {
   'GEV':  'GE Vernova，電力設備製造商（從奇異分拆）。<br>燃氣渦輪機、風電、電網設備全線產品，<br>全球電力基礎設施升級需求強勁，訂單能見度高。',
   'ETN':  'Eaton，電力管理與工業自動化龍頭。<br>資料中心 UPS、配電盤、電網設備主要供應商，<br>AI 電力基礎設施需求爆發為主要受惠股之一。',
   'NEE':  'NextEra Energy，全球最大可再生能源公司。<br>風電 + 太陽能裝機容量全球第一，<br>同時擁有佛州公用事業 FPL，股息穩定成長。',
+  // 日股・半導體設備
+  '8035.T': '東京威力科創（TEL），日本最大半導體設備廠。<br>蝕刻、CVD、清洗設備為主力，台積電/三星主要供應商，<br>先進製程資本支出週期高度連動。',
+  '6857.T': 'Advantest，半導體測試設備全球龍頭。<br>DRAM/NAND 與 SoC 測試機市佔約 50%，<br>HBM 記憶體及 AI 加速器出貨帶動測試需求成長。',
+  '6920.T': 'Lasertec，EUV 光罩缺陷檢測設備唯一製造商。<br>全球僅此一家可量產 EUV 光罩檢測機，<br>台積電/三星/Intel 均為必備客戶，議價能力極強。',
+  '6146.T': 'Disco，晶圓切割/研磨設備全球龍頭。<br>市佔率逾 70%，半導體後段製程不可或缺，<br>先進封裝（CoWoS）需求爆發帶動業績成長。',
+  // 日股・半導體材料
+  '4063.T': '信越化學，全球最大矽晶圓廠（市佔逾 30%）。<br>同時是全球最大光阻劑（Photoresist）供應商，<br>半導體材料雙龍頭地位，護城河極深。',
+  '3436.T': 'SUMCO，全球第二大矽晶圓廠（市佔約 26%）。<br>主要客戶為台積電、三星、SK Hynix，<br>晶圓供需週期與半導體資本支出高度連動。',
+  // 日股・精密電子
+  '6861.T': 'Keyence，工業感測器與機器視覺全球龍頭。<br>超高毛利率（>55%）靠直銷模式維持，<br>工廠自動化 + AI 視覺檢測需求長期受惠。',
+  '6758.T': 'Sony Group，影像感測器 + 娛樂多角化。<br>CMOS 影像感測器全球市佔超過 50%，<br>供應 iPhone/車用鏡頭，遊戲（PS5）+音樂+影視布局。',
+  '6762.T': 'TDK，電子零件大廠（電感/電容/電池）。<br>iPhone 等高階手機磁性元件主要供應商，<br>EV 電池模組與感測器布局積極。',
+  '7741.T': 'Hoya，光學玻璃 + EUV 光罩基板龍頭。<br>全球最大 EUV 光罩基板（Mask Blank）供應商，<br>眼鏡鏡片、醫療內視鏡多角化，高毛利穩健。',
+  // 日股・AI/DX
+  '9984.T': 'SoftBank Group，AI 時代風投旗艦。<br>持有 Arm Holdings 約 90% 股份為最大資產，<br>Vision Fund 持續投資 AI 新創，股價跟隨 ARM 連動性高。',
+  // 日股・自動車
+  '7203.T': 'Toyota，全球最大汽車廠（年產超過 1000 萬輛）。<br>HEV（油電混合）技術全球領先，固態電池研發積極，<br>豐田研究所（TRI）深入 AI 自動駕駛布局。',
+  '7267.T': 'Honda，汽車 + 機車 + 航太多角化。<br>機車全球第一，與 Nissan 討論合併以因應電動化，<br>與 Sony 合作開發 AFEELA 電動車品牌。',
+  '6902.T': 'Denso，豐田集團核心零件廠。<br>全球最大汽車零件廠之一，ADAS 感測器/電子控制，<br>電氣化（EV 零件）與工廠自動化受惠。',
   // 台灣相關
   'TSM':  '台積電 ADR（NYSE: TSM），= 2330.TW × 匯率 / 10。<br>全球晶圓代工龍頭，先進製程（3nm/2nm）近乎壟斷，<br>AI 加速器、手機、HPC 客戶涵蓋蘋果、NVDA、AMD。',
   'MU':   '美光科技，全球三大 DRAM/NAND 廠之一。<br>HBM（高頻寬記憶體）為 AI 晶片關鍵配套，<br>HBM3E 產能快速擴張，AI 伺服器需求帶動報價回升。',
@@ -1636,8 +1663,12 @@ async function loadAll() {
   renderTop3ETF();
   renderMarginRank(marginRankRaw);
   renderInstRank(instRankRaw);
-  renderIdx(jp.indices, 'jp-indices');
-  renderStocks(jp.stocks, 'jp-stocks');
+  renderIdx(jp.indices,     'jp-indices');
+  renderStocks(jp.semieq,  'jp-semieq');
+  renderStocks(jp.semimtl, 'jp-semimtl');
+  renderStocks(jp.tech,    'jp-tech');
+  renderStocks(jp.ai,      'jp-ai');
+  renderStocks(jp.auto,    'jp-auto');
   switchToLatest(us, tw, jp);
   if (document.getElementById('tw-panel').classList.contains('active') && _marginData && !_marginChart) {
     initMarginChart();

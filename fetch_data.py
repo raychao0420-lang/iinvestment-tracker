@@ -11,6 +11,7 @@ US_INDICES = [
     {'symbol': '^IXIC',  'name': 'NASDAQ'},
     {'symbol': '^DJI',   'name': '道瓊'},
     {'symbol': '^RUT',   'name': '羅素 2000'},
+    {'symbol': '^SOX',   'name': '費城半導體'},
 ]
 US_STOCKS = [
     {'symbol': 'TSM',  'name': '台積電 ADR'},
@@ -67,6 +68,7 @@ US_CLOUD = [
 TW_INDICES = [
     {'symbol': '^TWII',     'name': '加權指數'},
     {'symbol': '00631L.TW', 'name': '元大台灣50正2'},
+    {'symbol': '^SOX',      'name': '費城半導體'},
 ]
 TW_STOCKS = [
     {'symbol': '2330.TW', 'name': '台積電'},
@@ -127,14 +129,31 @@ ETF_UNIVERSE = [
 JP_INDICES = [
     {'symbol': '^N225', 'name': '日經 225'},
     {'symbol': 'EWJ',   'name': '日股 ETF (EWJ)'},
+    {'symbol': '^SOX',  'name': '費城半導體'},
 ]
-JP_STOCKS = [
+JP_SEMIEQ = [
     {'symbol': '8035.T', 'name': '東京威力科創'},
     {'symbol': '6857.T', 'name': 'Advantest'},
+    {'symbol': '6920.T', 'name': 'Lasertec'},
+    {'symbol': '6146.T', 'name': 'Disco'},
+]
+JP_SEMIMTL = [
     {'symbol': '4063.T', 'name': '信越化學'},
-    {'symbol': '6758.T', 'name': 'Sony'},
+    {'symbol': '3436.T', 'name': 'SUMCO'},
+]
+JP_TECH = [
     {'symbol': '6861.T', 'name': 'Keyence'},
-    {'symbol': '4452.T', 'name': '花王'},
+    {'symbol': '6758.T', 'name': 'Sony'},
+    {'symbol': '6762.T', 'name': 'TDK'},
+    {'symbol': '7741.T', 'name': 'Hoya'},
+]
+JP_AI = [
+    {'symbol': '9984.T', 'name': 'SoftBank Group'},
+]
+JP_AUTO = [
+    {'symbol': '7203.T', 'name': 'Toyota'},
+    {'symbol': '7267.T', 'name': 'Honda'},
+    {'symbol': '6902.T', 'name': 'Denso'},
 ]
 
 
@@ -1169,7 +1188,11 @@ def fetch_stock_charts():
         (TW_STOCKS,   '張'),
         (TW_DRONE,    '張'),
         (TW_ETF,      '張'),
-        (JP_STOCKS,   None),
+        (JP_SEMIEQ,   None),
+        (JP_SEMIMTL,  None),
+        (JP_TECH,     None),
+        (JP_AI,       None),
+        (JP_AUTO,     None),
     ]
     targets   = [(s['symbol'], s['name'], vu) for grp, vu in all_groups for s in grp]
     symbols   = [t[0] for t in targets]
@@ -1795,7 +1818,14 @@ if __name__ == '__main__':
     time.sleep(2)
     print('--- JP ---')
     old_jp = load_existing('data/jp.json')
-    jp = fetch_market({'indices': JP_INDICES, 'stocks': JP_STOCKS})
+    jp = fetch_market({
+        'indices': JP_INDICES,
+        'semieq':  JP_SEMIEQ,
+        'semimtl': JP_SEMIMTL,
+        'tech':    JP_TECH,
+        'ai':      JP_AI,
+        'auto':    JP_AUTO,
+    })
     jp = merge_with_old(jp, old_jp)
     save('data/jp.json', {'updated': now, **jp})
 
