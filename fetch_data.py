@@ -21,7 +21,7 @@ US_STOCKS = [
 ]
 US_GPU = [
     {'symbol': 'NVDA', 'name': 'NVIDIA'},
-    {'symbol': 'AMD',  'name': 'AMD'},
+    {'symbol': 'AMD',  'name': '超微 AMD'},
     {'symbol': 'AVGO', 'name': 'Broadcom'},
     {'symbol': 'MRVL', 'name': 'Marvell'},
 ]
