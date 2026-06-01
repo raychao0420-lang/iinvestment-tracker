@@ -1,13 +1,13 @@
 {
-  "updated": "2026/06/01 07:46",
+  "updated": "2026/06/01 13:26",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 66329.5,
-      "change": 1636.38,
-      "pct": 2.53,
-      "date": "05/29"
+      "price": 66926.63,
+      "change": 597.13,
+      "pct": 0.9,
+      "date": "06/01"
     },
     {
       "symbol": "EWJ",
@@ -22,122 +22,122 @@
     {
       "symbol": "8035.T",
       "name": "東京威力科創",
-      "price": 52420.0,
-      "change": 100.0,
-      "pct": 0.19,
-      "date": "05/29"
+      "price": 53530.0,
+      "change": 1110.0,
+      "pct": 2.12,
+      "date": "06/01"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
-      "price": 26170.0,
-      "change": -170.0,
-      "pct": -0.65,
-      "date": "05/29"
+      "price": 25740.0,
+      "change": -430.0,
+      "pct": -1.64,
+      "date": "06/01"
     },
     {
       "symbol": "6920.T",
       "name": "Lasertec",
-      "price": 40130.0,
-      "change": 20.0,
-      "pct": 0.05,
-      "date": "05/29"
+      "price": 38380.0,
+      "change": -1750.0,
+      "pct": -4.36,
+      "date": "06/01"
     },
     {
       "symbol": "6146.T",
       "name": "Disco",
-      "price": 65090.0,
-      "change": -1260.0,
-      "pct": -1.9,
-      "date": "05/29"
+      "price": 64270.0,
+      "change": -820.0,
+      "pct": -1.26,
+      "date": "06/01"
     }
   ],
   "semimtl": [
     {
       "symbol": "4063.T",
       "name": "信越化學",
-      "price": 7758.0,
-      "change": 414.0,
-      "pct": 5.64,
-      "date": "05/29"
+      "price": 7740.0,
+      "change": -18.0,
+      "pct": -0.23,
+      "date": "06/01"
     },
     {
       "symbol": "3436.T",
       "name": "SUMCO",
-      "price": 3994.0,
-      "change": 646.0,
-      "pct": 19.3,
-      "date": "05/29"
+      "price": 4356.0,
+      "change": 362.0,
+      "pct": 9.06,
+      "date": "06/01"
     }
   ],
   "tech": [
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 80110.0,
-      "change": 4930.0,
-      "pct": 6.56,
-      "date": "05/29"
+      "price": 80130.0,
+      "change": 20.0,
+      "pct": 0.02,
+      "date": "06/01"
     },
     {
       "symbol": "6758.T",
       "name": "Sony",
-      "price": 3444.0,
-      "change": -7.0,
-      "pct": -0.2,
-      "date": "05/29"
+      "price": 3544.0,
+      "change": 100.0,
+      "pct": 2.9,
+      "date": "06/01"
     },
     {
       "symbol": "6762.T",
       "name": "TDK",
-      "price": 4108.0,
-      "change": 312.0,
-      "pct": 8.22,
-      "date": "05/29"
+      "price": 4079.0,
+      "change": -29.0,
+      "pct": -0.71,
+      "date": "06/01"
     },
     {
       "symbol": "7741.T",
       "name": "Hoya",
-      "price": 27080.0,
-      "change": 110.0,
-      "pct": 0.41,
-      "date": "05/29"
+      "price": 26405.0,
+      "change": -675.0,
+      "pct": -2.49,
+      "date": "06/01"
     }
   ],
   "ai": [
     {
       "symbol": "9984.T",
       "name": "SoftBank Group",
-      "price": 7491.0,
-      "change": 366.0,
-      "pct": 5.14,
-      "date": "05/29"
+      "price": 8499.0,
+      "change": 1008.0,
+      "pct": 13.46,
+      "date": "06/01"
     }
   ],
   "auto": [
     {
       "symbol": "7203.T",
       "name": "Toyota",
-      "price": 3042.0,
-      "change": 12.0,
-      "pct": 0.4,
-      "date": "05/29"
+      "price": 2905.0,
+      "change": -137.0,
+      "pct": -4.5,
+      "date": "06/01"
     },
     {
       "symbol": "7267.T",
       "name": "Honda",
-      "price": 1452.5,
-      "change": 11.0,
-      "pct": 0.76,
-      "date": "05/29"
+      "price": 1392.0,
+      "change": -60.5,
+      "pct": -4.17,
+      "date": "06/01"
     },
     {
       "symbol": "6902.T",
       "name": "Denso",
-      "price": 1908.0,
-      "change": 22.0,
-      "pct": 1.17,
-      "date": "05/29"
+      "price": 1868.5,
+      "change": -39.5,
+      "pct": -2.07,
+      "date": "06/01"
     }
   ]
 }
