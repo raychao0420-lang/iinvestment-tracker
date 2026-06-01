@@ -1,0 +1,44 @@
+name: Intraday TW Update
+
+on:
+  schedule:
+    - cron: '45,50,55 0 * * 1-5'  # 08:45–08:55 台灣時間（期貨日盤開盤前）
+    - cron: '*/5 1-5 * * 1-5'      # 09:00–13:55 台灣時間（股市盤中）
+  workflow_dispatch:
+
+concurrency:
+  group: intraday-tw
+  cancel-in-progress: true   # 新 run 進來直接取代排隊中的舊 run（舊資料沒意義）
+
+jobs:
+  intraday:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install yfinance pytz requests urllib3
+
+      - name: Fetch intraday data
+        run: python fetch_intraday.py
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/tw.json
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "intraday: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          for attempt in 1 2 3; do
+            git push && exit 0
+            echo "push attempt $attempt failed, retrying..."
+            sleep 5
+            git pull --rebase -X theirs
+          done
+          git push
