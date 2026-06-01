@@ -153,6 +153,13 @@ JP_AUTO = [
     {'symbol': '7267.T', 'name': 'Honda'},
     {'symbol': '6902.T', 'name': 'Denso'},
 ]
+JP_ETF = [
+    {'symbol': '1321.T', 'name': 'NEXT日経225 ETF'},
+    {'symbol': '1306.T', 'name': 'NEXT TOPIX ETF'},
+    {'symbol': '1570.T', 'name': '日経225レバレッジ ETF'},
+    {'symbol': '2631.T', 'name': 'MAXIS全世界(除日本)'},
+    {'symbol': '2558.T', 'name': 'MAXIS S&P500(JPY)'},
+]
 
 
 def _parse_col(col):
@@ -1186,11 +1193,13 @@ def fetch_stock_charts():
         (TW_STOCKS,   '張'),
         (TW_DRONE,    '張'),
         (TW_ETF,      '張'),
+        (JP_INDICES,  None),
         (JP_SEMIEQ,   None),
         (JP_SEMIMTL,  None),
         (JP_TECH,     None),
         (JP_AI,       None),
         (JP_AUTO,     None),
+        (JP_ETF,      None),
     ]
     targets   = [(s['symbol'], s['name'], vu) for grp, vu in all_groups for s in grp]
     symbols   = [t[0] for t in targets]
@@ -1823,6 +1832,7 @@ if __name__ == '__main__':
         'tech':    JP_TECH,
         'ai':      JP_AI,
         'auto':    JP_AUTO,
+        'etf':     JP_ETF,
     })
     jp = merge_with_old(jp, old_jp)
     save('data/jp.json', {'updated': now, **jp})

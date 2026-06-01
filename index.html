@@ -627,6 +627,8 @@
     <div class="stock-grid" id="jp-ai"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">自動車</div>
     <div class="stock-grid" id="jp-auto"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">日本 ETF</div>
+    <div class="stock-grid" id="jp-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
     <button class="eps-toggle-btn" onclick="toggleEPS('jp')">
       <i class="bi bi-journal-text"></i>財報 EPS
       <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-jp"></i>
@@ -718,14 +720,21 @@ function fmt(v, d=2) {
   return Number(v).toLocaleString('en-US', {minimumFractionDigits:d, maximumFractionDigits:d});
 }
 
-function renderIdx(items, id) {
+function renderIdx(items, id, showChart = false) {
   document.getElementById(id).innerHTML = items.map(s => {
     const c = cls(s.pct, s.change), sign = (s.pct ?? s.change ?? 0) >= 0 ? '+' : '';
     const chgStr = s.pct !== null
       ? `${arrow(s.pct, s.change)} ${sign}${fmt(s.change, s.price>999?2:2)} (${sign}${fmt(s.pct)}%)`
       : '–';
+    const safeName = s.name.replace(/'/g, '&#39;');
+    const chartBtn = showChart
+      ? `<button class="btn-chart-card" onclick="openStockChart('${s.symbol}','${safeName}')" title="K線圖"><i class="bi bi-graph-up"></i></button>`
+      : '';
     return `<div class="idx-card">
-      <div class="idx-name">${s.name}</div>
+      <div style="display:flex;align-items:center;gap:.4rem">
+        <div class="idx-name">${s.name}</div>
+        ${chartBtn}
+      </div>
       <div class="idx-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
       <div class="idx-chg ${c}">${chgStr}
         <span style="color:#94a3b8;font-size:.75rem;margin-left:.3rem">${s.date||''}</span>
@@ -1676,12 +1685,13 @@ async function loadAll() {
   renderTop3ETF();
   renderMarginRank(marginRankRaw);
   renderInstRank(instRankRaw);
-  renderIdx(jp.indices,     'jp-indices');
+  renderIdx(jp.indices,     'jp-indices', true);
   renderStocks(jp.semieq,  'jp-semieq');
   renderStocks(jp.semimtl, 'jp-semimtl');
   renderStocks(jp.tech,    'jp-tech');
   renderStocks(jp.ai,      'jp-ai');
   renderStocks(jp.auto,    'jp-auto');
+  renderStocks(jp.etf||[], 'jp-etf');
   switchToLatest(us, tw, jp);
   if (document.getElementById('tw-panel').classList.contains('active') && _marginData && !_marginChart) {
     initMarginChart();
