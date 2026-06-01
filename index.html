@@ -75,7 +75,7 @@
   }
   .market-tabs .nav-link:hover:not(.active) { color: var(--t2); background: var(--c2); }
   .badge-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-  .dot-us { background: #f59e0b; } .dot-tw { background: #10b981; } .dot-jp { background: #f43f5e; }
+  .dot-us { background: #f59e0b; } .dot-tw { background: #10b981; } .dot-jp { background: #f43f5e; } .dot-kr { background: #3b82f6; }
 
   /* ── SECTION TITLE ───────────────────────────────────────────── */
   .section-title {
@@ -503,6 +503,11 @@
       <span class="badge-dot dot-jp"></span>日股 <span class="session-tag" id="jp-tag"></span>
     </button>
   </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="kr-tab" data-bs-toggle="tab" data-bs-target="#kr-panel" type="button" role="tab">
+      <span class="badge-dot dot-kr"></span>韓股 <span class="session-tag" id="kr-tag"></span>
+    </button>
+  </li>
 </ul>
 
 <div class="tab-content pb-5">
@@ -637,6 +642,23 @@
       <div class="eps-table-wrap"><div id="jp-eps"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
     </div>
   </div>
+  <div class="tab-pane fade" id="kr-panel" role="tabpanel">
+    <div class="section-title">指數</div>
+    <div class="idx-grid"  id="kr-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">半導體</div>
+    <div class="stock-grid" id="kr-semi"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">顯示器</div>
+    <div class="stock-grid" id="kr-display"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">鏡頭模組</div>
+    <div class="stock-grid" id="kr-camera"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <button class="eps-toggle-btn" onclick="toggleEPS('kr')">
+      <i class="bi bi-journal-text"></i>財報 EPS
+      <i class="bi bi-chevron-right eps-toggle-icon" id="eps-icon-kr"></i>
+    </button>
+    <div class="eps-body" id="eps-body-kr">
+      <div class="eps-table-wrap"><div id="kr-eps"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
+    </div>
+  </div>
 </div>
 
 <div class="update-bar">
@@ -688,13 +710,14 @@ function initTab() {
   // 預設美股
   bootstrap.Tab.getOrCreateInstance(document.getElementById('us-tab')).show();
 }
-function switchToLatest(us, tw, jp) {
+function switchToLatest(us, tw, jp, kr) {
   // 資料載入後切換到最近更新的市場
   const parse = s => s ? new Date(s.replace(/\//g,'-').replace(' ','T')) : new Date(0);
   const latest = [
     { id:'us-tab', t: parse(us.updated) },
     { id:'tw-tab', t: parse(tw.updated) },
     { id:'jp-tab', t: parse(jp.updated) },
+    { id:'kr-tab', t: parse(kr && kr.updated) },
   ].sort((a,b) => b.t - a.t)[0];
   bootstrap.Tab.getOrCreateInstance(document.getElementById(latest.id)).show();
 }
@@ -732,7 +755,7 @@ function renderIdx(items, id, showChart = false) {
       : '';
     return `<div class="idx-card">
       <div style="display:flex;align-items:center;gap:.4rem">
-        <div class="idx-name">${s.name}</div>
+        <div class="idx-name"${tipAttr(s.symbol)}>${s.name}</div>
         ${chartBtn}
       </div>
       <div class="idx-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
@@ -889,10 +912,21 @@ const US_ETF_DESC = {
   'ARKK': 'ARK Innovation ETF（主動式管理，Cathie Wood）。<br>聚焦顛覆式創新：AI、基因編輯、機器人、太空，<br>高波動、高持股集中度，長期持有須承受大幅回撤。',
 };
 
+const KR_STOCK_DESC = {
+  '^KS11':    'KOSPI 韓國綜合股價指數，相當於台灣加權指數。<br>三星電子獨佔約 20% 權重，半導體族群主導走勢，<br>是觀察韓國整體景氣與半導體出口的核心指標。',
+  '^KQ11':    'KOSDAQ 科技成長板，相當於美國 NASDAQ。<br>中小型科技、生技、遊戲股為主力，<br>波動遠大於 KOSPI，成長股行情時表現突出。',
+  '005930.KS':'三星電子，全球最大 DRAM/NAND 製造商。<br>同時是台積電在晶圓代工的最主要競爭對手（S3/4nm），<br>AI HBM 市佔僅次於 SK 海力士，股價為韓股風向球。',
+  '000660.KS':'SK 海力士，全球 HBM3e 最大供應商。<br>NVIDIA AI 加速器欽點 HBM 夥伴，市佔約 50%，<br>與台灣 CoWoS 先進封裝概念股（日月光、矽品）高度連動。',
+  '042700.KS':'漢美半導體，HBM 關鍵封裝設備「TC Bonder」全球龍頭。<br>HBM 每新增一批產能，漢美設備需求同步成長，<br>是 AI 算力供應鏈中最直接的設備受益者。',
+  '009150.KS':'三星電機，Samsung 旗下零件廠。<br>主攻 MLCC（積層陶瓷電容）、IC 基板與相機模組，<br>MLCC 地位與台灣國巨、日系村田齊名，受惠 AI/電動車。',
+  '034220.KS':'LG Display，全球 OLED 面板龍頭。<br>iPhone OLED 面板主供應商（Apple 銷售額佔比超 50%），<br>大尺寸 OLED TV 面板市佔第一，與台灣友達/群創形成競爭。',
+  '011070.KS':'LG Innotek，Apple iPhone 相機模組最大供應商。<br>台灣大立光（3008.TW）的直接競爭對手，<br>蘋果新機鏡頭規格升級為主要股價催化劑。',
+};
+
 function tipAttr(symbol) {
   const sym = symbol || '';
   const code = sym.replace('.TW', '');
-  const desc = ETF_DESC[code] || US_ETF_DESC[sym] || US_STOCK_DESC[sym];
+  const desc = ETF_DESC[code] || US_ETF_DESC[sym] || US_STOCK_DESC[sym] || KR_STOCK_DESC[sym];
   if (!desc) return '';
   return ` data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" data-bs-title="${desc.replace(/"/g, '&quot;')}"`;
 }
@@ -1641,10 +1675,11 @@ function renderEPS(items, id, headers) {
 // ── 載入資料 ──────────────────────────────────────────────────────────────────
 async function loadAll() {
   const ts = Date.now();
-  const [us, tw, jp, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw, stockInstRaw, marginRankRaw, instRankRaw] = await Promise.all([
+  const [us, tw, jp, kr, an, fut, marginData, chartData, signalsData, fundRaw, etfTradingRaw, etfHoldingsRaw, stockInstRaw, marginRankRaw, instRankRaw] = await Promise.all([
     fetch(`data/us.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/tw.json?t=${ts}`).then(r=>r.json()),
     fetch(`data/jp.json?t=${ts}`).then(r=>r.json()),
+    fetch(`data/kr.json?t=${ts}`).then(r=>r.json()).catch(()=>({updated:'',indices:[],semi:[],display:[],camera:[]})),
     fetch(`data/tw_analysis.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/tw_futures.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
     fetch(`data/margin.json?t=${ts}`).then(r=>r.json()).catch(()=>null),
@@ -1692,7 +1727,11 @@ async function loadAll() {
   renderStocks(jp.ai,      'jp-ai');
   renderStocks(jp.auto,    'jp-auto');
   renderStocks(jp.etf||[], 'jp-etf');
-  switchToLatest(us, tw, jp);
+  renderIdx(kr.indices||[],    'kr-indices', true);
+  renderStocks(kr.semi||[],    'kr-semi');
+  renderStocks(kr.display||[], 'kr-display');
+  renderStocks(kr.camera||[],  'kr-camera');
+  switchToLatest(us, tw, jp, kr);
   if (document.getElementById('tw-panel').classList.contains('active') && _marginData && !_marginChart) {
     initMarginChart();
   }

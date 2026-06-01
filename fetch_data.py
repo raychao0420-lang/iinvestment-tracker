@@ -161,6 +161,23 @@ JP_ETF = [
     {'symbol': '2558.T', 'name': 'MAXIS S&P500(JPY)'},
 ]
 
+KR_INDICES = [
+    {'symbol': '^KS11',  'name': 'KOSPI'},
+    {'symbol': '^KQ11',  'name': 'KOSDAQ'},
+]
+KR_SEMI = [
+    {'symbol': '005930.KS', 'name': '三星電子'},
+    {'symbol': '000660.KS', 'name': 'SK 海力士'},
+    {'symbol': '042700.KS', 'name': '漢美半導體'},
+    {'symbol': '009150.KS', 'name': '三星電機'},
+]
+KR_DISPLAY = [
+    {'symbol': '034220.KS', 'name': 'LG Display'},
+]
+KR_CAMERA = [
+    {'symbol': '011070.KS', 'name': 'LG Innotek'},
+]
+
 
 def _parse_col(col):
     """Extract (price, change, pct, date) from a Close series."""
@@ -1200,6 +1217,10 @@ def fetch_stock_charts():
         (JP_AI,       None),
         (JP_AUTO,     None),
         (JP_ETF,      None),
+        (KR_INDICES,  None),
+        (KR_SEMI,     None),
+        (KR_DISPLAY,  None),
+        (KR_CAMERA,   None),
     ]
     targets   = [(s['symbol'], s['name'], vu) for grp, vu in all_groups for s in grp]
     symbols   = [t[0] for t in targets]
@@ -1836,6 +1857,18 @@ if __name__ == '__main__':
     })
     jp = merge_with_old(jp, old_jp)
     save('data/jp.json', {'updated': now, **jp})
+
+    time.sleep(2)
+    print('--- KR ---')
+    old_kr = load_existing('data/kr.json')
+    kr = fetch_market({
+        'indices': KR_INDICES,
+        'semi':    KR_SEMI,
+        'display': KR_DISPLAY,
+        'camera':  KR_CAMERA,
+    })
+    kr = merge_with_old(kr, old_kr)
+    save('data/kr.json', {'updated': now, **kr})
 
     time.sleep(2)
     print('--- TWSE Market 成交金額 ---')
