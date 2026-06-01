@@ -20,6 +20,13 @@ jobs:
         run: |
           REPO="$GITHUB_REPOSITORY"
 
+          # 台灣盤中 (UTC 01:00–05:30 = TWN 09:00–13:30) 不補跑，避免抓到盤中價
+          UTC_MIN=$(( $(date -u +%H) * 60 + $(date -u +%M) ))
+          if [ $UTC_MIN -ge 60 ] && [ $UTC_MIN -le 330 ]; then
+            echo "台灣盤中時段 (UTC 01:00–05:30)，跳過補跑。"
+            exit 0
+          fi
+
           # 如果 update.yml 已在排隊或執行中，跳過
           ACTIVE=$(gh run list \
             --repo "$REPO" \
