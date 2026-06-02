@@ -1218,6 +1218,7 @@ def fetch_stock_charts():
     import pandas as pd, math
 
     all_groups = [
+        (US_INDICES,  None),
         (US_STOCKS,   None),
         (US_CLOUD,    None),
         (US_GPU,      None),

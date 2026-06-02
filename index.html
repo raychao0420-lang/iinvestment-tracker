@@ -1711,7 +1711,7 @@ async function loadAll() {
   _usData = us;
   _twData = tw;
 
-  renderIdx(us.indices,    'us-indices');
+  renderIdx(us.indices,    'us-indices', true);
   renderStocks(us.gpu,     'us-gpu');
   renderStocks(us.cpu,     'us-cpu');
   renderStocks(us.optical, 'us-optical');
