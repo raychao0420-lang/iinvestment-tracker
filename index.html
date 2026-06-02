@@ -598,8 +598,14 @@
     <div class="stock-grid" id="tw-finance"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">無人機概念</div>
     <div class="stock-grid" id="tw-drone"><div class="stock-card"><div class="skeleton"></div></div></div>
-    <div class="section-title mt-1">ETF</div>
-    <div class="stock-grid" id="tw-etf"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">指數型 ETF</div>
+    <div class="stock-grid" id="tw-etf-index"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">高股息 ETF</div>
+    <div class="stock-grid" id="tw-etf-div"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">主動式 ETF</div>
+    <div class="stock-grid" id="tw-etf-active"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">槓桿正2</div>
+    <div class="stock-grid" id="tw-etf-lev"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1" id="etf-top3-title" style="display:none">今日成交量前三名</div>
     <div class="stock-grid" id="etf-top3"></div>
     <button class="eps-toggle-btn" onclick="toggleHoldings()">
@@ -844,6 +850,14 @@ const ETF_NAMES = {
   '00919':'群益台灣精選高息','00929':'復華台灣科技優息','00940':'元大台灣價值高息',
   '00403A':'統一台股升級50','00988A':'統一全球創新','00981A':'統一台股增長',
   '00935':'野村新科技50','00980A':'野村優選',
+  '00631L':'元大台灣50正2','00675L':'富邦加權正2','00663L':'國泰加權正2',
+};
+
+const ETF_GROUPS_MAP = {
+  '0050':'index','006208':'index',
+  '00878':'div','00919':'div','00929':'div','00940':'div',
+  '00403A':'active','00988A':'active','00981A':'active','00935':'active','00980A':'active',
+  '00631L':'lev','00675L':'lev','00663L':'lev',
 };
 
 const ETF_DESC = {
@@ -858,6 +872,9 @@ const ETF_DESC = {
   '00981A': '主動式管理（統一投信），台股成長型主題。<br>聚焦半導體、AI電子相關成長股，<br>動態調整持股比重，非指數複製。',
   '00935':  '被動式管理（野村投信），追蹤台灣新科技50指數。<br>涵蓋半導體、AI、電動車等新興科技產業。<br>成分股50支，定期審查調整。',
   '00980A': '主動式管理（野村投信）。<br>經理人根據基本面動態調整成分股，非完全複製指數。<br>產業集中：半導體、AI電子相關熱門產業。<br>前十大持股合計不超過60%，單一成分股上限10%。',
+  '00631L': '每日槓桿 2 倍，追蹤台灣50指數每日績效的 2 倍。<br>每日重置機制，長期持有因波動耗損（Volatility Drag）報酬會偏離 2× 指數漲幅。<br>適合短線交易或趨勢明顯時使用，不適合長期持有。費用率約 1.0%。',
+  '00675L': '每日槓桿 2 倍，追蹤台灣加權股價指數（^TWII）每日績效的 2 倍。<br>成分較 00631L 更廣，涵蓋全市場加權指數。<br>同樣有每日重置槓桿消耗問題，建議短線操作。費用率約 0.99%（富邦投信）。',
+  '00663L': '每日槓桿 2 倍，追蹤台灣加權股價指數每日績效的 2 倍。<br>與 00675L 為同類競品（國泰投信），標的指數相同。<br>規模略小，流動性次之。費用率約 0.99%。',
 };
 
 const US_STOCK_DESC = {
@@ -1728,7 +1745,15 @@ async function loadAll() {
   renderStocks(tw.power_ship,  'tw-power-ship');
   renderStocks(tw.finance,     'tw-finance');
   renderStocks(tw.drone,       'tw-drone');
-  renderStocks(tw.etf,         'tw-etf');
+  const etfBuckets = {index:[],div:[],active:[],lev:[]};
+  (tw.etf || []).forEach(s => {
+    const g = ETF_GROUPS_MAP[s.symbol.replace('.TW','')];
+    if (g) etfBuckets[g].push(s);
+  });
+  renderStocks(etfBuckets.index,  'tw-etf-index');
+  renderStocks(etfBuckets.div,    'tw-etf-div');
+  renderStocks(etfBuckets.active, 'tw-etf-active');
+  renderStocks(etfBuckets.lev,    'tw-etf-lev');
   renderTop3ETF();
   renderMarginRank(marginRankRaw);
   renderInstRank(instRankRaw);
