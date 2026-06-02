@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/02 20:48",
+  "updated": "2026/06/03 01:03",
   "indices": [
     {
       "symbol": "^TWII",
@@ -250,8 +250,8 @@
       "change": 0.65,
       "pct": 0.27,
       "date": "06/02",
-      "nav": 240.42,
-      "premium": 1.72
+      "nav": 243.03,
+      "premium": 0.63
     },
     {
       "symbol": "00878.TW",
@@ -270,8 +270,8 @@
       "change": 0.3,
       "pct": 1.0,
       "date": "06/02",
-      "nav": 29.12,
-      "premium": 4.05
+      "nav": 29.97,
+      "premium": 1.1
     },
     {
       "symbol": "00929.TW",
@@ -280,8 +280,8 @@
       "change": 0.14,
       "pct": 0.45,
       "date": "06/02",
-      "nav": 30.33,
-      "premium": 2.01
+      "nav": 30.94,
+      "premium": 0.0
     },
     {
       "symbol": "00940.TW",
@@ -300,8 +300,8 @@
       "change": -0.12,
       "pct": -1.11,
       "date": "06/02",
-      "nav": 10.74,
-      "premium": -0.37
+      "nav": 10.86,
+      "premium": -1.47
     },
     {
       "symbol": "00988A.TW",
@@ -310,8 +310,8 @@
       "change": -0.29,
       "pct": -1.32,
       "date": "06/02",
-      "nav": 21.13,
-      "premium": 2.7
+      "nav": 21.69,
+      "premium": 0.05
     },
     {
       "symbol": "00981A.TW",
@@ -320,8 +320,8 @@
       "change": -0.37,
       "pct": -1.17,
       "date": "06/02",
-      "nav": 31.37,
-      "premium": -0.13
+      "nav": 31.8,
+      "premium": -1.48
     },
     {
       "symbol": "00935.TW",
@@ -330,8 +330,8 @@
       "change": -0.4,
       "pct": -0.64,
       "date": "06/02",
-      "nav": 60.93,
-      "premium": 1.76
+      "nav": 62.01,
+      "premium": -0.02
     },
     {
       "symbol": "00980A.TW",
@@ -360,8 +360,8 @@
       "change": 2.0,
       "pct": 0.6,
       "date": "06/02",
-      "nav": 324.29,
-      "premium": 3.5
+      "nav": 334.68,
+      "premium": 0.29
     },
     {
       "symbol": "00663L.TW",
@@ -370,8 +370,8 @@
       "change": 0.55,
       "pct": 0.5,
       "date": "06/02",
-      "nav": 107.13,
-      "premium": 3.43
+      "nav": 110.56,
+      "premium": 0.22
     }
   ]
 }
