@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/02 16:24",
+  "updated": "2026/06/02 17:43",
   "indices": [
     {
       "symbol": "^TWII",
@@ -18,7 +18,7 @@
       "date": "06/02"
     }
   ],
-  "semi": [
+  "stocks": [
     {
       "symbol": "2330.TW",
       "name": "台積電",
@@ -74,9 +74,39 @@
       "change": -3.8,
       "pct": -5.08,
       "date": "06/02"
-    }
-  ],
-  "old_ai": [
+    },
+    {
+      "symbol": "3037.TW",
+      "name": "欣興",
+      "price": 975.0,
+      "change": -75.0,
+      "pct": -7.14,
+      "date": "06/02"
+    },
+    {
+      "symbol": "8046.TW",
+      "name": "南電",
+      "price": 862.0,
+      "change": -43.0,
+      "pct": -4.75,
+      "date": "06/02"
+    },
+    {
+      "symbol": "3189.TW",
+      "name": "景碩",
+      "price": 743.0,
+      "change": -31.0,
+      "pct": -4.01,
+      "date": "06/02"
+    },
+    {
+      "symbol": "3149.TW",
+      "name": "正達",
+      "price": 86.1,
+      "change": 7.8,
+      "pct": 9.96,
+      "date": "06/02"
+    },
     {
       "symbol": "2317.TW",
       "name": "鴻海",
@@ -124,9 +154,7 @@
       "change": -40.0,
       "pct": -0.73,
       "date": "06/02"
-    }
-  ],
-  "power_ship": [
+    },
     {
       "symbol": "2308.TW",
       "name": "台達電",
@@ -142,9 +170,7 @@
       "change": 7.0,
       "pct": 3.12,
       "date": "06/02"
-    }
-  ],
-  "finance": [
+    },
     {
       "symbol": "2881.TW",
       "name": "富邦金",
