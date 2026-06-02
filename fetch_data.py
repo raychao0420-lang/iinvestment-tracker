@@ -69,21 +69,39 @@ TW_INDICES = [
     {'symbol': '^TWII',     'name': '加權指數'},
     {'symbol': '00631L.TW', 'name': '元大台灣50正2'},
 ]
-TW_STOCKS = [
+TW_SEMI = [
     {'symbol': '2330.TW', 'name': '台積電'},
     {'symbol': '2454.TW', 'name': '聯發科'},
     {'symbol': '3711.TW', 'name': 'ASE 日月光'},
     {'symbol': '2303.TW', 'name': '聯電'},
     {'symbol': '3008.TW', 'name': '大立光'},
-    {'symbol': '2308.TW', 'name': '台達電'},
+    {'symbol': '6770.TW', 'name': '力積電'},
+]
+TW_GLASS = [
+    {'symbol': '1802.TW', 'name': '台玻'},
+    {'symbol': '3037.TW', 'name': '欣興'},
+    {'symbol': '8046.TW', 'name': '南電'},
+    {'symbol': '3189.TW', 'name': '景碩'},
+    {'symbol': '3149.TW', 'name': '正達'},
+]
+TW_OLD_AI = [
+    {'symbol': '2317.TW', 'name': '鴻海'},
     {'symbol': '2382.TW', 'name': '廣達'},
+    {'symbol': '3231.TW', 'name': '緯創'},
+    {'symbol': '2356.TW', 'name': '英業達'},
+    {'symbol': '2376.TW', 'name': '技嘉'},
+    {'symbol': '6669.TW', 'name': '緯穎'},
+]
+TW_POWER_SHIP = [
+    {'symbol': '2308.TW', 'name': '台達電'},
     {'symbol': '2603.TW', 'name': '長榮'},
+]
+TW_FINANCE = [
     {'symbol': '2881.TW', 'name': '富邦金'},
     {'symbol': '2882.TW', 'name': '國泰金'},
     {'symbol': '2891.TW', 'name': '中信金'},
-    {'symbol': '1802.TW', 'name': '台玻'},
-    {'symbol': '6770.TW', 'name': '力積電'},
 ]
+TW_STOCKS = TW_SEMI + TW_GLASS + TW_OLD_AI + TW_POWER_SHIP + TW_FINANCE
 TW_DRONE = [
     {'symbol': '8033.TW', 'name': '雷虎科技'},
     {'symbol': '2634.TW', 'name': '漢翔航空'},
@@ -1821,7 +1839,16 @@ if __name__ == '__main__':
     time.sleep(2)
     print('--- TW ---')
     old_tw = load_existing('data/tw.json')
-    tw = fetch_market({'indices': TW_INDICES, 'stocks': TW_STOCKS, 'drone': TW_DRONE, 'etf': TW_ETF})
+    tw = fetch_market({
+        'indices':    TW_INDICES,
+        'semi':       TW_SEMI,
+        'glass':      TW_GLASS,
+        'old_ai':     TW_OLD_AI,
+        'power_ship': TW_POWER_SHIP,
+        'finance':    TW_FINANCE,
+        'drone':      TW_DRONE,
+        'etf':        TW_ETF,
+    })
     tw = merge_with_old(tw, old_tw)
 
     # Carry forward old nav for ETFs that got a fresh price (merge returns new item without nav)

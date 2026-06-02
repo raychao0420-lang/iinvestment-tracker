@@ -586,8 +586,16 @@
     <div id="inst-rank-section" style="display:none"></div>
     <div class="section-title mt-1">指數</div>
     <div class="idx-grid"  id="tw-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
-    <div class="section-title mt-1">個股</div>
-    <div class="stock-grid" id="tw-stocks"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">半導體</div>
+    <div class="stock-grid" id="tw-semi"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">玻璃基板</div>
+    <div class="stock-grid" id="tw-glass"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">老AI概念</div>
+    <div class="stock-grid" id="tw-old-ai"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">電源 / 航運</div>
+    <div class="stock-grid" id="tw-power-ship"><div class="stock-card"><div class="skeleton"></div></div></div>
+    <div class="section-title mt-1">金融</div>
+    <div class="stock-grid" id="tw-finance"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">無人機概念</div>
     <div class="stock-grid" id="tw-drone"><div class="stock-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">ETF</div>
@@ -1713,10 +1721,14 @@ async function loadAll() {
   renderStocks(us.etf,     'us-etf');
   renderAnalysisCard(an ? an.twii    : null, 'an-twii');
   renderAnalysisCard(an ? an.etf0050 : null, 'an-etf0050');
-  renderIdx(tw.indices,   'tw-indices');
-  renderStocks(tw.stocks, 'tw-stocks');
-  renderStocks(tw.drone,  'tw-drone');
-  renderStocks(tw.etf,    'tw-etf');
+  renderIdx(tw.indices,        'tw-indices');
+  renderStocks(tw.semi,        'tw-semi');
+  renderStocks(tw.glass,       'tw-glass');
+  renderStocks(tw.old_ai,      'tw-old-ai');
+  renderStocks(tw.power_ship,  'tw-power-ship');
+  renderStocks(tw.finance,     'tw-finance');
+  renderStocks(tw.drone,       'tw-drone');
+  renderStocks(tw.etf,         'tw-etf');
   renderTop3ETF();
   renderMarginRank(marginRankRaw);
   renderInstRank(instRankRaw);
