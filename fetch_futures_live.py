@@ -110,7 +110,7 @@ if __name__ == '__main__':
     total_min = h * 60 + m
 
     is_day   = 9 * 60 <= total_min <= 13 * 60 + 35   # 09:00-13:35
-    is_night = h >= 15 or h < 5                        # 15:00-05:00
+    is_night = h >= 15 or h < 6                        # 15:00-05:59（含收盤後 30 分緩衝）
 
     if not (is_day or is_night):
         print(f'非交易時段 ({now.strftime("%H:%M")} TWN)，跳過。')
