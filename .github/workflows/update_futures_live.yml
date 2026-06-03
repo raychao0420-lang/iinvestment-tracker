@@ -40,6 +40,10 @@ jobs:
             git push && exit 0
             echo "push attempt $attempt failed, retrying..."
             sleep 3
-            git pull --rebase -X theirs
+            git pull --rebase || {
+              git checkout --theirs data/tw_futures.json
+              git add data/tw_futures.json
+              GIT_EDITOR=true git rebase --continue
+            }
           done
           git push
