@@ -1769,8 +1769,8 @@ async function loadAll() {
   renderStocks(kr.display||[], 'kr-display');
   renderStocks(kr.camera||[],  'kr-camera');
   switchToLatest(us, tw, jp, kr);
-  if (_chartCache && !_klineChart) initKlineChart();
-  if (document.getElementById('tw-panel').classList.contains('active')) {
+  if (document.getElementById('tw-panel').classList.contains('show')) {
+    if (_chartCache && !_klineChart)  initKlineChart();
     if (_marginData && !_marginChart) initMarginChart();
   }
 
@@ -2242,15 +2242,16 @@ function renderStockMarginChart(series) {
 function initKlineChart() {
   if (_klineChart) return;
   const klineCont = document.getElementById('twii-kline-chart');
-  if (!klineCont) return;
+  if (!klineCont || klineCont.clientWidth === 0) return;
   const twiiData = _chartCache && _chartCache.twii;
   if (!twiiData || !twiiData.candles || !twiiData.candles.length) {
     klineCont.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1.5rem;font-size:.8rem">K線資料未載入，請觸發重抓</div>';
     return;
   }
 
+  const w = klineCont.clientWidth;
   const kChart = LightweightCharts.createChart(klineCont, {
-    autoSize: true,
+    width:  w,
     height: 180,
     layout:    { background: { color: '#1e293b' }, textColor: '#94a3b8' },
     grid:      { vertLines: { color: '#334155' }, horzLines: { color: '#334155' } },
@@ -2313,6 +2314,10 @@ function initKlineChart() {
   });
 
   kChart.timeScale().fitContent();
+
+  new ResizeObserver(() => {
+    if (_klineChart) _klineChart.applyOptions({ width: klineCont.clientWidth });
+  }).observe(klineCont);
 }
 
 // ── 融資餘額折線圖 ────────────────────────────────────────────────────────────
