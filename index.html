@@ -2240,14 +2240,10 @@ function renderStockMarginChart(series) {
 
 // ── 大盤 K 線圖（獨立，不依賴融資餘額資料）────────────────────────────────
 function initKlineChart() {
-  console.log('[kline] called. _klineChart=', !!_klineChart, '_chartCache=', !!_chartCache);
-  if (_klineChart) { console.log('[kline] skip: already inited'); return; }
+  if (_klineChart) return;
   const klineCont = document.getElementById('twii-kline-chart');
-  const cw = klineCont ? klineCont.clientWidth : 'NO_ELEM';
-  console.log('[kline] klineCont.clientWidth=', cw, 'tw-panel classes=', document.getElementById('tw-panel').className);
-  if (!klineCont || klineCont.clientWidth === 0) { console.log('[kline] skip: hidden'); return; }
+  if (!klineCont || klineCont.clientWidth === 0) return;
   const twiiData = _chartCache && _chartCache.twii;
-  console.log('[kline] twiiData candles=', twiiData && twiiData.candles && twiiData.candles.length);
   if (!twiiData || !twiiData.candles || !twiiData.candles.length) {
     klineCont.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:1.5rem;font-size:.8rem">K線資料未載入，請觸發重抓</div>';
     return;
@@ -2320,7 +2316,8 @@ function initKlineChart() {
   kChart.timeScale().fitContent();
 
   new ResizeObserver(() => {
-    if (_klineChart) _klineChart.applyOptions({ width: klineCont.clientWidth });
+    const rw = klineCont.clientWidth;
+    if (_klineChart && rw > 0) _klineChart.applyOptions({ width: rw });
   }).observe(klineCont);
 }
 
@@ -2405,7 +2402,6 @@ function initMarginChart() {
 }
 
 document.getElementById('tw-tab').addEventListener('shown.bs.tab', () => {
-  console.log('[shown.bs.tab] tw-tab fired. _chartCache=', !!_chartCache, '_klineChart=', !!_klineChart);
   if (_chartCache && !_klineChart)  initKlineChart();
   if (_marginData && !_marginChart) initMarginChart();
 });

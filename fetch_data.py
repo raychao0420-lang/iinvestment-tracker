@@ -617,6 +617,13 @@ def fetch_chart_data(mkt_series=None):
                 return [{'time': ts.strftime('%Y-%m-%d'), 'value': round(float(v), 2)}
                         for ts, v in s.items() if pd.notna(v)]
 
+            # Deduplicate by date (yfinance occasionally returns duplicate timestamps)
+            seen_c, seen_v = {}, {}
+            for c in candles: seen_c[c['time']] = c
+            for v in volume:  seen_v[v['time']] = v
+            candles = list(seen_c.values())
+            volume  = list(seen_v.values())
+
             result[key] = {
                 'symbol':  sym,
                 'candles': candles,
