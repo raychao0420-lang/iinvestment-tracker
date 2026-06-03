@@ -3,7 +3,8 @@ name: Update Futures Live
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 21 * * 1-5'   # 05:30 台灣時間 週二~六（夜盤收盤後 30 分）
+    - cron: '5 21 * * 1-5'    # 05:05 台灣時間 週二~六（夜盤收盤後 5 分，OpenAPI 取結算價）
+    - cron: '30 21 * * 1-5'   # 05:30 台灣時間 週二~六（夜盤收盤後 30 分，補抓保底）
     - cron: '*/15 1-5 * * 1-5' # 09:00-13:45 台灣時間 週一~五（日盤盤中，每 15 分）
 
 concurrency:
