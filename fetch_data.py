@@ -359,7 +359,7 @@ def save(path, payload):
     print(f'saved {path}')
 
 
-def fetch_twse_market_amount(target_days=130):
+def fetch_twse_market_amount(target_days=150):
     """Fetch Taiwan market daily 成交金額 (億元) by querying TWSE MI_INDEX day-by-day.
     Walks back through weekdays until target_days trading days are collected.
     Uses table[6] 總計(1~15) row — total market across all categories.
@@ -370,7 +370,7 @@ def fetch_twse_market_amount(target_days=130):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     records = {}
     today = _date.today()
-    offset = 1
+    offset = 0                         # start from today so today's volume is included
     calendar_limit = target_days * 3  # upper bound to avoid infinite loop
 
     while len(records) < target_days and offset <= calendar_limit:
@@ -501,7 +501,7 @@ def fetch_tw_analysis(mkt_series=None):
     # TWII volume: TWSE for recent data; calibrate yfinance for 120-day MA
     if mkt_series is None:
         print('  fetching TWSE market 成交金額...')
-        mkt_series = fetch_twse_market_amount(target_days=130)
+        mkt_series = fetch_twse_market_amount(target_days=150)
     mkt = mkt_series
 
     if mkt is not None and len(mkt) >= 3 and 'twii' in result:
@@ -1905,7 +1905,7 @@ if __name__ == '__main__':
 
     time.sleep(2)
     print('--- TWSE Market 成交金額 ---')
-    mkt_series = fetch_twse_market_amount(target_days=130)
+    mkt_series = fetch_twse_market_amount(target_days=150)
 
     time.sleep(1)
     print('--- TW Analysis ---')
