@@ -1,0 +1,10 @@
+services:
+  - type: cron
+    name: iinvestment-tracker-cron
+    runtime: python
+    buildCommand: pip install -r cron/requirements.txt
+    startCommand: python cron/trigger.py
+    schedule: "0 * * * *"   # 每整點觸發一次
+    envVars:
+      - key: GH_TOKEN
+        sync: false          # 在 Render dashboard 手動填入 GitHub PAT
