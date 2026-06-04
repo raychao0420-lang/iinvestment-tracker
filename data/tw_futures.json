@@ -1,49 +1,49 @@
 {
-  "updated": "2026/06/04 07:55",
+  "updated": "2026/06/04 08:21",
   "futures": [
     {
       "symbol": "TX",
       "name": "台指期",
-      "price": 46546.0,
-      "change": 443.0,
-      "pct": 0.96,
-      "change_open": 401.0,
-      "pct_open": 0.87,
+      "price": 46686.0,
+      "change": -171.0,
+      "pct": -0.36,
+      "change_open": -32.0,
+      "pct_open": -0.07,
       "contract": "202606",
-      "date": "06/02"
+      "date": "06/03"
     },
     {
       "symbol": "MTX",
       "name": "小台",
-      "price": 46550.0,
-      "change": 447.0,
-      "pct": 0.97,
-      "change_open": 413.0,
-      "pct_open": 0.9,
+      "price": 46683.0,
+      "change": -174.0,
+      "pct": -0.37,
+      "change_open": -109.0,
+      "pct_open": -0.23,
       "contract": "202606",
-      "date": "06/02"
+      "date": "06/03"
     },
     {
       "symbol": "TMF",
       "name": "微台",
-      "price": 46553.0,
-      "change": 450.0,
-      "pct": 0.98,
-      "change_open": 418.0,
-      "pct_open": 0.91,
+      "price": 46694.0,
+      "change": -163.0,
+      "pct": -0.35,
+      "change_open": -98.0,
+      "pct_open": -0.21,
       "contract": "202606",
-      "date": "06/02"
+      "date": "06/03"
     },
     {
       "symbol": "TE",
       "name": "電子期",
-      "price": 3058.3,
-      "change": 46.0,
-      "pct": 1.53,
-      "change_open": 10.0,
-      "pct_open": 0.33,
+      "price": 3041.4,
+      "change": -14.0,
+      "pct": -0.46,
+      "change_open": -20.0,
+      "pct_open": -0.65,
       "contract": "202606",
-      "date": "06/02"
+      "date": "06/03"
     }
   ]
 }
