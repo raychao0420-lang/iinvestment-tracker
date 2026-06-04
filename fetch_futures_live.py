@@ -208,6 +208,12 @@ if __name__ == '__main__':
     if is_post_close:
         print(f'=== fetch_futures_live [夜盤收盤後/OpenAPI] {now_str} ===')
         live = fetch_quotes_openapi()
+        if live:
+            cached_date = (existing.get('futures') or [{}])[0].get('date', '')
+            api_date = next((d['date'] for d in live.values() if d.get('date')), '')
+            if cached_date and api_date and api_date < cached_date:
+                print(f'  post-close: OpenAPI date {api_date} < cached {cached_date}，保留現有資料。')
+                live = {}
     elif is_day:
         print(f'=== fetch_futures_live [日盤] {now_str} ===')
         live = fetch_quotes(is_night=False)
