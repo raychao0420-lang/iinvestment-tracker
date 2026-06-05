@@ -186,9 +186,9 @@ if __name__ == '__main__':
     h, m = now.hour, now.minute
     total_min = h * 60 + m
 
-    is_day        = 9 * 60 <= total_min <= 13 * 60 + 35  # 09:00-13:35
-    is_night_live = h >= 15 or h < 5                      # 15:00-04:59 夜盤進行中
-    is_post_close = 5 <= h < 8                            # 05:00-07:59 收盤後，MIS 已無 -M 合約
+    is_day        = 9 * 60 <= total_min <= 13 * 60 + 35      # 09:00-13:35
+    is_night_live = h >= 15 or h < 5 or (h == 5 and m < 5)  # 15:00-05:04 夜盤（含 GH Actions 最多 4 分鐘延誤容忍）
+    is_post_close = (h == 5 and m >= 5) or (6 <= h < 8)     # 05:05-07:59 收盤後，MIS 已無 -M 合約
 
     if not (is_day or is_night_live or is_post_close):
         print(f'非交易時段 ({now.strftime("%H:%M")} TWN)，跳過。')
