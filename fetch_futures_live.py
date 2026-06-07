@@ -214,6 +214,9 @@ if __name__ == '__main__':
             if cached_date and api_date and api_date < cached_date:
                 print(f'  post-close: OpenAPI date {api_date} < cached {cached_date}，保留現有資料。')
                 live = {}
+        if not live:
+            print('  post-close: OpenAPI 無新資料，改用 MIS -M 備援')
+            live = fetch_quotes(is_night=True)
     elif is_day:
         print(f'=== fetch_futures_live [日盤] {now_str} ===')
         live = fetch_quotes(is_night=False)
