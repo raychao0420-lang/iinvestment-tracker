@@ -1896,6 +1896,18 @@ if __name__ == '__main__':
         'etf':     JP_ETF,
     })
     jp = merge_with_old(jp, old_jp)
+
+    # EWJ is NYSE-listed; re-fetch individually so it isn't clipped by the Tokyo date index
+    ewj_col = _fetch_single('EWJ')
+    if ewj_col is not None:
+        p, c, pct, d = _parse_col(ewj_col)
+        if p is not None:
+            for item in jp.get('indices', []):
+                if item['symbol'] == 'EWJ':
+                    item.update({'price': p, 'change': c, 'pct': pct, 'date': d})
+                    print(f'  EWJ: patched via individual fetch ({d})')
+                    break
+
     save('data/jp.json', {'updated': now, **jp})
 
     time.sleep(2)
