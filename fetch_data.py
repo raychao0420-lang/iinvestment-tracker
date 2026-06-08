@@ -18,6 +18,7 @@ US_STOCKS = [
     {'symbol': 'MU',   'name': '美光 MU'},
     {'symbol': 'TSLA', 'name': '特斯拉 TSLA'},
     {'symbol': 'EWT',  'name': '摩台指 EWT'},
+    {'symbol': 'EWJ',  'name': '日股 ETF EWJ'},
 ]
 US_GPU = [
     {'symbol': 'NVDA', 'name': 'NVIDIA'},
@@ -150,7 +151,6 @@ ETF_UNIVERSE = [
 
 JP_INDICES = [
     {'symbol': '^N225', 'name': '日經 225'},
-    {'symbol': 'EWJ',   'name': '日股 ETF (EWJ)'},
 ]
 JP_SEMIEQ = [
     {'symbol': '8035.T', 'name': '東京威力科創'},
@@ -1896,18 +1896,6 @@ if __name__ == '__main__':
         'etf':     JP_ETF,
     })
     jp = merge_with_old(jp, old_jp)
-
-    # EWJ is NYSE-listed; re-fetch individually so it isn't clipped by the Tokyo date index
-    ewj_col = _fetch_single('EWJ')
-    if ewj_col is not None:
-        p, c, pct, d = _parse_col(ewj_col)
-        if p is not None:
-            for item in jp.get('indices', []):
-                if item['symbol'] == 'EWJ':
-                    item.update({'price': p, 'change': c, 'pct': pct, 'date': d})
-                    print(f'  EWJ: patched via individual fetch ({d})')
-                    break
-
     save('data/jp.json', {'updated': now, **jp})
 
     time.sleep(2)
