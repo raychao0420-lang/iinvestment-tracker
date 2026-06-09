@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/09 07:50",
+  "updated": "2026/06/09 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -105,8 +105,8 @@
       "symbol": "GOOGL",
       "name": "Alphabet GCP",
       "price": 363.31,
-      "change": -5.22,
-      "pct": -1.42,
+      "change": -5.0,
+      "pct": -1.36,
       "date": "06/08"
     },
     {
