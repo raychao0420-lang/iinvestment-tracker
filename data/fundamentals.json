@@ -1,14 +1,14 @@
 {
-  "updated": "2026/06/09 18:48",
+  "updated": "2026/06/09 20:13",
   "stocks": {
-    "TSLA": {
-      "pe": 371.8,
-      "fpe": 163.3,
-      "pb": 18.7,
-      "roe": 4.9,
-      "div_yield": null,
-      "gm": 19.1,
-      "rev_growth": 15.8
+    "MU": {
+      "pe": 44.8,
+      "fpe": 8.8,
+      "pb": 14.8,
+      "roe": 39.8,
+      "div_yield": 0.06,
+      "gm": 58.4,
+      "rev_growth": 196.3
     },
     "EWT": {
       "pe": 24.9,
@@ -28,14 +28,14 @@
       "gm": 61.9,
       "rev_growth": 35.1
     },
-    "MU": {
-      "pe": 44.8,
-      "fpe": 8.8,
-      "pb": 14.8,
-      "roe": 39.8,
-      "div_yield": 0.06,
-      "gm": 58.4,
-      "rev_growth": 196.3
+    "TSLA": {
+      "pe": 371.8,
+      "fpe": 163.3,
+      "pb": 18.7,
+      "roe": 4.9,
+      "div_yield": null,
+      "gm": 19.1,
+      "rev_growth": 15.8
     },
     "EWJ": {
       "pe": 18.9,
@@ -46,15 +46,6 @@
       "gm": null,
       "rev_growth": null
     },
-    "ORCL": {
-      "pe": 38.0,
-      "fpe": 26.3,
-      "pb": 18.2,
-      "roe": 57.6,
-      "div_yield": 0.94,
-      "gm": 67.1,
-      "rev_growth": 21.7
-    },
     "AMZN": {
       "pe": 31.6,
       "fpe": 24.9,
@@ -63,15 +54,6 @@
       "div_yield": null,
       "gm": 50.6,
       "rev_growth": 16.6
-    },
-    "GOOGL": {
-      "pe": 27.7,
-      "fpe": 25.1,
-      "pb": 9.2,
-      "roe": 38.9,
-      "div_yield": 0.24,
-      "gm": 60.4,
-      "rev_growth": 21.8
     },
     "MSFT": {
       "pe": 24.5,
@@ -82,14 +64,14 @@
       "gm": 68.3,
       "rev_growth": 18.3
     },
-    "IBM": {
-      "pe": 24.9,
-      "fpe": 20.9,
-      "pb": 8.0,
-      "roe": 35.8,
-      "div_yield": 2.41,
-      "gm": 58.4,
-      "rev_growth": 9.5
+    "GOOGL": {
+      "pe": 27.7,
+      "fpe": 25.1,
+      "pb": 9.2,
+      "roe": 38.9,
+      "div_yield": 0.24,
+      "gm": 60.4,
+      "rev_growth": 21.8
     },
     "META": {
       "pe": 21.3,
@@ -99,6 +81,24 @@
       "div_yield": 0.36,
       "gm": 81.9,
       "rev_growth": 33.1
+    },
+    "ORCL": {
+      "pe": 38.0,
+      "fpe": 26.3,
+      "pb": 18.2,
+      "roe": 57.6,
+      "div_yield": 0.94,
+      "gm": 67.1,
+      "rev_growth": 21.7
+    },
+    "IBM": {
+      "pe": 24.9,
+      "fpe": 20.9,
+      "pb": 8.0,
+      "roe": 35.8,
+      "div_yield": 2.41,
+      "gm": 58.4,
+      "rev_growth": 9.5
     },
     "AAPL": {
       "pe": 36.5,
@@ -118,6 +118,15 @@
       "gm": 74.1,
       "rev_growth": 85.2
     },
+    "AVGO": {
+      "pe": 65.8,
+      "fpe": 20.5,
+      "pb": 21.5,
+      "roe": 37.3,
+      "div_yield": 0.66,
+      "gm": 76.3,
+      "rev_growth": 47.9
+    },
     "AMD": {
       "pe": 164.0,
       "fpe": 37.5,
@@ -127,14 +136,14 @@
       "gm": 53.1,
       "rev_growth": 37.8
     },
-    "AVGO": {
-      "pe": 65.8,
-      "fpe": 20.5,
-      "pb": 21.5,
-      "roe": 37.3,
-      "div_yield": 0.66,
-      "gm": 76.3,
-      "rev_growth": 47.9
+    "QCOM": {
+      "pe": 23.4,
+      "fpe": 20.4,
+      "pb": 8.5,
+      "roe": 36.1,
+      "div_yield": 1.69,
+      "gm": 54.8,
+      "rev_growth": -3.5
     },
     "MRVL": {
       "pe": 98.9,
@@ -154,14 +163,14 @@
       "gm": 37.2,
       "rev_growth": 7.2
     },
-    "QCOM": {
-      "pe": 23.4,
-      "fpe": 20.4,
-      "pb": 8.5,
-      "roe": 36.1,
-      "div_yield": 1.69,
-      "gm": 54.8,
-      "rev_growth": -3.5
+    "ARM": {
+      "pe": 398.1,
+      "fpe": 113.2,
+      "pb": 44.5,
+      "roe": 12.0,
+      "div_yield": null,
+      "gm": 97.5,
+      "rev_growth": 20.1
     },
     "COHR": {
       "pe": 192.3,
@@ -190,15 +199,6 @@
       "gm": 43.0,
       "rev_growth": 39.5
     },
-    "ARM": {
-      "pe": 398.1,
-      "fpe": 113.2,
-      "pb": 44.5,
-      "roe": 12.0,
-      "div_yield": null,
-      "gm": 97.5,
-      "rev_growth": 20.1
-    },
     "AAOI": {
       "pe": null,
       "fpe": 41.2,
@@ -217,6 +217,15 @@
       "gm": 60.4,
       "rev_growth": 42.8
     },
+    "VST": {
+      "pe": 24.6,
+      "fpe": 13.4,
+      "pb": 18.9,
+      "roe": 42.9,
+      "div_yield": 0.62,
+      "gm": 38.6,
+      "rev_growth": 43.4
+    },
     "CEG": {
       "pe": 21.8,
       "fpe": 18.4,
@@ -234,15 +243,6 @@
       "div_yield": 0.21,
       "gm": 20.3,
       "rev_growth": 16.3
-    },
-    "VST": {
-      "pe": 24.6,
-      "fpe": 13.4,
-      "pb": 18.9,
-      "roe": 42.9,
-      "div_yield": 0.62,
-      "gm": 38.6,
-      "rev_growth": 43.4
     },
     "ETN": {
       "pe": 39.4,
@@ -271,6 +271,15 @@
       "gm": 61.9,
       "rev_growth": 35.1
     },
+    "2454.TW": {
+      "pe": 67.9,
+      "fpe": 37.3,
+      "pb": 18.3,
+      "roe": 25.4,
+      "div_yield": 1.31,
+      "gm": 47.0,
+      "rev_growth": -2.7
+    },
     "3711.TW": {
       "pe": 55.7,
       "fpe": 24.4,
@@ -288,15 +297,6 @@
       "div_yield": 2.36,
       "gm": 29.6,
       "rev_growth": 5.5
-    },
-    "2454.TW": {
-      "pe": 67.9,
-      "fpe": 37.3,
-      "pb": 18.3,
-      "roe": 25.4,
-      "div_yield": 1.31,
-      "gm": 47.0,
-      "rev_growth": -2.7
     },
     "3008.TW": {
       "pe": 24.7,
@@ -334,15 +334,6 @@
       "gm": 15.1,
       "rev_growth": 24.5
     },
-    "3189.TW": {
-      "pe": 213.1,
-      "fpe": 34.6,
-      "pb": 8.7,
-      "roe": 6.6,
-      "div_yield": 0.14,
-      "gm": 20.8,
-      "rev_growth": 28.8
-    },
     "8046.TW": {
       "pe": 305.7,
       "fpe": 32.7,
@@ -352,14 +343,14 @@
       "gm": 11.6,
       "rev_growth": 32.1
     },
-    "2317.TW": {
-      "pe": 20.7,
-      "fpe": 12.9,
-      "pb": 2.2,
-      "roe": 11.8,
-      "div_yield": 2.67,
-      "gm": 6.2,
-      "rev_growth": 28.9
+    "3189.TW": {
+      "pe": 213.1,
+      "fpe": 34.6,
+      "pb": 8.7,
+      "roe": 6.6,
+      "div_yield": 0.14,
+      "gm": 20.8,
+      "rev_growth": 28.8
     },
     "3149.TW": {
       "pe": null,
@@ -370,6 +361,15 @@
       "gm": -7.8,
       "rev_growth": 25.4
     },
+    "2317.TW": {
+      "pe": 20.7,
+      "fpe": 12.9,
+      "pb": 2.2,
+      "roe": 11.8,
+      "div_yield": 2.67,
+      "gm": 6.2,
+      "rev_growth": 28.9
+    },
     "3231.TW": {
       "pe": 19.7,
       "fpe": 9.5,
@@ -379,14 +379,14 @@
       "gm": 5.6,
       "rev_growth": 144.3
     },
-    "2356.TW": {
-      "pe": 29.3,
-      "fpe": 19.3,
-      "pb": 3.4,
-      "roe": 14.1,
-      "div_yield": 2.46,
-      "gm": 5.1,
-      "rev_growth": 27.6
+    "2376.TW": {
+      "pe": 20.9,
+      "fpe": 11.3,
+      "pb": 3.7,
+      "roe": 24.7,
+      "div_yield": 2.9,
+      "gm": 10.4,
+      "rev_growth": 59.8
     },
     "2382.TW": {
       "pe": 19.8,
@@ -397,14 +397,14 @@
       "gm": 6.1,
       "rev_growth": 66.6
     },
-    "2376.TW": {
-      "pe": 20.9,
-      "fpe": 11.3,
-      "pb": 3.7,
-      "roe": 24.7,
-      "div_yield": 2.9,
-      "gm": 10.4,
-      "rev_growth": 59.8
+    "2356.TW": {
+      "pe": 29.3,
+      "fpe": 19.3,
+      "pb": 3.4,
+      "roe": 14.1,
+      "div_yield": 2.46,
+      "gm": 5.1,
+      "rev_growth": 27.6
     },
     "6669.TW": {
       "pe": 20.0,
@@ -496,15 +496,6 @@
       "gm": null,
       "rev_growth": null
     },
-    "00878.TW": {
-      "pe": 22.5,
-      "fpe": null,
-      "pb": null,
-      "roe": null,
-      "div_yield": 6.65,
-      "gm": null,
-      "rev_growth": null
-    },
     "006208.TW": {
       "pe": 33.7,
       "fpe": null,
@@ -514,12 +505,12 @@
       "gm": null,
       "rev_growth": null
     },
-    "00929.TW": {
-      "pe": 27.2,
+    "00878.TW": {
+      "pe": 22.5,
       "fpe": null,
       "pb": null,
       "roe": null,
-      "div_yield": 4.81,
+      "div_yield": 6.65,
       "gm": null,
       "rev_growth": null
     },
@@ -532,12 +523,12 @@
       "gm": null,
       "rev_growth": null
     },
-    "00403A.TW": {
-      "pe": null,
+    "00929.TW": {
+      "pe": 27.2,
       "fpe": null,
       "pb": null,
       "roe": null,
-      "div_yield": null,
+      "div_yield": 4.81,
       "gm": null,
       "rev_growth": null
     },
@@ -561,6 +552,15 @@
     },
     "00981A.TW": {
       "pe": 65.0,
+      "fpe": null,
+      "pb": null,
+      "roe": null,
+      "div_yield": null,
+      "gm": null,
+      "rev_growth": null
+    },
+    "00403A.TW": {
+      "pe": null,
       "fpe": null,
       "pb": null,
       "roe": null,
