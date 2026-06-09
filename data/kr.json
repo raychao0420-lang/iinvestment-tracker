@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/09 14:01",
+  "updated": "2026/06/09 18:00",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 8073.35,
-      "change": 588.94,
-      "pct": 7.87,
+      "price": 8096.93,
+      "change": 612.52,
+      "pct": 8.18,
       "date": "06/09"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 970.32,
-      "change": 58.93,
-      "pct": 6.47,
+      "price": 967.81,
+      "change": 56.42,
+      "pct": 6.19,
       "date": "06/09"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 321000.0,
-      "change": 25500.0,
-      "pct": 8.63,
+      "price": 322000.0,
+      "change": 26500.0,
+      "pct": 8.97,
       "date": "06/09"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2201000.0,
-      "change": 290000.0,
-      "pct": 15.18,
+      "price": 2215000.0,
+      "change": 304000.0,
+      "pct": 15.91,
       "date": "06/09"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 276000.0,
-      "change": 22500.0,
-      "pct": 8.88,
+      "price": 276500.0,
+      "change": 23000.0,
+      "pct": 9.07,
       "date": "06/09"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1950000.0,
-      "change": 286000.0,
-      "pct": 17.19,
+      "price": 1970000.0,
+      "change": 306000.0,
+      "pct": 18.39,
       "date": "06/09"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 13850.0,
-      "change": -170.0,
-      "pct": -1.21,
+      "price": 13970.0,
+      "change": -50.0,
+      "pct": -0.36,
       "date": "06/09"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 1150000.0,
-      "change": 55000.0,
-      "pct": 5.02,
+      "price": 1137000.0,
+      "change": 42000.0,
+      "pct": 3.84,
       "date": "06/09"
     }
   ]
