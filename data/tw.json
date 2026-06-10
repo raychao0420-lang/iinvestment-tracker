@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/10 14:01",
+  "updated": "2026/06/10 17:00",
   "indices": [
     {
       "symbol": "^TWII",
@@ -20,7 +20,7 @@
       "premium": 0.24
     }
   ],
-  "semi": [
+  "stocks": [
     {
       "symbol": "2330.TW",
       "name": "台積電",
@@ -68,9 +68,7 @@
       "change": -7.1,
       "pct": -9.93,
       "date": "06/10"
-    }
-  ],
-  "glass": [
+    },
     {
       "symbol": "1802.TW",
       "name": "台玻",
@@ -110,9 +108,7 @@
       "change": -5.0,
       "pct": -5.73,
       "date": "06/10"
-    }
-  ],
-  "old_ai": [
+    },
     {
       "symbol": "2317.TW",
       "name": "鴻海",
@@ -160,9 +156,7 @@
       "change": -235.0,
       "pct": -4.43,
       "date": "06/10"
-    }
-  ],
-  "power_ship": [
+    },
     {
       "symbol": "2308.TW",
       "name": "台達電",
@@ -178,9 +172,7 @@
       "change": 1.0,
       "pct": 0.45,
       "date": "06/10"
-    }
-  ],
-  "finance": [
+    },
     {
       "symbol": "2881.TW",
       "name": "富邦金",
