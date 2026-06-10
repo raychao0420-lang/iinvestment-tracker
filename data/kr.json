@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/10 14:01",
+  "updated": "2026/06/10 18:01",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 7594.92,
-      "change": 110.51,
-      "pct": 1.48,
+      "price": 7730.82,
+      "change": 246.41,
+      "pct": 3.29,
       "date": "06/10"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 941.29,
-      "change": 29.9,
-      "pct": 3.28,
+      "price": 951.63,
+      "change": 40.24,
+      "pct": 4.42,
       "date": "06/10"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 297500.0,
-      "change": -24500.0,
-      "pct": -7.61,
+      "price": 302500.0,
+      "change": -19500.0,
+      "pct": -6.06,
       "date": "06/10"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2013000.0,
-      "change": -202000.0,
-      "pct": -9.12,
+      "price": 2048000.0,
+      "change": -167000.0,
+      "pct": -7.54,
       "date": "06/10"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 264000.0,
-      "change": -12500.0,
-      "pct": -4.52,
+      "price": 270000.0,
+      "change": -6500.0,
+      "pct": -2.35,
       "date": "06/10"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1774000.0,
-      "change": -196000.0,
-      "pct": -9.95,
+      "price": 1805000.0,
+      "change": -165000.0,
+      "pct": -8.38,
       "date": "06/10"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 12810.0,
-      "change": -1160.0,
-      "pct": -8.3,
+      "price": 12910.0,
+      "change": -1060.0,
+      "pct": -7.59,
       "date": "06/10"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 1062000.0,
-      "change": -75000.0,
-      "pct": -6.6,
+      "price": 1090000.0,
+      "change": -47000.0,
+      "pct": -4.13,
       "date": "06/10"
     }
   ]
