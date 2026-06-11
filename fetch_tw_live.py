@@ -86,7 +86,7 @@ if __name__ == '__main__':
         exit(0)
 
     total = 0
-    for group in ('indices', 'stocks', 'drone', 'etf'):
+    for group in ('indices', 'semi', 'glass', 'old_ai', 'power_ship', 'finance', 'drone', 'etf'):
         if isinstance(tw.get(group), list):
             n = update_group(tw[group], live)
             total += n

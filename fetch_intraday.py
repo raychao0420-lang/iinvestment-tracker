@@ -6,7 +6,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from fetch_data import (
-    TZ, TW_INDICES, TW_STOCKS, TW_DRONE, TW_ETF,
+    TZ, TW_INDICES, TW_SEMI, TW_GLASS, TW_OLD_AI, TW_POWER_SHIP, TW_FINANCE, TW_DRONE, TW_ETF,
     fetch_market, merge_with_old, load_existing, save,
 )
 from datetime import datetime
@@ -15,7 +15,16 @@ now = datetime.now(TZ).strftime('%Y/%m/%d %H:%M')
 print(f'=== intraday {now} ===')
 
 old_tw = load_existing('data/tw.json')
-tw = fetch_market({'indices': TW_INDICES, 'stocks': TW_STOCKS, 'drone': TW_DRONE, 'etf': TW_ETF})
+tw = fetch_market({
+    'indices':    TW_INDICES,
+    'semi':       TW_SEMI,
+    'glass':      TW_GLASS,
+    'old_ai':     TW_OLD_AI,
+    'power_ship': TW_POWER_SHIP,
+    'finance':    TW_FINANCE,
+    'drone':      TW_DRONE,
+    'etf':        TW_ETF,
+})
 tw = merge_with_old(tw, old_tw)
 
 # Carry forward nav/premium from cache (ETF NAV is not available intraday)
