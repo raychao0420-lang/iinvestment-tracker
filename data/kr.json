@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/11 17:01",
+  "updated": "2026/06/11 18:56",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
       "price": 7763.95,
-      "change": -332.98,
-      "pct": -4.11,
+      "change": 33.13,
+      "pct": 0.43,
       "date": "06/11"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
       "price": 996.93,
-      "change": 29.12,
-      "pct": 3.01,
+      "change": 45.3,
+      "pct": 4.76,
       "date": "06/11"
     }
   ],
