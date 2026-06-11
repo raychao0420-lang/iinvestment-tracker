@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/12 00:36",
+  "updated": "2026/06/12 04:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -310,8 +310,8 @@
       "change": 0.03,
       "pct": 0.15,
       "date": "06/11",
-      "nav": 20.34,
-      "premium": -2.41
+      "nav": 20.66,
+      "premium": -3.92
     },
     {
       "symbol": "00981A.TW",
@@ -320,8 +320,8 @@
       "change": -0.18,
       "pct": -0.6,
       "date": "06/11",
-      "nav": 31.27,
-      "premium": -4.99
+      "nav": 29.78,
+      "premium": -0.24
     },
     {
       "symbol": "00935.TW",
@@ -340,8 +340,8 @@
       "change": -0.14,
       "pct": -0.6,
       "date": "06/11",
-      "nav": 24.63,
-      "premium": -5.48
+      "nav": 23.45,
+      "premium": -0.72
     },
     {
       "symbol": "00631L.TW",
