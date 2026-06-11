@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/11 13:10",
+  "updated": "2026/06/11 17:01",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 7760.14,
-      "change": -336.79,
-      "pct": -4.16,
+      "price": 7763.95,
+      "change": -332.98,
+      "pct": -4.11,
       "date": "06/11"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 987.12,
-      "change": 19.31,
-      "pct": 2.0,
+      "price": 996.93,
+      "change": 29.12,
+      "pct": 3.01,
       "date": "06/11"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 300000.0,
-      "change": -2500.0,
-      "pct": -0.83,
+      "price": 299000.0,
+      "change": -3500.0,
+      "pct": -1.16,
       "date": "06/11"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2110000.0,
-      "change": 62000.0,
-      "pct": 3.03,
+      "price": 2101000.0,
+      "change": 53000.0,
+      "pct": 2.59,
       "date": "06/11"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 283500.0,
-      "change": 13500.0,
-      "pct": 5.0,
+      "price": 291000.0,
+      "change": 21000.0,
+      "pct": 7.78,
       "date": "06/11"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1793000.0,
-      "change": -12000.0,
-      "pct": -0.66,
+      "price": 1805000.0,
+      "change": 0.0,
+      "pct": 0.0,
       "date": "06/11"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 12730.0,
-      "change": -180.0,
-      "pct": -1.39,
+      "price": 12850.0,
+      "change": -60.0,
+      "pct": -0.46,
       "date": "06/11"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 1069000.0,
-      "change": -21000.0,
-      "pct": -1.93,
+      "price": 1072000.0,
+      "change": -18000.0,
+      "pct": -1.65,
       "date": "06/11"
     }
   ]
