@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/12 08:09",
+  "updated": "2026/06/12 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -47,8 +47,8 @@
       "symbol": "TSM",
       "name": "台積電 ADR",
       "price": 421.07,
-      "change": 12.32,
-      "pct": 3.01,
+      "change": 13.27,
+      "pct": 3.26,
       "date": "06/11"
     },
     {
