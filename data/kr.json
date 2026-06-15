@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/15 13:38",
+  "updated": "2026/06/15 17:01",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 8568.2,
-      "change": 444.58,
-      "pct": 5.47,
+      "price": 8545.98,
+      "change": 422.36,
+      "pct": 5.2,
       "date": "06/15"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 1036.85,
-      "change": 7.8,
-      "pct": 0.76,
+      "price": 1034.03,
+      "change": 4.98,
+      "pct": 0.48,
       "date": "06/15"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 337250.0,
-      "change": 14750.0,
-      "pct": 4.57,
+      "price": 337000.0,
+      "change": 14500.0,
+      "pct": 4.5,
       "date": "06/15"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2307000.0,
-      "change": 157000.0,
-      "pct": 7.3,
+      "price": 2288000.0,
+      "change": 138000.0,
+      "pct": 6.42,
       "date": "06/15"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 349000.0,
-      "change": -12000.0,
-      "pct": -3.32,
+      "price": 347000.0,
+      "change": -14000.0,
+      "pct": -3.88,
       "date": "06/15"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1959000.0,
-      "change": 245000.0,
-      "pct": 14.29,
+      "price": 1999000.0,
+      "change": 285000.0,
+      "pct": 16.63,
       "date": "06/15"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 14140.0,
-      "change": 240.0,
-      "pct": 1.73,
+      "price": 14130.0,
+      "change": 230.0,
+      "pct": 1.65,
       "date": "06/15"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 1198000.0,
-      "change": 162000.0,
-      "pct": 15.64,
+      "price": 1209000.0,
+      "change": 173000.0,
+      "pct": 16.7,
       "date": "06/15"
     }
   ]
