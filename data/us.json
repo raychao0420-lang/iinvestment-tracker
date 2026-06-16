@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/16 08:17",
+  "updated": "2026/06/16 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -79,8 +79,8 @@
       "symbol": "EWJ",
       "name": "日股 ETF EWJ",
       "price": 94.06,
-      "change": 1.35,
-      "pct": 1.46,
+      "change": 1.85,
+      "pct": 2.01,
       "date": "06/15"
     }
   ],
@@ -121,8 +121,8 @@
       "symbol": "META",
       "name": "Meta",
       "price": 593.48,
-      "change": 26.5,
-      "pct": 4.67,
+      "change": 27.03,
+      "pct": 4.77,
       "date": "06/15"
     },
     {
