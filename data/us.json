@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/17 08:05",
+  "updated": "2026/06/17 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -28,8 +28,8 @@
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2939.19,
-      "change": -25.9,
+      "price": 2939.2,
+      "change": -25.89,
       "pct": -0.87,
       "date": "06/16"
     },
@@ -265,8 +265,8 @@
       "symbol": "GEV",
       "name": "GE Vernova",
       "price": 982.35,
-      "change": 3.28,
-      "pct": 0.34,
+      "change": 3.78,
+      "pct": 0.39,
       "date": "06/16"
     },
     {
