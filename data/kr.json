@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/17 14:01",
+  "updated": "2026/06/17 18:01",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 8867.64,
-      "change": 141.04,
-      "pct": 1.62,
+      "price": 8864.24,
+      "change": 137.64,
+      "pct": 1.58,
       "date": "06/17"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 1030.03,
-      "change": -4.0,
-      "pct": -0.39,
+      "price": 1031.96,
+      "change": -2.07,
+      "pct": -0.2,
       "date": "06/17"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 347000.0,
-      "change": 4000.0,
-      "pct": 1.17,
+      "price": 346500.0,
+      "change": 3500.0,
+      "pct": 1.02,
       "date": "06/17"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2512000.0,
-      "change": 130000.0,
-      "pct": 5.46,
+      "price": 2521000.0,
+      "change": 139000.0,
+      "pct": 5.84,
       "date": "06/17"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 317500.0,
-      "change": -11000.0,
-      "pct": -3.35,
+      "price": 319500.0,
+      "change": -9000.0,
+      "pct": -2.74,
       "date": "06/17"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 2020000.0,
-      "change": -28000.0,
-      "pct": -1.37,
+      "price": 2032000.0,
+      "change": -16000.0,
+      "pct": -0.78,
       "date": "06/17"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 13800.0,
-      "change": -130.0,
-      "pct": -0.93,
+      "price": 13770.0,
+      "change": -160.0,
+      "pct": -1.15,
       "date": "06/17"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 1245000.0,
-      "change": 9000.0,
-      "pct": 0.73,
+      "price": 1248000.0,
+      "change": 12000.0,
+      "pct": 0.97,
       "date": "06/17"
     }
   ]
