@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/18 14:01",
+  "updated": "2026/06/18 18:01",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 9044.48,
-      "change": 180.24,
-      "pct": 2.03,
+      "price": 9063.84,
+      "change": 199.6,
+      "pct": 2.25,
       "date": "06/18"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 1001.83,
-      "change": -30.13,
-      "pct": -2.92,
+      "price": 1000.93,
+      "change": -31.03,
+      "pct": -3.01,
       "date": "06/18"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 356500.0,
-      "change": 10000.0,
-      "pct": 2.89,
+      "price": 362500.0,
+      "change": 16000.0,
+      "pct": 4.62,
       "date": "06/18"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2707000.0,
-      "change": 186000.0,
-      "pct": 7.38,
+      "price": 2685000.0,
+      "change": 164000.0,
+      "pct": 6.51,
       "date": "06/18"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 310500.0,
-      "change": -9000.0,
-      "pct": -2.82,
+      "price": 315500.0,
+      "change": -4000.0,
+      "pct": -1.25,
       "date": "06/18"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 2215000.0,
-      "change": 183000.0,
-      "pct": 9.01,
+      "price": 2200000.0,
+      "change": 168000.0,
+      "pct": 8.27,
       "date": "06/18"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 13400.0,
-      "change": -370.0,
-      "pct": -2.69,
+      "price": 13530.0,
+      "change": -240.0,
+      "pct": -1.74,
       "date": "06/18"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 1297000.0,
-      "change": 49000.0,
-      "pct": 3.93,
+      "price": 1283000.0,
+      "change": 35000.0,
+      "pct": 2.8,
       "date": "06/18"
     }
   ]
