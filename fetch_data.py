@@ -17,6 +17,7 @@ US_STOCKS = [
     {'symbol': 'TSM',  'name': '台積電 ADR'},
     {'symbol': 'MU',   'name': '美光 MU'},
     {'symbol': 'TSLA', 'name': '特斯拉 TSLA'},
+    {'symbol': 'SPCX', 'name': 'SpaceX'},
     {'symbol': 'EWT',  'name': '摩台指 EWT'},
     {'symbol': 'EWJ',  'name': '日股 ETF EWJ'},
 ]
