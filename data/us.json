@@ -1,44 +1,44 @@
 {
-  "updated": "2026/06/19 00:02",
+  "updated": "2026/06/19 04:01",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7490.34,
-      "change": 70.24,
-      "pct": 0.95,
+      "price": 7500.66,
+      "change": 80.56,
+      "pct": 1.09,
       "date": "06/18"
     },
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 26364.99,
-      "change": 343.33,
-      "pct": 1.32,
+      "price": 26517.93,
+      "change": 496.27,
+      "pct": 1.91,
       "date": "06/18"
     },
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 51642.31,
-      "change": 149.76,
-      "pct": 0.29,
+      "price": 51565.75,
+      "change": 73.2,
+      "pct": 0.14,
       "date": "06/18"
     },
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2955.69,
-      "change": 37.71,
-      "pct": 1.29,
+      "price": 2970.36,
+      "change": 52.38,
+      "pct": 1.8,
       "date": "06/18"
     },
     {
       "symbol": "^SOX",
       "name": "費城半導體",
-      "price": 14313.33,
-      "change": 836.26,
-      "pct": 6.21,
+      "price": 14341.78,
+      "change": 864.71,
+      "pct": 6.42,
       "date": "06/18"
     }
   ],
@@ -46,49 +46,49 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR",
-      "price": 453.99,
-      "change": 21.84,
-      "pct": 5.05,
+      "price": 462.19,
+      "change": 30.04,
+      "pct": 6.95,
       "date": "06/18"
     },
     {
       "symbol": "MU",
       "name": "美光 MU",
-      "price": 1126.99,
-      "change": 83.8,
-      "pct": 8.03,
+      "price": 1133.99,
+      "change": 90.8,
+      "pct": 8.7,
       "date": "06/18"
     },
     {
       "symbol": "TSLA",
       "name": "特斯拉 TSLA",
-      "price": 390.98,
-      "change": -5.4,
-      "pct": -1.36,
+      "price": 400.49,
+      "change": 4.11,
+      "pct": 1.04,
       "date": "06/18"
     },
     {
       "symbol": "SPCX",
       "name": "SpaceX",
-      "price": 175.5,
-      "change": -16.32,
-      "pct": -8.51,
+      "price": 185.0,
+      "change": -6.82,
+      "pct": -3.56,
       "date": "06/18"
     },
     {
       "symbol": "EWT",
       "name": "摩台指 EWT",
-      "price": 109.52,
-      "change": 4.41,
-      "pct": 4.2,
+      "price": 109.99,
+      "change": 4.88,
+      "pct": 4.64,
       "date": "06/18"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF EWJ",
-      "price": 96.28,
-      "change": 1.83,
-      "pct": 1.93,
+      "price": 96.24,
+      "change": 1.79,
+      "pct": 1.9,
       "date": "06/18"
     }
   ],
@@ -96,57 +96,57 @@
     {
       "symbol": "AMZN",
       "name": "亞馬遜 AWS",
-      "price": 243.17,
-      "change": 5.67,
-      "pct": 2.39,
+      "price": 244.39,
+      "change": 6.89,
+      "pct": 2.9,
       "date": "06/18"
     },
     {
       "symbol": "MSFT",
       "name": "微軟 Azure",
-      "price": 377.26,
-      "change": -1.65,
-      "pct": -0.44,
+      "price": 379.4,
+      "change": 0.49,
+      "pct": 0.13,
       "date": "06/18"
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet GCP",
-      "price": 365.71,
-      "change": 1.92,
-      "pct": 0.53,
+      "price": 368.03,
+      "change": 4.24,
+      "pct": 1.17,
       "date": "06/18"
     },
     {
       "symbol": "ORCL",
       "name": "Oracle Cloud",
-      "price": 185.05,
-      "change": 1.52,
-      "pct": 0.83,
+      "price": 184.31,
+      "change": 0.78,
+      "pct": 0.42,
       "date": "06/18"
     },
     {
       "symbol": "META",
       "name": "Meta",
-      "price": 575.09,
-      "change": 7.51,
-      "pct": 1.32,
+      "price": 577.22,
+      "change": 9.64,
+      "pct": 1.7,
       "date": "06/18"
     },
     {
       "symbol": "IBM",
       "name": "IBM Cloud",
-      "price": 247.57,
-      "change": -14.78,
-      "pct": -5.63,
+      "price": 249.07,
+      "change": -13.28,
+      "pct": -5.06,
       "date": "06/18"
     },
     {
       "symbol": "AAPL",
       "name": "Apple",
-      "price": 297.31,
-      "change": 1.36,
-      "pct": 0.46,
+      "price": 298.01,
+      "change": 2.06,
+      "pct": 0.7,
       "date": "06/18"
     }
   ],
@@ -154,33 +154,33 @@
     {
       "symbol": "NVDA",
       "name": "NVIDIA",
-      "price": 209.06,
-      "change": 4.41,
-      "pct": 2.15,
+      "price": 210.69,
+      "change": 6.04,
+      "pct": 2.95,
       "date": "06/18"
     },
     {
       "symbol": "AMD",
       "name": "超微 AMD",
-      "price": 535.17,
-      "change": 22.69,
-      "pct": 4.43,
+      "price": 537.37,
+      "change": 24.89,
+      "pct": 4.86,
       "date": "06/18"
     },
     {
       "symbol": "AVGO",
       "name": "Broadcom",
-      "price": 408.67,
-      "change": 15.77,
-      "pct": 4.01,
+      "price": 411.35,
+      "change": 18.45,
+      "pct": 4.7,
       "date": "06/18"
     },
     {
       "symbol": "MRVL",
       "name": "Marvell",
-      "price": 324.24,
-      "change": 34.7,
-      "pct": 11.98,
+      "price": 310.58,
+      "change": 21.04,
+      "pct": 7.27,
       "date": "06/18"
     }
   ],
@@ -188,25 +188,25 @@
     {
       "symbol": "INTC",
       "name": "Intel",
-      "price": 132.68,
-      "change": 11.58,
-      "pct": 9.56,
+      "price": 133.99,
+      "change": 12.89,
+      "pct": 10.64,
       "date": "06/18"
     },
     {
       "symbol": "QCOM",
       "name": "Qualcomm",
-      "price": 219.38,
-      "change": 6.41,
-      "pct": 3.01,
+      "price": 226.11,
+      "change": 13.14,
+      "pct": 6.17,
       "date": "06/18"
     },
     {
       "symbol": "ARM",
       "name": "Arm Holdings",
-      "price": 442.99,
-      "change": 24.11,
-      "pct": 5.76,
+      "price": 439.46,
+      "change": 20.58,
+      "pct": 4.91,
       "date": "06/18"
     }
   ],
@@ -214,41 +214,41 @@
     {
       "symbol": "COHR",
       "name": "Coherent",
-      "price": 396.51,
-      "change": 17.65,
-      "pct": 4.66,
+      "price": 389.74,
+      "change": 10.89,
+      "pct": 2.87,
       "date": "06/18"
     },
     {
       "symbol": "LITE",
       "name": "Lumentum",
-      "price": 857.95,
-      "change": -12.03,
-      "pct": -1.38,
+      "price": 850.0,
+      "change": -19.98,
+      "pct": -2.3,
       "date": "06/18"
     },
     {
       "symbol": "CIEN",
       "name": "Ciena",
-      "price": 428.09,
-      "change": -8.63,
-      "pct": -1.98,
+      "price": 428.38,
+      "change": -8.34,
+      "pct": -1.91,
       "date": "06/18"
     },
     {
       "symbol": "AAOI",
       "name": "Applied Optoelectronics",
-      "price": 164.56,
-      "change": -2.78,
-      "pct": -1.66,
+      "price": 161.85,
+      "change": -5.49,
+      "pct": -3.28,
       "date": "06/18"
     },
     {
       "symbol": "VIAV",
       "name": "Viavi Solutions",
-      "price": 49.17,
-      "change": 0.44,
-      "pct": 0.91,
+      "price": 47.17,
+      "change": -1.56,
+      "pct": -3.2,
       "date": "06/18"
     }
   ],
@@ -256,41 +256,41 @@
     {
       "symbol": "VST",
       "name": "Vistra",
-      "price": 169.55,
-      "change": 10.72,
-      "pct": 6.75,
+      "price": 163.73,
+      "change": 4.9,
+      "pct": 3.09,
       "date": "06/18"
     },
     {
       "symbol": "CEG",
       "name": "Constellation Energy",
-      "price": 280.46,
-      "change": 13.29,
-      "pct": 4.97,
+      "price": 274.06,
+      "change": 6.89,
+      "pct": 2.58,
       "date": "06/18"
     },
     {
       "symbol": "GEV",
       "name": "GE Vernova",
-      "price": 1102.88,
-      "change": 54.02,
-      "pct": 5.15,
+      "price": 1109.74,
+      "change": 60.88,
+      "pct": 5.8,
       "date": "06/18"
     },
     {
       "symbol": "ETN",
       "name": "Eaton",
-      "price": 421.58,
-      "change": 11.94,
-      "pct": 2.92,
+      "price": 421.69,
+      "change": 12.05,
+      "pct": 2.94,
       "date": "06/18"
     },
     {
       "symbol": "NEE",
       "name": "NextEra Energy",
-      "price": 87.28,
-      "change": 1.55,
-      "pct": 1.81,
+      "price": 86.74,
+      "change": 1.0,
+      "pct": 1.17,
       "date": "06/18"
     }
   ],
@@ -298,73 +298,73 @@
     {
       "symbol": "SPY",
       "name": "S&P 500 SPY",
-      "price": 746.07,
-      "change": 5.11,
-      "pct": 0.69,
+      "price": 746.62,
+      "change": 5.66,
+      "pct": 0.76,
       "date": "06/18"
     },
     {
       "symbol": "QQQ",
       "name": "Nasdaq 100 QQQ",
-      "price": 738.24,
-      "change": 15.73,
-      "pct": 2.18,
+      "price": 740.62,
+      "change": 18.11,
+      "pct": 2.51,
       "date": "06/18"
     },
     {
       "symbol": "VOO",
       "name": "Vanguard S&P VOO",
-      "price": 687.67,
-      "change": 6.26,
-      "pct": 0.92,
+      "price": 688.08,
+      "change": 6.67,
+      "pct": 0.98,
       "date": "06/18"
     },
     {
       "symbol": "SCHD",
       "name": "Dividend SCHD",
-      "price": 31.76,
-      "change": -0.17,
-      "pct": -0.52,
+      "price": 31.86,
+      "change": -0.07,
+      "pct": -0.22,
       "date": "06/18"
     },
     {
       "symbol": "VGT",
       "name": "Vanguard IT VGT",
-      "price": 119.69,
-      "change": 2.76,
-      "pct": 2.36,
+      "price": 120.14,
+      "change": 3.21,
+      "pct": 2.74,
       "date": "06/18"
     },
     {
       "symbol": "SOXX",
       "name": "Semiconductor SOXX",
-      "price": 637.43,
-      "change": 37.7,
-      "pct": 6.29,
+      "price": 639.45,
+      "change": 39.72,
+      "pct": 6.62,
       "date": "06/18"
     },
     {
       "symbol": "GLD",
       "name": "黃金 GLD",
-      "price": 388.1,
-      "change": -0.5,
-      "pct": -0.13,
+      "price": 387.11,
+      "change": -1.49,
+      "pct": -0.38,
       "date": "06/18"
     },
     {
       "symbol": "TLT",
       "name": "長債 TLT",
-      "price": 86.81,
-      "change": 0.47,
-      "pct": 0.55,
+      "price": 86.75,
+      "change": 0.42,
+      "pct": 0.49,
       "date": "06/18"
     },
     {
       "symbol": "ARKK",
       "name": "ARK Innovation",
-      "price": 79.09,
-      "change": 0.6,
-      "pct": 0.76,
+      "price": 80.21,
+      "change": 1.72,
+      "pct": 2.19,
       "date": "06/18"
     }
   ]
