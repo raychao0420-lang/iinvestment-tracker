@@ -1297,7 +1297,7 @@ def fetch_stock_charts():
                     'Volume': raw['Volume'][sym],
                 }).dropna()
 
-            if len(df) < 5:
+            if len(df) < 2:
                 print(f'  stock_charts {sym}: insufficient ({len(df)} rows)')
                 continue
 
