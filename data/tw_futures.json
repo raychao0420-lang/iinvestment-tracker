@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/18 11:50",
+  "updated": "2026/06/18 11:55",
   "futures": [
     {
       "symbol": "TX",
@@ -26,9 +26,9 @@
     {
       "symbol": "TMF",
       "name": "微台",
-      "price": 46436.0,
-      "change": 425.0,
-      "pct": 0.92,
+      "price": 46442.0,
+      "change": 431.0,
+      "pct": 0.94,
       "change_open": -3006.0,
       "pct_open": -6.65,
       "contract": "202607",
