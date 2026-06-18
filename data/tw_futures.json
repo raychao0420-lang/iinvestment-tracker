@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/19 06:47",
+  "updated": "2026/06/19 06:52",
   "futures": [
     {
       "symbol": "TX",
@@ -7,8 +7,8 @@
       "price": 46036.0,
       "change": -716.0,
       "pct": -1.53,
-      "change_open": -3006.0,
-      "pct_open": -6.65,
+      "change_open": -434.0,
+      "pct_open": -0.93,
       "contract": "202607",
       "date": "06/18"
     },
@@ -18,8 +18,8 @@
       "price": 46120.0,
       "change": -535.0,
       "pct": -1.15,
-      "change_open": -3006.0,
-      "pct_open": -6.65,
+      "change_open": -232.0,
+      "pct_open": -0.5,
       "contract": "202606W4",
       "date": "06/18"
     },
@@ -29,8 +29,8 @@
       "price": 46036.0,
       "change": -716.0,
       "pct": -1.53,
-      "change_open": -3006.0,
-      "pct_open": -6.65,
+      "change_open": -421.0,
+      "pct_open": -0.91,
       "contract": "202607",
       "date": "06/18"
     },
@@ -40,8 +40,8 @@
       "price": 2988.0,
       "change": -29.0,
       "pct": -0.96,
-      "change_open": -197.05,
-      "pct_open": -6.55,
+      "change_open": -21.0,
+      "pct_open": -0.7,
       "contract": "202607",
       "date": "06/18"
     }
