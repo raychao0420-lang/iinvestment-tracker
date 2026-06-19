@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/19 13:34",
+  "updated": "2026/06/19 17:01",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 8925.89,
-      "change": 61.65,
-      "pct": 0.7,
+      "price": 9052.42,
+      "change": -11.42,
+      "pct": -0.13,
       "date": "06/19"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 950.09,
-      "change": -81.87,
-      "pct": -7.93,
+      "price": 966.59,
+      "change": -34.34,
+      "pct": -3.43,
       "date": "06/19"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 352000.0,
-      "change": -10500.0,
-      "pct": -2.9,
+      "price": 354000.0,
+      "change": -8500.0,
+      "pct": -2.34,
       "date": "06/19"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2724000.0,
-      "change": 39000.0,
-      "pct": 1.45,
+      "price": 2764000.0,
+      "change": 79000.0,
+      "pct": 2.94,
       "date": "06/19"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 290000.0,
-      "change": -25500.0,
-      "pct": -8.08,
+      "price": 295000.0,
+      "change": -20500.0,
+      "pct": -6.5,
       "date": "06/19"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 2225000.0,
-      "change": 25000.0,
-      "pct": 1.14,
+      "price": 2270000.0,
+      "change": 70000.0,
+      "pct": 3.18,
       "date": "06/19"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 12970.0,
-      "change": -560.0,
-      "pct": -4.14,
+      "price": 13570.0,
+      "change": 40.0,
+      "pct": 0.3,
       "date": "06/19"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 1154000.0,
-      "change": -129000.0,
-      "pct": -10.05,
+      "price": 1145000.0,
+      "change": -138000.0,
+      "pct": -10.76,
       "date": "06/19"
     }
   ]

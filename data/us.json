@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/19 13:34",
+  "updated": "2026/06/19 17:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -299,8 +299,8 @@
       "symbol": "SPY",
       "name": "S&P 500 SPY",
       "price": 746.74,
-      "change": 5.78,
-      "pct": 0.78,
+      "change": 7.68,
+      "pct": 1.04,
       "date": "06/18"
     },
     {
