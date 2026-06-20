@@ -131,6 +131,9 @@ def fetch_quotes_openapi():
 
     night, day = {}, {}
     for row in data:
+        # 只取月合約，排除週合約（如 202606W4），避免近月週結算被誤當成近月
+        if 'W' in str(row.get('ContractMonth(Week)', '')).upper():
+            continue
         session = row.get('TradingSession', '')
         cid = row.get('Contract', '')
         if session == '盤後':
