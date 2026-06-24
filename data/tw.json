@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/25 00:01",
+  "updated": "2026/06/25 04:02",
   "indices": [
     {
       "symbol": "^TWII",
@@ -90,8 +90,8 @@
     {
       "symbol": "8046.TW",
       "name": "南電",
-      "price": 955.0,
-      "change": 46.0,
+      "price": 953.0,
+      "change": 45.9,
       "pct": 5.06,
       "date": "06/24"
     },
