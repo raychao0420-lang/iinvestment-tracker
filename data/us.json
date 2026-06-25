@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/25 07:49",
+  "updated": "2026/06/25 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -12,7 +12,7 @@
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 25476.63,
+      "price": 25476.64,
       "change": -110.4,
       "pct": -0.43,
       "date": "06/24"
@@ -36,8 +36,8 @@
     {
       "symbol": "^SOX",
       "name": "費城半導體",
-      "price": 13458.19,
-      "change": -24.32,
+      "price": 13458.2,
+      "change": -24.31,
       "pct": -0.18,
       "date": "06/24"
     }
@@ -323,16 +323,16 @@
       "symbol": "SCHD",
       "name": "Dividend SCHD",
       "price": 31.72,
-      "change": -0.3,
-      "pct": -0.94,
+      "change": -0.05,
+      "pct": -0.15,
       "date": "06/24"
     },
     {
       "symbol": "VGT",
       "name": "Vanguard IT VGT",
       "price": 115.13,
-      "change": -0.94,
-      "pct": -0.81,
+      "change": -0.8,
+      "pct": -0.69,
       "date": "06/24"
     },
     {
