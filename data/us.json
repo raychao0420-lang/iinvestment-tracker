@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/27 07:48",
+  "updated": "2026/06/29 06:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -315,8 +315,8 @@
       "symbol": "VOO",
       "name": "Vanguard S&P VOO",
       "price": 670.26,
-      "change": -5.45,
-      "pct": -0.81,
+      "change": -3.49,
+      "pct": -0.52,
       "date": "06/26"
     },
     {

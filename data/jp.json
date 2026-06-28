@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/27 07:48",
+  "updated": "2026/06/29 06:01",
   "indices": [
     {
       "symbol": "^N225",
@@ -30,8 +30,8 @@
     {
       "symbol": "6920.T",
       "name": "Lasertec",
-      "price": 50000.0,
-      "change": -3180.0,
+      "price": 49803.0,
+      "change": -3167.47,
       "pct": -5.98,
       "date": "06/26"
     },
@@ -56,8 +56,8 @@
     {
       "symbol": "3436.T",
       "name": "SUMCO",
-      "price": 3818.0,
-      "change": 24.0,
+      "price": 3808.0,
+      "change": 23.94,
       "pct": 0.63,
       "date": "06/26"
     }
