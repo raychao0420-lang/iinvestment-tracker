@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/30 01:01",
+  "updated": "2026/06/30 05:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -192,8 +192,8 @@
     {
       "symbol": "2882.TW",
       "name": "國泰金",
-      "price": 101.5,
-      "change": -4.5,
+      "price": 98.0,
+      "change": -4.34,
       "pct": -4.25,
       "date": "06/29"
     },
