@@ -1,20 +1,20 @@
 {
-  "updated": "2026/06/30 14:01",
+  "updated": "2026/06/30 17:57",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 8580.24,
-      "change": 185.59,
-      "pct": 2.21,
+      "price": 8476.48,
+      "change": 81.83,
+      "pct": 0.97,
       "date": "06/30"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 920.3,
-      "change": -0.27,
-      "pct": -0.03,
+      "price": 916.18,
+      "change": -4.39,
+      "pct": -0.48,
       "date": "06/30"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 338000.0,
-      "change": 15000.0,
-      "pct": 4.64,
+      "price": 334000.0,
+      "change": 11000.0,
+      "pct": 3.41,
       "date": "06/30"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2701000.0,
-      "change": 73000.0,
-      "pct": 2.78,
+      "price": 2650000.0,
+      "change": 22000.0,
+      "pct": 0.84,
       "date": "06/30"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 257500.0,
-      "change": -500.0,
-      "pct": -0.19,
+      "price": 256500.0,
+      "change": -1500.0,
+      "pct": -0.58,
       "date": "06/30"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 2200000.0,
-      "change": 162000.0,
-      "pct": 7.95,
+      "price": 2184000.0,
+      "change": 146000.0,
+      "pct": 7.16,
       "date": "06/30"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 11590.0,
-      "change": -410.0,
-      "pct": -3.42,
+      "price": 11530.0,
+      "change": -470.0,
+      "pct": -3.92,
       "date": "06/30"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 978000.0,
-      "change": 63000.0,
-      "pct": 6.89,
+      "price": 981000.0,
+      "change": 66000.0,
+      "pct": 7.21,
       "date": "06/30"
     }
   ]
