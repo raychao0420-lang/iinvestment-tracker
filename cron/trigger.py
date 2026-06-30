@@ -93,4 +93,12 @@ def dispatch(headers):
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except requests.exceptions.RequestException as e:
+        status = getattr(e.response, "status_code", None)
+        if status in (401, 404):   # bad/expired token or wrong repo — real problem, alert
+            print(f"FATAL: GitHub API {status} — {e}")
+            sys.exit(1)
+        # transient blip (timeout / rate-limit / 5xx): self-heals next hour, don't alarm
+        print(f"Transient API error ({status or 'network'}): {e} — skipping this run.")
