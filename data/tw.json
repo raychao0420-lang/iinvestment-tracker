@@ -1,5 +1,5 @@
 {
-  "updated": "2026/06/30 23:01",
+  "updated": "2026/07/01 03:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -184,8 +184,8 @@
     {
       "symbol": "2881.TW",
       "name": "富邦金",
-      "price": 129.5,
-      "change": 1.0,
+      "price": 125.25,
+      "change": 0.97,
       "pct": 0.78,
       "date": "06/30"
     },
@@ -226,7 +226,7 @@
     {
       "symbol": "4961.TW",
       "name": "鼎天國際",
-      "price": 165.0,
+      "price": 157.28,
       "change": 0.0,
       "pct": 0.0,
       "date": "06/30"
