@@ -2,6 +2,7 @@ services:
   - type: cron
     name: iinvestment-tracker-cron
     runtime: python
+    autoDeploy: false          # 每小時資料 push 不重建，改動 cron 程式碼時才手動部署
     buildCommand: pip install -r cron/requirements.txt
     startCommand: python cron/trigger.py
     schedule: "0 * * * *"   # 每整點觸發一次
