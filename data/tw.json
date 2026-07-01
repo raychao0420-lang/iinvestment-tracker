@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/02 00:01",
+  "updated": "2026/07/02 04:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -98,8 +98,8 @@
     {
       "symbol": "3189.TW",
       "name": "景碩",
-      "price": 888.0,
-      "change": -3.0,
+      "price": 886.48,
+      "change": -2.99,
       "pct": -0.34,
       "date": "07/01"
     },
@@ -116,8 +116,8 @@
     {
       "symbol": "2317.TW",
       "name": "鴻海",
-      "price": 248.0,
-      "change": -3.0,
+      "price": 240.83,
+      "change": -2.91,
       "pct": -1.2,
       "date": "07/01"
     },
