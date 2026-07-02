@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/02 22:54",
+  "updated": "2026/07/03 03:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -40,8 +40,8 @@
     {
       "symbol": "3711.TW",
       "name": "ASE 日月光",
-      "price": 727.0,
-      "change": 24.0,
+      "price": 720.42,
+      "change": 23.78,
       "pct": 3.41,
       "date": "07/02"
     },
