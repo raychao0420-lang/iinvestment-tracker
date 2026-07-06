@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/06 19:40",
+  "updated": "2026/07/06 19:45",
   "futures": [
     {
       "symbol": "TX",
@@ -15,9 +15,9 @@
     {
       "symbol": "MTX",
       "name": "小台",
-      "price": 46900.0,
-      "change": 26.0,
-      "pct": 0.06,
+      "price": 46894.0,
+      "change": 20.0,
+      "pct": 0.04,
       "change_open": -232.0,
       "pct_open": -0.5,
       "contract": "202607",
