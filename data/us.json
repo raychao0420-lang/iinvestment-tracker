@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/07 07:46",
+  "updated": "2026/07/07 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -55,8 +55,8 @@
       "symbol": "MU",
       "name": "美光 MU",
       "price": 984.75,
-      "change": 9.19,
-      "pct": 0.94,
+      "change": 9.34,
+      "pct": 0.96,
       "date": "07/06"
     },
     {
