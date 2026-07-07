@@ -1,11 +1,11 @@
 {
-  "updated": "2026/07/08 04:02",
+  "updated": "2026/07/08 06:01",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7503.75,
-      "change": -33.68,
+      "price": 7503.85,
+      "change": -33.58,
       "pct": -0.45,
       "date": "07/07"
     },
@@ -20,17 +20,17 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 52924.56,
-      "change": -131.35,
+      "price": 52925.15,
+      "change": -130.76,
       "pct": -0.25,
       "date": "07/07"
     },
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2983.47,
-      "change": -26.07,
-      "pct": -0.87,
+      "price": 2982.49,
+      "change": -27.05,
+      "pct": -0.9,
       "date": "07/07"
     },
     {
@@ -46,9 +46,9 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR",
-      "price": 432.66,
-      "change": -19.13,
-      "pct": -4.23,
+      "price": 432.57,
+      "change": -19.22,
+      "pct": -4.25,
       "date": "07/07"
     },
     {
@@ -78,17 +78,17 @@
     {
       "symbol": "EWT",
       "name": "摩台指 EWT",
-      "price": 101.86,
-      "change": -5.41,
-      "pct": -5.04,
+      "price": 101.88,
+      "change": -5.39,
+      "pct": -5.02,
       "date": "07/07"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF EWJ",
-      "price": 93.09,
-      "change": -2.18,
-      "pct": -2.29,
+      "price": 93.07,
+      "change": -2.2,
+      "pct": -2.31,
       "date": "07/07"
     }
   ],
@@ -120,9 +120,9 @@
     {
       "symbol": "ORCL",
       "name": "Oracle Cloud",
-      "price": 141.64,
-      "change": -2.12,
-      "pct": -1.47,
+      "price": 141.6,
+      "change": -2.16,
+      "pct": -1.5,
       "date": "07/07"
     },
     {
@@ -136,8 +136,8 @@
     {
       "symbol": "IBM",
       "name": "IBM Cloud",
-      "price": 306.14,
-      "change": 6.62,
+      "price": 306.13,
+      "change": 6.61,
       "pct": 2.21,
       "date": "07/07"
     },
@@ -214,9 +214,9 @@
     {
       "symbol": "COHR",
       "name": "Coherent",
-      "price": 313.99,
-      "change": -21.71,
-      "pct": -6.47,
+      "price": 314.13,
+      "change": -21.57,
+      "pct": -6.43,
       "date": "07/07"
     },
     {
@@ -230,8 +230,8 @@
     {
       "symbol": "CIEN",
       "name": "Ciena",
-      "price": 418.89,
-      "change": -14.93,
+      "price": 418.91,
+      "change": -14.92,
       "pct": -3.44,
       "date": "07/07"
     },
@@ -256,9 +256,9 @@
     {
       "symbol": "VST",
       "name": "Vistra",
-      "price": 155.77,
-      "change": -1.45,
-      "pct": -0.92,
+      "price": 155.73,
+      "change": -1.49,
+      "pct": -0.95,
       "date": "07/07"
     },
     {
@@ -272,25 +272,25 @@
     {
       "symbol": "GEV",
       "name": "GE Vernova",
-      "price": 1077.5,
-      "change": -74.54,
-      "pct": -6.47,
+      "price": 1077.08,
+      "change": -74.96,
+      "pct": -6.51,
       "date": "07/07"
     },
     {
       "symbol": "ETN",
       "name": "Eaton",
-      "price": 395.73,
-      "change": -17.69,
-      "pct": -4.28,
+      "price": 395.68,
+      "change": -17.74,
+      "pct": -4.29,
       "date": "07/07"
     },
     {
       "symbol": "NEE",
       "name": "NextEra Energy",
-      "price": 88.45,
-      "change": 1.01,
-      "pct": 1.16,
+      "price": 88.47,
+      "change": 1.03,
+      "pct": 1.18,
       "date": "07/07"
     }
   ],
@@ -298,9 +298,9 @@
     {
       "symbol": "SPY",
       "name": "S&P 500 SPY",
-      "price": 747.62,
-      "change": -3.66,
-      "pct": -0.49,
+      "price": 747.71,
+      "change": -3.57,
+      "pct": -0.48,
       "date": "07/07"
     },
     {
@@ -314,25 +314,25 @@
     {
       "symbol": "VOO",
       "name": "Vanguard S&P VOO",
-      "price": 687.16,
-      "change": -3.46,
-      "pct": -0.5,
+      "price": 687.08,
+      "change": -3.54,
+      "pct": -0.51,
       "date": "07/07"
     },
     {
       "symbol": "SCHD",
       "name": "Dividend SCHD",
-      "price": 32.53,
-      "change": 0.29,
-      "pct": 0.9,
+      "price": 32.54,
+      "change": 0.3,
+      "pct": 0.93,
       "date": "07/07"
     },
     {
       "symbol": "VGT",
       "name": "Vanguard IT VGT",
-      "price": 114.07,
-      "change": -2.3,
-      "pct": -1.98,
+      "price": 114.06,
+      "change": -2.31,
+      "pct": -1.99,
       "date": "07/07"
     },
     {
@@ -346,9 +346,9 @@
     {
       "symbol": "GLD",
       "name": "黃金 GLD",
-      "price": 377.46,
-      "change": -4.67,
-      "pct": -1.22,
+      "price": 377.49,
+      "change": -4.64,
+      "pct": -1.21,
       "date": "07/07"
     },
     {
@@ -362,9 +362,9 @@
     {
       "symbol": "ARKK",
       "name": "ARK Innovation",
-      "price": 81.2,
-      "change": -2.41,
-      "pct": -2.88,
+      "price": 81.19,
+      "change": -2.42,
+      "pct": -2.89,
       "date": "07/07"
     }
   ]
