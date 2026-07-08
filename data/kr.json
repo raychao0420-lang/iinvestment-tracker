@@ -1,20 +1,20 @@
 {
-  "updated": "2026/07/08 14:01",
+  "updated": "2026/07/08 16:42",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 7226.23,
-      "change": -430.08,
-      "pct": -5.62,
+      "price": 7246.79,
+      "change": -409.52,
+      "pct": -5.35,
       "date": "07/08"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 779.96,
-      "change": -51.27,
-      "pct": -6.17,
+      "price": 785.0,
+      "change": -46.23,
+      "pct": -5.56,
       "date": "07/08"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 275000.0,
-      "change": -21000.0,
-      "pct": -7.09,
+      "price": 277500.0,
+      "change": -18500.0,
+      "pct": -6.25,
       "date": "07/08"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2103000.0,
-      "change": -98000.0,
-      "pct": -4.45,
+      "price": 2076000.0,
+      "change": -125000.0,
+      "pct": -5.68,
       "date": "07/08"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 196900.0,
-      "change": -13600.0,
-      "pct": -6.46,
+      "price": 199200.0,
+      "change": -11300.0,
+      "pct": -5.37,
       "date": "07/08"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1478000.0,
-      "change": -170000.0,
-      "pct": -10.32,
+      "price": 1479000.0,
+      "change": -169000.0,
+      "pct": -10.25,
       "date": "07/08"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 10950.0,
-      "change": 70.0,
-      "pct": 0.64,
+      "price": 11240.0,
+      "change": 360.0,
+      "pct": 3.31,
       "date": "07/08"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 752000.0,
-      "change": -62000.0,
-      "pct": -7.62,
+      "price": 763000.0,
+      "change": -51000.0,
+      "pct": -6.27,
       "date": "07/08"
     }
   ]
