@@ -1,20 +1,20 @@
 {
-  "updated": "2026/07/08 11:58",
+  "updated": "2026/07/08 12:00",
   "indices": [
     {
       "symbol": "^TWII",
       "name": "加權指數",
-      "price": 45586.97,
-      "change": 107.86,
-      "pct": 0.24,
+      "price": 45567.44,
+      "change": 88.33,
+      "pct": 0.19,
       "date": "07/08"
     },
     {
       "symbol": "00631L.TW",
       "name": "元大台灣50正2",
-      "price": 37.21,
-      "change": -1.54,
-      "pct": -3.97,
+      "price": 37.2,
+      "change": -1.55,
+      "pct": -4.0,
       "date": "07/08",
       "nav": 38.74,
       "premium": -4.0
@@ -48,17 +48,17 @@
     {
       "symbol": "2303.TW",
       "name": "聯電",
-      "price": 161.5,
-      "change": 9.11,
-      "pct": 5.98,
+      "price": 160.0,
+      "change": 7.61,
+      "pct": 4.99,
       "date": "07/08"
     },
     {
       "symbol": "3008.TW",
       "name": "大立光",
-      "price": 3950.0,
-      "change": 60.0,
-      "pct": 1.54,
+      "price": 3960.0,
+      "change": 70.0,
+      "pct": 1.8,
       "date": "07/08"
     },
     {
@@ -74,9 +74,9 @@
     {
       "symbol": "1802.TW",
       "name": "台玻",
-      "price": 65.1,
-      "change": 0.5,
-      "pct": 0.77,
+      "price": 65.2,
+      "change": 0.6,
+      "pct": 0.93,
       "date": "07/08"
     },
     {
@@ -124,9 +124,9 @@
     {
       "symbol": "2382.TW",
       "name": "廣達",
-      "price": 377.5,
-      "change": 4.5,
-      "pct": 1.21,
+      "price": 377.0,
+      "change": 4.0,
+      "pct": 1.07,
       "date": "07/08"
     },
     {
@@ -166,9 +166,9 @@
     {
       "symbol": "2308.TW",
       "name": "台達電",
-      "price": 1880.0,
-      "change": -10.0,
-      "pct": -0.53,
+      "price": 1875.0,
+      "change": -15.0,
+      "pct": -0.79,
       "date": "07/08"
     },
     {
@@ -218,9 +218,9 @@
     {
       "symbol": "2634.TW",
       "name": "漢翔航空",
-      "price": 59.3,
-      "change": 1.68,
-      "pct": 2.91,
+      "price": 59.2,
+      "change": 1.58,
+      "pct": 2.74,
       "date": "07/08"
     },
     {
@@ -246,9 +246,9 @@
     {
       "symbol": "006208.TW",
       "name": "富邦台50",
-      "price": 246.95,
-      "change": -4.4,
-      "pct": -1.75,
+      "price": 246.75,
+      "change": -4.6,
+      "pct": -1.83,
       "date": "07/08",
       "nav": 250.25,
       "premium": -1.5
@@ -266,9 +266,9 @@
     {
       "symbol": "00919.TW",
       "name": "群益台灣精選高息",
-      "price": 29.95,
-      "change": 0.19,
-      "pct": 0.64,
+      "price": 29.94,
+      "change": 0.18,
+      "pct": 0.6,
       "date": "07/08",
       "nav": 29.71,
       "premium": -0.3
@@ -296,9 +296,9 @@
     {
       "symbol": "00403A.TW",
       "name": "統一台股升級50",
-      "price": 10.42,
-      "change": -0.51,
-      "pct": -4.67,
+      "price": 10.41,
+      "change": -0.52,
+      "pct": -4.76,
       "date": "07/08",
       "nav": 10.9,
       "premium": -4.13
@@ -306,9 +306,9 @@
     {
       "symbol": "00988A.TW",
       "name": "主動統一全球創新",
-      "price": 19.37,
-      "change": -1.46,
-      "pct": -7.01,
+      "price": 19.34,
+      "change": -1.49,
+      "pct": -7.15,
       "date": "07/08",
       "nav": 21.02,
       "premium": -6.66
@@ -316,9 +316,9 @@
     {
       "symbol": "00981A.TW",
       "name": "主動統一台股增長",
-      "price": 29.82,
-      "change": -1.38,
-      "pct": -4.42,
+      "price": 29.8,
+      "change": -1.4,
+      "pct": -4.49,
       "date": "07/08",
       "nav": 31.12,
       "premium": -4.11
@@ -346,9 +346,9 @@
     {
       "symbol": "00631L.TW",
       "name": "元大台灣50正2",
-      "price": 37.21,
-      "change": -1.54,
-      "pct": -3.97,
+      "price": 37.2,
+      "change": -1.55,
+      "pct": -4.0,
       "date": "07/08",
       "nav": 38.74,
       "premium": -4.0
@@ -356,9 +356,9 @@
     {
       "symbol": "00675L.TW",
       "name": "富邦台灣加權正2",
-      "price": 324.1,
-      "change": -15.7,
-      "pct": -4.62,
+      "price": 323.7,
+      "change": -16.1,
+      "pct": -4.74,
       "date": "07/08",
       "nav": 340.31,
       "premium": -4.92
@@ -366,9 +366,9 @@
     {
       "symbol": "00663L.TW",
       "name": "國泰臺灣加權正2",
-      "price": 107.0,
-      "change": -5.15,
-      "pct": -4.59,
+      "price": 106.95,
+      "change": -5.2,
+      "pct": -4.64,
       "date": "07/08",
       "nav": 112.32,
       "premium": -5.0
