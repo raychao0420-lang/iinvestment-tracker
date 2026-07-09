@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/09 17:56",
+  "updated": "2026/07/09 18:40",
   "indices": [
     {
       "symbol": "^TWII",
@@ -260,8 +260,8 @@
       "change": -0.01,
       "pct": -0.03,
       "date": "07/09",
-      "nav": 32.97,
-      "premium": 0.67
+      "nav": 33.39,
+      "premium": -0.6
     },
     {
       "symbol": "00919.TW",
@@ -270,8 +270,8 @@
       "change": 0.03,
       "pct": 0.1,
       "date": "07/09",
-      "nav": 29.67,
-      "premium": 1.01
+      "nav": 30.11,
+      "premium": -0.46
     },
     {
       "symbol": "00929.TW",
@@ -290,8 +290,8 @@
       "change": -0.06,
       "pct": -0.48,
       "date": "07/09",
-      "nav": 12.56,
-      "premium": -0.24
+      "nav": 12.65,
+      "premium": -0.95
     },
     {
       "symbol": "00403A.TW",
@@ -310,8 +310,8 @@
       "change": 0.02,
       "pct": 0.1,
       "date": "07/09",
-      "nav": 20.6,
-      "premium": -6.94
+      "nav": 19.17,
+      "premium": 0.0
     },
     {
       "symbol": "00981A.TW",
@@ -320,8 +320,8 @@
       "change": 0.2,
       "pct": 0.67,
       "date": "07/09",
-      "nav": 29.6,
-      "premium": 1.18
+      "nav": 29.72,
+      "premium": 0.77
     },
     {
       "symbol": "00935.TW",
