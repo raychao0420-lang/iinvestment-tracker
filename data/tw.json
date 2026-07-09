@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/10 04:01",
+  "updated": "2026/07/10 06:09",
   "indices": [
     {
       "symbol": "^TWII",
@@ -200,8 +200,8 @@
     {
       "symbol": "2891.TW",
       "name": "中信金",
-      "price": 69.9,
-      "change": -1.4,
+      "price": 67.4,
+      "change": -1.35,
       "pct": -1.96,
       "date": "07/09"
     }
