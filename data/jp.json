@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/10 20:06",
+  "updated": "2026/07/11 00:01",
   "indices": [
     {
       "symbol": "^N225",
@@ -145,8 +145,8 @@
       "symbol": "1306.T",
       "name": "NEXT TOPIX ETF",
       "price": 422.1,
-      "change": 3.0,
-      "pct": 0.72,
+      "change": 10.9,
+      "pct": 2.65,
       "date": "07/10"
     },
     {
