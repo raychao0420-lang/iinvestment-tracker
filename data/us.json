@@ -1,11 +1,11 @@
 {
-  "updated": "2026/07/11 04:01",
+  "updated": "2026/07/11 05:44",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7575.25,
-      "change": 31.61,
+      "price": 7575.39,
+      "change": 31.75,
       "pct": 0.42,
       "date": "07/10"
     },
@@ -20,17 +20,17 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 52637.13,
-      "change": 149.72,
+      "price": 52637.01,
+      "change": 149.6,
       "pct": 0.29,
       "date": "07/10"
     },
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2979.58,
-      "change": -12.96,
-      "pct": -0.43,
+      "price": 2977.81,
+      "change": -14.73,
+      "pct": -0.49,
       "date": "07/10"
     },
     {
@@ -46,9 +46,9 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR",
-      "price": 434.15,
-      "change": -2.81,
-      "pct": -0.64,
+      "price": 434.11,
+      "change": -2.85,
+      "pct": -0.65,
       "date": "07/10"
     },
     {
@@ -78,15 +78,15 @@
     {
       "symbol": "EWT",
       "name": "摩台指 EWT",
-      "price": 106.17,
-      "change": 1.12,
-      "pct": 1.07,
+      "price": 106.19,
+      "change": 1.14,
+      "pct": 1.09,
       "date": "07/10"
     },
     {
       "symbol": "EWJ",
       "name": "日股 ETF EWJ",
-      "price": 94.54,
+      "price": 94.55,
       "change": 1.03,
       "pct": 1.1,
       "date": "07/10"
@@ -120,9 +120,9 @@
     {
       "symbol": "ORCL",
       "name": "Oracle Cloud",
-      "price": 140.68,
-      "change": -3.54,
-      "pct": -2.45,
+      "price": 140.64,
+      "change": -3.58,
+      "pct": -2.48,
       "date": "07/10"
     },
     {
@@ -136,9 +136,9 @@
     {
       "symbol": "IBM",
       "name": "IBM Cloud",
-      "price": 287.61,
-      "change": -7.69,
-      "pct": -2.6,
+      "price": 287.56,
+      "change": -7.74,
+      "pct": -2.62,
       "date": "07/10"
     },
     {
@@ -214,8 +214,8 @@
     {
       "symbol": "COHR",
       "name": "Coherent",
-      "price": 324.49,
-      "change": -2.75,
+      "price": 324.5,
+      "change": -2.74,
       "pct": -0.84,
       "date": "07/10"
     },
@@ -230,8 +230,8 @@
     {
       "symbol": "CIEN",
       "name": "Ciena",
-      "price": 460.74,
-      "change": -1.6,
+      "price": 460.72,
+      "change": -1.62,
       "pct": -0.35,
       "date": "07/10"
     },
@@ -256,9 +256,9 @@
     {
       "symbol": "VST",
       "name": "Vistra",
-      "price": 158.79,
-      "change": 0.82,
-      "pct": 0.52,
+      "price": 158.86,
+      "change": 0.88,
+      "pct": 0.56,
       "date": "07/10"
     },
     {
@@ -272,17 +272,17 @@
     {
       "symbol": "GEV",
       "name": "GE Vernova",
-      "price": 1091.19,
-      "change": 15.93,
-      "pct": 1.48,
+      "price": 1091.57,
+      "change": 16.31,
+      "pct": 1.52,
       "date": "07/10"
     },
     {
       "symbol": "ETN",
       "name": "Eaton",
-      "price": 407.04,
-      "change": 1.21,
-      "pct": 0.3,
+      "price": 407.28,
+      "change": 1.45,
+      "pct": 0.36,
       "date": "07/10"
     },
     {
@@ -298,8 +298,8 @@
     {
       "symbol": "SPY",
       "name": "S&P 500 SPY",
-      "price": 754.94,
-      "change": 3.23,
+      "price": 754.95,
+      "change": 3.24,
       "pct": 0.43,
       "date": "07/10"
     },
@@ -314,17 +314,17 @@
     {
       "symbol": "VOO",
       "name": "Vanguard S&P VOO",
-      "price": 693.83,
-      "change": 3.14,
-      "pct": 0.45,
+      "price": 693.86,
+      "change": 3.17,
+      "pct": 0.46,
       "date": "07/10"
     },
     {
       "symbol": "SCHD",
       "name": "Dividend SCHD",
-      "price": 32.38,
-      "change": 0.12,
-      "pct": 0.39,
+      "price": 32.4,
+      "change": 0.14,
+      "pct": 0.43,
       "date": "07/10"
     },
     {
@@ -346,9 +346,9 @@
     {
       "symbol": "GLD",
       "name": "黃金 GLD",
-      "price": 376.91,
-      "change": -1.27,
-      "pct": -0.34,
+      "price": 377.01,
+      "change": -1.17,
+      "pct": -0.31,
       "date": "07/10"
     },
     {
@@ -364,7 +364,7 @@
       "name": "ARK Innovation",
       "price": 80.25,
       "change": -1.28,
-      "pct": -1.56,
+      "pct": -1.58,
       "date": "07/10"
     }
   ]
