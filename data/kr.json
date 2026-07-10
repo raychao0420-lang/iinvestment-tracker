@@ -1,20 +1,20 @@
 {
-  "updated": "2026/07/10 14:01",
+  "updated": "2026/07/10 17:50",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 7589.97,
-      "change": 298.06,
-      "pct": 4.09,
+      "price": 7475.94,
+      "change": 184.03,
+      "pct": 2.52,
       "date": "07/10"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 839.83,
-      "change": 45.83,
-      "pct": 5.77,
+      "price": 837.43,
+      "change": 43.43,
+      "pct": 5.47,
       "date": "07/10"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 292000.0,
-      "change": 14000.0,
-      "pct": 5.04,
+      "price": 285000.0,
+      "change": 7000.0,
+      "pct": 2.52,
       "date": "07/10"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2240000.0,
-      "change": 54000.0,
-      "pct": 2.47,
+      "price": 2180000.0,
+      "change": -6000.0,
+      "pct": -0.27,
       "date": "07/10"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 224000.0,
-      "change": 8500.0,
-      "pct": 3.94,
+      "price": 222000.0,
+      "change": 6500.0,
+      "pct": 3.02,
       "date": "07/10"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1585000.0,
-      "change": 92000.0,
-      "pct": 6.16,
+      "price": 1584000.0,
+      "change": 91000.0,
+      "pct": 6.1,
       "date": "07/10"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 11060.0,
-      "change": 380.0,
-      "pct": 3.56,
+      "price": 11010.0,
+      "change": 330.0,
+      "pct": 3.09,
       "date": "07/10"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 731000.0,
-      "change": -10000.0,
-      "pct": -1.35,
+      "price": 742000.0,
+      "change": 1000.0,
+      "pct": 0.13,
       "date": "07/10"
     }
   ]
