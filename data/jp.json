@@ -1,177 +1,177 @@
 {
-  "updated": "2026/07/10 07:50",
+  "updated": "2026/07/10 14:01",
   "indices": [
     {
       "symbol": "^N225",
       "name": "日經 225",
-      "price": 67743.85,
-      "change": 924.8,
-      "pct": 1.38,
-      "date": "07/09"
+      "price": 68816.79,
+      "change": 1072.94,
+      "pct": 1.58,
+      "date": "07/10"
     }
   ],
   "semieq": [
     {
       "symbol": "8035.T",
       "name": "東京威力科創",
-      "price": 71060.0,
-      "change": 3710.0,
-      "pct": 5.51,
-      "date": "07/09"
+      "price": 73420.0,
+      "change": 2360.0,
+      "pct": 3.32,
+      "date": "07/10"
     },
     {
       "symbol": "6857.T",
       "name": "Advantest",
-      "price": 29160.0,
-      "change": 1615.0,
-      "pct": 5.86,
-      "date": "07/09"
+      "price": 30140.0,
+      "change": 980.0,
+      "pct": 3.36,
+      "date": "07/10"
     },
     {
       "symbol": "6920.T",
       "name": "Lasertec",
-      "price": 43020.0,
-      "change": 1020.0,
-      "pct": 2.43,
-      "date": "07/09"
+      "price": 44690.0,
+      "change": 1670.0,
+      "pct": 3.88,
+      "date": "07/10"
     },
     {
       "symbol": "6146.T",
       "name": "Disco",
-      "price": 71510.0,
-      "change": 3280.0,
-      "pct": 4.81,
-      "date": "07/09"
+      "price": 72980.0,
+      "change": 1470.0,
+      "pct": 2.06,
+      "date": "07/10"
     }
   ],
   "semimtl": [
     {
       "symbol": "4063.T",
       "name": "信越化學",
-      "price": 7010.0,
-      "change": 90.0,
-      "pct": 1.3,
-      "date": "07/09"
+      "price": 7291.0,
+      "change": 281.0,
+      "pct": 4.01,
+      "date": "07/10"
     },
     {
       "symbol": "3436.T",
       "name": "SUMCO",
-      "price": 4544.0,
-      "change": 37.0,
-      "pct": 0.82,
-      "date": "07/09"
+      "price": 5244.0,
+      "change": 700.0,
+      "pct": 15.4,
+      "date": "07/10"
     }
   ],
   "tech": [
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 75600.0,
-      "change": 900.0,
-      "pct": 1.2,
-      "date": "07/09"
+      "price": 76980.0,
+      "change": 1380.0,
+      "pct": 1.83,
+      "date": "07/10"
     },
     {
       "symbol": "6758.T",
       "name": "Sony",
-      "price": 3409.0,
-      "change": -59.0,
-      "pct": -1.7,
-      "date": "07/09"
+      "price": 3367.0,
+      "change": -42.0,
+      "pct": -1.23,
+      "date": "07/10"
     },
     {
       "symbol": "6762.T",
       "name": "TDK",
-      "price": 3382.0,
-      "change": 84.0,
-      "pct": 2.55,
-      "date": "07/09"
+      "price": 3385.0,
+      "change": 3.0,
+      "pct": 0.09,
+      "date": "07/10"
     },
     {
       "symbol": "7741.T",
       "name": "Hoya",
-      "price": 24780.0,
-      "change": 870.0,
-      "pct": 3.64,
-      "date": "07/09"
+      "price": 24915.0,
+      "change": 135.0,
+      "pct": 0.54,
+      "date": "07/10"
     }
   ],
   "ai": [
     {
       "symbol": "9984.T",
       "name": "SoftBank Group",
-      "price": 5757.0,
-      "change": -6.0,
-      "pct": -0.1,
-      "date": "07/09"
+      "price": 6447.0,
+      "change": 690.0,
+      "pct": 11.99,
+      "date": "07/10"
     }
   ],
   "auto": [
     {
       "symbol": "7203.T",
       "name": "Toyota",
-      "price": 2824.0,
-      "change": -65.0,
-      "pct": -2.25,
-      "date": "07/09"
+      "price": 2823.0,
+      "change": -1.0,
+      "pct": -0.04,
+      "date": "07/10"
     },
     {
       "symbol": "7267.T",
       "name": "Honda",
-      "price": 1502.0,
-      "change": -23.0,
-      "pct": -1.51,
-      "date": "07/09"
+      "price": 1499.0,
+      "change": -3.0,
+      "pct": -0.2,
+      "date": "07/10"
     },
     {
       "symbol": "6902.T",
       "name": "Denso",
-      "price": 1928.0,
-      "change": -17.0,
-      "pct": -0.87,
-      "date": "07/09"
+      "price": 1934.0,
+      "change": 6.0,
+      "pct": 0.31,
+      "date": "07/10"
     }
   ],
   "etf": [
     {
       "symbol": "1321.T",
       "name": "NEXT日経225 ETF",
-      "price": 70280.0,
-      "change": 640.0,
-      "pct": 0.92,
-      "date": "07/09"
+      "price": 71220.0,
+      "change": 940.0,
+      "pct": 1.34,
+      "date": "07/10"
     },
     {
       "symbol": "1306.T",
       "name": "NEXT TOPIX ETF",
-      "price": 419.1,
-      "change": -7.4,
-      "pct": -1.74,
-      "date": "07/09"
+      "price": 421.7,
+      "change": 2.6,
+      "pct": 0.62,
+      "date": "07/10"
     },
     {
       "symbol": "1570.T",
       "name": "日経225レバレッジ ETF",
-      "price": 74350.0,
-      "change": 1850.0,
-      "pct": 2.55,
-      "date": "07/09"
+      "price": 76250.0,
+      "change": 1900.0,
+      "pct": 2.56,
+      "date": "07/10"
     },
     {
       "symbol": "2631.T",
       "name": "MAXIS全世界(除日本)",
-      "price": 34140.0,
-      "change": 420.0,
-      "pct": 1.25,
-      "date": "07/09"
+      "price": 34290.0,
+      "change": 150.0,
+      "pct": 0.44,
+      "date": "07/10"
     },
     {
       "symbol": "2558.T",
       "name": "MAXIS S&P500(JPY)",
-      "price": 3501.0,
-      "change": 9.0,
-      "pct": 0.26,
-      "date": "07/09"
+      "price": 3497.0,
+      "change": -4.0,
+      "pct": -0.11,
+      "date": "07/10"
     }
   ]
 }
