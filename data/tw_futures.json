@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/11 07:10",
+  "updated": "2026/07/13 07:00",
   "futures": [
     {
       "symbol": "TX",
@@ -10,7 +10,7 @@
       "change_open": -434.0,
       "pct_open": -0.93,
       "contract": "202607",
-      "date": "07/11"
+      "date": "07/13"
     },
     {
       "symbol": "MTX",
@@ -21,7 +21,7 @@
       "change_open": -232.0,
       "pct_open": -0.5,
       "contract": "202607",
-      "date": "07/11"
+      "date": "07/13"
     },
     {
       "symbol": "TMF",
@@ -32,7 +32,7 @@
       "change_open": -421.0,
       "pct_open": -0.91,
       "contract": "202607",
-      "date": "07/11"
+      "date": "07/13"
     },
     {
       "symbol": "TE",
@@ -43,7 +43,7 @@
       "change_open": -21.0,
       "pct_open": -0.7,
       "contract": "202607",
-      "date": "07/11"
+      "date": "07/13"
     }
   ]
 }
