@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/11 07:42",
+  "updated": "2026/07/13 06:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -121,8 +121,8 @@
       "symbol": "ORCL",
       "name": "Oracle Cloud",
       "price": 140.64,
-      "change": -3.58,
-      "pct": -2.48,
+      "change": -3.08,
+      "pct": -2.14,
       "date": "07/10"
     },
     {
@@ -179,8 +179,8 @@
       "symbol": "MRVL",
       "name": "Marvell",
       "price": 235.81,
-      "change": -7.46,
-      "pct": -3.07,
+      "change": -7.4,
+      "pct": -3.04,
       "date": "07/10"
     }
   ],
