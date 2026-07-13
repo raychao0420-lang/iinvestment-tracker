@@ -1,75 +1,75 @@
 {
-  "updated": "2026/07/13 07:36",
+  "updated": "2026/07/13 12:09",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 7475.94,
-      "change": 184.03,
-      "pct": 2.52,
-      "date": "07/10"
+      "price": 6977.59,
+      "change": -498.35,
+      "pct": -6.67,
+      "date": "07/13"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 837.43,
-      "change": 43.43,
-      "pct": 5.47,
-      "date": "07/10"
+      "price": 810.31,
+      "change": -27.12,
+      "pct": -3.24,
+      "date": "07/13"
     }
   ],
   "semi": [
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 285000.0,
-      "change": 7000.0,
-      "pct": 2.52,
-      "date": "07/10"
+      "price": 264000.0,
+      "change": -21000.0,
+      "pct": -7.37,
+      "date": "07/13"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 2180000.0,
-      "change": -6000.0,
-      "pct": -0.27,
-      "date": "07/10"
+      "price": 1924000.0,
+      "change": -256000.0,
+      "pct": -11.74,
+      "date": "07/13"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 222000.0,
-      "change": 6500.0,
-      "pct": 3.02,
-      "date": "07/10"
+      "price": 210500.0,
+      "change": -11500.0,
+      "pct": -5.18,
+      "date": "07/13"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1584000.0,
-      "change": 91000.0,
-      "pct": 6.1,
-      "date": "07/10"
+      "price": 1313000.0,
+      "change": -271000.0,
+      "pct": -17.11,
+      "date": "07/13"
     }
   ],
   "display": [
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 11010.0,
-      "change": 330.0,
-      "pct": 3.09,
-      "date": "07/10"
+      "price": 10570.0,
+      "change": -440.0,
+      "pct": -4.0,
+      "date": "07/13"
     }
   ],
   "camera": [
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 742000.0,
-      "change": 1000.0,
-      "pct": 0.13,
-      "date": "07/10"
+      "price": 661000.0,
+      "change": -81000.0,
+      "pct": -10.92,
+      "date": "07/13"
     }
   ]
 }
