@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/14 18:53",
+  "updated": "2026/07/14 22:01",
   "etfs": {
     "0050": {
       "holdings": [
@@ -10716,13 +10716,8 @@
         "in": [],
         "out": [
           {
-            "symbol": "2885.TW",
-            "name": "Yuanta Financial Holding Co. Ltd",
-            "pct": null
-          },
-          {
-            "symbol": "2886.TW",
-            "name": "Mega Financial Holding Company Ltd.",
+            "symbol": "3017.TW",
+            "name": "Asia Vital Components Co. Ltd.",
             "pct": null
           },
           {
@@ -10731,33 +10726,8 @@
             "pct": null
           },
           {
-            "symbol": "8046.TW",
-            "name": "NAN YA PRINTED CIRCUIT BOARD CORPORATION",
-            "pct": null
-          },
-          {
-            "symbol": "2890.TW",
-            "name": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
-            "pct": null
-          },
-          {
-            "symbol": "6505.TW",
-            "name": "Formosa Petrochemical Corp",
-            "pct": null
-          },
-          {
-            "symbol": "3017.TW",
-            "name": "Asia Vital Components Co. Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "3653.TW",
-            "name": "JENTECH PRECISION INDUSTRIAL CO. LTD.",
-            "pct": null
-          },
-          {
-            "symbol": "2892.TW",
-            "name": "First  Financial  Holding  Co.  Ltd.",
+            "symbol": "2449.TW",
+            "name": "KING YUAN ELECTRONICS CO. LTD.",
             "pct": null
           },
           {
@@ -10766,53 +10736,8 @@
             "pct": null
           },
           {
-            "symbol": "2884.TW",
-            "name": "E.SUN FINANCIAL HOLDING COMPANYLTD.",
-            "pct": null
-          },
-          {
-            "symbol": "2883.TW",
-            "name": "KGI Financial Holding Co. Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "3231.TW",
-            "name": "Wistron Corporation",
-            "pct": null
-          },
-          {
-            "symbol": "2412.TW",
-            "name": "Chunghwa Telecom Co. Ltd",
-            "pct": null
-          },
-          {
-            "symbol": "1216.TW",
-            "name": "UNI-PRESIDENT ENTERPRISES CORP.",
-            "pct": null
-          },
-          {
-            "symbol": "2882.TW",
-            "name": "CATHAY FINANCIAL HOLDING CO. LTD.",
-            "pct": null
-          },
-          {
-            "symbol": "2881.TW",
-            "name": "Fubon Financial Holding Co. Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "2408.TW",
-            "name": "NANYA TECHNOLOGY CORPORATION",
-            "pct": null
-          },
-          {
-            "symbol": "7769.TW",
-            "name": "Hon.Precision Inc.",
-            "pct": null
-          },
-          {
-            "symbol": "2603.TW",
-            "name": "EVERGREEN MARINE CORP. (TAIWAN) LTD.",
+            "symbol": "3665.TW",
+            "name": "BizLink Holding Inc.",
             "pct": null
           },
           {
@@ -10821,33 +10746,13 @@
             "pct": null
           },
           {
-            "symbol": "1303.TW",
-            "name": "NAN YA PLASTICS CORPORATION",
+            "symbol": "2881.TW",
+            "name": "Fubon Financial Holding Co. Ltd.",
             "pct": null
           },
           {
-            "symbol": "3443.TW",
-            "name": "Global Unichip Corp.",
-            "pct": null
-          },
-          {
-            "symbol": "3665.TW",
-            "name": "BizLink Holding Inc.",
-            "pct": null
-          },
-          {
-            "symbol": "2301.TW",
-            "name": "LITE-ON TECHNOLOGY CORP.",
-            "pct": null
-          },
-          {
-            "symbol": "3008.TW",
-            "name": "LARGAN Precision Co.Ltd",
-            "pct": null
-          },
-          {
-            "symbol": "2344.TW",
-            "name": "Winbond Electronics Corporation",
+            "symbol": "2883.TW",
+            "name": "KGI Financial Holding Co. Ltd.",
             "pct": null
           },
           {
@@ -10861,18 +10766,33 @@
             "pct": null
           },
           {
-            "symbol": "4958.TW",
-            "name": "Zhen Ding Technology Holding Limited",
+            "symbol": "7769.TW",
+            "name": "Hon.Precision Inc.",
             "pct": null
           },
           {
-            "symbol": "2357.TW",
-            "name": "ASUSTEK COMPUTER INC.",
+            "symbol": "6505.TW",
+            "name": "Formosa Petrochemical Corp",
             "pct": null
           },
           {
-            "symbol": "2382.TW",
-            "name": "QUANTA COMPUTER INC.",
+            "symbol": "3008.TW",
+            "name": "LARGAN Precision Co.Ltd",
+            "pct": null
+          },
+          {
+            "symbol": "2882.TW",
+            "name": "CATHAY FINANCIAL HOLDING CO. LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "2603.TW",
+            "name": "EVERGREEN MARINE CORP. (TAIWAN) LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "2408.TW",
+            "name": "NANYA TECHNOLOGY CORPORATION",
             "pct": null
           },
           {
@@ -10881,13 +10801,58 @@
             "pct": null
           },
           {
+            "symbol": "3443.TW",
+            "name": "Global Unichip Corp.",
+            "pct": null
+          },
+          {
+            "symbol": "3231.TW",
+            "name": "Wistron Corporation",
+            "pct": null
+          },
+          {
+            "symbol": "8046.TW",
+            "name": "NAN YA PRINTED CIRCUIT BOARD CORPORATION",
+            "pct": null
+          },
+          {
+            "symbol": "2344.TW",
+            "name": "Winbond Electronics Corporation",
+            "pct": null
+          },
+          {
+            "symbol": "2395.TW",
+            "name": "ADVANTECH Co. Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "2382.TW",
+            "name": "QUANTA COMPUTER INC.",
+            "pct": null
+          },
+          {
+            "symbol": "2885.TW",
+            "name": "Yuanta Financial Holding Co. Ltd",
+            "pct": null
+          },
+          {
+            "symbol": "2884.TW",
+            "name": "E.SUN FINANCIAL HOLDING COMPANYLTD.",
+            "pct": null
+          },
+          {
             "symbol": "3045.TW",
             "name": "TAIWAN  MOBILE  CO. LTD.",
             "pct": null
           },
           {
-            "symbol": "2449.TW",
-            "name": "KING YUAN ELECTRONICS CO. LTD.",
+            "symbol": "1216.TW",
+            "name": "UNI-PRESIDENT ENTERPRISES CORP.",
+            "pct": null
+          },
+          {
+            "symbol": "2301.TW",
+            "name": "LITE-ON TECHNOLOGY CORP.",
             "pct": null
           },
           {
@@ -10901,8 +10866,18 @@
             "pct": null
           },
           {
+            "symbol": "4958.TW",
+            "name": "Zhen Ding Technology Holding Limited",
+            "pct": null
+          },
+          {
             "symbol": "2059.TW",
             "name": "KING SLIDE WORKS CO.LTD",
+            "pct": null
+          },
+          {
+            "symbol": "2890.TW",
+            "name": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
             "pct": null
           },
           {
@@ -10911,8 +10886,33 @@
             "pct": null
           },
           {
-            "symbol": "2395.TW",
-            "name": "ADVANTECH Co. Ltd.",
+            "symbol": "1303.TW",
+            "name": "NAN YA PLASTICS CORPORATION",
+            "pct": null
+          },
+          {
+            "symbol": "2886.TW",
+            "name": "Mega Financial Holding Company Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "3653.TW",
+            "name": "JENTECH PRECISION INDUSTRIAL CO. LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "2357.TW",
+            "name": "ASUSTEK COMPUTER INC.",
+            "pct": null
+          },
+          {
+            "symbol": "2412.TW",
+            "name": "Chunghwa Telecom Co. Ltd",
+            "pct": null
+          },
+          {
+            "symbol": "2892.TW",
+            "name": "First  Financial  Holding  Co.  Ltd.",
             "pct": null
           }
         ]
