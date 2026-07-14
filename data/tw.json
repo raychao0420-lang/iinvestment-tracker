@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/15 02:02",
+  "updated": "2026/07/15 05:41",
   "indices": [
     {
       "symbol": "^TWII",
@@ -140,8 +140,8 @@
     {
       "symbol": "2356.TW",
       "name": "英業達",
-      "price": 63.7,
-      "change": -1.0,
+      "price": 61.7,
+      "change": -0.97,
       "pct": -1.55,
       "date": "07/14"
     },
