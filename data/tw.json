@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/16 02:01",
+  "updated": "2026/07/16 05:41",
   "indices": [
     {
       "symbol": "^TWII",
@@ -124,8 +124,8 @@
     {
       "symbol": "2382.TW",
       "name": "廣達",
-      "price": 381.0,
-      "change": 1.0,
+      "price": 365.4,
+      "change": 0.96,
       "pct": 0.26,
       "date": "07/15"
     },
