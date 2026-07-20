@@ -1,20 +1,20 @@
 {
-  "updated": "2026/07/20 14:02",
+  "updated": "2026/07/20 17:31",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 6522.18,
-      "change": -298.42,
-      "pct": -4.38,
+      "price": 6516.27,
+      "change": -304.33,
+      "pct": -4.46,
       "date": "07/20"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 749.7,
-      "change": -42.14,
-      "pct": -5.32,
+      "price": 749.64,
+      "change": -42.2,
+      "pct": -5.33,
       "date": "07/20"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 243750.0,
-      "change": -11250.0,
-      "pct": -4.41,
+      "price": 244000.0,
+      "change": -11000.0,
+      "pct": -4.31,
       "date": "07/20"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1780000.0,
-      "change": -62000.0,
-      "pct": -3.37,
+      "price": 1764000.0,
+      "change": -78000.0,
+      "pct": -4.23,
       "date": "07/20"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 220000.0,
-      "change": -22500.0,
-      "pct": -9.28,
+      "price": 222000.0,
+      "change": -20500.0,
+      "pct": -8.45,
       "date": "07/20"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1280000.0,
-      "change": 3000.0,
-      "pct": 0.23,
+      "price": 1275000.0,
+      "change": -2000.0,
+      "pct": -0.16,
       "date": "07/20"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 9870.0,
-      "change": -540.0,
-      "pct": -5.19,
+      "price": 9880.0,
+      "change": -530.0,
+      "pct": -5.09,
       "date": "07/20"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 605000.0,
-      "change": -63000.0,
-      "pct": -9.43,
+      "price": 602000.0,
+      "change": -66000.0,
+      "pct": -9.88,
       "date": "07/20"
     }
   ]
