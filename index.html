@@ -513,6 +513,19 @@
   .sea-fade th, .sea-fade td { padding: .3rem .35rem; text-align: right; border-bottom: 1px solid var(--bdr); font-family: 'Courier New', monospace; }
   .sea-fade th { color: var(--t3); font-weight: 600; font-family: inherit; }
   .sea-fade td:first-child, .sea-fade th:first-child { text-align: left; color: var(--t2); font-family: inherit; }
+
+  /* ── 美股夜盤 US LIVE ────────────────────────────────────────── */
+  #us-live-section { border-bottom: 1px solid var(--bdr); padding-bottom: .3rem; margin-bottom: .2rem; }
+  .ul-phase { font-size: .58rem; padding: .1rem .45rem; border-radius: 4px; font-weight: 700; letter-spacing: 0; text-transform: none; }
+  .ul-phase.pre  { background: #422006; color: #fbbf24; }
+  .ul-phase.reg  { background: #14532d; color: #4ade80; }
+  .ul-phase.post { background: #1e3a5f; color: #7dd3fc; }
+  .ul-time { font-size: .58rem; color: var(--t3); margin-left: auto; font-family: 'Courier New', monospace; font-weight: 400; letter-spacing: 0; text-transform: none; }
+  .ul-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(102px, 1fr)); gap: .4rem; margin: .2rem .7rem; }
+  .ul-card { background: var(--c1); border: 1px solid var(--bdr); border-radius: 8px; padding: .4rem .55rem; }
+  .ul-nm { font-size: .62rem; color: var(--t2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: .1rem; }
+  .ul-px { font-size: .84rem; font-weight: 700; font-family: 'Courier New', monospace; }
+  .ul-ch { font-size: .62rem; font-family: 'Courier New', monospace; }
 </style>
 </head>
 <body>
@@ -560,6 +573,14 @@
 
 <div class="tab-content pb-5">
   <div class="tab-pane fade" id="us-panel" role="tabpanel">
+    <div id="us-live-section" style="display:none">
+      <div class="section-title">美股夜盤<span id="us-live-phase"></span><span class="ul-time" id="us-live-time"></span></div>
+      <div class="ul-grid" id="us-live-futures"></div>
+      <div class="section-title mt-1">現貨指數（即時）</div>
+      <div class="ul-grid" id="us-live-indices"></div>
+      <div class="section-title mt-1">追蹤個股夜盤</div>
+      <div class="ul-grid" id="us-live-stocks"></div>
+    </div>
     <div class="section-title">指數</div>
     <div class="idx-grid"  id="us-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">GPU / AI 晶片</div>
@@ -1895,6 +1916,7 @@ async function manualRefresh() {
   _marginData = null;
   try {
     await loadAll();
+    if (typeof loadUsLive === 'function') loadUsLive();
   } catch {
     document.getElementById('last-update').textContent = '資料載入失敗，請稍後再試';
   } finally {
@@ -2488,6 +2510,33 @@ loadAll().catch(() => {
 });
 </script>
 <script>
+// ══ 美股夜盤即時（獨立模組，隨頁面載入與刷新更新）════════════════
+async function loadUsLive() {
+  try {
+    const d = await fetch(`data/us_live.json?t=${Date.now()}`).then(r => r.json());
+    const sec = document.getElementById('us-live-section');
+    if (!d || !d.session) { sec.style.display = 'none'; return; }
+    const phaseCls = { '盤前': 'pre', '盤中': 'reg', '盤後': 'post' }[d.session] || 'reg';
+    document.getElementById('us-live-phase').className = 'ul-phase ' + phaseCls;
+    document.getElementById('us-live-phase').textContent = d.session;
+    document.getElementById('us-live-time').textContent = `美東 ${d.et}｜更新 ${(d.updated||'').slice(-5)}`;
+    ulRender('us-live-futures', d.futures);
+    ulRender('us-live-indices', d.indices);
+    ulRender('us-live-stocks',  d.stocks);
+    sec.style.display = '';
+  } catch {
+    document.getElementById('us-live-section').style.display = 'none';
+  }
+}
+function ulRender(id, items) {
+  document.getElementById(id).innerHTML = (items || []).map(s => {
+    const up = (s.pct ?? s.change ?? 0) >= 0, col = up ? 'var(--up)' : 'var(--down)', sg = up ? '+' : '';
+    return `<div class="ul-card"><div class="ul-nm" title="${s.name}">${s.name}</div>
+      <div class="ul-px" style="color:${col}">${s.price}</div>
+      <div class="ul-ch" style="color:${col}">${sg}${s.change} (${sg}${s.pct}%)</div></div>`;
+  }).join('');
+}
+
 // ══ 季節性分析（獨立模組，點頁籤才載入）══════════════════════════
 let _seaData = null, _seaEvents = null, _seaIdx = 'sp500';
 const SEA_MN = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
@@ -2611,6 +2660,9 @@ function renderSeaStatic() {
      <span class="bias">${hd.effect}</span></div>
      <div class="desc when">🗓 ${hd.when}</div><div class="desc">${hd.note}</div></div>`).join('');
 }
+
+// 頁面載入即抓一次夜盤（不阻塞主資料）
+loadUsLive();
 </script>
 </body>
 </html>

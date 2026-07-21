@@ -1,0 +1,43 @@
+name: Update US Live (夜盤)
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # 每小時整點；由 fetch_us_live.py 依美東時間 gate（ET 04:00-20:00 才動）
+  workflow_dispatch:
+
+concurrency:
+  group: update-us-live
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests pytz
+
+      - name: Fetch US live data
+        run: python fetch_us_live.py
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/us_live.json
+          git diff --staged --quiet && echo "no changes (盤外或無更新)" && exit 0
+          git commit -m "us-live: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          for attempt in 1 2 3; do
+            git push && exit 0
+            echo "push attempt $attempt failed, pulling and retrying..."
+            sleep 5
+            git pull --rebase -X theirs
+          done
+          git push
