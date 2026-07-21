@@ -16,6 +16,7 @@ INDICES = [
     {'key': 'sp500',  'symbol': '^GSPC', 'name': 'S&P 500'},
     {'key': 'nasdaq', 'symbol': '^IXIC', 'name': 'NASDAQ'},
     {'key': 'dow',    'symbol': '^DJI',  'name': '道瓊'},
+    {'key': 'sox',    'symbol': '^SOX',  'name': '費城半導體'},
 ]
 START_YEAR = datetime.now().year - 40  # 近 40 年
 

@@ -493,7 +493,14 @@
   .sea-heat th { color: var(--t3); font-weight: 600; padding: .2rem .1rem; position: sticky; }
   .sea-heat td { text-align: center; padding: 0; }
   .sea-heat .ycell { color: var(--t2); font-family: 'Courier New', monospace; padding: 0 .35rem; text-align: right; white-space: nowrap; }
-  .sea-heat .ytag { color: var(--acc); font-size: .52rem; padding-left: .3rem; cursor: help; }
+  .sea-heat .ytag { color: var(--acc); font-size: .52rem; padding-left: .3rem; }
+  .sea-heat tr.has-ev { cursor: help; }
+  .sea-heat tr.has-ev:hover td { background-color: rgba(59,130,246,.10); }
+  #sea-tip { position: fixed; z-index: 200; max-width: 260px; display: none;
+    background: #0b1220; border: 1px solid var(--acc); border-radius: 8px;
+    padding: .5rem .65rem; font-size: .68rem; line-height: 1.55; color: var(--t1);
+    box-shadow: 0 8px 28px rgba(0,0,0,.65); pointer-events: none; }
+  #sea-tip .tt { color: #93c5fd; font-weight: 700; margin-bottom: .22rem; }
   .sea-heat .hc { width: 26px; height: 20px; color: rgba(255,255,255,.92); font-family: 'Courier New', monospace; border: 1px solid rgba(0,0,0,.25); }
   .sea-heat .totcell { font-family: 'Courier New', monospace; font-weight: 700; padding: 0 .3rem; text-align: right; }
   /* 事件卡 / 一般卡 */
@@ -751,8 +758,9 @@
     <div class="section-title mt-1">各月平均報酬與勝率（近 40 年）</div>
     <div class="sea-legend"><span>跌</span><span class="bar"></span><span>漲</span><span style="margin-left:.4rem">數字＝平均月報酬%；右側＝收紅年數比例</span></div>
     <div id="sea-months"><div class="skeleton" style="height:12rem;margin:.5rem"></div></div>
-    <div class="section-title mt-1">逐年月度熱力圖（每格＝該年該月漲跌%）</div>
+    <div class="section-title mt-1">逐年月度熱力圖（每格＝該年該月漲跌%；滑到有標記的年份看當年事件）</div>
     <div class="sea-heat-wrap"><div id="sea-heat"></div></div>
+    <div id="sea-tip"></div>
     <div class="section-title mt-1">各月事件解讀</div>
     <div class="sea-cards" id="sea-monthcards"></div>
     <div class="section-title mt-1">季節效應鈍化對照（逐十年各月平均%）</div>
@@ -2598,8 +2606,8 @@ function renderSeasonality() {
   ht += '<th>全年</th></tr></thead><tbody>';
   years.forEach(y => {
     const row = idx.matrix[y];
-    const tag = ev[y] ? `<span class="ytag" title="${ev[y].text.replace(/"/g,'&quot;')}">${ev[y].tag}</span>` : '';
-    ht += `<tr><td class="ycell">${y}${tag}</td>`;
+    const tag = ev[y] ? `<span class="ytag">${ev[y].tag}</span>` : '';
+    ht += `<tr${ev[y] ? ` class="has-ev" data-y="${y}"` : ''}><td class="ycell">${y}${tag}</td>`;
     let comp = 1, has = false;
     for (let m = 1; m <= 12; m++) {
       const v = row[m];
@@ -2609,9 +2617,32 @@ function renderSeasonality() {
     const tot = has ? (comp - 1) * 100 : null;
     ht += `<td class="totcell" style="color:${tot>=0?'var(--up)':'var(--down)'}">${tot==null?'':(tot>=0?'+':'')+tot.toFixed(0)+'%'}</td></tr>`;
   });
-  document.getElementById('sea-heat').innerHTML = ht + '</tbody></table>';
+  const heatEl = document.getElementById('sea-heat');
+  heatEl.innerHTML = ht + '</tbody></table>';
+  bindSeaTip(heatEl);
 
   renderSeaFade();
+}
+
+// 滑鼠移到有事件標記的年份，彈出當年事件說明
+function bindSeaTip(heatEl) {
+  if (heatEl._tipBound) return;
+  heatEl._tipBound = true;
+  const tip = document.getElementById('sea-tip');
+  heatEl.addEventListener('mousemove', e => {
+    const tr = e.target.closest('tr.has-ev');
+    const ev = tr && (_seaEvents.years || {})[tr.getAttribute('data-y')];
+    if (!ev) { tip.style.display = 'none'; return; }
+    tip.innerHTML = `<div class="tt">${tr.getAttribute('data-y')}・${ev.tag}</div>${ev.text}`;
+    tip.style.display = 'block';
+    const r = tip.getBoundingClientRect(), pad = 14;
+    let x = e.clientX + pad, y = e.clientY + pad;
+    if (x + r.width > innerWidth)  x = e.clientX - r.width - pad;
+    if (y + r.height > innerHeight) y = e.clientY - r.height - pad;
+    tip.style.left = Math.max(4, x) + 'px';
+    tip.style.top  = Math.max(4, y) + 'px';
+  });
+  heatEl.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
 }
 
 // 鈍化對照（逐十年各月平均，首桶 vs 末桶判趨勢）
