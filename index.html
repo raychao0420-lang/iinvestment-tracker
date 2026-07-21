@@ -470,6 +470,49 @@
   .streak-tag.sit.s4  { background: #c2410c; color: #fed7aa; }
   .streak-tag.sit.s5  { background: #ea580c; color: #fff; }
   .streak-sync { font-size: .52rem; padding: .04rem .18rem; border-radius: 3px; background: #2d1b69; color: #a78bfa; font-weight: 700; }
+
+  /* ── SEASONALITY 季節性 ──────────────────────────────────────── */
+  .sea-intro { margin: .5rem .7rem; padding: .7rem .9rem; background: var(--c1); border: 1px solid var(--bdr); border-radius: 10px; font-size: .74rem; line-height: 1.6; color: var(--t2); }
+  .sea-intro b { color: var(--t1); }
+  .sea-switch { display: flex; gap: .4rem; margin: .5rem .7rem .2rem; flex-wrap: wrap; }
+  .sea-switch button { background: var(--c1); border: 1px solid var(--bdr); border-radius: 6px; color: var(--t2); font-size: .74rem; padding: .28rem .8rem; cursor: pointer; transition: all .15s; }
+  .sea-switch button.active { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 700; }
+  .sea-legend { display: flex; align-items: center; gap: .5rem; margin: .4rem .8rem; font-size: .62rem; color: var(--t3); flex-wrap: wrap; }
+  .sea-legend .bar { display: inline-block; width: 90px; height: 10px; border-radius: 3px; background: linear-gradient(90deg,#16a34a,#3b4a5a 45%,#3b4a5a 55%,#dc2626); }
+  /* 月度均值長條 */
+  .sea-month-row { display: flex; align-items: center; margin: .15rem .7rem; font-size: .72rem; gap: .5rem; }
+  .sea-month-row .mlabel { width: 2.4rem; color: var(--t2); flex-shrink: 0; }
+  .sea-bartrack { flex: 1; position: relative; height: 20px; background: var(--c1); border-radius: 4px; overflow: hidden; }
+  .sea-bartrack .mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--bdr); }
+  .sea-bartrack .fill { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; }
+  .sea-month-row .mval { width: 3.6rem; text-align: right; font-family: 'Courier New', monospace; flex-shrink: 0; }
+  .sea-month-row .mwin { width: 3.2rem; text-align: right; font-size: .64rem; color: var(--t3); flex-shrink: 0; }
+  /* 熱力圖 */
+  .sea-heat-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: .3rem .5rem; }
+  .sea-heat { border-collapse: collapse; font-size: .58rem; margin: 0 auto; }
+  .sea-heat th { color: var(--t3); font-weight: 600; padding: .2rem .1rem; position: sticky; }
+  .sea-heat td { text-align: center; padding: 0; }
+  .sea-heat .ycell { color: var(--t2); font-family: 'Courier New', monospace; padding: 0 .35rem; text-align: right; white-space: nowrap; }
+  .sea-heat .ytag { color: var(--acc); font-size: .52rem; padding-left: .3rem; cursor: help; }
+  .sea-heat .hc { width: 26px; height: 20px; color: rgba(255,255,255,.92); font-family: 'Courier New', monospace; border: 1px solid rgba(0,0,0,.25); }
+  .sea-heat .totcell { font-family: 'Courier New', monospace; font-weight: 700; padding: 0 .3rem; text-align: right; }
+  /* 事件卡 / 一般卡 */
+  .sea-cards { margin: .3rem .7rem; }
+  .sea-card { background: var(--c1); border: 1px solid var(--bdr); border-radius: 9px; padding: .6rem .8rem; margin-bottom: .45rem; }
+  .sea-card .hd { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; flex-wrap: wrap; }
+  .sea-card .mname { font-weight: 700; color: var(--t1); font-size: .82rem; }
+  .sea-card .bias { font-size: .6rem; padding: .1rem .45rem; border-radius: 4px; background: var(--c2); color: var(--t2); border: 1px solid var(--bdr); }
+  .sea-card .stat { margin-left: auto; font-family: 'Courier New', monospace; font-size: .68rem; color: var(--t3); }
+  .sea-card .tags { display: flex; gap: .3rem; flex-wrap: wrap; margin-bottom: .3rem; }
+  .sea-card .tag { font-size: .58rem; padding: .08rem .4rem; border-radius: 4px; background: var(--acc2); color: #93c5fd; }
+  .sea-card .desc { font-size: .72rem; line-height: 1.65; color: var(--t2); }
+  .sea-card .desc.when { font-size: .62rem; color: var(--t3); margin-bottom: .2rem; }
+  /* 鈍化對照表 */
+  .sea-fade-wrap { overflow-x: auto; margin: .3rem .7rem; }
+  .sea-fade { width: 100%; border-collapse: collapse; font-size: .66rem; min-width: 380px; }
+  .sea-fade th, .sea-fade td { padding: .3rem .35rem; text-align: right; border-bottom: 1px solid var(--bdr); font-family: 'Courier New', monospace; }
+  .sea-fade th { color: var(--t3); font-weight: 600; font-family: inherit; }
+  .sea-fade td:first-child, .sea-fade th:first-child { text-align: left; color: var(--t2); font-family: inherit; }
 </style>
 </head>
 <body>
@@ -506,6 +549,11 @@
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="kr-tab" data-bs-toggle="tab" data-bs-target="#kr-panel" type="button" role="tab">
       <span class="badge-dot dot-kr"></span>韓股 <span class="session-tag" id="kr-tag"></span>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="season-tab" data-bs-toggle="tab" data-bs-target="#season-panel" type="button" role="tab" onclick="loadSeasonality()">
+      <span class="badge-dot" style="background:#a78bfa"></span>季節性
     </button>
   </li>
 </ul>
@@ -671,6 +719,29 @@
     </button>
     <div class="eps-body" id="eps-body-kr">
       <div class="eps-table-wrap"><div id="kr-eps"><div class="skeleton" style="height:8rem;margin:.5rem"></div></div></div>
+    </div>
+  </div>
+
+  <div class="tab-pane fade" id="season-panel" role="tabpanel">
+    <div class="sea-intro">
+      <b>美股 40 年月度季節性</b>　紅漲綠跌。整理 S&amp;P 500 / NASDAQ / 道瓊 近 40 年每月漲跌、勝率，對照各月重複發生的事件（FOMC、財報季、大選、三巫日、節日）與逐年反應。多數季節效應會隨時間<b>鈍化</b>，請搭配「鈍化對照」一起看，當作風險提醒而非鐵律。
+    </div>
+    <div class="sea-switch" id="sea-switch"></div>
+    <div class="section-title mt-1">各月平均報酬與勝率（近 40 年）</div>
+    <div class="sea-legend"><span>跌</span><span class="bar"></span><span>漲</span><span style="margin-left:.4rem">數字＝平均月報酬%；右側＝收紅年數比例</span></div>
+    <div id="sea-months"><div class="skeleton" style="height:12rem;margin:.5rem"></div></div>
+    <div class="section-title mt-1">逐年月度熱力圖（每格＝該年該月漲跌%）</div>
+    <div class="sea-heat-wrap"><div id="sea-heat"></div></div>
+    <div class="section-title mt-1">各月事件解讀</div>
+    <div class="sea-cards" id="sea-monthcards"></div>
+    <div class="section-title mt-1">季節效應鈍化對照（逐十年各月平均%）</div>
+    <div class="sea-fade-wrap"><div id="sea-fade"></div></div>
+    <div class="section-title mt-1">鈍化觀察重點</div>
+    <div class="sea-cards" id="sea-fatigue"></div>
+    <div class="section-title mt-1">節日 / 暑假 / 結算效應</div>
+    <div class="sea-cards" id="sea-holidays"></div>
+    <div class="sea-intro" style="color:var(--t3);font-size:.64rem">
+      資料來源：Yahoo Finance 月線（月報酬＝當月收盤 vs 前月收盤，已還原股息）。事件註記為人工整理，僅供研究參考，非投資建議。
     </div>
   </div>
 </div>
@@ -2415,6 +2486,131 @@ setInterval(() => { updateClock(); updateTags(); }, 30000);
 loadAll().catch(() => {
   document.getElementById('last-update').textContent = '資料載入失敗，請稍後再試';
 });
+</script>
+<script>
+// ══ 季節性分析（獨立模組，點頁籤才載入）══════════════════════════
+let _seaData = null, _seaEvents = null, _seaIdx = 'sp500';
+const SEA_MN = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+async function loadSeasonality() {
+  if (_seaData) return;
+  const ts = Date.now();
+  try {
+    const [d, e] = await Promise.all([
+      fetch(`data/seasonality.json?t=${ts}`).then(r=>r.json()),
+      fetch(`data/seasonality_events.json?t=${ts}`).then(r=>r.json()),
+    ]);
+    _seaData = d; _seaEvents = e;
+    renderSeaSwitch();
+    renderSeasonality();
+    renderSeaStatic();
+  } catch (err) {
+    document.getElementById('sea-months').innerHTML =
+      '<div style="padding:1rem;color:var(--t3)">季節性資料載入失敗，請稍後重試</div>';
+  }
+}
+
+// 紅漲綠跌，|pct| 約 ±8% 達飽和
+function seaHeatColor(pct) {
+  if (pct == null || isNaN(pct)) return 'background:transparent';
+  const a = 0.12 + Math.min(Math.abs(pct) / 8, 1) * 0.78;
+  return `background:rgba(${pct >= 0 ? '220,38,38' : '22,163,74'},${a.toFixed(2)})`;
+}
+
+function renderSeaSwitch() {
+  document.getElementById('sea-switch').innerHTML = Object.keys(_seaData.indices).map(k =>
+    `<button class="${k === _seaIdx ? 'active' : ''}" onclick="setSeaIdx('${k}')">${_seaData.indices[k].name}</button>`
+  ).join('');
+}
+function setSeaIdx(k) { _seaIdx = k; renderSeaSwitch(); renderSeasonality(); }
+
+function renderSeasonality() {
+  const idx = _seaData.indices[_seaIdx];
+
+  // 月度平均長條（滿格對應 ±3%）
+  let html = '';
+  for (let m = 1; m <= 12; m++) {
+    const s = idx.monthly[m]; if (!s) continue;
+    const half = Math.min(Math.abs(s.avg) / 3, 1) * 50, pos = s.avg >= 0;
+    const fill = pos ? `left:50%;width:${half}%;background:var(--up)`
+                     : `right:50%;width:${half}%;background:var(--down)`;
+    html += `<div class="sea-month-row"><span class="mlabel">${SEA_MN[m-1]}</span>
+      <span class="sea-bartrack"><span class="mid"></span><span class="fill" style="${fill}"></span></span>
+      <span class="mval" style="color:${pos?'var(--up)':'var(--down)'}">${pos?'+':''}${s.avg}%</span>
+      <span class="mwin">${s.win}%紅</span></div>`;
+  }
+  document.getElementById('sea-months').innerHTML = html;
+
+  // 逐年熱力圖
+  const years = Object.keys(idx.matrix).sort();
+  const ev = _seaEvents.years || {};
+  let ht = '<table class="sea-heat"><thead><tr><th></th>';
+  for (let m = 1; m <= 12; m++) ht += `<th>${m}</th>`;
+  ht += '<th>全年</th></tr></thead><tbody>';
+  years.forEach(y => {
+    const row = idx.matrix[y];
+    const tag = ev[y] ? `<span class="ytag" title="${ev[y].text.replace(/"/g,'&quot;')}">${ev[y].tag}</span>` : '';
+    ht += `<tr><td class="ycell">${y}${tag}</td>`;
+    let comp = 1, has = false;
+    for (let m = 1; m <= 12; m++) {
+      const v = row[m];
+      if (v == null) { ht += '<td class="hc"></td>'; }
+      else { has = true; comp *= (1 + v/100); ht += `<td class="hc" style="${seaHeatColor(v)}">${v<0?'-':''}${Math.abs(v).toFixed(0)}</td>`; }
+    }
+    const tot = has ? (comp - 1) * 100 : null;
+    ht += `<td class="totcell" style="color:${tot>=0?'var(--up)':'var(--down)'}">${tot==null?'':(tot>=0?'+':'')+tot.toFixed(0)+'%'}</td></tr>`;
+  });
+  document.getElementById('sea-heat').innerHTML = ht + '</tbody></table>';
+
+  renderSeaFade();
+}
+
+// 鈍化對照（逐十年各月平均，首桶 vs 末桶判趨勢）
+function renderSeaFade() {
+  const decs = _seaData.indices[_seaIdx].decades;
+  let h = '<table class="sea-fade"><thead><tr><th>月</th>';
+  decs.forEach(d => h += `<th>${d.label}</th>`);
+  h += '<th>趨勢</th></tr></thead><tbody>';
+  for (let m = 1; m <= 12; m++) {
+    h += `<tr><td>${m}月</td>`;
+    const vals = [];
+    decs.forEach(d => {
+      const s = d.stats[m];
+      if (s) { vals.push(s.avg); h += `<td style="color:${s.avg>=0?'var(--up)':'var(--down)'}">${s.avg>=0?'+':''}${s.avg}</td>`; }
+      else { vals.push(null); h += '<td>–</td>'; }
+    });
+    const first = vals.find(v => v != null), last = [...vals].reverse().find(v => v != null);
+    let trend = '';
+    if (first != null && last != null) {
+      const d = last - first;
+      trend = Math.abs(d) < 0.3 ? '≈ 穩定' : (d > 0 ? '↑ 轉強' : '↓ 走弱');
+    }
+    h += `<td style="font-family:inherit;color:var(--t3)">${trend}</td></tr>`;
+  }
+  document.getElementById('sea-fade').innerHTML = h + '</tbody></table>';
+}
+
+// 事件卡 / 鈍化觀察 / 節日（與指數無關，只畫一次；統計固定用 S&P 500）
+function renderSeaStatic() {
+  const sp = _seaData.indices.sp500;
+  document.getElementById('sea-monthcards').innerHTML = _seaEvents.months.map(mo => {
+    const s = sp.monthly[mo.m] || {};
+    const stat = s.avg != null ? `<span class="stat">均 ${s.avg>=0?'+':''}${s.avg}%・勝率 ${s.win}%</span>` : '';
+    return `<div class="sea-card"><div class="hd"><span class="mname">${mo.name}</span>
+      <span class="bias">${mo.bias}</span>${stat}</div>
+      <div class="tags">${mo.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="desc">${mo.note}</div></div>`;
+  }).join('');
+
+  document.getElementById('sea-fatigue').innerHTML = _seaEvents.fatigue.map(f =>
+    `<div class="sea-card"><div class="hd"><span class="mname" style="font-size:.76rem">${f.title}</span></div>
+     <div class="desc">${f.note}</div></div>`).join('');
+
+  document.getElementById('sea-holidays').innerHTML = _seaEvents.holidays.map(hd =>
+    `<div class="sea-card"><div class="hd"><span class="mname" style="font-size:.78rem">${hd.name}</span>
+     <span class="bias">${hd.effect}</span></div>
+     <div class="desc when">🗓 ${hd.when}</div><div class="desc">${hd.note}</div></div>`).join('');
+}
 </script>
 </body>
 </html>
