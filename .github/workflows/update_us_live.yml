@@ -27,11 +27,15 @@ jobs:
       - name: Fetch US live data
         run: python fetch_us_live.py
 
+      - name: Fetch TW futures (跟著美股一起更新，兼作排程漏跑備援)
+        run: python fetch_futures_live.py
+        continue-on-error: true   # 台指夜盤失敗不影響美股夜盤更新
+
       - name: Commit and push
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/us_live.json
+          git add data/us_live.json data/tw_futures.json
           git diff --staged --quiet && echo "no changes (盤外或無更新)" && exit 0
           git commit -m "us-live: $(date -u '+%Y-%m-%d %H:%M UTC')"
           for attempt in 1 2 3; do
