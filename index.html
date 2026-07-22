@@ -129,8 +129,10 @@
   .sig-bar {
     width: 100%; border-top: 1px solid var(--bdr);
     padding-top: .28rem; margin-top: .22rem;
-    display: flex; flex-direction: column; gap: .15rem;
+    display: flex; flex-direction: row; align-items: center; gap: .5rem; justify-content: space-between;
   }
+  .sig-text  { display: flex; flex-direction: column; gap: .15rem; flex: 1; min-width: 0; }
+  .sig-quad  { width: 84px; height: 84px; flex-shrink: 0; }
   .sig-row   { display: flex; align-items: center; gap: .35rem; font-size: .67rem; }
   .sig-label { color: var(--t3); font-weight: 700; font-size: .59rem; min-width: 1.4rem; }
   .sig-sep   { color: var(--bdr); }
@@ -899,6 +901,27 @@ const SIG_ZONE = {
   sell:        { t: '賣出',     c: 'sig-sell' },
   strong_sell: { t: '強力賣出', c: 'sig-sell' },
 };
+// 共振象限圖：橫軸=布林%B，縱軸=RSI；左下角=買進區、右上角=賣出區
+function sigQuadrant(sig) {
+  if (sig.bb_pct == null || sig.rsi14 == null) return '';
+  const X = v => 15 + Math.max(0, Math.min(100, v)) / 100 * 80;   // 15..95
+  const Y = v => 90 - Math.max(0, Math.min(100, v)) / 100 * 82;   // 90(下)..8(上)，RSI 高在上
+  const bx = X(sig.bb_pct).toFixed(1), by = Y(sig.rsi14).toFixed(1);
+  const dot = (sig.zone === 'strong_buy' || sig.zone === 'buy') ? '#16a34a'
+            : (sig.zone === 'strong_sell' || sig.zone === 'sell') ? '#dc2626' : '#e2e8f0';
+  return `<svg class="sig-quad" viewBox="0 0 100 100"><title>共振象限：橫=布林%B 縱=RSI｜左下=買進區、右上=賣出區、中間=觀望</title>
+    <rect x="15" y="8" width="80" height="82" fill="none" stroke="var(--bdr)"/>
+    <rect x="15" y="57" width="32" height="33" fill="rgba(22,163,74,.16)"/>
+    <rect x="63" y="8" width="32" height="33" fill="rgba(220,38,38,.16)"/>
+    <line x1="55" y1="8" x2="55" y2="90" stroke="var(--bdr)" stroke-dasharray="2 2" stroke-width=".6"/>
+    <line x1="15" y1="49" x2="95" y2="49" stroke="var(--bdr)" stroke-dasharray="2 2" stroke-width=".6"/>
+    <text x="17" y="88" font-size="8" fill="#16a34a">買</text>
+    <text x="80" y="17" font-size="8" fill="#dc2626">賣</text>
+    <text x="55" y="99" font-size="6.5" fill="var(--t3)" text-anchor="middle">布林%B→</text>
+    <text x="6" y="49" font-size="6.5" fill="var(--t3)" text-anchor="middle" transform="rotate(-90 6 49)">RSI→</text>
+    <circle cx="${bx}" cy="${by}" r="4.5" fill="${dot}" stroke="#fff" stroke-width="1.2"/>
+  </svg>`;
+}
 function renderSignalBadges(sig) {
   if (!sig) return '';
   const rc = v => v == null ? 'sig-neutral' : v < 35 ? 'sig-buy' : v > 65 ? 'sig-sell' : 'sig-neutral';
@@ -922,21 +945,24 @@ function renderSignalBadges(sig) {
     </div>`;
   }
   return `<div class="sig-bar">
-    <div class="sig-row">
-      <span class="sig-label">短</span>
-      <span class="sig-val ${rc(sig.rsi14)}">RSI ${fr(sig.rsi14)}</span>
-      <span class="sig-sep">·</span>
-      <span class="sig-val ${bc20(sig.bias20)}">乖 ${fb(sig.bias20)}</span>
-      <span class="sig-sep">·</span>
-      <span class="sig-val ${pbc(sig.bb_pct)}" title="布林通道位置 %B：0%=下軌 100%=上軌">布 ${fp(sig.bb_pct)}</span>
+    <div class="sig-text">
+      <div class="sig-row">
+        <span class="sig-label">短</span>
+        <span class="sig-val ${rc(sig.rsi14)}">RSI ${fr(sig.rsi14)}</span>
+        <span class="sig-sep">·</span>
+        <span class="sig-val ${bc20(sig.bias20)}">乖 ${fb(sig.bias20)}</span>
+        <span class="sig-sep">·</span>
+        <span class="sig-val ${pbc(sig.bb_pct)}" title="布林通道位置 %B：0%=下軌 100%=上軌">布 ${fp(sig.bb_pct)}</span>
+      </div>
+      <div class="sig-row">
+        <span class="sig-label">中</span>
+        <span class="sig-val ${rc(sig.rsi21)}">RSI ${fr(sig.rsi21)}</span>
+        <span class="sig-sep">·</span>
+        <span class="sig-val ${bc60(sig.bias60)}">乖 ${fb(sig.bias60)}</span>
+      </div>
+      ${verdict}
     </div>
-    <div class="sig-row">
-      <span class="sig-label">中</span>
-      <span class="sig-val ${rc(sig.rsi21)}">RSI ${fr(sig.rsi21)}</span>
-      <span class="sig-sep">·</span>
-      <span class="sig-val ${bc60(sig.bias60)}">乖 ${fb(sig.bias60)}</span>
-    </div>
-    ${verdict}
+    ${sigQuadrant(sig)}
   </div>`;
 }
 
