@@ -2128,8 +2128,13 @@ async function openChart(key) {
     crosshairMarkerVisible: false,
   });
   mkLine('#f59e0b', 'MA5').setData(data.ma5  || []);
-  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);
+  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);   // 亦為布林中軌
   mkLine('#c084fc', 'MA60').setData(data.ma60 || []);
+  // 布林通道上下軌（青色虛線，中軌即 MA20）
+  const mkBB = t => chart.addLineSeries({ color: 'rgba(45,212,191,.85)', lineWidth: 1, title: t,
+    lineStyle: 2, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
+  mkBB('布林上軌').setData(data.bb_up || []);
+  mkBB('布林下軌').setData(data.bb_low || []);
 
   // Candlestick (紅漲綠跌)
   const candS = chart.addCandlestickSeries({
@@ -2247,8 +2252,13 @@ async function openStockChart(symbol, name) {
     lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false,
   });
   mkLine('#f59e0b', 'MA5').setData(data.ma5  || []);
-  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);
+  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);   // 亦為布林中軌
   mkLine('#c084fc', 'MA60').setData(data.ma60 || []);
+  // 布林通道上下軌（青色虛線，中軌即 MA20）
+  const mkBB = t => chart.addLineSeries({ color: 'rgba(45,212,191,.85)', lineWidth: 1, title: t,
+    lineStyle: 2, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
+  mkBB('布林上軌').setData(data.bb_up || []);
+  mkBB('布林下軌').setData(data.bb_low || []);
 
   const candS = chart.addCandlestickSeries({
     upColor: '#dc2626', downColor: '#16a34a',

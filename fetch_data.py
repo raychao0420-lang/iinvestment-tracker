@@ -575,10 +575,14 @@ def fetch_chart_data(mkt_series=None):
             ma5  = df['close'].rolling(5).mean()
             ma20 = df['close'].rolling(20).mean()
             ma60 = df['close'].rolling(60).mean()
+            std20 = df['close'].rolling(20).std()      # 布林通道 20,2σ
             df   = df.tail(126)
             ma5  = ma5.reindex(df.index)
             ma20 = ma20.reindex(df.index)
             ma60 = ma60.reindex(df.index)
+            std20 = std20.reindex(df.index)
+            bb_up  = ma20 + 2 * std20
+            bb_low = ma20 - 2 * std20
 
             # ^TWII: use TWSE 成交金額(億元) when available; 0050.TW: 股 ÷ 1000 = 張
             use_twse = sym == '^TWII' and mkt_series is not None
@@ -632,6 +636,8 @@ def fetch_chart_data(mkt_series=None):
                 'ma5':     to_line(ma5),
                 'ma20':    to_line(ma20),
                 'ma60':    to_line(ma60),
+                'bb_up':   to_line(bb_up),
+                'bb_low':  to_line(bb_low),
             }
             if use_twse:
                 result[key]['vol_unit'] = '億元'
@@ -1351,6 +1357,9 @@ def fetch_stock_charts():
             ma5  = df['Close'].rolling(5).mean()
             ma20 = df['Close'].rolling(20).mean()
             ma60 = df['Close'].rolling(60).mean()
+            std20 = df['Close'].rolling(20).std()      # 布林通道 20,2σ
+            bb_up  = ma20 + 2 * std20
+            bb_low = ma20 - 2 * std20
 
             is_tw = unit_map[sym] == '張'
             candles, volume = [], []
@@ -1378,6 +1387,8 @@ def fetch_stock_charts():
                 'ma5':     to_line(ma5),
                 'ma20':    to_line(ma20),
                 'ma60':    to_line(ma60),
+                'bb_up':   to_line(bb_up),
+                'bb_low':  to_line(bb_low),
             }
             if unit_map[sym]:
                 entry['vol_unit'] = unit_map[sym]
