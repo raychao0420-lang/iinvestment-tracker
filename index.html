@@ -138,6 +138,12 @@
   .sig-buy     { color: var(--down); }
   .sig-sell    { color: var(--up); }
   .sig-neutral { color: var(--t3); font-weight: 400; }
+  .sig-verdict { border-top: 1px dashed var(--bdr); padding-top: .2rem; margin-top: .05rem; }
+  .sig-zone    { font-weight: 800; font-size: .7rem; padding: .04rem .4rem; border-radius: 4px; background: var(--c1); }
+  .sig-zone.sig-buy  { background: rgba(22,163,74,.16); }
+  .sig-zone.sig-sell { background: rgba(220,38,38,.16); }
+  .sig-warn    { color: #f59e0b; font-weight: 700; font-size: .62rem; cursor: help; }
+  .sig-squeeze { color: #60a5fa; font-weight: 700; font-size: .62rem; cursor: help; }
 
   /* ── ETF NAV ─────────────────────────────────────────────────── */
   .nav-bar {
@@ -880,19 +886,43 @@ function renderIdx(items, id, showChart = false) {
   }).join('');
 }
 
+const SIG_ZONE = {
+  strong_buy:  { t: '強力買進', c: 'sig-buy'  },
+  buy:         { t: '買進',     c: 'sig-buy'  },
+  neutral:     { t: '中性觀望', c: 'sig-neutral' },
+  sell:        { t: '賣出',     c: 'sig-sell' },
+  strong_sell: { t: '強力賣出', c: 'sig-sell' },
+};
 function renderSignalBadges(sig) {
   if (!sig) return '';
   const rc = v => v == null ? 'sig-neutral' : v < 35 ? 'sig-buy' : v > 65 ? 'sig-sell' : 'sig-neutral';
   const bc20 = v => v == null ? 'sig-neutral' : v < -8 ? 'sig-buy' : v > 8 ? 'sig-sell' : 'sig-neutral';
   const bc60 = v => v == null ? 'sig-neutral' : v < -12 ? 'sig-buy' : v > 12 ? 'sig-sell' : 'sig-neutral';
+  const pbc = v => v == null ? 'sig-neutral' : v <= 20 ? 'sig-buy' : v >= 80 ? 'sig-sell' : 'sig-neutral';
   const fr = v => v == null ? '–' : Math.round(v);
   const fb = v => v == null ? '–' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+  const fp = v => v == null ? '–' : Math.round(v) + '%';
+  // 共振判斷列（布林%B + RSI + 乖離 同向數）
+  let verdict = '';
+  if (sig.zone) {
+    const z = SIG_ZONE[sig.zone] || SIG_ZONE.neutral;
+    const zoneTxt = sig.zone === 'neutral' ? z.t : `${z.t} ${sig.score}⚡`;
+    const warn = sig.trend
+      ? ' <span class="sig-warn" title="布林帶擴張＝趨勢盤，均值回歸(抄底/摸頭)訊號易誤判，別逆勢接刀">⚠趨勢盤</span>'
+      : (sig.squeeze ? ' <span class="sig-squeeze" title="布林帶收斂＝盤整，區間操作(高出低進)較有效">◧盤整</span>' : '');
+    verdict = `<div class="sig-row sig-verdict">
+      <span class="sig-label">判</span>
+      <span class="sig-zone ${z.c}">${zoneTxt}</span>${warn}
+    </div>`;
+  }
   return `<div class="sig-bar">
     <div class="sig-row">
       <span class="sig-label">短</span>
       <span class="sig-val ${rc(sig.rsi14)}">RSI ${fr(sig.rsi14)}</span>
       <span class="sig-sep">·</span>
       <span class="sig-val ${bc20(sig.bias20)}">乖 ${fb(sig.bias20)}</span>
+      <span class="sig-sep">·</span>
+      <span class="sig-val ${pbc(sig.bb_pct)}" title="布林通道位置 %B：0%=下軌 100%=上軌">布 ${fp(sig.bb_pct)}</span>
     </div>
     <div class="sig-row">
       <span class="sig-label">中</span>
@@ -900,6 +930,7 @@ function renderSignalBadges(sig) {
       <span class="sig-sep">·</span>
       <span class="sig-val ${bc60(sig.bias60)}">乖 ${fb(sig.bias60)}</span>
     </div>
+    ${verdict}
   </div>`;
 }
 

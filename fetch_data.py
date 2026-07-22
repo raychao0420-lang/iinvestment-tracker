@@ -1211,11 +1211,58 @@ def fetch_signals():
             bias20 = round((price - ma20) / ma20 * 100, 1) if ma20 else None
             bias60 = round((price - ma60) / ma60 * 100, 1) if ma60 else None
 
+            # 布林通道 (20, 2σ)：%B 通道位置、帶寬、收斂(盤整)/擴張(趨勢)
+            bb_pct = bb_width = bb_low = bb_mid = bb_up = None
+            squeeze = trend = False
+            if len(close) >= 20:
+                ma = close.rolling(20).mean()
+                sd = close.rolling(20).std()
+                bb_mid = float(ma.iloc[-1])
+                bb_up = float((ma + 2 * sd).iloc[-1])
+                bb_low = float((ma - 2 * sd).iloc[-1])
+                rng = bb_up - bb_low
+                if rng > 0:
+                    bb_pct = round((price - bb_low) / rng * 100, 1)   # %B：0=下軌 100=上軌
+                if bb_mid:
+                    bb_width = round(rng / bb_mid * 100, 1)           # 帶寬%
+                    widths = ((ma + 2 * sd) - (ma - 2 * sd)) / ma * 100
+                    wmed = float(widths.tail(60).median())
+                    if bb_width is not None and wmed:
+                        squeeze = bb_width < wmed * 0.85   # 明顯收斂→盤整，均值回歸有效
+                        trend = bb_width > wmed * 1.35     # 明顯擴張→趨勢啟動，均值回歸易誤判
+
+            # 共振判斷：布林%B + RSI14 + 乖離20 三指標同向才算數，降低單一指標誤判
+            buy = sum(x for x in (
+                bb_pct is not None and bb_pct <= 15,
+                rsi14 is not None and rsi14 <= 35,
+                bias20 is not None and bias20 <= -8,
+            ))
+            sell = sum(x for x in (
+                bb_pct is not None and bb_pct >= 85,
+                rsi14 is not None and rsi14 >= 65,
+                bias20 is not None and bias20 >= 8,
+            ))
+            if buy >= 2 and buy >= sell:
+                zone, score = ('strong_buy' if buy >= 3 else 'buy'), buy
+            elif sell >= 2 and sell > buy:
+                zone, score = ('strong_sell' if sell >= 3 else 'sell'), sell
+            else:
+                zone, score = 'neutral', max(buy, sell)
+
             result[sym] = {
                 'rsi14':  rsi14,
                 'rsi21':  rsi21,
                 'bias20': bias20,
                 'bias60': bias60,
+                'bb_pct': bb_pct,
+                'bb_width': bb_width,
+                'bb_low': round(bb_low, 2) if bb_low is not None else None,
+                'bb_mid': round(bb_mid, 2) if bb_mid is not None else None,
+                'bb_up':  round(bb_up, 2) if bb_up is not None else None,
+                'squeeze': squeeze,
+                'trend':   trend,
+                'zone':    zone,
+                'score':   score,
             }
         except Exception as e:
             print(f'  signals {sym}: {e}')
