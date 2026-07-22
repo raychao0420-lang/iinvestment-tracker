@@ -24,14 +24,17 @@ jobs:
       - name: Install dependencies
         run: pip install yfinance pytz
 
-      - name: Fetch seasonality data
+      - name: Fetch seasonality data (US)
         run: python fetch_seasonality.py
+
+      - name: Fetch seasonality data (TW)
+        run: python fetch_seasonality_tw.py
 
       - name: Commit and push
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/seasonality.json
+          git add data/seasonality.json data/seasonality_tw.json
           git diff --staged --quiet && echo "no changes" && exit 0
           git commit -m "seasonality: $(date -u '+%Y-%m-%d %H:%M UTC')"
           for attempt in 1 2 3; do

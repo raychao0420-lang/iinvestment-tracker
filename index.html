@@ -477,6 +477,9 @@
   .sea-switch { display: flex; gap: .4rem; margin: .5rem .7rem .2rem; flex-wrap: wrap; }
   .sea-switch button { background: var(--c1); border: 1px solid var(--bdr); border-radius: 6px; color: var(--t2); font-size: .74rem; padding: .28rem .8rem; cursor: pointer; transition: all .15s; }
   .sea-switch button.active { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 700; }
+  .sea-mkt { margin-bottom: 0; }
+  .sea-mkt button { font-size: .78rem; padding: .34rem 1.1rem; font-weight: 600; }
+  .sea-mkt button.active { background: #a78bfa; border-color: #a78bfa; }
   .sea-legend { display: flex; align-items: center; gap: .5rem; margin: .4rem .8rem; font-size: .62rem; color: var(--t3); flex-wrap: wrap; }
   .sea-legend .bar { display: inline-block; width: 90px; height: 10px; border-radius: 3px; background: linear-gradient(90deg,#16a34a,#3b4a5a 45%,#3b4a5a 55%,#dc2626); }
   /* 月度均值長條 */
@@ -751,11 +754,10 @@
   </div>
 
   <div class="tab-pane fade" id="season-panel" role="tabpanel">
-    <div class="sea-intro">
-      <b>美股 40 年月度季節性</b>　紅漲綠跌。整理 S&amp;P 500 / NASDAQ / 道瓊 近 40 年每月漲跌、勝率，對照各月重複發生的事件（FOMC、財報季、大選、三巫日、節日）與逐年反應。多數季節效應會隨時間<b>鈍化</b>，請搭配「鈍化對照」一起看，當作風險提醒而非鐵律。
-    </div>
+    <div class="sea-switch sea-mkt" id="sea-mkt"></div>
+    <div class="sea-intro" id="sea-intro"></div>
     <div class="sea-switch" id="sea-switch"></div>
-    <div class="section-title mt-1">各月平均報酬與勝率（近 40 年）</div>
+    <div class="section-title mt-1">各月平均報酬與勝率（歷年統計）</div>
     <div class="sea-legend"><span>跌</span><span class="bar"></span><span>漲</span><span style="margin-left:.4rem">數字＝平均月報酬%；右側＝收紅年數比例</span></div>
     <div id="sea-months"><div class="skeleton" style="height:12rem;margin:.5rem"></div></div>
     <div class="section-title mt-1">逐年月度熱力圖（每格＝該年該月漲跌%；滑到有標記的年份看當年事件）</div>
@@ -2546,25 +2548,53 @@ function ulRender(id, items) {
 }
 
 // ══ 季節性分析（獨立模組，點頁籤才載入）══════════════════════════
-let _seaData = null, _seaEvents = null, _seaIdx = 'sp500';
+let _seaMk = null, _seaData = null, _seaEvents = null, _seaIdx = null;
+const _seaCache = {};
+const SEA_CFG = {
+  us: { name: '美股', primary: 'sp500',
+        files: ['data/seasonality.json', 'data/seasonality_events.json'],
+        intro: '<b>美股 40 年月度季節性</b>　紅漲綠跌。整理 S&P 500 / NASDAQ / 道瓊 / 費半 近 40 年每月漲跌、勝率，對照各月重複發生的事件（FOMC、財報季、大選、三巫日、節日）與逐年反應。多數季節效應會隨時間<b>鈍化</b>，請搭配「鈍化對照」一起看，當作風險提醒而非鐵律。' },
+  tw: { name: '台股', primary: 'twii',
+        files: ['data/seasonality_tw.json', 'data/seasonality_tw_events.json'],
+        intro: '<b>台股月度季節性</b>　紅漲綠跌。整理加權指數等近 20 餘年每月漲跌、勝率，對照台股專屬事件（農曆年封關開紅盤、五窮六絕、除權息旺季、台指結算、MSCI 調整、投信作帳）與逐年大事。台股電子權值高、與美股連動強，且除權息旺季會讓指數技術性「蒸發點數」，請搭配「鈍化對照」與「美股」對照著看。' },
+};
 const SEA_MN = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
 async function loadSeasonality() {
-  if (_seaData) return;
-  const ts = Date.now();
+  if (_seaMk) return;              // 已初始化過，保留目前選到的市場
+  renderSeaMktSwitch();
+  await switchSeaMkt('us');
+}
+
+// 美股／台股 切換：各自快取一份資料，共用同一套渲染
+async function switchSeaMkt(mk) {
+  const cfg = SEA_CFG[mk];
   try {
-    const [d, e] = await Promise.all([
-      fetch(`data/seasonality.json?t=${ts}`).then(r=>r.json()),
-      fetch(`data/seasonality_events.json?t=${ts}`).then(r=>r.json()),
-    ]);
-    _seaData = d; _seaEvents = e;
-    renderSeaSwitch();
-    renderSeasonality();
-    renderSeaStatic();
+    if (!_seaCache[mk]) {
+      const ts = Date.now();
+      const [d, e] = await Promise.all(cfg.files.map(f => fetch(`${f}?t=${ts}`).then(r => r.json())));
+      _seaCache[mk] = { data: d, events: e };
+    }
   } catch (err) {
     document.getElementById('sea-months').innerHTML =
-      '<div style="padding:1rem;color:var(--t3)">季節性資料載入失敗，請稍後重試</div>';
+      `<div style="padding:1rem;color:var(--t3)">${cfg.name}季節性資料載入失敗，請稍後重試</div>`;
+    return;
   }
+  _seaMk = mk;
+  _seaData = _seaCache[mk].data;
+  _seaEvents = _seaCache[mk].events;
+  _seaIdx = _seaData.indices[cfg.primary] ? cfg.primary : Object.keys(_seaData.indices)[0];
+  document.getElementById('sea-intro').innerHTML = cfg.intro;
+  renderSeaMktSwitch();
+  renderSeaSwitch();
+  renderSeasonality();
+  renderSeaStatic();
+}
+
+function renderSeaMktSwitch() {
+  document.getElementById('sea-mkt').innerHTML = Object.keys(SEA_CFG).map(mk =>
+    `<button class="${mk === _seaMk ? 'active' : ''}" onclick="switchSeaMkt('${mk}')">${SEA_CFG[mk].name}</button>`
+  ).join('');
 }
 
 // 紅漲綠跌，|pct| 約 ±8% 達飽和
@@ -2672,9 +2702,9 @@ function renderSeaFade() {
 
 // 事件卡 / 鈍化觀察 / 節日（與指數無關，只畫一次；統計固定用 S&P 500）
 function renderSeaStatic() {
-  const sp = _seaData.indices.sp500;
+  const p = _seaData.indices[SEA_CFG[_seaMk].primary] || Object.values(_seaData.indices)[0];
   document.getElementById('sea-monthcards').innerHTML = _seaEvents.months.map(mo => {
-    const s = sp.monthly[mo.m] || {};
+    const s = p.monthly[mo.m] || {};
     const stat = s.avg != null ? `<span class="stat">均 ${s.avg>=0?'+':''}${s.avg}%・勝率 ${s.win}%</span>` : '';
     return `<div class="sea-card"><div class="hd"><span class="mname">${mo.name}</span>
       <span class="bias">${mo.bias}</span>${stat}</div>
