@@ -771,9 +771,7 @@
     <div class="sea-cards" id="sea-fatigue"></div>
     <div class="section-title mt-1">節日 / 暑假 / 結算效應</div>
     <div class="sea-cards" id="sea-holidays"></div>
-    <div class="sea-intro" style="color:var(--t3);font-size:.64rem">
-      資料來源：Yahoo Finance 月線（月報酬＝當月收盤 vs 前月收盤，已還原股息）。事件註記為人工整理，僅供研究參考，非投資建議。
-    </div>
+    <div class="sea-intro" id="sea-src" style="color:var(--t3);font-size:.64rem"></div>
   </div>
 </div>
 
@@ -2553,10 +2551,12 @@ const _seaCache = {};
 const SEA_CFG = {
   us: { name: '美股', primary: 'sp500',
         files: ['data/seasonality.json', 'data/seasonality_events.json'],
-        intro: '<b>美股 40 年月度季節性</b>　紅漲綠跌。整理 S&P 500 / NASDAQ / 道瓊 / 費半 近 40 年每月漲跌、勝率，對照各月重複發生的事件（FOMC、財報季、大選、三巫日、節日）與逐年反應。多數季節效應會隨時間<b>鈍化</b>，請搭配「鈍化對照」一起看，當作風險提醒而非鐵律。' },
+        intro: '<b>美股 40 年月度季節性</b>　紅漲綠跌。整理 S&P 500 / NASDAQ / 道瓊 / 費半 近 40 年每月漲跌、勝率，對照各月重複發生的事件（FOMC、財報季、大選、三巫日、節日）與逐年反應。多數季節效應會隨時間<b>鈍化</b>，請搭配「鈍化對照」一起看，當作風險提醒而非鐵律。',
+        src: '資料來源：Yahoo Finance 月線（月報酬＝當月收盤 vs 前月收盤，已還原股息）。事件註記為人工整理，僅供研究參考，非投資建議。' },
   tw: { name: '台股', primary: 'twii',
         files: ['data/seasonality_tw.json', 'data/seasonality_tw_events.json'],
-        intro: '<b>台股月度季節性</b>　紅漲綠跌。整理加權指數等近 20 餘年每月漲跌、勝率，對照台股專屬事件（農曆年封關開紅盤、五窮六絕、除權息旺季、台指結算、MSCI 調整、投信作帳）與逐年大事。台股電子權值高、與美股連動強，且除權息旺季會讓指數技術性「蒸發點數」，請搭配「鈍化對照」與「美股」對照著看。' },
+        intro: '<b>台股月度季節性</b>　紅漲綠跌。整理加權指數等近 20 餘年每月漲跌、勝率，對照台股專屬事件（農曆年封關開紅盤、五窮六絕、除權息旺季、台指結算、MSCI 調整、投信作帳）與逐年大事。台股電子權值高、與美股連動強，且除權息旺季會讓指數技術性「蒸發點數」，請搭配「鈍化對照」與「美股」對照著看。',
+        src: '資料來源：<b>加權指數、台灣50</b> 為 Yahoo Finance 月線（<b>價格指數</b>，已還原股息）；<b>櫃買指數</b>為 FinMind「櫃買報酬指數」（<b>報酬指數・含息</b>，基準與加權的價格指數略有不同）。月報酬＝當月收盤 vs 前月收盤，已濾除股票分割造成的假跳空。事件註記為人工整理，僅供研究參考，非投資建議。' },
 };
 const SEA_MN = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
@@ -2585,6 +2585,7 @@ async function switchSeaMkt(mk) {
   _seaEvents = _seaCache[mk].events;
   _seaIdx = _seaData.indices[cfg.primary] ? cfg.primary : Object.keys(_seaData.indices)[0];
   document.getElementById('sea-intro').innerHTML = cfg.intro;
+  document.getElementById('sea-src').innerHTML = cfg.src;
   renderSeaMktSwitch();
   renderSeaSwitch();
   renderSeasonality();
