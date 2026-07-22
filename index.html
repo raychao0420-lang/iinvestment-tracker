@@ -486,6 +486,11 @@
   .sea-mkt { margin-bottom: 0; }
   .sea-mkt button { font-size: .78rem; padding: .34rem 1.1rem; font-weight: 600; }
   .sea-mkt button.active { background: #a78bfa; border-color: #a78bfa; }
+  .sea-range { display: flex; align-items: center; gap: .4rem; margin: .3rem .7rem .1rem; flex-wrap: wrap; font-size: .72rem; }
+  .sea-range .sea-rng-lbl { color: var(--t3); font-weight: 700; }
+  .sea-range select { background: var(--c1); border: 1px solid var(--bdr); border-radius: 6px; color: var(--t1); font-size: .72rem; padding: .22rem .4rem; }
+  .sea-range button { background: var(--c1); border: 1px solid var(--bdr); border-radius: 6px; color: var(--t2); font-size: .68rem; padding: .22rem .6rem; cursor: pointer; }
+  .sea-range button:hover { border-color: var(--acc); color: var(--t1); }
   .sea-legend { display: flex; align-items: center; gap: .5rem; margin: .4rem .8rem; font-size: .62rem; color: var(--t3); flex-wrap: wrap; }
   .sea-legend .bar { display: inline-block; width: 90px; height: 10px; border-radius: 3px; background: linear-gradient(90deg,#16a34a,#3b4a5a 45%,#3b4a5a 55%,#dc2626); }
   /* 月度均值長條 */
@@ -763,7 +768,8 @@
     <div class="sea-switch sea-mkt" id="sea-mkt"></div>
     <div class="sea-intro" id="sea-intro"></div>
     <div class="sea-switch" id="sea-switch"></div>
-    <div class="section-title mt-1">各月平均報酬與勝率（歷年統計）</div>
+    <div class="sea-range" id="sea-range"></div>
+    <div class="section-title mt-1" id="sea-months-title">各月平均報酬與勝率</div>
     <div class="sea-legend"><span>跌</span><span class="bar"></span><span>漲</span><span style="margin-left:.4rem">數字＝平均月報酬%；右側＝收紅年數比例</span></div>
     <div id="sea-months"><div class="skeleton" style="height:12rem;margin:.5rem"></div></div>
     <div class="section-title mt-1">逐年月度熱力圖（每格＝該年該月漲跌%；滑到有標記的年份看當年事件）</div>
@@ -2578,7 +2584,52 @@ function ulRender(id, items) {
 
 // ══ 季節性分析（獨立模組，點頁籤才載入）══════════════════════════
 let _seaMk = null, _seaData = null, _seaEvents = null, _seaIdx = null;
+let _seaFrom = null, _seaTo = null;   // 選定的年份區間（null=全部）
 const _seaCache = {};
+
+// 從逐年矩陣即時重算各月統計（avg/win/best/worst/n），支援年份區間過濾
+function computeMonthly(matrix, fromY, toY) {
+  const stats = {};
+  for (let m = 1; m <= 12; m++) {
+    const vals = [];
+    for (const y in matrix) {
+      const yi = +y;
+      if (fromY && yi < fromY) continue;
+      if (toY && yi > toY) continue;
+      const v = matrix[y][m];
+      if (v != null) vals.push(v);
+    }
+    if (!vals.length) continue;
+    const wins = vals.filter(v => v > 0).length;
+    stats[m] = {
+      avg: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2),
+      win: +(wins / vals.length * 100).toFixed(1),
+      best: Math.max(...vals), worst: Math.min(...vals), n: vals.length,
+    };
+  }
+  return stats;
+}
+// 逐十年分桶（同 fetch 端 decade_buckets），套用區間
+function computeDecades(matrix, fromY, toY) {
+  const years = Object.keys(matrix).map(Number)
+    .filter(y => (!fromY || y >= fromY) && (!toY || y <= toY)).sort((a, b) => a - b);
+  if (!years.length) return [];
+  const hi = years[years.length - 1];
+  const buckets = [];
+  let start = years[0];
+  while (start <= hi) {
+    let end = start + 9;
+    if (hi - end < 5) end = hi;
+    const yrs = years.filter(y => y >= start && y <= end);
+    if (yrs.length) {
+      const sub = {};
+      yrs.forEach(y => sub[y] = matrix[y]);
+      buckets.push({ label: `${start}-${end}`, stats: computeMonthly(sub, null, null) });
+    }
+    start = end + 1;
+  }
+  return buckets;
+}
 const SEA_CFG = {
   us: { name: '美股', primary: 'sp500',
         files: ['data/seasonality.json', 'data/seasonality_events.json'],
@@ -2615,12 +2666,52 @@ async function switchSeaMkt(mk) {
   _seaData = _seaCache[mk].data;
   _seaEvents = _seaCache[mk].events;
   _seaIdx = _seaData.indices[cfg.primary] ? cfg.primary : Object.keys(_seaData.indices)[0];
+  _seaFrom = _seaTo = null;   // 換市場重置為「全部」
   document.getElementById('sea-intro').innerHTML = cfg.intro;
   document.getElementById('sea-src').innerHTML = cfg.src;
   renderSeaMktSwitch();
   renderSeaSwitch();
+  renderSeaRange();
   renderSeasonality();
   renderSeaStatic();
+}
+
+// 年份區間控制列（起訖下拉 + 全部 / 共同期間 快捷）
+function renderSeaRange() {
+  const yset = new Set();
+  Object.values(_seaData.indices).forEach(ix => Object.keys(ix.matrix).forEach(y => yset.add(+y)));
+  const years = [...yset].sort((a, b) => a - b);
+  const el = document.getElementById('sea-range');
+  if (!years.length) { el.innerHTML = ''; return; }
+  const lo = years[0], hi = years[years.length - 1];
+  const from = _seaFrom || lo, to = _seaTo || hi;
+  const opt = sel => years.map(y => `<option value="${y}"${y === sel ? ' selected' : ''}>${y}</option>`).join('');
+  el.innerHTML =
+    `<span class="sea-rng-lbl">期間</span>
+     <select id="sea-from" onchange="onSeaRange()">${opt(from)}</select>
+     <span>~</span>
+     <select id="sea-to" onchange="onSeaRange()">${opt(to)}</select>
+     <button onclick="setSeaRange(null,null)">全部</button>
+     <button onclick="seaCommonRange()" title="對齊所有指數都有資料的重疊期間，跨指數比較才客觀（如台股 2009~）">共同期間</button>`;
+}
+function onSeaRange() {
+  let f = +document.getElementById('sea-from').value, t = +document.getElementById('sea-to').value;
+  if (f > t) { const tmp = f; f = t; t = tmp; }
+  setSeaRange(f, t);
+}
+function setSeaRange(f, t) {
+  _seaFrom = f; _seaTo = t;
+  renderSeaRange(); renderSeasonality(); renderSeaStatic();
+}
+// 重疊期間 = 各指數「起始年最大值」~「結束年最小值」
+function seaCommonRange() {
+  let start = -Infinity, end = Infinity;
+  Object.values(_seaData.indices).forEach(ix => {
+    const ys = Object.keys(ix.matrix).map(Number);
+    start = Math.max(start, Math.min(...ys));
+    end = Math.min(end, Math.max(...ys));
+  });
+  if (start <= end) setSeaRange(start, end);
 }
 
 function renderSeaMktSwitch() {
@@ -2645,11 +2736,19 @@ function setSeaIdx(k) { _seaIdx = k; renderSeaSwitch(); renderSeasonality(); }
 
 function renderSeasonality() {
   const idx = _seaData.indices[_seaIdx];
+  const monthly = computeMonthly(idx.matrix, _seaFrom, _seaTo);
+
+  // 此指數在選定區間內實際有幾年
+  const yrs = Object.keys(idx.matrix).map(Number)
+    .filter(y => (!_seaFrom || y >= _seaFrom) && (!_seaTo || y <= _seaTo));
+  document.getElementById('sea-months-title').textContent = yrs.length
+    ? `各月平均報酬與勝率（${Math.min(...yrs)}~${Math.max(...yrs)}，共 ${yrs.length} 年）`
+    : '各月平均報酬與勝率';
 
   // 月度平均長條（滿格對應 ±3%）
   let html = '';
   for (let m = 1; m <= 12; m++) {
-    const s = idx.monthly[m]; if (!s) continue;
+    const s = monthly[m]; if (!s) continue;
     const half = Math.min(Math.abs(s.avg) / 3, 1) * 50, pos = s.avg >= 0;
     const fill = pos ? `left:50%;width:${half}%;background:var(--up)`
                      : `right:50%;width:${half}%;background:var(--down)`;
@@ -2658,10 +2757,12 @@ function renderSeasonality() {
       <span class="mval" style="color:${pos?'var(--up)':'var(--down)'}">${pos?'+':''}${s.avg}%</span>
       <span class="mwin">${s.win}%紅</span></div>`;
   }
-  document.getElementById('sea-months').innerHTML = html;
+  document.getElementById('sea-months').innerHTML = html ||
+    `<div style="padding:1rem;color:var(--t3)">${idx.name} 在所選期間沒有資料，請調整年份或按「共同期間」。</div>`;
 
-  // 逐年熱力圖
-  const years = Object.keys(idx.matrix).sort();
+  // 逐年熱力圖（只列選定區間內的年份）
+  const years = Object.keys(idx.matrix).sort()
+    .filter(y => (!_seaFrom || +y >= _seaFrom) && (!_seaTo || +y <= _seaTo));
   const ev = _seaEvents.years || {};
   let ht = '<table class="sea-heat"><thead><tr><th></th>';
   for (let m = 1; m <= 12; m++) ht += `<th>${m}</th>`;
@@ -2709,7 +2810,7 @@ function bindSeaTip(heatEl) {
 
 // 鈍化對照（逐十年各月平均，首桶 vs 末桶判趨勢）
 function renderSeaFade() {
-  const decs = _seaData.indices[_seaIdx].decades;
+  const decs = computeDecades(_seaData.indices[_seaIdx].matrix, _seaFrom, _seaTo);
   let h = '<table class="sea-fade"><thead><tr><th>月</th>';
   decs.forEach(d => h += `<th>${d.label}</th>`);
   h += '<th>趨勢</th></tr></thead><tbody>';
@@ -2735,8 +2836,9 @@ function renderSeaFade() {
 // 事件卡 / 鈍化觀察 / 節日（與指數無關，只畫一次；統計固定用 S&P 500）
 function renderSeaStatic() {
   const p = _seaData.indices[SEA_CFG[_seaMk].primary] || Object.values(_seaData.indices)[0];
+  const pMonthly = computeMonthly(p.matrix, _seaFrom, _seaTo);
   document.getElementById('sea-monthcards').innerHTML = _seaEvents.months.map(mo => {
-    const s = p.monthly[mo.m] || {};
+    const s = pMonthly[mo.m] || {};
     const stat = s.avg != null ? `<span class="stat">均 ${s.avg>=0?'+':''}${s.avg}%・勝率 ${s.win}%</span>` : '';
     return `<div class="sea-card"><div class="hd"><span class="mname">${mo.name}</span>
       <span class="bias">${mo.bias}</span>${stat}</div>
