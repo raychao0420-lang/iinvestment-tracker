@@ -32,7 +32,10 @@ def month_returns(symbol):
     for ts, price in closes.items():
         if prev is not None and prev > 0:
             pct = round((price / prev - 1) * 100, 2)
-            out.setdefault(ts.year, {})[ts.month] = pct
+            # 過濾股票分割／資料錯誤造成的假暴衝：指數或 ETF 單月不可能 ±50% 以上
+            # （如 0050 於 2025 年 1 拆 4，yfinance 調整在 2014/1 留下 -75% 假接縫）
+            if abs(pct) <= 50:
+                out.setdefault(ts.year, {})[ts.month] = pct
         prev = price
     return out
 
