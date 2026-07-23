@@ -147,6 +147,22 @@
   .sig-warn    { color: #f59e0b; font-weight: 700; font-size: .62rem; cursor: help; }
   .sig-squeeze { color: #60a5fa; font-weight: 700; font-size: .62rem; cursor: help; }
 
+  /* ── 布林掛單階梯（開盤前價位策略）─────────────────────────────── */
+  .bb-lad   { width: 100%; border-top: 1px dashed var(--bdr); padding-top: .3rem; margin-top: .24rem; }
+  .bb-track { position: relative; height: 5px; border-radius: 3px; margin: .1rem .25rem .34rem;
+    background: linear-gradient(90deg, rgba(34,197,94,.4), rgba(100,116,139,.22) 50%, rgba(239,68,68,.4)); }
+  .bb-mid-tick { position: absolute; top: -2px; left: 50%; width: 1px; height: 9px; background: var(--t3); }
+  .bb-dot   { position: absolute; top: 50%; width: 8px; height: 8px; border-radius: 50%;
+    background: #e2e8f0; border: 1.5px solid #0f172a; transform: translate(-50%,-50%); }
+  .bb-cols  { display: flex; justify-content: space-between; align-items: flex-end; }
+  .bb-col   { display: flex; flex-direction: column; line-height: 1.2; }
+  .bb-col.c-buy  { text-align: left;   color: var(--down); }
+  .bb-col.c-mid  { text-align: center; color: var(--t2); }
+  .bb-col.c-sell { text-align: right;  color: var(--up); }
+  .bb-lab   { font-size: .55rem; font-weight: 700; color: var(--t3); letter-spacing: .02em; }
+  .bb-col b { font-family: 'Courier New', monospace; font-size: .74rem; font-weight: 700; }
+  .bb-d     { font-size: .58rem; opacity: .8; font-family: 'Courier New', monospace; }
+
   /* ── ETF NAV ─────────────────────────────────────────────────── */
   .nav-bar {
     width: 100%; border-top: 1px solid var(--bdr);
@@ -375,6 +391,12 @@
     padding: .3rem .75rem; font-size: .7rem; color: var(--t3);
   }
   #stock-margin-chart { height: 130px; width: 100%; }
+
+  /* ── RSI 子圖（K 線下方）─────────────────────────────────────── */
+  #stock-rsi-section { flex-shrink: 0; flex-direction: column; background: #080f1d; border-top: 1px solid var(--bdr); }
+  #stock-rsi-header  { display: flex; justify-content: space-between; align-items: center;
+    padding: .25rem .75rem; font-size: .66rem; color: var(--t3); }
+  #stock-rsi-chart   { height: 90px; width: 100%; }
 
   /* ── INLINE CHART PANEL (台股大盤區) ─────────────────────────── */
   .tw-chart-panel {
@@ -804,6 +826,13 @@
     <button id="chart-close" onclick="closeChart()">×</button>
   </div>
   <div id="chart-container"></div>
+  <div id="stock-rsi-section" style="display:none">
+    <div id="stock-rsi-header">
+      <span>RSI(14)　<span style="color:#eab308">超買70</span> / <span style="color:#22c55e">超賣30</span></span>
+      <span id="stock-rsi-info"></span>
+    </div>
+    <div id="stock-rsi-chart"></div>
+  </div>
   <div id="stock-margin-section" style="display:none">
     <div id="stock-margin-header">
       <span>融資餘額（張）</span>
@@ -966,6 +995,22 @@ function renderSignalBadges(sig) {
   </div>`;
 }
 
+// 布林掛單階梯：把上/中/下軌換成開盤前可直接抄的價位＋距現價%
+function sigLadder(sig, price) {
+  if (!sig || sig.bb_up == null || sig.bb_low == null || price == null) return '';
+  const f  = v => Number(v).toLocaleString('en-US', { maximumFractionDigits: v > 999 ? 0 : 2 });
+  const dp = v => { const d = (v / price - 1) * 100; return (d >= 0 ? '+' : '') + d.toFixed(1) + '%'; };
+  const pos = Math.max(2, Math.min(98, sig.bb_pct ?? 50)).toFixed(1);   // 現價在通道位置(%B)
+  return `<div class="bb-lad" title="開盤前掛單參考：碰下軌(綠)分批買、碰上軌(紅)分批賣，中軌為多空分界">
+    <div class="bb-track"><div class="bb-mid-tick"></div><div class="bb-dot" style="left:${pos}%"></div></div>
+    <div class="bb-cols">
+      <div class="bb-col c-buy"><span class="bb-lab">買·下軌</span><b>${f(sig.bb_low)}</b><span class="bb-d">${dp(sig.bb_low)}</span></div>
+      <div class="bb-col c-mid"><span class="bb-lab">中軌</span><b>${f(sig.bb_mid)}</b><span class="bb-d">${dp(sig.bb_mid)}</span></div>
+      <div class="bb-col c-sell"><span class="bb-lab">賣·上軌</span><b>${f(sig.bb_up)}</b><span class="bb-d">${dp(sig.bb_up)}</span></div>
+    </div>
+  </div>`;
+}
+
 function renderStocks(items, id) {
   document.getElementById(id).innerHTML = items.map(s => {
     const c = cls(s.pct, s.change), sign = (s.pct ?? s.change ?? 0) >= 0 ? '+' : '';
@@ -973,6 +1018,7 @@ function renderStocks(items, id) {
       ? `<span class="chg-badge ${c}">${arrow(s.pct, s.change)} ${sign}${fmt(s.change)} (${sign}${fmt(s.pct)}%)</span>`
       : `<span class="chg-badge flat">–</span>`;
     const sigHtml = renderSignalBadges(_signals[s.symbol]);
+    const ladderHtml = sigLadder(_signals[s.symbol], s.price);
     const safeName = s.name.replace(/'/g, '&#39;');
     let navHtml = '';
     if (s.nav != null && s.premium != null) {
@@ -1002,7 +1048,7 @@ function renderStocks(items, id) {
         <div class="stock-price ${c}">${fmt(s.price, s.price>999?0:2)}</div>
         <div style="text-align:right">${badge}</div>
       </div>
-      ${sigHtml}${navHtml}${instHtml}
+      ${sigHtml}${ladderHtml}${navHtml}${instHtml}
     </div>`;
   }).join('');
 }
@@ -2096,16 +2142,20 @@ let _twData      = null;
 let _stockCharts = null;
 let _stockMargin = null;
 let _stockChart2 = null;
+let _rsiChart    = null;
 
 async function openChart(key) {
   const modal = document.getElementById('chart-modal');
   modal.style.display = 'flex';
   document.getElementById('chart-ohlc').textContent = '';
+  document.getElementById('stock-margin-section').style.display = 'none';
+  document.getElementById('stock-rsi-section').style.display = 'none';
 
   const cont = document.getElementById('chart-container');
   cont.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:3rem;font-size:.9rem">載入中…</div>';
 
   if (_chartInst) { _chartInst.remove(); _chartInst = null; }
+  if (_rsiChart)  { _rsiChart.remove();  _rsiChart = null; }
 
   if (!_chartCache) {
     try {
@@ -2215,12 +2265,14 @@ async function openChart(key) {
 function closeChart() {
   document.getElementById('chart-modal').style.display = 'none';
   document.getElementById('stock-margin-section').style.display = 'none';
+  document.getElementById('stock-rsi-section').style.display = 'none';
   if (_chartInst) {
     if (_chartInst._ro) _chartInst._ro.disconnect();
     _chartInst.remove();
     _chartInst = null;
   }
   if (_stockChart2) { _stockChart2.remove(); _stockChart2 = null; }
+  if (_rsiChart)    { _rsiChart.remove();    _rsiChart = null; }
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeChart(); });
@@ -2293,6 +2345,30 @@ async function openStockChart(symbol, name) {
   });
   candS.setData(data.candles);
 
+  // 最新布林三軌 → 開盤前掛單價位線（延伸到右側價格軸，紅賣綠買）
+  const lastOf = arr => (arr && arr.length) ? arr[arr.length - 1].value : null;
+  const priceLine = (price, color, title) => { if (price != null) candS.createPriceLine({
+    price, color, lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title }); };
+  priceLine(lastOf(data.bb_up),  '#ef4444', '賣 上軌');
+  priceLine(lastOf(data.ma20),   '#94a3b8', '中軌');
+  priceLine(lastOf(data.bb_low), '#22c55e', '買 下軌');
+
+  // 高低點連線趨勢線：壓力線(紅)連波段高點、支撐線(綠)連波段低點，延伸到最新一根
+  const piv = findPivots(data.candles, 3);
+  const lastIdx = data.candles.length - 1, lastT = data.candles[lastIdx].time;
+  const marks = [];
+  const addTrend = (pv, color, title, isHigh) => {
+    const t = pivotTrend(pv, lastIdx, lastT);
+    if (!t) return;
+    chart.addLineSeries({ color, lineWidth: 2, title,
+      lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false }).setData(t.data);
+    [t.a, t.b].forEach(p => marks.push({ time: p.time,
+      position: isHigh ? 'aboveBar' : 'belowBar', color, shape: isHigh ? 'arrowDown' : 'arrowUp' }));
+  };
+  addTrend(piv.highs, '#ef4444', '壓力線', true);
+  addTrend(piv.lows,  '#22c55e', '支撐線', false);
+  if (marks.length) { marks.sort((x, y) => x.time < y.time ? -1 : 1); candS.setMarkers(marks); }
+
   const volMap = {};
   (data.volume || []).forEach(v => { volMap[v.time] = v.value; });
   const fv = v => v >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(2);
@@ -2327,6 +2403,12 @@ async function openStockChart(symbol, name) {
   ro.observe(cont);
   _chartInst._ro = ro;
   chart.timeScale().fitContent();
+
+  // K 線下方 RSI 子圖（時間軸與主圖同步）
+  const rsiC = renderRSIChart(data.candles);
+  if (rsiC) chart.timeScale().subscribeVisibleLogicalRangeChange(r => {
+    if (r) rsiC.timeScale().setVisibleLogicalRange(r);
+  });
 
   // 台股才顯示融資餘額
   if (!symbol.endsWith('.TW')) return;
@@ -2411,6 +2493,96 @@ function renderStockMarginChart(series) {
   }).observe(cont);
 
   chart.timeScale().fitContent();
+}
+
+// RSI(14) Wilder 平滑；回傳與 candles 等長（前 period 根補白）以對齊時間軸
+function computeRSI(candles, period = 14) {
+  const out = candles.map(c => ({ time: c.time }));
+  if (candles.length <= period) return out;
+  let gain = 0, loss = 0;
+  for (let i = 1; i <= period; i++) {
+    const d = candles[i].close - candles[i - 1].close;
+    if (d >= 0) gain += d; else loss -= d;
+  }
+  gain /= period; loss /= period;
+  out[period] = { time: candles[period].time, value: loss === 0 ? 100 : 100 - 100 / (1 + gain / loss) };
+  for (let i = period + 1; i < candles.length; i++) {
+    const d = candles[i].close - candles[i - 1].close;
+    gain = (gain * (period - 1) + (d > 0 ?  d : 0)) / period;
+    loss = (loss * (period - 1) + (d < 0 ? -d : 0)) / period;
+    out[i] = { time: candles[i].time, value: loss === 0 ? 100 : 100 - 100 / (1 + gain / loss) };
+  }
+  return out;
+}
+
+// K 線下方 RSI 子圖，回傳 chart 供主圖同步時間軸
+function renderRSIChart(candles) {
+  if (_rsiChart) { _rsiChart.remove(); _rsiChart = null; }
+  const cont = document.getElementById('stock-rsi-chart');
+  const sec  = document.getElementById('stock-rsi-section');
+  const info = document.getElementById('stock-rsi-info');
+  const rsiData = computeRSI(candles, 14);
+  const valued  = rsiData.filter(p => p.value != null);
+  if (!cont || valued.length < 2) { sec.style.display = 'none'; return null; }
+  sec.style.display = 'flex';
+
+  const chart = LightweightCharts.createChart(cont, {
+    width: cont.clientWidth || 300, height: 90,
+    layout:    { background: { color: '#0f172a' }, textColor: '#94a3b8' },
+    grid:      { vertLines: { color: '#1e293b' }, horzLines: { color: 'transparent' } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: '#334155' },
+    timeScale: { borderColor: '#334155', visible: false },
+    handleScroll: false, handleScale: false,
+  });
+  _rsiChart = chart;
+
+  const s = chart.addLineSeries({
+    color: '#eab308', lineWidth: 1.5, lastValueVisible: true, priceLineVisible: false,
+    priceFormat: { type: 'price', precision: 0, minMove: 1 },
+    autoscaleInfoProvider: () => ({ priceRange: { minValue: 0, maxValue: 100 } }),
+  });
+  s.setData(rsiData);
+  s.createPriceLine({ price: 70, color: 'rgba(234,179,8,.6)',   lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: '70' });
+  s.createPriceLine({ price: 50, color: 'rgba(100,116,139,.4)', lineWidth: 1, lineStyle: 3, axisLabelVisible: false });
+  s.createPriceLine({ price: 30, color: 'rgba(34,197,94,.6)',   lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: '30' });
+
+  const last = valued[valued.length - 1].value;
+  const setInfo = v => { const c = v >= 70 ? '#eab308' : v <= 30 ? '#22c55e' : '#cbd5e1';
+    info.innerHTML = `<span style="color:${c};font-family:'Courier New',monospace;font-weight:700">${v.toFixed(1)}</span>`; };
+  setInfo(last);
+  chart.subscribeCrosshairMove(p => {
+    const d = p.seriesData.get(s);
+    setInfo(d && d.value != null ? d.value : last);
+  });
+
+  new ResizeObserver(() => { if (_rsiChart) _rsiChart.applyOptions({ width: cont.clientWidth }); }).observe(cont);
+  chart.timeScale().fitContent();
+  return chart;
+}
+
+// 波段轉折點（fractal pivot）：high/low 為前後 k 根的極值
+function findPivots(candles, k = 3) {
+  const highs = [], lows = [];
+  for (let i = k; i < candles.length - k; i++) {
+    let isH = true, isL = true;
+    for (let j = i - k; j <= i + k && (isH || isL); j++) {
+      if (j === i) continue;
+      if (candles[j].high >= candles[i].high) isH = false;
+      if (candles[j].low  <= candles[i].low)  isL = false;
+    }
+    if (isH) highs.push({ i, time: candles[i].time, value: candles[i].high });
+    if (isL) lows.push({ i, time: candles[i].time, value: candles[i].low });
+  }
+  return { highs, lows };
+}
+// 最近兩個轉折點連線，延伸到最後一根（回傳 2 端點＋所用轉折點）
+function pivotTrend(pivots, lastIdx, lastTime) {
+  if (pivots.length < 2) return null;
+  const a = pivots[pivots.length - 2], b = pivots[pivots.length - 1];
+  const m = (b.value - a.value) / (b.i - a.i);
+  return { data: [{ time: a.time, value: a.value },
+                  { time: lastTime, value: b.value + m * (lastIdx - b.i) }], a, b };
 }
 
 // ── 大盤 K 線圖（獨立，不依賴融資餘額資料）────────────────────────────────
