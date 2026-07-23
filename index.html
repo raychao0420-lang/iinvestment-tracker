@@ -368,6 +368,33 @@
   #chart-close:hover { color: var(--t1); }
   #chart-container { flex: 1; min-height: 0; width: 100%; }
 
+  /* ── K 線圖層開關列 ─────────────────────────────────────────── */
+  #chart-layers {
+    display: flex; flex-wrap: wrap; gap: .3rem; padding: .35rem .75rem;
+    border-bottom: 1px solid var(--bdr); background: #0b1424; flex-shrink: 0;
+  }
+  .lay-chip {
+    display: inline-flex; align-items: center; gap: .28rem;
+    background: var(--c2); border: 1px solid var(--bdr); border-radius: 999px;
+    color: var(--t3); font-size: .64rem; padding: .12rem .5rem; cursor: pointer;
+    transition: color .12s, border-color .12s, background .12s;
+  }
+  .lay-chip.on { color: var(--t1); border-color: #475569; background: #1e293b; }
+  .lay-chip:not(.on) { opacity: .55; }
+  .lay-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  /* ── 明日 S/R 推薦面板 ──────────────────────────────────────── */
+  #chart-reco {
+    flex-direction: column; gap: .12rem; padding: .35rem .75rem;
+    border-bottom: 1px solid var(--bdr); background: #0b1424; flex-shrink: 0; font-size: .7rem;
+  }
+  .reco-title { font-size: .64rem; color: var(--t2); font-weight: 700; margin-bottom: .1rem; }
+  .reco-row { display: flex; align-items: baseline; gap: .4rem; flex-wrap: wrap; }
+  .reco-tag { font-weight: 800; font-size: .66rem; min-width: 1.7rem; }
+  .reco-row b { font-family: 'Courier New', monospace; font-size: .82rem; }
+  .reco-d { font-family: 'Courier New', monospace; font-size: .66rem; color: var(--t2); }
+  .reco-star { color: #eab308; font-size: .62rem; letter-spacing: -1px; }
+  .reco-why { font-size: .6rem; color: var(--t3); }
+
   .btn-chart {
     background: var(--c2); border: 1px solid var(--bdr); border-radius: 4px;
     color: var(--t2); font-size: .64rem; padding: .1rem .42rem; cursor: pointer; white-space: nowrap;
@@ -825,6 +852,8 @@
     <span id="chart-ohlc"></span>
     <button id="chart-close" onclick="closeChart()">×</button>
   </div>
+  <div id="chart-layers"></div>
+  <div id="chart-reco" style="display:none"></div>
   <div id="chart-container"></div>
   <div id="stock-rsi-section" style="display:none">
     <div id="stock-rsi-header">
@@ -2143,6 +2172,20 @@ let _stockCharts = null;
 let _stockMargin = null;
 let _stockChart2 = null;
 let _rsiChart    = null;
+// K 線可勾選圖層
+const LAYER_DEFS = [
+  { g:'ma',    label:'均線',    color:'#60a5fa', def:true  },
+  { g:'boll',  label:'布林',    color:'#2dd4bf', def:false },
+  { g:'trend', label:'趨勢線',  color:'#f59e0b', def:true  },
+  { g:'pivot', label:'樞紐點',  color:'#a78bfa', def:false },
+  { g:'atr',   label:'ATR區間', color:'#f472b6', def:false },
+  { g:'vpoc',  label:'量價',    color:'#38bdf8', def:false },
+  { g:'fib',   label:'費波',    color:'#e879f9', def:false },
+];
+let _layers = {}, _trendMarks = [], _firstT = null, _lastT = null;
+let _layerState = (() => { const d = {}; LAYER_DEFS.forEach(x => d[x.g] = x.def);
+  try { Object.assign(d, JSON.parse(localStorage.getItem('itk_layers') || '{}')); } catch (e) {}
+  return d; })();
 
 async function openChart(key) {
   const modal = document.getElementById('chart-modal');
@@ -2150,6 +2193,9 @@ async function openChart(key) {
   document.getElementById('chart-ohlc').textContent = '';
   document.getElementById('stock-margin-section').style.display = 'none';
   document.getElementById('stock-rsi-section').style.display = 'none';
+  document.getElementById('chart-layers').innerHTML = '';
+  document.getElementById('chart-reco').style.display = 'none';
+  _layers = {};
 
   const cont = document.getElementById('chart-container');
   cont.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:3rem;font-size:.9rem">載入中…</div>';
@@ -2266,6 +2312,9 @@ function closeChart() {
   document.getElementById('chart-modal').style.display = 'none';
   document.getElementById('stock-margin-section').style.display = 'none';
   document.getElementById('stock-rsi-section').style.display = 'none';
+  document.getElementById('chart-layers').innerHTML = '';
+  document.getElementById('chart-reco').style.display = 'none';
+  _layers = {};
   if (_chartInst) {
     if (_chartInst._ro) _chartInst._ro.disconnect();
     _chartInst.remove();
@@ -2329,14 +2378,15 @@ async function openStockChart(symbol, name) {
     color, lineWidth: 1, title,
     lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false,
   });
-  mkLine('#f59e0b', 'MA5').setData(data.ma5  || []);
-  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);   // 亦為布林中軌
-  mkLine('#c084fc', 'MA60').setData(data.ma60 || []);
+  _layers = {}; _firstT = data.candles[0].time; _lastT = data.candles[data.candles.length - 1].time;
+  const s5 = mkLine('#f59e0b', 'MA5');  s5.setData(data.ma5  || []); regLayer('ma', s5);
+  const s20 = mkLine('#60a5fa', 'MA20'); s20.setData(data.ma20 || []); regLayer('ma', s20);   // 亦為布林中軌
+  const s60 = mkLine('#c084fc', 'MA60'); s60.setData(data.ma60 || []); regLayer('ma', s60);
   // 布林通道上下軌（青色虛線，中軌即 MA20）
   const mkBB = t => chart.addLineSeries({ color: 'rgba(45,212,191,.85)', lineWidth: 1, title: t,
     lineStyle: 2, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
-  mkBB('布林上軌').setData(data.bb_up || []);
-  mkBB('布林下軌').setData(data.bb_low || []);
+  const bu = mkBB('布林上軌'); bu.setData(data.bb_up || []); regLayer('boll', bu);
+  const bl = mkBB('布林下軌'); bl.setData(data.bb_low || []); regLayer('boll', bl);
 
   const candS = chart.addCandlestickSeries({
     upColor: '#dc2626', downColor: '#16a34a',
@@ -2345,29 +2395,53 @@ async function openStockChart(symbol, name) {
   });
   candS.setData(data.candles);
 
-  // 最新布林三軌 → 開盤前掛單價位線（延伸到右側價格軸，紅賣綠買）
-  const lastOf = arr => (arr && arr.length) ? arr[arr.length - 1].value : null;
-  const priceLine = (price, color, title) => { if (price != null) candS.createPriceLine({
-    price, color, lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title }); };
-  priceLine(lastOf(data.bb_up),  '#ef4444', '賣 上軌');
-  priceLine(lastOf(data.ma20),   '#94a3b8', '中軌');
-  priceLine(lastOf(data.bb_low), '#22c55e', '買 下軌');
-
-  // 高低點連線趨勢線：壓力線(紅)連波段高點、支撐線(綠)連波段低點，延伸到最新一根
+  // 高低點連線趨勢線（可勾選圖層 trend）：壓力線連波段高、支撐線連波段低，延伸到最新
   const piv = findPivots(data.candles, 3);
   const lastIdx = data.candles.length - 1, lastT = data.candles[lastIdx].time;
-  const marks = [];
+  _trendMarks = [];
   const addTrend = (pv, color, title, isHigh) => {
     const t = pivotTrend(pv, lastIdx, lastT);
     if (!t) return;
-    chart.addLineSeries({ color, lineWidth: 2, title,
-      lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false }).setData(t.data);
-    [t.a, t.b].forEach(p => marks.push({ time: p.time,
+    const s = chart.addLineSeries({ color, lineWidth: 2, title,
+      lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
+    s.setData(t.data); regLayer('trend', s);
+    [t.a, t.b].forEach(p => _trendMarks.push({ time: p.time,
       position: isHigh ? 'aboveBar' : 'belowBar', color, shape: isHigh ? 'arrowDown' : 'arrowUp' }));
   };
   addTrend(piv.highs, '#ef4444', '壓力線', true);
   addTrend(piv.lows,  '#22c55e', '支撐線', false);
-  if (marks.length) { marks.sort((x, y) => x.time < y.time ? -1 : 1); candS.setMarkers(marks); }
+  _trendMarks.sort((x, y) => x.time < y.time ? -1 : 1);
+
+  // 隔日 S/R 圖層：樞紐點 / ATR區間 / 量價VPOC / 費波那契
+  const cndl = data.candles, close = cndl[lastIdx].close, sg = _signals[symbol] || {};
+  const A = atr14(cndl), PV = computePivots(cndl[lastIdx]);
+  const VP = computeVPOC(cndl, data.volume), FB = computeFib(cndl);
+  const lastOf = arr => (arr && arr.length) ? arr[arr.length - 1].value : null;
+  hLine(chart, 'pivot', PV.R2, '#fb7185', '樞紐R2', 2);
+  hLine(chart, 'pivot', PV.R1, '#fb7185', '樞紐R1', 2);
+  hLine(chart, 'pivot', PV.P,  '#94a3b8', '樞紐P',  2);
+  hLine(chart, 'pivot', PV.S1, '#4ade80', '樞紐S1', 2);
+  hLine(chart, 'pivot', PV.S2, '#4ade80', '樞紐S2', 2);
+  if (A != null) { hLine(chart, 'atr', close + A, '#f472b6', 'ATR上', 2); hLine(chart, 'atr', close - A, '#f472b6', 'ATR下', 2); }
+  VP.forEach((v, i) => hLine(chart, 'vpoc', v, '#38bdf8', '量價' + (i + 1), 1));
+  FB.forEach(([n, v]) => hLine(chart, 'fib', v, '#e879f9', n, 3));
+
+  // 彙整全部方法候選 → 交會分群 → 明日 S/R 推薦
+  const C = [], addC = (v, label) => C.push({ v, label });
+  addC(PV.R1, '樞紐R1'); addC(PV.R2, '樞紐R2'); addC(PV.R3, '樞紐R3');
+  addC(PV.S1, '樞紐S1'); addC(PV.S2, '樞紐S2'); addC(PV.S3, '樞紐S3');
+  if (A != null) { addC(close + A, 'ATR上界'); addC(close - A, 'ATR下界'); }
+  VP.forEach((v, i) => addC(v, '量價密集' + (i + 1)));
+  FB.forEach(([n, v]) => addC(v, n));
+  addC(sg.bb_up, '布林上軌'); addC(sg.bb_mid, '布林中軌'); addC(sg.bb_low, '布林下軌');
+  addC(lastOf(data.ma20), '月線MA20'); addC(lastOf(data.ma60), '季線MA60');
+  if (piv.highs.length) addC(piv.highs[piv.highs.length - 1].value, '前波高');
+  if (piv.lows.length)  addC(piv.lows[piv.lows.length - 1].value,  '前波低');
+  renderReco(A != null ? srRecommend(C, close, A) : null, close);
+
+  // 圖層開關列 + 套用記住的顯示狀態
+  buildLayerBar(candS);
+  applyAllLayers(candS);
 
   const volMap = {};
   (data.volume || []).forEach(v => { volMap[v.time] = v.value; });
@@ -2583,6 +2657,95 @@ function pivotTrend(pivots, lastIdx, lastTime) {
   const m = (b.value - a.value) / (b.i - a.i);
   return { data: [{ time: a.time, value: a.value },
                   { time: lastTime, value: b.value + m * (lastIdx - b.i) }], a, b };
+}
+
+// ── 隔日 S/R 計算引擎 ────────────────────────────────────────────────────
+function atr14(c, p = 14) {
+  if (c.length <= p) return null;
+  const tr = [];
+  for (let i = 1; i < c.length; i++) {
+    const h = c[i].high, l = c[i].low, pc = c[i - 1].close;
+    tr.push(Math.max(h - l, Math.abs(h - pc), Math.abs(l - pc)));
+  }
+  let a = tr.slice(0, p).reduce((x, y) => x + y, 0) / p;
+  for (let i = p; i < tr.length; i++) a = (a * (p - 1) + tr[i]) / p;
+  return a;
+}
+function computePivots(k) {   // 傳統樞紐點（用最後一根預測隔日）
+  const h = k.high, l = k.low, c = k.close, P = (h + l + c) / 3;
+  return { P, R1: 2 * P - l, S1: 2 * P - h, R2: P + (h - l), S2: P - (h - l), R3: h + 2 * (P - l), S3: l - 2 * (h - P) };
+}
+function computeVPOC(c, vol, bins = 48) {   // 量價密集節點（日 K 近似分布）
+  const vmap = {}; (vol || []).forEach(v => vmap[v.time] = v.value);
+  const N = c.slice(-60);
+  const lo = Math.min(...N.map(x => x.low)), hi = Math.max(...N.map(x => x.high));
+  if (!(hi > lo)) return [];
+  const w = (hi - lo) / bins, vv = new Array(bins).fill(0);
+  N.forEach(x => {
+    const b0 = Math.max(0, Math.floor((x.low - lo) / w)), b1 = Math.min(bins - 1, Math.floor((x.high - lo) / w));
+    const q = (vmap[x.time] || 1) / (b1 - b0 + 1);
+    for (let b = b0; b <= b1; b++) vv[b] += q;
+  });
+  const idx = [...vv.keys()].sort((a, b) => vv[b] - vv[a]), pk = [];
+  for (const b of idx) { if (pk.every(p => Math.abs(p - b) > 2)) pk.push(b); if (pk.length >= 3) break; }
+  return pk.map(b => lo + (b + 0.5) * w);
+}
+function computeFib(c) {   // 近 60 日高低的回撤位
+  const N = c.slice(-60), hi = Math.max(...N.map(x => x.high)), lo = Math.min(...N.map(x => x.low)), d = hi - lo;
+  return [['費波38.2%', hi - 0.382 * d], ['費波50%', hi - 0.5 * d], ['費波61.8%', hi - 0.618 * d]];
+}
+// 各法候選價位交會分群 → 推薦壓力/支撐（含理由）
+function srRecommend(cands, close, A) {
+  const tol = Math.max(0.006 * close, 0.25 * A);
+  const near = cands.filter(x => x.v != null && isFinite(x.v) && Math.abs(x.v - close) <= 1.5 * A).sort((a, b) => a.v - b.v);
+  const cl = [];
+  near.forEach(x => {
+    const g = cl.find(g => Math.abs(g.mid - x.v) <= tol);
+    if (g) { g.items.push(x.label); g.sum += x.v; g.mid = g.sum / g.items.length; }
+    else cl.push({ mid: x.v, sum: x.v, items: [x.label] });
+  });
+  const pack = g => ({ mid: g.mid, n: g.items.length, items: g.items, d: (g.mid / close - 1) * 100 });
+  const rank = a => a.map(pack).sort((x, y) => y.n - x.n || Math.abs(x.d) - Math.abs(y.d));
+  return { res: rank(cl.filter(g => g.mid > close)), sup: rank(cl.filter(g => g.mid < close)) };
+}
+
+// ── K 線圖層控制 ─────────────────────────────────────────────────────────
+function regLayer(g, s) { (_layers[g] = _layers[g] || []).push(s); return s; }
+function hLine(chart, g, value, color, title, style) {   // 水平價位線（可勾選）
+  if (value == null || !isFinite(value)) return;
+  const s = chart.addLineSeries({ color, lineWidth: 1, lineStyle: style || 0, title,
+    lastValueVisible: true, priceLineVisible: false, crosshairMarkerVisible: false });
+  s.setData([{ time: _firstT, value }, { time: _lastT, value }]);
+  regLayer(g, s);
+}
+function applyLayer(g, candS) {
+  (_layers[g] || []).forEach(s => s.applyOptions({ visible: !!_layerState[g] }));
+  if (g === 'trend' && candS) candS.setMarkers(_layerState.trend ? _trendMarks : []);
+}
+function applyAllLayers(candS) { Object.keys(_layers).forEach(g => applyLayer(g, candS)); }
+function buildLayerBar(candS) {
+  const bar = document.getElementById('chart-layers');
+  bar.innerHTML = LAYER_DEFS.filter(d => (_layers[d.g] || []).length).map(d =>
+    `<button class="lay-chip${_layerState[d.g] ? ' on' : ''}" data-g="${d.g}">` +
+    `<span class="lay-dot" style="background:${d.color}"></span>${d.label}</button>`).join('');
+  bar.querySelectorAll('.lay-chip').forEach(b => b.onclick = () => {
+    const g = b.dataset.g; _layerState[g] = !_layerState[g]; b.classList.toggle('on', _layerState[g]);
+    applyLayer(g, candS);
+    try { localStorage.setItem('itk_layers', JSON.stringify(_layerState)); } catch (e) {}
+  });
+}
+function renderReco(rec, close) {
+  const el = document.getElementById('chart-reco');
+  if (!rec || (!rec.res.length && !rec.sup.length)) { el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const f = v => v.toFixed(v > 999 ? 0 : 2);
+  const row = (g, kind, col) => !g ? '' :
+    `<div class="reco-row"><span class="reco-tag" style="color:${col}">${kind}</span>` +
+    `<b style="color:${col}">${f(g.mid)}</b><span class="reco-d">${g.d >= 0 ? '+' : ''}${g.d.toFixed(1)}%</span>` +
+    `<span class="reco-star">${'★'.repeat(Math.min(3, g.n))}</span>` +
+    `<span class="reco-why">${g.items.join('・')}</span></div>`;
+  el.innerHTML = `<div class="reco-title">明日 S/R 推薦<span style="color:#64748b">　收 ${f(close)}｜多法交會=強</span></div>` +
+    row(rec.res[0], '壓力', '#ef4444') + row(rec.sup[0], '支撐', '#22c55e');
 }
 
 // ── 大盤 K 線圖（獨立，不依賴融資餘額資料）────────────────────────────────
