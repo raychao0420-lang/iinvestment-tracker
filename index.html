@@ -716,7 +716,7 @@
       <div class="section-title mt-1">追蹤個股夜盤</div>
       <div class="ul-grid" id="us-live-stocks"></div>
     </div>
-    <div class="section-title">指數</div>
+    <div class="section-title">指數<span id="us-updated" style="font-size:.55rem;font-weight:400;color:var(--t3);margin-left:.4rem"></span></div>
     <div class="idx-grid"  id="us-indices"><div class="idx-card"><div class="skeleton"></div></div></div>
     <div class="section-title mt-1">GPU / AI 晶片</div>
     <div class="stock-grid" id="us-gpu"><div class="stock-card"><div class="skeleton"></div></div></div>
@@ -2116,6 +2116,9 @@ async function loadAll() {
   // 顯示最晚更新時間
   document.getElementById('last-update').textContent =
     `資料時間｜美股 ${us.updated||'–'} ／ 台股 ${tw.updated||'–'} ／ 日股 ${jp.updated||'–'}`;
+  // 美股主區塊頂端更新時間（收盤資料，去年份留 MM/DD HH:MM）
+  const usUpd = document.getElementById('us-updated');
+  if (usUpd) usUpd.textContent = us.updated ? `更新 ${us.updated.slice(5)}` : '';
 
   // EPS（只在第一次載入時抓，之後用快取）
   if (!_epsData) {
@@ -3129,6 +3132,7 @@ document.getElementById('tw-tab').addEventListener('shown.bs.tab', () => {
 const PAPER_KEY   = 'itk_paper';
 const PAPER_CCY   = { us: 'USD', tw: 'TWD', jp: 'JPY', kr: 'KRW' };
 const PAPER_START = { tw: 1000000, us: 10000, jp: 1000000, kr: 10000000 };  // 各市場起始本金
+const PAPER_MKT_ORD = { tw: 0, us: 1, jp: 2, kr: 3 };  // 顯示順序：台股、美股優先
 let _paper = null;
 
 function paperLoad() {
@@ -3139,15 +3143,17 @@ function paperLoad() {
 }
 function paperSave() { try { localStorage.setItem(PAPER_KEY, JSON.stringify(_paper)); } catch (e) {} }
 
-// 追蹤標的索引：symbol → { market, name, price, ccy }（掃各市場所有陣列）
+// 追蹤標的索引：symbol → { market, name, price, ccy }（只收現股，排除指數）
 function paperIndex() {
   const idx = {};
   const add = (arr, market) => (arr || []).forEach(s => {
     if (!s || !s.symbol || s.price == null) return;
+    if (s.symbol.charAt(0) === '^') return;   // 排除指數（非現股，如加權 ^TWII、S&P ^GSPC）
     idx[s.symbol] = { market, name: s.name || s.symbol, price: s.price, ccy: PAPER_CCY[market] };
   });
-  const scan = (data, market) => { if (data) Object.values(data).forEach(v => { if (Array.isArray(v)) add(v, market); }); };
-  scan(_usData, 'us'); scan(_twData, 'tw'); scan(_jpData, 'jp'); scan(_krData, 'kr');
+  // 跳過 indices 陣列（指數不可當現股買賣）；台股、美股優先掃
+  const scan = (data, market) => { if (data) Object.entries(data).forEach(([k, v]) => { if (k !== 'indices' && Array.isArray(v)) add(v, market); }); };
+  scan(_twData, 'tw'); scan(_usData, 'us'); scan(_jpData, 'jp'); scan(_krData, 'kr');
   return idx;
 }
 
@@ -3316,7 +3322,7 @@ function renderPaper() {
     const info = idx[sym];
     recoRows.push({ sym, info, buy: r.buy, sell: r.sell });
   });
-  recoRows.sort((a, b) => a.info.market.localeCompare(b.info.market) || a.sym.localeCompare(b.sym));
+  recoRows.sort((a, b) => (PAPER_MKT_ORD[a.info.market] - PAPER_MKT_ORD[b.info.market]) || a.sym.localeCompare(b.sym));
   document.getElementById('pp-reco').innerHTML = !recoRows.length
     ? '<div class="pp-empty">目前無可推薦標的（K 線資料尚未載入或不足 60 根）。</div>'
     : `<table class="pp-table"><thead><tr>
@@ -3357,7 +3363,7 @@ function renderPaper() {
     ? '<div class="pp-empty">無持倉。</div>'
     : `<table class="pp-table"><thead><tr>
         <th>標的</th><th>股數</th><th>均價</th><th>現價</th><th>市值</th><th>未實現</th><th>報酬</th></tr></thead><tbody>` +
-      held.sort((a, b) => a.market.localeCompare(b.market)).map(ps => {
+      held.sort((a, b) => (PAPER_MKT_ORD[a.market] - PAPER_MKT_ORD[b.market]) || a.symbol.localeCompare(b.symbol)).map(ps => {
         const cur = idx[ps.symbol] ? idx[ps.symbol].price : ps.avgCost;
         const u = (cur - ps.avgCost) * ps.qty, rp = ps.avgCost ? (cur / ps.avgCost - 1) * 100 : 0;
         return `<tr><td class="nm">${ps.name}</td><td>${ps.qty}</td><td>${ppPx(ps.avgCost)}</td>
