@@ -634,7 +634,7 @@
   .ul-px { font-size: .84rem; font-weight: 700; font-family: 'Courier New', monospace; }
   .ul-ch { font-size: .62rem; font-family: 'Courier New', monospace; }
 
-  /* ── 紙上下單（第三部）────────────────────────────────────────────── */
+  /* ── 實測績效（模擬下單，第三部）──────────────────────────────────── */
   .pp-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; margin: .3rem .7rem; }
   .pp-card { background: var(--c1); border: 1px solid var(--bdr); border-radius: 10px; padding: .5rem .6rem; }
   .pp-card .ccy { font-size: .62rem; color: var(--t3); font-weight: 700; letter-spacing: .04em; }
@@ -656,6 +656,9 @@
   .pp-empty { color: var(--t3); font-size: .7rem; padding: .5rem .7rem; }
   .pp-reset { margin: .5rem .7rem 1rem; background: var(--c2); color: var(--t3); border: 1px solid var(--bdr); border-radius: 6px; font-size: .64rem; padding: .3rem .7rem; cursor: pointer; }
   .pp-note { margin: 0 .7rem .3rem; font-size: .6rem; color: var(--t3); line-height: 1.6; }
+  .pp-lnk { background: none; border: 1px solid var(--bdr); border-radius: 5px; color: var(--acc); font-size: .56rem; padding: .05rem .3rem; cursor: pointer; margin-left: .3rem; white-space: nowrap; }
+  .pp-lnk:hover { background: var(--c2); }
+  .pp-star { color: #eab308; font-size: .54rem; letter-spacing: -1px; text-align: right; margin-top: 1px; }
 </style>
 </head>
 <body>
@@ -701,7 +704,7 @@
   </li>
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="paper-tab" data-bs-toggle="tab" data-bs-target="#paper-panel" type="button" role="tab" onclick="loadPaper()">
-      <span class="badge-dot" style="background:#f59e0b"></span>紙上下單
+      <span class="badge-dot" style="background:#f59e0b"></span>實測績效
     </button>
   </li>
 </ul>
@@ -901,12 +904,12 @@
   </div>
 
   <div class="tab-pane fade" id="paper-panel" role="tabpanel">
-    <div class="section-title">模擬帳戶（紙上下單）</div>
+    <div class="section-title">實測績效（模擬下單）</div>
     <div class="pp-note">用早上做的隔日 S/R 推薦引擎推算「支撐買價／壓力賣價」→ 掛限價單 → 每次資料更新自動比對當日高低價回填成交 → mark-to-market 算績效。紅賺綠賠，無真實金流。</div>
     <div class="pp-summary" id="pp-summary"></div>
 
     <div class="section-title mt-1">隔日 S/R 推薦掛單</div>
-    <div class="pp-note">支撐＝建議買價、壓力＝建議賣價（★＝多法交會強度）。填股數後按掛買／掛賣，或直接改價格手動掛。</div>
+    <div class="pp-note">支撐＝建議買價、壓力＝建議賣價（★＝多法交會強度）。<b>游標移到支撐/壓力價</b>會顯示「這個價格怎麼算的、依據哪些方法」；點 <b>📈線圖</b> 開早上做的 K 線圖（可勾選均線/布林/樞紐/ATR/VPOC/費波等圖層）。填股數後按掛買／掛賣，或直接改價格手動掛。</div>
     <div class="pp-wrap"><div id="pp-reco"><div class="skeleton" style="height:8rem;margin:.3rem"></div></div></div>
 
     <div class="section-title mt-1">未成交掛單</div>
@@ -2859,7 +2862,8 @@ function bbCalc(cl, n = 20, k = 2) {
   let v = 0; for (let i = cl.length - n; i < cl.length; i++) v += (cl[i] - m) ** 2;
   const sd = Math.sqrt(v / n); return { mid: m, up: m + k * sd, low: m - k * sd };
 }
-function btRecoLevels(h, vol) {
+// 完整交會群（含 items 法源/n 交會數/d 距離），供推薦與 tooltip 依據
+function srClusters(h, vol) {
   const last = h[h.length - 1], close = last.close, A = atr14(h); if (A == null) return null;
   const PV = computePivots(last), VP = computeVPOC(h, vol), FB = computeFib(h), B = bbCalc(h.map(c => c.close)), pv = findPivots(h, 3);
   const cl = h.map(c => c.close), m20 = sma(cl, 20), m60 = sma(cl, 60), C = [], a = (v, l) => { if (v != null && isFinite(v)) C.push({ v, label: l }); };
@@ -2868,8 +2872,11 @@ function btRecoLevels(h, vol) {
   if (B) { a(B.up,'bu'); a(B.mid,'bm'); a(B.low,'bl'); } a(m20,'m20'); a(m60,'m60');
   if (pv.highs.length) a(pv.highs[pv.highs.length - 1].value, 'ph');
   if (pv.lows.length)  a(pv.lows[pv.lows.length - 1].value,  'pl');
-  const r = srRecommend(C, close, A);
-  return { buy: r.sup[0] ? r.sup[0].mid : null, sell: r.res[0] ? r.res[0].mid : null };
+  return { r: srRecommend(C, close, A), close, A };
+}
+function btRecoLevels(h, vol) {
+  const s = srClusters(h, vol); if (!s) return null;
+  return { buy: s.r.sup[0] ? s.r.sup[0].mid : null, sell: s.r.res[0] ? s.r.res[0].mid : null };
 }
 const BT_STRATS = {
   pivot: { name:'樞紐區間', desc:'碰S1買·碰R1賣',      levels: h => { const p = computePivots(h[h.length - 1]); return { buy: p.S1, sell: p.R1 }; } },
@@ -3128,7 +3135,7 @@ document.getElementById('tw-tab').addEventListener('shown.bs.tab', () => {
   if (_marginData && !_marginChart) initMarginChart();
 });
 
-// ══ 紙上下單（第三部：接隔日 S/R 推薦引擎 → 掛限價單 → 自動成交 → 績效）══════════
+// ══ 實測績效（模擬下單，第三部：接隔日 S/R 推薦引擎 → 掛限價單 → 自動成交 → 績效）══════════
 const PAPER_KEY   = 'itk_paper';
 const PAPER_CCY   = { us: 'USD', tw: 'TWD', jp: 'JPY', kr: 'KRW' };
 const PAPER_START = { tw: 1000000, us: 10000, jp: 1000000, kr: 10000000 };  // 各市場起始本金
@@ -3173,11 +3180,34 @@ async function ensureStockCharts() {
   try { _stockCharts = await fetch(`data/stock_charts.json?t=${Date.now()}`).then(r => r.json()); } catch (e) {}
 }
 
-// 用第二部的 btRecoLevels 算隔日 { buy:支撐, sell:壓力 }
+// 用第二部的交會群算隔日支撐/壓力，並帶出計算依據（法源 items＋交會數 n）
 function paperReco(symbol) {
   const cd = paperCandles(symbol);
   if (!cd || cd.candles.length < 60) return null;
-  try { return btRecoLevels(cd.candles, cd.volume); } catch (e) { return null; }
+  try {
+    const s = srClusters(cd.candles, cd.volume); if (!s) return null;
+    const sup = s.r.sup[0], res = s.r.res[0];
+    return {
+      buy:  sup ? sup.mid : null, buyN:  sup ? sup.n : 0, buyItems:  sup ? sup.items : [],
+      sell: res ? res.mid : null, sellN: res ? res.n : 0, sellItems: res ? res.items : [],
+    };
+  } catch (e) { return null; }
+}
+// 交會法源代碼 → 中文（tooltip 用）
+const PP_SR_LABEL = {
+  R1:'樞紐壓力R1', R2:'樞紐壓力R2', R3:'樞紐壓力R3', S1:'樞紐支撐S1', S2:'樞紐支撐S2', S3:'樞紐支撐S3',
+  ATRu:'ATR上緣(收+1ATR)', ATRd:'ATR下緣(收−1ATR)', bu:'布林上軌(+2σ)', bm:'布林中軌(MA20)', bl:'布林下軌(−2σ)',
+  m20:'月線MA20', m60:'季線MA60', ph:'前波高點', pl:'前波低點',
+};
+function ppSRLabel(code) {
+  if (PP_SR_LABEL[code]) return PP_SR_LABEL[code];
+  if (typeof code === 'string' && code.charAt(0) === 'v') return '量價密集區VPOC';  // v0/v1/v2
+  return code;  // 費波38.2%/50%/61.8% 已可讀
+}
+function ppSRTip(kind, price, n, items) {
+  if (price == null) return kind + '：暫無';
+  const methods = (items || []).map(ppSRLabel).join('・') || '單一方法';
+  return `${kind} ${ppPx(price)}（${n} 法交會）\n依據：${methods}`;
 }
 
 // 由 trades 重播 → 持倉(均價)、現金、已實現損益（皆 per 幣別）
@@ -3320,19 +3350,25 @@ function renderPaper() {
   Object.keys(idx).forEach(sym => {
     const r = paperReco(sym); if (!r || (r.buy == null && r.sell == null)) return;
     const info = idx[sym];
-    recoRows.push({ sym, info, buy: r.buy, sell: r.sell });
+    recoRows.push({ sym, info, buy: r.buy, sell: r.sell, buyN: r.buyN, buyItems: r.buyItems, sellN: r.sellN, sellItems: r.sellItems });
   });
   recoRows.sort((a, b) => (PAPER_MKT_ORD[a.info.market] - PAPER_MKT_ORD[b.info.market]) || a.sym.localeCompare(b.sym));
   document.getElementById('pp-reco').innerHTML = !recoRows.length
     ? '<div class="pp-empty">目前無可推薦標的（K 線資料尚未載入或不足 60 根）。</div>'
     : `<table class="pp-table"><thead><tr>
         <th>標的</th><th>現價</th><th>支撐(買)</th><th>壓力(賣)</th><th>股數</th><th>操作</th></tr></thead><tbody>` +
-      recoRows.map(({ sym, info, buy, sell }) => {
+      recoRows.map(({ sym, info, buy, sell, buyN, buyItems, sellN, sellItems }) => {
         const e = sym.replace(/'/g, '');
-        return `<tr><td class="nm">${info.name}<br><span style="color:var(--t3);font-size:.58rem">${sym}</span></td>
+        const safeName = (info.name || '').replace(/'/g, '&#39;');
+        const buyTip  = ppSRTip('支撐(買)', buy,  buyN,  buyItems).replace(/"/g, '&quot;');
+        const sellTip = ppSRTip('壓力(賣)', sell, sellN, sellItems).replace(/"/g, '&quot;');
+        const stars = n => n > 1 ? `<div class="pp-star">${'★'.repeat(Math.min(3, n))}</div>` : '';
+        return `<tr><td class="nm">${info.name}
+          <button class="pp-lnk" onclick="openStockChart('${e}','${safeName}')" title="開 K 線圖（可勾選均線/布林/樞紐/ATR/VPOC/費波等圖層＋明日 S/R）">📈線圖</button>
+          <br><span style="color:var(--t3);font-size:.58rem">${sym}</span></td>
           <td>${ppPx(info.price)}</td>
-          <td><input class="pp-qty" id="ppbuy_${e}" value="${buy != null ? ppPx(buy) : ''}" style="color:var(--up)"></td>
-          <td><input class="pp-qty" id="ppsell_${e}" value="${sell != null ? ppPx(sell) : ''}" style="color:var(--down)"></td>
+          <td title="${buyTip}"><input class="pp-qty" id="ppbuy_${e}" value="${buy != null ? ppPx(buy) : ''}" style="color:var(--up)" title="${buyTip}">${stars(buyN)}</td>
+          <td title="${sellTip}"><input class="pp-qty" id="ppsell_${e}" value="${sell != null ? ppPx(sell) : ''}" style="color:var(--down)" title="${sellTip}">${stars(sellN)}</td>
           <td><input class="pp-qty" id="ppq_${e}" placeholder="股"></td>
           <td style="white-space:nowrap">
             <button class="pp-btn buy"  onclick="paperPlace('${e}','buy',ppRowPrice('${e}','buy'),ppRowQty('${e}'))"${buy == null ? ' disabled' : ''}>掛買</button>
