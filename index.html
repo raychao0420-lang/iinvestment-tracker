@@ -633,6 +633,29 @@
   .ul-nm { font-size: .62rem; color: var(--t2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: .1rem; }
   .ul-px { font-size: .84rem; font-weight: 700; font-family: 'Courier New', monospace; }
   .ul-ch { font-size: .62rem; font-family: 'Courier New', monospace; }
+
+  /* ── 紙上下單（第三部）────────────────────────────────────────────── */
+  .pp-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; margin: .3rem .7rem; }
+  .pp-card { background: var(--c1); border: 1px solid var(--bdr); border-radius: 10px; padding: .5rem .6rem; }
+  .pp-card .ccy { font-size: .62rem; color: var(--t3); font-weight: 700; letter-spacing: .04em; }
+  .pp-card .asset { font-size: 1.05rem; font-weight: 800; font-family: 'Courier New', monospace; margin: .1rem 0; }
+  .pp-card .ret { font-size: .74rem; font-weight: 700; font-family: 'Courier New', monospace; }
+  .pp-card .sub { font-size: .58rem; color: var(--t3); margin-top: .2rem; line-height: 1.5; }
+  .pp-table { width: 100%; border-collapse: collapse; font-size: .72rem; }
+  .pp-table th { color: var(--t3); font-weight: 600; font-size: .6rem; padding: .3rem .4rem; text-align: right; border-bottom: 1px solid var(--bdr); white-space: nowrap; }
+  .pp-table th:first-child, .pp-table td:first-child { text-align: left; }
+  .pp-table td { padding: .3rem .4rem; text-align: right; border-top: 1px solid var(--bdr); color: var(--t2); font-family: 'Courier New', monospace; white-space: nowrap; }
+  .pp-table td.nm { font-family: inherit; }
+  .pp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: .2rem .7rem; }
+  .pp-qty { width: 62px; background: var(--c2); border: 1px solid var(--bdr); border-radius: 5px; color: var(--t1); font-size: .68rem; padding: .15rem .25rem; font-family: 'Courier New', monospace; text-align: right; }
+  .pp-btn { border: none; border-radius: 5px; font-size: .62rem; font-weight: 700; padding: .18rem .45rem; cursor: pointer; color: #fff; }
+  .pp-btn.buy  { background: var(--up); }
+  .pp-btn.sell { background: var(--down); }
+  .pp-btn.ghost { background: var(--c2); color: var(--t2); border: 1px solid var(--bdr); }
+  .pp-btn:disabled { opacity: .35; cursor: default; }
+  .pp-empty { color: var(--t3); font-size: .7rem; padding: .5rem .7rem; }
+  .pp-reset { margin: .5rem .7rem 1rem; background: var(--c2); color: var(--t3); border: 1px solid var(--bdr); border-radius: 6px; font-size: .64rem; padding: .3rem .7rem; cursor: pointer; }
+  .pp-note { margin: 0 .7rem .3rem; font-size: .6rem; color: var(--t3); line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -674,6 +697,11 @@
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="season-tab" data-bs-toggle="tab" data-bs-target="#season-panel" type="button" role="tab" onclick="loadSeasonality()">
       <span class="badge-dot" style="background:#a78bfa"></span>季節性
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="paper-tab" data-bs-toggle="tab" data-bs-target="#paper-panel" type="button" role="tab" onclick="loadPaper()">
+      <span class="badge-dot" style="background:#f59e0b"></span>紙上下單
     </button>
   </li>
 </ul>
@@ -870,6 +898,27 @@
     <div class="section-title mt-1">節日 / 暑假 / 結算效應</div>
     <div class="sea-cards" id="sea-holidays"></div>
     <div class="sea-intro" id="sea-src" style="color:var(--t3);font-size:.64rem"></div>
+  </div>
+
+  <div class="tab-pane fade" id="paper-panel" role="tabpanel">
+    <div class="section-title">模擬帳戶（紙上下單）</div>
+    <div class="pp-note">用早上做的隔日 S/R 推薦引擎推算「支撐買價／壓力賣價」→ 掛限價單 → 每次資料更新自動比對當日高低價回填成交 → mark-to-market 算績效。紅賺綠賠，無真實金流。</div>
+    <div class="pp-summary" id="pp-summary"></div>
+
+    <div class="section-title mt-1">隔日 S/R 推薦掛單</div>
+    <div class="pp-note">支撐＝建議買價、壓力＝建議賣價（★＝多法交會強度）。填股數後按掛買／掛賣，或直接改價格手動掛。</div>
+    <div class="pp-wrap"><div id="pp-reco"><div class="skeleton" style="height:8rem;margin:.3rem"></div></div></div>
+
+    <div class="section-title mt-1">未成交掛單</div>
+    <div class="pp-wrap"><div id="pp-orders"></div></div>
+
+    <div class="section-title mt-1">目前持倉</div>
+    <div class="pp-wrap"><div id="pp-positions"></div></div>
+
+    <div class="section-title mt-1">交易紀錄</div>
+    <div class="pp-wrap"><div id="pp-trades"></div></div>
+
+    <button class="pp-reset" onclick="paperReset()">🗑 清空模擬帳戶（歸零重來）</button>
   </div>
 </div>
 
@@ -2003,6 +2052,8 @@ async function loadAll() {
   if (fundRaw) _fundData._updated = fundRaw.updated;
   _usData = us;
   _twData = tw;
+  _jpData = jp;
+  _krData = kr;
 
   renderIdx(us.indices,    'us-indices', true);
   renderStocks(us.gpu,     'us-gpu');
@@ -2205,6 +2256,8 @@ let _etfHoldings = null;
 let _stockInst   = null;
 let _marginRank  = null;
 let _twData      = null;
+let _jpData      = null;
+let _krData      = null;
 let _stockCharts = null;
 let _stockMargin = null;
 let _stockChart2 = null;
@@ -3071,6 +3124,263 @@ document.getElementById('tw-tab').addEventListener('shown.bs.tab', () => {
   if (_chartCache && !_klineChart)  initKlineChart();
   if (_marginData && !_marginChart) initMarginChart();
 });
+
+// ══ 紙上下單（第三部：接隔日 S/R 推薦引擎 → 掛限價單 → 自動成交 → 績效）══════════
+const PAPER_KEY   = 'itk_paper';
+const PAPER_CCY   = { us: 'USD', tw: 'TWD', jp: 'JPY', kr: 'KRW' };
+const PAPER_START = { tw: 1000000, us: 10000, jp: 1000000, kr: 10000000 };  // 各市場起始本金
+let _paper = null;
+
+function paperLoad() {
+  if (_paper) return _paper;
+  try { _paper = JSON.parse(localStorage.getItem(PAPER_KEY)); } catch (e) { _paper = null; }
+  if (!_paper || _paper.v !== 1) _paper = { v: 1, start: { ...PAPER_START }, orders: [], trades: [] };
+  return _paper;
+}
+function paperSave() { try { localStorage.setItem(PAPER_KEY, JSON.stringify(_paper)); } catch (e) {} }
+
+// 追蹤標的索引：symbol → { market, name, price, ccy }（掃各市場所有陣列）
+function paperIndex() {
+  const idx = {};
+  const add = (arr, market) => (arr || []).forEach(s => {
+    if (!s || !s.symbol || s.price == null) return;
+    idx[s.symbol] = { market, name: s.name || s.symbol, price: s.price, ccy: PAPER_CCY[market] };
+  });
+  const scan = (data, market) => { if (data) Object.values(data).forEach(v => { if (Array.isArray(v)) add(v, market); }); };
+  scan(_usData, 'us'); scan(_twData, 'tw'); scan(_jpData, 'jp'); scan(_krData, 'kr');
+  return idx;
+}
+
+// 取某標的 K 線：優先 stock_charts，其次 chart.json(大盤/0050)，再 hist_long
+function paperCandles(symbol) {
+  const sc = _stockCharts && _stockCharts.stocks && _stockCharts.stocks[symbol];
+  if (sc && sc.candles && sc.candles.length) return { candles: sc.candles, volume: sc.volume || [] };
+  if (_chartCache) {
+    const cc = symbol === '^TWII' ? _chartCache.twii : symbol === '0050.TW' ? _chartCache.etf0050 : null;
+    if (cc && cc.candles && cc.candles.length) return { candles: cc.candles, volume: cc.volume || [] };
+  }
+  if (_histLong && _histLong.stocks && _histLong.stocks[symbol]) return histCandles(symbol);  // {t,o,h,l,c,v}→標準格式
+  return null;
+}
+async function ensureStockCharts() {
+  if (_stockCharts) return;
+  try { _stockCharts = await fetch(`data/stock_charts.json?t=${Date.now()}`).then(r => r.json()); } catch (e) {}
+}
+
+// 用第二部的 btRecoLevels 算隔日 { buy:支撐, sell:壓力 }
+function paperReco(symbol) {
+  const cd = paperCandles(symbol);
+  if (!cd || cd.candles.length < 60) return null;
+  try { return btRecoLevels(cd.candles, cd.volume); } catch (e) { return null; }
+}
+
+// 由 trades 重播 → 持倉(均價)、現金、已實現損益（皆 per 幣別）
+function paperCompute() {
+  const p = paperLoad();
+  const cash = {}, realized = {};
+  Object.keys(PAPER_START).forEach(m => { const c = PAPER_CCY[m]; cash[c] = (cash[c] || 0) + (p.start[m] || 0); realized[c] = realized[c] || 0; });
+  const pos = {};
+  const trades = p.trades.slice().sort((a, b) => (a.fillTime || 0) - (b.fillTime || 0) || a.ts - b.ts);
+  trades.forEach(t => {
+    const val = t.price * t.qty;
+    const ps = pos[t.symbol] || (pos[t.symbol] = { symbol: t.symbol, qty: 0, avgCost: 0, market: t.market, name: t.name, ccy: t.ccy });
+    if (t.side === 'buy') {
+      const nq = ps.qty + t.qty;
+      ps.avgCost = nq > 0 ? (ps.avgCost * ps.qty + val) / nq : 0;
+      ps.qty = nq; cash[t.ccy] -= val;
+    } else {
+      const q = Math.min(t.qty, ps.qty);
+      realized[t.ccy] += (t.price - ps.avgCost) * q;
+      ps.qty -= t.qty; cash[t.ccy] += val;
+      if (ps.qty < 1e-6) ps.qty = 0;
+    }
+  });
+  return { cash, realized, pos };
+}
+
+function ppFmt(v, d) { return v == null || !isFinite(v) ? '–' : Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function ppColor(v) { return v > 0 ? 'var(--up)' : v < 0 ? 'var(--down)' : 'var(--t3)'; }
+function ppSign(v) { return v > 0 ? '+' : ''; }
+function ppPx(v) { return ppFmt(v, v > 999 ? 0 : 2); }
+
+// ── 下單 / 成交 ───────────────────────────────────────────────────────────
+function paperPlace(symbol, side, price, qty) {
+  price = +price; qty = Math.floor(+qty);
+  const info = paperIndex()[symbol];
+  if (!info) { alert('找不到此標的的即時價'); return; }
+  if (!(price > 0) || !(qty > 0)) { alert('請輸入有效的價格與股數'); return; }
+  const { cash, pos } = paperCompute();
+  if (side === 'buy' && price * qty > cash[info.ccy] + 1e-6) {
+    alert(`現金不足：需 ${ppFmt(price * qty, 0)} ${info.ccy}，現有 ${ppFmt(cash[info.ccy], 0)}`); return;
+  }
+  if (side === 'sell') {
+    const have = (pos[symbol] && pos[symbol].qty) || 0;
+    if (qty > have + 1e-6) { alert(`持股不足：欲賣 ${qty} 股，只有 ${have} 股`); return; }
+  }
+  const cd = paperCandles(symbol);
+  const afterTime = cd && cd.candles.length ? cd.candles[cd.candles.length - 1].time : 0;
+  paperLoad().orders.push({
+    id: Date.now() + '_' + Math.round(Math.random() * 1e4), ts: Date.now(),
+    market: info.market, symbol, name: info.name, ccy: info.ccy, side, price, qty, afterTime,
+  });
+  paperSave(); renderPaper();
+}
+function paperFill(o, fillPrice, fillTime, manual) {
+  paperLoad().trades.push({
+    id: o.id, ts: Date.now(), fillTime: fillTime || Math.floor(Date.now() / 1000),
+    market: o.market, symbol: o.symbol, name: o.name, ccy: o.ccy, side: o.side, qty: o.qty, price: fillPrice, manual: !!manual,
+  });
+  _paper.orders = _paper.orders.filter(x => x.id !== o.id);
+}
+// 自動回填：每筆掛單找 afterTime 之後第一根 K 棒觸價成交（買:low≤價，賣:high≥價）
+function paperRunFills() {
+  const p = paperLoad(); let changed = false;
+  p.orders.slice().forEach(o => {
+    const cd = paperCandles(o.symbol); if (!cd) return;
+    for (const bar of cd.candles) {
+      if (bar.time <= o.afterTime) continue;
+      const hit = o.side === 'buy' ? bar.low <= o.price : bar.high >= o.price;
+      if (hit) { paperFill(o, o.price, bar.time, false); changed = true; break; }
+    }
+  });
+  if (changed) paperSave();
+  return changed;
+}
+function paperManualFill(id) {
+  const o = paperLoad().orders.find(x => x.id === id); if (!o) return;
+  const info = paperIndex()[o.symbol];
+  const def = info ? info.price : o.price;
+  const inp = prompt(`手動成交「${o.name}」${o.side === 'buy' ? '買進' : '賣出'} ${o.qty} 股\n輸入成交價（現價 ${ppPx(def)}）：`, def);
+  if (inp == null) return;
+  const px = +inp; if (!(px > 0)) { alert('價格無效'); return; }
+  paperFill(o, px, Math.floor(Date.now() / 1000), true);
+  paperSave(); renderPaper();
+}
+function paperCancel(id) { paperLoad().orders = _paper.orders.filter(x => x.id !== id); paperSave(); renderPaper(); }
+function paperReset() {
+  if (!confirm('確定清空模擬帳戶？所有掛單、持倉、交易紀錄與損益都會歸零。')) return;
+  _paper = { v: 1, start: { ...PAPER_START }, orders: [], trades: [] };
+  paperSave(); renderPaper();
+}
+
+// 供推薦列與掛單列讀 input 值（用字面 id，非選擇器，故不需 CSS.escape）
+function ppRowQty(sym) { const el = document.getElementById('ppq_' + sym); return el ? el.value : ''; }
+function ppRowPrice(sym, which) { const el = document.getElementById('pp' + which + '_' + sym); return el ? el.value : ''; }
+
+// ── 載入頁籤 ──────────────────────────────────────────────────────────────
+async function loadPaper() {
+  paperLoad();
+  document.getElementById('pp-reco').innerHTML = '<div class="skeleton" style="height:8rem;margin:.3rem"></div>';
+  await ensureStockCharts();
+  if (typeof ensureHistLong === 'function') { try { await ensureHistLong(); } catch (e) {} }
+  paperRunFills();          // 用最新資料回填觸價掛單
+  renderPaper();
+}
+
+// ── 渲染 ──────────────────────────────────────────────────────────────────
+function renderPaper() {
+  const p = paperLoad();
+  const idx = paperIndex();
+  const { cash, realized, pos } = paperCompute();
+
+  // 未實現 & 市值（per 幣別）
+  const mv = {}, unreal = {};
+  Object.keys(PAPER_CCY).forEach(m => { mv[PAPER_CCY[m]] = 0; unreal[PAPER_CCY[m]] = 0; });
+  Object.values(pos).forEach(ps => {
+    if (ps.qty <= 0) return;
+    const cur = idx[ps.symbol] ? idx[ps.symbol].price : ps.avgCost;
+    mv[ps.ccy] += cur * ps.qty;
+    unreal[ps.ccy] += (cur - ps.avgCost) * ps.qty;
+  });
+
+  // 摘要卡（只顯示有動用過的幣別）
+  const usedCcy = new Set();
+  p.trades.forEach(t => usedCcy.add(t.ccy)); p.orders.forEach(o => usedCcy.add(o.ccy));
+  const ccyOrder = ['TWD', 'USD', 'JPY', 'KRW'].filter(c => usedCcy.size === 0 ? c === 'TWD' : usedCcy.has(c));
+  document.getElementById('pp-summary').innerHTML = ccyOrder.map(c => {
+    const start = Object.keys(PAPER_START).filter(m => PAPER_CCY[m] === c).reduce((a, m) => a + p.start[m], 0);
+    const asset = (cash[c] || 0) + (mv[c] || 0);
+    const pnl = asset - start, ret = start ? pnl / start * 100 : 0;
+    return `<div class="pp-card"><div class="ccy">${c}</div>
+      <div class="asset">${ppFmt(asset, 0)}</div>
+      <div class="ret" style="color:${ppColor(pnl)}">${ppSign(pnl)}${ppFmt(pnl, 0)}（${ppSign(ret)}${ppFmt(ret, 2)}%）</div>
+      <div class="sub">現金 ${ppFmt(cash[c] || 0, 0)}｜持倉市值 ${ppFmt(mv[c] || 0, 0)}<br>
+      已實現 <span style="color:${ppColor(realized[c])}">${ppSign(realized[c])}${ppFmt(realized[c] || 0, 0)}</span>｜
+      未實現 <span style="color:${ppColor(unreal[c])}">${ppSign(unreal[c])}${ppFmt(unreal[c] || 0, 0)}</span></div></div>`;
+  }).join('') || '<div class="pp-empty">尚無交易，從下方推薦掛單開始。</div>';
+
+  // 推薦掛單列（有 K 線且能算出 reco 的追蹤標的）
+  const recoRows = [];
+  Object.keys(idx).forEach(sym => {
+    const r = paperReco(sym); if (!r || (r.buy == null && r.sell == null)) return;
+    const info = idx[sym];
+    recoRows.push({ sym, info, buy: r.buy, sell: r.sell });
+  });
+  recoRows.sort((a, b) => a.info.market.localeCompare(b.info.market) || a.sym.localeCompare(b.sym));
+  document.getElementById('pp-reco').innerHTML = !recoRows.length
+    ? '<div class="pp-empty">目前無可推薦標的（K 線資料尚未載入或不足 60 根）。</div>'
+    : `<table class="pp-table"><thead><tr>
+        <th>標的</th><th>現價</th><th>支撐(買)</th><th>壓力(賣)</th><th>股數</th><th>操作</th></tr></thead><tbody>` +
+      recoRows.map(({ sym, info, buy, sell }) => {
+        const e = sym.replace(/'/g, '');
+        return `<tr><td class="nm">${info.name}<br><span style="color:var(--t3);font-size:.58rem">${sym}</span></td>
+          <td>${ppPx(info.price)}</td>
+          <td><input class="pp-qty" id="ppbuy_${e}" value="${buy != null ? ppPx(buy) : ''}" style="color:var(--up)"></td>
+          <td><input class="pp-qty" id="ppsell_${e}" value="${sell != null ? ppPx(sell) : ''}" style="color:var(--down)"></td>
+          <td><input class="pp-qty" id="ppq_${e}" placeholder="股"></td>
+          <td style="white-space:nowrap">
+            <button class="pp-btn buy"  onclick="paperPlace('${e}','buy',ppRowPrice('${e}','buy'),ppRowQty('${e}'))"${buy == null ? ' disabled' : ''}>掛買</button>
+            <button class="pp-btn sell" onclick="paperPlace('${e}','sell',ppRowPrice('${e}','sell'),ppRowQty('${e}'))"${sell == null ? ' disabled' : ''}>掛賣</button>
+          </td></tr>`;
+      }).join('') + '</tbody></table>';
+
+  // 未成交掛單
+  document.getElementById('pp-orders').innerHTML = !p.orders.length
+    ? '<div class="pp-empty">無未成交掛單。</div>'
+    : `<table class="pp-table"><thead><tr>
+        <th>標的</th><th>方向</th><th>掛單價</th><th>股數</th><th>現價</th><th>距觸價</th><th>操作</th></tr></thead><tbody>` +
+      p.orders.slice().sort((a, b) => b.ts - a.ts).map(o => {
+        const cur = idx[o.symbol] ? idx[o.symbol].price : null;
+        const gap = cur != null ? (o.side === 'buy' ? (cur / o.price - 1) : (o.price / cur - 1)) * 100 : null;
+        return `<tr><td class="nm">${o.name}</td>
+          <td style="color:${o.side === 'buy' ? 'var(--up)' : 'var(--down)'}">${o.side === 'buy' ? '買' : '賣'}</td>
+          <td>${ppPx(o.price)}</td><td>${o.qty}</td><td>${cur != null ? ppPx(cur) : '–'}</td>
+          <td>${gap != null ? (gap >= 0 ? '+' : '') + ppFmt(gap, 1) + '%' : '–'}</td>
+          <td style="white-space:nowrap">
+            <button class="pp-btn ghost" onclick="paperManualFill('${o.id}')">手動成交</button>
+            <button class="pp-btn ghost" onclick="paperCancel('${o.id}')">取消</button></td></tr>`;
+      }).join('') + '</tbody></table>';
+
+  // 持倉
+  const held = Object.values(pos).filter(ps => ps.qty > 0);
+  document.getElementById('pp-positions').innerHTML = !held.length
+    ? '<div class="pp-empty">無持倉。</div>'
+    : `<table class="pp-table"><thead><tr>
+        <th>標的</th><th>股數</th><th>均價</th><th>現價</th><th>市值</th><th>未實現</th><th>報酬</th></tr></thead><tbody>` +
+      held.sort((a, b) => a.market.localeCompare(b.market)).map(ps => {
+        const cur = idx[ps.symbol] ? idx[ps.symbol].price : ps.avgCost;
+        const u = (cur - ps.avgCost) * ps.qty, rp = ps.avgCost ? (cur / ps.avgCost - 1) * 100 : 0;
+        return `<tr><td class="nm">${ps.name}</td><td>${ps.qty}</td><td>${ppPx(ps.avgCost)}</td>
+          <td>${ppPx(cur)}</td><td>${ppFmt(cur * ps.qty, 0)}</td>
+          <td style="color:${ppColor(u)}">${ppSign(u)}${ppFmt(u, 0)}</td>
+          <td style="color:${ppColor(u)}">${ppSign(rp)}${ppFmt(rp, 2)}%</td></tr>`;
+      }).join('') + '</tbody></table>';
+
+  // 交易紀錄（含勝率）
+  const sells = p.trades.filter(t => t.side === 'sell');
+  document.getElementById('pp-trades').innerHTML = !p.trades.length
+    ? '<div class="pp-empty">尚無成交紀錄。</div>'
+    : `<div class="pp-note">共 ${p.trades.length} 筆成交（賣出 ${sells.length} 筆）。</div>` +
+      `<table class="pp-table"><thead><tr>
+        <th>日期</th><th>標的</th><th>方向</th><th>股數</th><th>成交價</th><th>方式</th></tr></thead><tbody>` +
+      p.trades.slice().sort((a, b) => (b.fillTime || 0) - (a.fillTime || 0)).map(t => {
+        const dt = t.fillTime ? new Date(t.fillTime * 1000).toISOString().slice(0, 10) : '';
+        return `<tr><td class="nm">${dt}</td><td class="nm">${t.name}</td>
+          <td style="color:${t.side === 'buy' ? 'var(--up)' : 'var(--down)'}">${t.side === 'buy' ? '買' : '賣'}</td>
+          <td>${t.qty}</td><td>${ppPx(t.price)}</td>
+          <td style="color:var(--t3)">${t.manual ? '手動' : '觸價'}</td></tr>`;
+      }).join('') + '</tbody></table>';
+}
 
 // ── 初始化 ────────────────────────────────────────────────────────────────────
 updateClock();
