@@ -363,9 +363,44 @@
   #chart-title { color: var(--t1); font-size: .9rem; font-weight: 700; white-space: nowrap; }
   #chart-ohlc  { flex: 1; font-size: .7rem; color: var(--t2); font-family: 'Courier New', monospace;
     min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  #chart-close { margin-left: auto; background: none; border: none; color: var(--t3);
+  #chart-close { margin-left: .3rem; background: none; border: none; color: var(--t3);
     font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 0 .2rem; flex-shrink: 0; }
   #chart-close:hover { color: var(--t1); }
+  #chart-bt-btn {
+    margin-left: auto; background: var(--c2); border: 1px solid var(--bdr); border-radius: 5px;
+    color: var(--t2); font-size: .66rem; padding: .12rem .5rem; cursor: pointer; flex-shrink: 0;
+    transition: color .12s, border-color .12s, background .12s;
+  }
+  #chart-bt-btn.on { color: var(--t1); border-color: #475569; background: #1e293b; }
+
+  /* ── 歷史回測面板 ───────────────────────────────────────────── */
+  #chart-bt {
+    flex-direction: column; gap: .35rem; padding: .4rem .75rem; max-height: 42vh; overflow-y: auto;
+    border-bottom: 1px solid var(--bdr); background: #0b1424; flex-shrink: 0;
+  }
+  .bt-head { font-size: .66rem; color: var(--t2); font-weight: 700; }
+  .bt-head span { font-weight: 400; color: var(--t3); font-size: .6rem; }
+  .bt-ctrl { display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+  .bt-chips { display: flex; gap: .3rem; flex-wrap: wrap; }
+  .bt-chip {
+    background: var(--c2); border: 1px solid var(--bdr); border-radius: 999px;
+    color: var(--t3); font-size: .64rem; padding: .12rem .55rem; cursor: pointer;
+  }
+  .bt-chip.on { color: var(--t1); border-color: #475569; background: #1e293b; }
+  .bt-stop { font-size: .63rem; color: var(--t3); display: flex; align-items: center; gap: .25rem; }
+  .bt-stop select { background: var(--c2); color: var(--t2); border: 1px solid var(--bdr); border-radius: 4px; font-size: .63rem; padding: .05rem .2rem; }
+  .bt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .3rem; }
+  .bt-stat { display: flex; flex-direction: column; align-items: center; background: var(--c1);
+    border: 1px solid var(--bdr); border-radius: 6px; padding: .28rem .2rem; }
+  .bt-stat span { font-size: .56rem; color: var(--t3); }
+  .bt-stat b { font-family: 'Courier New', monospace; font-size: .85rem; }
+  .bt-stat small { font-size: .54rem; color: var(--t3); }
+  .bt-trades { display: flex; flex-direction: column; gap: .1rem; }
+  .bt-tr { display: flex; align-items: center; gap: .4rem; font-size: .62rem; font-family: 'Courier New', monospace;
+    color: var(--t2); border-top: 1px solid #1e293b; padding-top: .12rem; }
+  .bt-tr span:first-child { flex: 1; min-width: 0; }
+  .bt-rsn { color: var(--t3); font-size: .56rem; }
+  .bt-empty { font-size: .64rem; color: var(--t3); text-align: center; padding: .6rem; }
   #chart-container { flex: 1; min-height: 0; width: 100%; }
 
   /* ── K 線圖層開關列 ─────────────────────────────────────────── */
@@ -850,10 +885,12 @@
   <div id="chart-header">
     <span id="chart-title">K 線圖</span>
     <span id="chart-ohlc"></span>
+    <button id="chart-bt-btn" onclick="toggleBacktest()">📊 回測</button>
     <button id="chart-close" onclick="closeChart()">×</button>
   </div>
   <div id="chart-layers"></div>
   <div id="chart-reco" style="display:none"></div>
+  <div id="chart-bt" style="display:none"></div>
   <div id="chart-container"></div>
   <div id="stock-rsi-section" style="display:none">
     <div id="stock-rsi-header">
@@ -2195,7 +2232,10 @@ async function openChart(key) {
   document.getElementById('stock-rsi-section').style.display = 'none';
   document.getElementById('chart-layers').innerHTML = '';
   document.getElementById('chart-reco').style.display = 'none';
-  _layers = {};
+  document.getElementById('chart-bt').style.display = 'none';
+  document.getElementById('chart-bt-btn').classList.remove('on');
+  document.getElementById('chart-bt-btn').style.display = 'none';
+  _layers = {}; _btData = null;
 
   const cont = document.getElementById('chart-container');
   cont.innerHTML = '<div style="color:#94a3b8;text-align:center;padding:3rem;font-size:.9rem">載入中…</div>';
@@ -2314,7 +2354,10 @@ function closeChart() {
   document.getElementById('stock-rsi-section').style.display = 'none';
   document.getElementById('chart-layers').innerHTML = '';
   document.getElementById('chart-reco').style.display = 'none';
-  _layers = {};
+  document.getElementById('chart-bt').style.display = 'none';
+  document.getElementById('chart-bt-btn').classList.remove('on');
+  document.getElementById('chart-bt-btn').style.display = 'none';
+  _layers = {}; _btData = null;
   if (_chartInst) {
     if (_chartInst._ro) _chartInst._ro.disconnect();
     _chartInst.remove();
@@ -2442,6 +2485,11 @@ async function openStockChart(symbol, name) {
   // 圖層開關列 + 套用記住的顯示狀態
   buildLayerBar(candS);
   applyAllLayers(candS);
+
+  // 歷史回測資料就緒（面板若開著則刷新）
+  _btData = { candles: data.candles, volume: data.volume, name, symbol }; _btRange = 'recent';
+  document.getElementById('chart-bt-btn').style.display = 'inline-flex';
+  if (document.getElementById('chart-bt').style.display === 'flex') renderBacktest();
 
   const volMap = {};
   (data.volume || []).forEach(v => { volMap[v.time] = v.value; });
@@ -2746,6 +2794,114 @@ function renderReco(rec, close) {
     `<span class="reco-why">${g.items.join('・')}</span></div>`;
   el.innerHTML = `<div class="reco-title">明日 S/R 推薦<span style="color:#64748b">　收 ${f(close)}｜多法交會=強</span></div>` +
     row(rec.res[0], '壓力', '#ef4444') + row(rec.sup[0], '支撐', '#22c55e');
+}
+
+// ── 歷史回測引擎（僅用當時可得資料，無未來偏差）─────────────────────────
+function sma(cl, n) { if (cl.length < n) return null; let s = 0; for (let i = cl.length - n; i < cl.length; i++) s += cl[i]; return s / n; }
+function bbCalc(cl, n = 20, k = 2) {
+  const m = sma(cl, n); if (m == null) return null;
+  let v = 0; for (let i = cl.length - n; i < cl.length; i++) v += (cl[i] - m) ** 2;
+  const sd = Math.sqrt(v / n); return { mid: m, up: m + k * sd, low: m - k * sd };
+}
+function btRecoLevels(h, vol) {
+  const last = h[h.length - 1], close = last.close, A = atr14(h); if (A == null) return null;
+  const PV = computePivots(last), VP = computeVPOC(h, vol), FB = computeFib(h), B = bbCalc(h.map(c => c.close)), pv = findPivots(h, 3);
+  const cl = h.map(c => c.close), m20 = sma(cl, 20), m60 = sma(cl, 60), C = [], a = (v, l) => { if (v != null && isFinite(v)) C.push({ v, label: l }); };
+  a(PV.R1,'R1'); a(PV.R2,'R2'); a(PV.R3,'R3'); a(PV.S1,'S1'); a(PV.S2,'S2'); a(PV.S3,'S3');
+  a(close + A,'ATRu'); a(close - A,'ATRd'); VP.forEach((v, i) => a(v, 'v' + i)); FB.forEach(([n, v]) => a(v, n));
+  if (B) { a(B.up,'bu'); a(B.mid,'bm'); a(B.low,'bl'); } a(m20,'m20'); a(m60,'m60');
+  if (pv.highs.length) a(pv.highs[pv.highs.length - 1].value, 'ph');
+  if (pv.lows.length)  a(pv.lows[pv.lows.length - 1].value,  'pl');
+  const r = srRecommend(C, close, A);
+  return { buy: r.sup[0] ? r.sup[0].mid : null, sell: r.res[0] ? r.res[0].mid : null };
+}
+const BT_STRATS = {
+  pivot: { name:'樞紐區間', desc:'碰S1買·碰R1賣',      levels: h => { const p = computePivots(h[h.length - 1]); return { buy: p.S1, sell: p.R1 }; } },
+  boll:  { name:'布林區間', desc:'碰下軌買·碰上軌賣',   levels: h => { const b = bbCalc(h.map(c => c.close)); return b ? { buy: b.low, sell: b.up } : null; } },
+  reco:  { name:'推薦交會', desc:'碰推薦支撐買·壓力賣', levels: (h, vol) => btRecoLevels(h, vol) },
+  ma:    { name:'月線回歸', desc:'碰月線MA20買·+5%賣',  levels: h => { const m = sma(h.map(c => c.close), 20); return m ? { buy: m, sell: m * 1.05 } : null; } },
+};
+function mkTrade(pos, outDate, outPx, reason) { return { inDate: pos.inDate, inPx: pos.inPx, outDate, outPx, ret: (outPx / pos.inPx - 1) * 100, reason }; }
+function runBacktest(candles, volume, key, stopPct) {
+  const S = BT_STRATS[key], START = 60, N = candles.length;
+  if (N <= START + 3) return { insufficient: true, span: 0 };
+  const trades = []; let pos = null;
+  for (let t = START; t < N; t++) {
+    const hist = candles.slice(0, t), day = candles[t], lv = S.levels(hist, volume);
+    if (!lv) continue;
+    if (!pos) { if (lv.buy != null && day.low <= lv.buy) pos = { inDate: day.time, inPx: lv.buy }; }
+    else {
+      const sp = stopPct ? pos.inPx * (1 - stopPct / 100) : null;
+      if (sp != null && day.low <= sp) { trades.push(mkTrade(pos, day.time, sp, '停損')); pos = null; }
+      else if (lv.sell != null && day.high >= lv.sell) { trades.push(mkTrade(pos, day.time, lv.sell, '停利')); pos = null; }
+    }
+  }
+  if (pos) { const last = candles[N - 1]; trades.push(mkTrade(pos, last.time, last.close, '期末')); }
+  const n = trades.length, wins = trades.filter(t => t.ret > 0).length;
+  let eq = 1, peak = 1, dd = 0;
+  trades.forEach(t => { eq *= (1 + t.ret / 100); peak = Math.max(peak, eq); dd = Math.min(dd, eq / peak - 1); });
+  return { trades, n, wins, winRate: n ? wins / n * 100 : 0, total: (eq - 1) * 100, maxDD: dd * 100,
+           avg: n ? trades.reduce((s, t) => s + t.ret, 0) / n : 0, span: N - START };
+}
+let _btData = null, _btStrat = 'pivot', _btStop = 0, _btRange = 'recent', _histLong = null;
+const HIST_LONG_SYMS = ['00631L.TW','00675L.TW','00663L.TW','0050.TW','006208.TW','00878.TW','2330.TW','2454.TW','2317.TW','2308.TW','TSM','NVDA','AAPL'];
+async function ensureHistLong() {
+  if (_histLong) return _histLong;
+  _histLong = await fetch(`data/hist_long.json?t=${Date.now()}`).then(r => r.json()).catch(() => ({ stocks: {} }));
+  return _histLong;
+}
+function histCandles(symbol) {
+  const s = _histLong && _histLong.stocks && _histLong.stocks[symbol];
+  if (!s) return null;
+  return { candles: s.candles.map(c => ({ time: c.t, open: c.o, high: c.h, low: c.l, close: c.c })),
+           volume: s.candles.map(c => ({ time: c.t, value: c.v })) };
+}
+function toggleBacktest() {
+  const el = document.getElementById('chart-bt');
+  const show = el.style.display !== 'flex';
+  el.style.display = show ? 'flex' : 'none';
+  document.getElementById('chart-bt-btn').classList.toggle('on', show);
+  if (show) renderBacktest();
+}
+function renderBacktest() {
+  const el = document.getElementById('chart-bt');
+  if (!_btData) { el.innerHTML = '<div class="bt-empty">請先開啟個股 K 線</div>'; return; }
+  const hasFull = HIST_LONG_SYMS.includes(_btData.symbol);
+  let candles = _btData.candles, volume = _btData.volume;
+  if (_btRange === 'full' && hasFull) {
+    if (!_histLong) { el.innerHTML = '<div class="bt-empty">載入完整歷史中…</div>'; ensureHistLong().then(renderBacktest); return; }
+    const h = histCandles(_btData.symbol);
+    if (h) { candles = h.candles; volume = h.volume; } else { _btRange = 'recent'; }
+  }
+  const f = v => v.toFixed(v > 999 ? 0 : 2), sign = v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+  const rangeChips = `<button class="bt-chip${_btRange === 'recent' ? ' on' : ''}" data-r="recent">近半年</button>` +
+    (hasFull ? `<button class="bt-chip${_btRange === 'full' ? ' on' : ''}" data-r="full">完整歷史</button>` : '');
+  const chips = Object.entries(BT_STRATS).map(([k, s]) =>
+    `<button class="bt-chip${k === _btStrat ? ' on' : ''}" data-k="${k}" title="${s.desc}">${s.name}</button>`).join('');
+  const stops = [0, 3, 5, 8].map(v => `<option value="${v}"${v === _btStop ? ' selected' : ''}>${v ? v + '%' : '無'}</option>`).join('');
+  const r = runBacktest(candles, volume, _btStrat, _btStop);
+  const period = candles.length > 60 ? `${candles[60].time}~${candles[candles.length - 1].time}` : '';
+  let body;
+  if (r.insufficient) body = '<div class="bt-empty">此標的歷史資料不足，無法回測</div>';
+  else {
+    const stat = (lab, val, cls, sub) => `<div class="bt-stat"><span>${lab}</span><b class="${cls}">${val}</b>${sub ? `<small>${sub}</small>` : ''}</div>`;
+    const rows = r.trades.slice(-10).reverse().map(t => `<div class="bt-tr">` +
+      `<span>${t.inDate.slice(5)} ${f(t.inPx)} → ${t.outDate.slice(5)} ${f(t.outPx)}</span>` +
+      `<span class="${t.ret >= 0 ? 'up' : 'down'}">${sign(t.ret)}</span><span class="bt-rsn">${t.reason}</span></div>`
+      ).join('') || '<div class="bt-empty">這段期間沒有觸發交易</div>';
+    body = `<div class="bt-stats">` +
+      stat('勝率', r.winRate.toFixed(0) + '%', r.winRate >= 50 ? 'up' : 'down', r.wins + '/' + r.n) +
+      stat('累積報酬', sign(r.total), r.total >= 0 ? 'up' : 'down') +
+      stat('最大回撤', r.maxDD.toFixed(1) + '%', 'down') +
+      stat('平均每筆', sign(r.avg), r.avg >= 0 ? 'up' : 'down') +
+      `</div><div class="bt-trades">${rows}</div>`;
+  }
+  el.innerHTML = `<div class="bt-head">📊 歷史回測 · ${_btData.name}　<span>${period} · ${r.span || 0} 交易日 · 僅用當時可得資料</span></div>` +
+    `<div class="bt-ctrl"><div class="bt-chips">${rangeChips}</div></div>` +
+    `<div class="bt-ctrl"><div class="bt-chips">${chips}</div><label class="bt-stop">停損 <select id="bt-stop">${stops}</select></label></div>` + body;
+  el.querySelectorAll('.bt-chip[data-r]').forEach(b => b.onclick = () => { _btRange = b.dataset.r; renderBacktest(); });
+  el.querySelectorAll('.bt-chip[data-k]').forEach(b => b.onclick = () => { _btStrat = b.dataset.k; renderBacktest(); });
+  const ss = el.querySelector('#bt-stop'); if (ss) ss.onchange = e => { _btStop = +e.target.value; renderBacktest(); };
 }
 
 // ── 大盤 K 線圖（獨立，不依賴融資餘額資料）────────────────────────────────
