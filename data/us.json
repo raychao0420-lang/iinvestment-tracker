@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/23 07:42",
+  "updated": "2026/07/23 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -37,7 +37,7 @@
       "symbol": "^SOX",
       "name": "費城半導體",
       "price": 12410.67,
-      "change": 54.5,
+      "change": 54.51,
       "pct": 0.44,
       "date": "07/22"
     }
