@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/25 05:47",
+  "updated": "2026/07/25 06:17",
   "etfs": {
     "0050": {
       "holdings": [
@@ -12561,63 +12561,8 @@
         "in": [],
         "out": [
           {
-            "symbol": "2382.TW",
-            "name": "QUANTA COMPUTER INC.",
-            "pct": null
-          },
-          {
-            "symbol": "2368.TW",
-            "name": "GOLD CIRCUIT ELECTRONICS LTD",
-            "pct": null
-          },
-          {
-            "symbol": "2883.TW",
-            "name": "KGI Financial Holding Co. Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "2882.TW",
-            "name": "CATHAY FINANCIAL HOLDING CO. LTD.",
-            "pct": null
-          },
-          {
             "symbol": "2884.TW",
             "name": "E.SUN FINANCIAL HOLDING COMPANYLTD.",
-            "pct": null
-          },
-          {
-            "symbol": "3665.TW",
-            "name": "BizLink Holding Inc.",
-            "pct": null
-          },
-          {
-            "symbol": "2345.TW",
-            "name": "Accton Technology Corp.",
-            "pct": null
-          },
-          {
-            "symbol": "2885.TW",
-            "name": "Yuanta Financial Holding Co. Ltd",
-            "pct": null
-          },
-          {
-            "symbol": "2887.TW",
-            "name": "TS Financial Holding Co. Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "4958.TW",
-            "name": "Zhen Ding Technology Holding Limited",
-            "pct": null
-          },
-          {
-            "symbol": "3231.TW",
-            "name": "Wistron Corporation",
-            "pct": null
-          },
-          {
-            "symbol": "2395.TW",
-            "name": "ADVANTECH Co. Ltd.",
             "pct": null
           },
           {
@@ -12626,88 +12571,8 @@
             "pct": null
           },
           {
-            "symbol": "2603.TW",
-            "name": "EVERGREEN MARINE CORP. (TAIWAN) LTD.",
-            "pct": null
-          },
-          {
-            "symbol": "6669.TW",
-            "name": "Wiwynn Corporation",
-            "pct": null
-          },
-          {
-            "symbol": "3017.TW",
-            "name": "Asia Vital Components Co. Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "1216.TW",
-            "name": "UNI-PRESIDENT ENTERPRISES CORP.",
-            "pct": null
-          },
-          {
-            "symbol": "2408.TW",
-            "name": "NANYA TECHNOLOGY CORPORATION",
-            "pct": null
-          },
-          {
-            "symbol": "1303.TW",
-            "name": "NAN YA PLASTICS CORPORATION",
-            "pct": null
-          },
-          {
-            "symbol": "2880.TW",
-            "name": "HUA NAN FINANCIAL HOLDINGS CO. LTD.",
-            "pct": null
-          },
-          {
-            "symbol": "2360.TW",
-            "name": "CHROMA ATE INC.",
-            "pct": null
-          },
-          {
-            "symbol": "2357.TW",
-            "name": "ASUSTEK COMPUTER INC.",
-            "pct": null
-          },
-          {
-            "symbol": "2892.TW",
-            "name": "First  Financial  Holding  Co.  Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "3045.TW",
-            "name": "TAIWAN  MOBILE  CO. LTD.",
-            "pct": null
-          },
-          {
-            "symbol": "3653.TW",
-            "name": "JENTECH PRECISION INDUSTRIAL CO. LTD.",
-            "pct": null
-          },
-          {
-            "symbol": "2881.TW",
-            "name": "Fubon Financial Holding Co. Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "7769.TW",
-            "name": "Hon.Precision Inc.",
-            "pct": null
-          },
-          {
-            "symbol": "2886.TW",
-            "name": "Mega Financial Holding Company Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "5880.TW",
-            "name": "Taiwan Cooperative Financial Holding Co.Ltd.",
-            "pct": null
-          },
-          {
-            "symbol": "3443.TW",
-            "name": "Global Unichip Corp.",
+            "symbol": "2887.TW",
+            "name": "TS Financial Holding Co. Ltd.",
             "pct": null
           },
           {
@@ -12716,18 +12581,28 @@
             "pct": null
           },
           {
-            "symbol": "2890.TW",
-            "name": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
+            "symbol": "2892.TW",
+            "name": "First  Financial  Holding  Co.  Ltd.",
             "pct": null
           },
           {
-            "symbol": "4904.TW",
-            "name": "Far EasTone Telecommunications Co. Ltd.",
+            "symbol": "3017.TW",
+            "name": "Asia Vital Components Co. Ltd.",
             "pct": null
           },
           {
-            "symbol": "2412.TW",
-            "name": "Chunghwa Telecom Co. Ltd",
+            "symbol": "3665.TW",
+            "name": "BizLink Holding Inc.",
+            "pct": null
+          },
+          {
+            "symbol": "5880.TW",
+            "name": "Taiwan Cooperative Financial Holding Co.Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "3231.TW",
+            "name": "Wistron Corporation",
             "pct": null
           },
           {
@@ -12736,18 +12611,48 @@
             "pct": null
           },
           {
-            "symbol": "2449.TW",
-            "name": "KING YUAN ELECTRONICS CO. LTD.",
+            "symbol": "2360.TW",
+            "name": "CHROMA ATE INC.",
             "pct": null
           },
           {
-            "symbol": "3008.TW",
-            "name": "LARGAN Precision Co.Ltd",
+            "symbol": "2301.TW",
+            "name": "LITE-ON TECHNOLOGY CORP.",
             "pct": null
           },
           {
-            "symbol": "3661.TW",
-            "name": "Alchip Technologies Limited",
+            "symbol": "7769.TW",
+            "name": "Hon.Precision Inc.",
+            "pct": null
+          },
+          {
+            "symbol": "2368.TW",
+            "name": "GOLD CIRCUIT ELECTRONICS LTD",
+            "pct": null
+          },
+          {
+            "symbol": "2881.TW",
+            "name": "Fubon Financial Holding Co. Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "2890.TW",
+            "name": "SINOPAC  FINANCIAL HOLDINGS COMPANY LIMITED",
+            "pct": null
+          },
+          {
+            "symbol": "3045.TW",
+            "name": "TAIWAN  MOBILE  CO. LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "2395.TW",
+            "name": "ADVANTECH Co. Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "2882.TW",
+            "name": "CATHAY FINANCIAL HOLDING CO. LTD.",
             "pct": null
           },
           {
@@ -12756,8 +12661,103 @@
             "pct": null
           },
           {
-            "symbol": "2301.TW",
-            "name": "LITE-ON TECHNOLOGY CORP.",
+            "symbol": "2886.TW",
+            "name": "Mega Financial Holding Company Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "2880.TW",
+            "name": "HUA NAN FINANCIAL HOLDINGS CO. LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "3008.TW",
+            "name": "LARGAN Precision Co.Ltd",
+            "pct": null
+          },
+          {
+            "symbol": "4904.TW",
+            "name": "Far EasTone Telecommunications Co. Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "3653.TW",
+            "name": "JENTECH PRECISION INDUSTRIAL CO. LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "2603.TW",
+            "name": "EVERGREEN MARINE CORP. (TAIWAN) LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "3443.TW",
+            "name": "Global Unichip Corp.",
+            "pct": null
+          },
+          {
+            "symbol": "2408.TW",
+            "name": "NANYA TECHNOLOGY CORPORATION",
+            "pct": null
+          },
+          {
+            "symbol": "2449.TW",
+            "name": "KING YUAN ELECTRONICS CO. LTD.",
+            "pct": null
+          },
+          {
+            "symbol": "2345.TW",
+            "name": "Accton Technology Corp.",
+            "pct": null
+          },
+          {
+            "symbol": "3661.TW",
+            "name": "Alchip Technologies Limited",
+            "pct": null
+          },
+          {
+            "symbol": "2412.TW",
+            "name": "Chunghwa Telecom Co. Ltd",
+            "pct": null
+          },
+          {
+            "symbol": "6669.TW",
+            "name": "Wiwynn Corporation",
+            "pct": null
+          },
+          {
+            "symbol": "2883.TW",
+            "name": "KGI Financial Holding Co. Ltd.",
+            "pct": null
+          },
+          {
+            "symbol": "2357.TW",
+            "name": "ASUSTEK COMPUTER INC.",
+            "pct": null
+          },
+          {
+            "symbol": "4958.TW",
+            "name": "Zhen Ding Technology Holding Limited",
+            "pct": null
+          },
+          {
+            "symbol": "1216.TW",
+            "name": "UNI-PRESIDENT ENTERPRISES CORP.",
+            "pct": null
+          },
+          {
+            "symbol": "1303.TW",
+            "name": "NAN YA PLASTICS CORPORATION",
+            "pct": null
+          },
+          {
+            "symbol": "2382.TW",
+            "name": "QUANTA COMPUTER INC.",
+            "pct": null
+          },
+          {
+            "symbol": "2885.TW",
+            "name": "Yuanta Financial Holding Co. Ltd",
             "pct": null
           }
         ]
@@ -13068,53 +13068,7 @@
             }
           ]
         }
-      ],
-      "diff": {
-        "in": [
-          {
-            "symbol": "2379.TW",
-            "name": "Realtek Semiconductor Corp",
-            "pct": 3.38
-          },
-          {
-            "symbol": "2603.TW",
-            "name": "Evergreen Marine Corp (Taiwan) Ltd",
-            "pct": 3.37
-          },
-          {
-            "symbol": "5347.TWO",
-            "name": "Vanguard International Semiconductor Corp",
-            "pct": 3.33
-          },
-          {
-            "symbol": "2887.TW",
-            "name": "TS Financial Holding Co Ltd",
-            "pct": 3.08
-          }
-        ],
-        "out": [
-          {
-            "symbol": "2881.TW",
-            "name": "Fubon Financial Holdings Co Ltd",
-            "pct": 8.05
-          },
-          {
-            "symbol": "2885.TW",
-            "name": "Yuanta Financial Holdings Co Ltd",
-            "pct": 3.37
-          },
-          {
-            "symbol": "3711.TW",
-            "name": "ASE Technology Holding Co Ltd",
-            "pct": 4.49
-          },
-          {
-            "symbol": "2449.TW",
-            "name": "King Yuan Electronics Co Ltd",
-            "pct": 3.21
-          }
-        ]
-      }
+      ]
     },
     "00919": {
       "holdings": [
@@ -13247,43 +13201,7 @@
             }
           ]
         }
-      ],
-      "diff": {
-        "in": [
-          {
-            "symbol": "2382.TW",
-            "name": "Quanta Computer Inc",
-            "pct": 11.87
-          },
-          {
-            "symbol": "2883.TW",
-            "name": "KGI Financial Holding Co Ltd",
-            "pct": 4.15
-          },
-          {
-            "symbol": "2379.TW",
-            "name": "Realtek Semiconductor Corp",
-            "pct": 3.36
-          }
-        ],
-        "out": [
-          {
-            "symbol": "2609.TW",
-            "name": "Yang Ming Marine Transport Corp",
-            "pct": 2.92
-          },
-          {
-            "symbol": "2303.TW",
-            "name": "United Microelectronics Corp",
-            "pct": 8.67
-          },
-          {
-            "symbol": "3036.TW",
-            "name": "WT Microelectronics Co Ltd",
-            "pct": 2.88
-          }
-        ]
-      }
+      ]
     },
     "00929": {
       "holdings": [
@@ -13420,33 +13338,7 @@
             }
           ]
         }
-      ],
-      "diff": {
-        "in": [
-          {
-            "symbol": "5347.TWO",
-            "name": "Vanguard International Semiconductor Corp",
-            "pct": 2.8
-          },
-          {
-            "symbol": "6488.TWO",
-            "name": "GlobalWafers Co Ltd",
-            "pct": 2.55
-          }
-        ],
-        "out": [
-          {
-            "symbol": "3044.TW",
-            "name": "Tripod Technology Corp",
-            "pct": 2.98
-          },
-          {
-            "symbol": "3036.TW",
-            "name": "WT Microelectronics Co Ltd",
-            "pct": 3.73
-          }
-        ]
-      }
+      ]
     },
     "00940": {
       "holdings": [
@@ -13602,73 +13494,7 @@
             }
           ]
         }
-      ],
-      "diff": {
-        "in": [
-          {
-            "symbol": "2357.TW",
-            "name": "Asustek Computer Inc",
-            "pct": 4.35
-          },
-          {
-            "symbol": "2303.TW",
-            "name": "United Microelectronics Corp",
-            "pct": 3.56
-          },
-          {
-            "symbol": "2404.TW",
-            "name": "United Integrated Services Co Ltd",
-            "pct": 3.0
-          },
-          {
-            "symbol": "2356.TW",
-            "name": "Inventec Corp",
-            "pct": 2.87
-          },
-          {
-            "symbol": "2881.TW",
-            "name": "Fubon Financial Holdings Co Ltd",
-            "pct": 2.81
-          },
-          {
-            "symbol": "1513.TW",
-            "name": "Chung-Hsin Electric & Machinery Mfg Corp",
-            "pct": 2.68
-          }
-        ],
-        "out": [
-          {
-            "symbol": "3702.TW",
-            "name": "WPG Holding Co Ltd",
-            "pct": 3.36
-          },
-          {
-            "symbol": "2454.TW",
-            "name": "MediaTek Inc",
-            "pct": 2.79
-          },
-          {
-            "symbol": "3293.TWO",
-            "name": "International Games System Co Ltd",
-            "pct": 2.5
-          },
-          {
-            "symbol": "2385.TW",
-            "name": "Chicony Electronics Co Ltd",
-            "pct": 2.98
-          },
-          {
-            "symbol": "2603.TW",
-            "name": "Evergreen Marine Corp (Taiwan) Ltd",
-            "pct": 7.0
-          },
-          {
-            "symbol": "3036.TW",
-            "name": "WT Microelectronics Co Ltd",
-            "pct": 2.88
-          }
-        ]
-      }
+      ]
     },
     "00403A": {
       "holdings": [
@@ -13723,62 +13549,7 @@
           "pct": 3.04
         }
       ],
-      "changed_at": "2026/07/25",
-      "diff": {
-        "in": [
-          {
-            "symbol": "2330.TW",
-            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
-            "pct": 18.03
-          },
-          {
-            "symbol": "2303.TW",
-            "name": "United Microelectronics Corp",
-            "pct": 7.15
-          },
-          {
-            "symbol": "2327.TW",
-            "name": "Yageo Corp",
-            "pct": 6.64
-          },
-          {
-            "symbol": "3037.TW",
-            "name": "Unimicron Technology Corp",
-            "pct": 5.56
-          },
-          {
-            "symbol": "3017.TW",
-            "name": "Asia Vital Components Co Ltd",
-            "pct": 4.95
-          },
-          {
-            "symbol": "2344.TW",
-            "name": "Winbond Electronics Corp",
-            "pct": 4.67
-          },
-          {
-            "symbol": "2383.TW",
-            "name": "Elite Material Co Ltd",
-            "pct": 3.75
-          },
-          {
-            "symbol": "2454.TW",
-            "name": "MediaTek Inc",
-            "pct": 3.53
-          },
-          {
-            "symbol": "6223.TWO",
-            "name": "MPI Corp",
-            "pct": 3.32
-          },
-          {
-            "symbol": "2345.TW",
-            "name": "Accton Technology Corp",
-            "pct": 3.04
-          }
-        ],
-        "out": []
-      }
+      "changed_at": "2026/07/25"
     },
     "00988A": {
       "holdings": [
@@ -13938,93 +13709,7 @@
             }
           ]
         }
-      ],
-      "diff": {
-        "in": [
-          {
-            "symbol": "009150.KS",
-            "name": "Samsung Electro-Mechanics Co Ltd",
-            "pct": 5.65
-          },
-          {
-            "symbol": "AMD",
-            "name": "Advanced Micro Devices Inc",
-            "pct": 5.63
-          },
-          {
-            "symbol": "285A.T",
-            "name": "Kioxia Holdings Corp Ordinary Shares",
-            "pct": 5.63
-          },
-          {
-            "symbol": "6976.T",
-            "name": "Taiyo Yuden Co Ltd",
-            "pct": 4.02
-          },
-          {
-            "symbol": "6981.T",
-            "name": "Murata Manufacturing Co Ltd",
-            "pct": 3.72
-          },
-          {
-            "symbol": "3037.TW",
-            "name": "Unimicron Technology Corp",
-            "pct": 3.68
-          },
-          {
-            "symbol": "BE",
-            "name": "Bloom Energy Corp Class A",
-            "pct": 3.46
-          },
-          {
-            "symbol": "MRVL",
-            "name": "Marvell Technology Inc",
-            "pct": 3.41
-          }
-        ],
-        "out": [
-          {
-            "symbol": "GEV",
-            "name": "GE Vernova Inc",
-            "pct": 3.44
-          },
-          {
-            "symbol": "GLW",
-            "name": "Corning Inc",
-            "pct": 3.94
-          },
-          {
-            "symbol": "3017.TW",
-            "name": "Asia Vital Components Co Ltd",
-            "pct": 3.21
-          },
-          {
-            "symbol": "6787.T",
-            "name": "Meiko Electronics Co Ltd",
-            "pct": 3.52
-          },
-          {
-            "symbol": "CIEN",
-            "name": "Ciena Corp",
-            "pct": 3.54
-          },
-          {
-            "symbol": "5801.T",
-            "name": "Furukawa Electric Co Ltd",
-            "pct": 3.11
-          },
-          {
-            "symbol": "6515.TW",
-            "name": "WinWay Technology Co Ltd Ordinary Shares",
-            "pct": 3.22
-          },
-          {
-            "symbol": "LITE",
-            "name": "Lumentum Holdings Inc",
-            "pct": 8.43
-          }
-        ]
-      }
+      ]
     },
     "00981A": {
       "holdings": [
@@ -14156,63 +13841,7 @@
             }
           ]
         }
-      ],
-      "diff": {
-        "in": [
-          {
-            "symbol": "2327.TW",
-            "name": "Yageo Corp",
-            "pct": 9.86
-          },
-          {
-            "symbol": "2454.TW",
-            "name": "MediaTek Inc",
-            "pct": 7.37
-          },
-          {
-            "symbol": "3037.TW",
-            "name": "Unimicron Technology Corp",
-            "pct": 5.6
-          },
-          {
-            "symbol": "2303.TW",
-            "name": "United Microelectronics Corp",
-            "pct": 4.9
-          },
-          {
-            "symbol": "6669.TW",
-            "name": "Wiwynn Corp Ordinary Shares",
-            "pct": 3.86
-          }
-        ],
-        "out": [
-          {
-            "symbol": "2308.TW",
-            "name": "Delta Electronics Inc",
-            "pct": 6.05
-          },
-          {
-            "symbol": "5274.TWO",
-            "name": "Aspeed Technology Inc",
-            "pct": 3.41
-          },
-          {
-            "symbol": "3665.TW",
-            "name": "Bizlink Holding Inc",
-            "pct": 5.14
-          },
-          {
-            "symbol": "2368.TW",
-            "name": "Gold Circuit Electronics Ltd",
-            "pct": 5.24
-          },
-          {
-            "symbol": "3653.TW",
-            "name": "Jentech Precision Industrial Co Ltd",
-            "pct": 5.77
-          }
-        ]
-      }
+      ]
     },
     "00935": {
       "holdings": [
@@ -14496,83 +14125,7 @@
             }
           ]
         }
-      ],
-      "diff": {
-        "in": [
-          {
-            "symbol": "2454.TW",
-            "name": "MediaTek Inc",
-            "pct": 6.56
-          },
-          {
-            "symbol": "2059.TW",
-            "name": "King Slide Works Co Ltd",
-            "pct": 4.65
-          },
-          {
-            "symbol": "2383.TW",
-            "name": "Elite Material Co Ltd",
-            "pct": 4.15
-          },
-          {
-            "symbol": "3037.TW",
-            "name": "Unimicron Technology Corp",
-            "pct": 3.46
-          },
-          {
-            "symbol": "3653.TW",
-            "name": "Jentech Precision Industrial Co Ltd",
-            "pct": 2.98
-          },
-          {
-            "symbol": "2368.TW",
-            "name": "Gold Circuit Electronics Ltd",
-            "pct": 2.71
-          },
-          {
-            "symbol": "6223.TWO",
-            "name": "MPI Corp",
-            "pct": 2.66
-          }
-        ],
-        "out": [
-          {
-            "symbol": "3017.TW",
-            "name": "Asia Vital Components Co Ltd",
-            "pct": 3.05
-          },
-          {
-            "symbol": "2382.TW",
-            "name": "Quanta Computer Inc",
-            "pct": 2.94
-          },
-          {
-            "symbol": "2408.TW",
-            "name": "Nanya Technology Corp",
-            "pct": 2.61
-          },
-          {
-            "symbol": "8210.TW",
-            "name": "Chenbro Micom Co Ltd",
-            "pct": 2.78
-          },
-          {
-            "symbol": "2345.TW",
-            "name": "Accton Technology Corp",
-            "pct": 2.73
-          },
-          {
-            "symbol": "2317.TW",
-            "name": "Hon Hai Precision Industry Co Ltd",
-            "pct": 3.11
-          },
-          {
-            "symbol": "6669.TW",
-            "name": "Wiwynn Corp Ordinary Shares",
-            "pct": 2.99
-          }
-        ]
-      }
+      ]
     },
     "00631L": {
       "holdings": [],
