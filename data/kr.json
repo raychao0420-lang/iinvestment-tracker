@@ -1,20 +1,20 @@
 {
-  "updated": "2026/07/24 14:01",
+  "updated": "2026/07/24 16:39",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 6749.62,
-      "change": -347.27,
-      "pct": -4.89,
+      "price": 6690.62,
+      "change": -406.27,
+      "pct": -5.72,
       "date": "07/24"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 754.6,
-      "change": -35.68,
-      "pct": -4.51,
+      "price": 748.22,
+      "change": -42.06,
+      "pct": -5.32,
       "date": "07/24"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 252750.0,
-      "change": -17250.0,
-      "pct": -6.39,
+      "price": 249500.0,
+      "change": -20500.0,
+      "pct": -7.59,
       "date": "07/24"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1787000.0,
-      "change": -132000.0,
-      "pct": -6.88,
+      "price": 1759000.0,
+      "change": -160000.0,
+      "pct": -8.34,
       "date": "07/24"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 202000.0,
-      "change": -14000.0,
-      "pct": -6.48,
+      "price": 200000.0,
+      "change": -16000.0,
+      "pct": -7.41,
       "date": "07/24"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1342000.0,
-      "change": -106000.0,
-      "pct": -7.32,
+      "price": 1326000.0,
+      "change": -122000.0,
+      "pct": -8.43,
       "date": "07/24"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 9840.0,
-      "change": -640.0,
-      "pct": -6.11,
+      "price": 9800.0,
+      "change": -680.0,
+      "pct": -6.49,
       "date": "07/24"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 627000.0,
-      "change": -52000.0,
-      "pct": -7.66,
+      "price": 625000.0,
+      "change": -54000.0,
+      "pct": -7.95,
       "date": "07/24"
     }
   ]
