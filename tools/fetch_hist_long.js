@@ -8,6 +8,7 @@ const TICKERS = [
   { sym: '00631L.TW', name: '元大台灣50正2', market: 'lev' },
   { sym: '00675L.TW', name: '富邦加權正2',   market: 'lev' },
   { sym: '00663L.TW', name: '國泰加權正2',   market: 'lev' },
+  { sym: '00685L.TW', name: '群益加權正2',   market: 'lev' },
   { sym: '0050.TW',   name: '元大台灣50',    market: 'tw' },
   { sym: '006208.TW', name: '富邦台50',      market: 'tw' },
   { sym: '00878.TW',  name: '國泰永續高股息', market: 'tw' },

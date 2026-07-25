@@ -1177,14 +1177,14 @@ const ETF_NAMES = {
   '00919':'群益台灣精選高息','00929':'復華台灣科技優息','00940':'元大台灣價值高息',
   '00403A':'統一台股升級50','00988A':'統一全球創新','00981A':'統一台股增長',
   '00935':'野村新科技50','00980A':'野村優選',
-  '00631L':'元大台灣50正2','00675L':'富邦加權正2','00663L':'國泰加權正2',
+  '00631L':'元大台灣50正2','00675L':'富邦加權正2','00663L':'國泰加權正2','00685L':'群益加權正2',
 };
 
 const ETF_GROUPS_MAP = {
   '0050':'index','006208':'index',
   '00878':'div','00919':'div','00929':'div','00940':'div',
   '00403A':'active','00988A':'active','00981A':'active','00935':'active','00980A':'active',
-  '00631L':'lev','00675L':'lev','00663L':'lev',
+  '00631L':'lev','00675L':'lev','00663L':'lev','00685L':'lev',
 };
 
 const ETF_DESC = {
@@ -1202,6 +1202,7 @@ const ETF_DESC = {
   '00631L': '每日槓桿 2 倍，追蹤台灣50指數每日績效的 2 倍。<br>每日重置機制，長期持有因波動耗損（Volatility Drag）報酬會偏離 2× 指數漲幅。<br>適合短線交易或趨勢明顯時使用，不適合長期持有。費用率約 1.0%。',
   '00675L': '每日槓桿 2 倍，追蹤台灣加權股價指數（^TWII）每日績效的 2 倍。<br>成分較 00631L 更廣，涵蓋全市場加權指數。<br>同樣有每日重置槓桿消耗問題，建議短線操作。費用率約 0.99%（富邦投信）。',
   '00663L': '每日槓桿 2 倍，追蹤台灣加權股價指數每日績效的 2 倍。<br>與 00675L 為同類競品（國泰投信），標的指數相同。<br>規模略小，流動性次之。費用率約 0.99%。',
+  '00685L': '每日槓桿 2 倍，追蹤台灣加權股價指數（臺指日報酬兩倍指數）每日績效的 2 倍。<br>與 00675L／00663L 同追蹤指數（群益投信），四檔正2中經理費最低（約 0.3%）。<br>2026 年完成 1 拆 24 分割，單位淨值調降、流動性提升。同有每日重置槓桿消耗，適合短線。',
 };
 
 const US_STOCK_DESC = {
@@ -2907,7 +2908,7 @@ function runBacktest(candles, volume, key, stopPct) {
            avg: n ? trades.reduce((s, t) => s + t.ret, 0) / n : 0, span: N - START };
 }
 let _btData = null, _btStrat = 'pivot', _btStop = 0, _btRange = 'recent', _histLong = null;
-const HIST_LONG_SYMS = ['00631L.TW','00675L.TW','00663L.TW','0050.TW','006208.TW','00878.TW','2330.TW','2454.TW','2317.TW','2308.TW','TSM','NVDA','AAPL'];
+const HIST_LONG_SYMS = ['00631L.TW','00675L.TW','00663L.TW','00685L.TW','0050.TW','006208.TW','00878.TW','2330.TW','2454.TW','2317.TW','2308.TW','TSM','NVDA','AAPL'];
 async function ensureHistLong() {
   if (_histLong) return _histLong;
   _histLong = await fetch(`data/hist_long.json?t=${Date.now()}`).then(r => r.json()).catch(() => ({ stocks: {} }));

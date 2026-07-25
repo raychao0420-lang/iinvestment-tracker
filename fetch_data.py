@@ -124,6 +124,7 @@ TW_ETF = [
     {'symbol': '00631L.TW', 'name': '元大台灣50正2'},
     {'symbol': '00675L.TW', 'name': '富邦台灣加權正2'},
     {'symbol': '00663L.TW', 'name': '國泰臺灣加權正2'},
+    {'symbol': '00685L.TW', 'name': '群益臺灣加權正2'},
 ]
 
 # Extended ETF universe for top-3-by-volume discovery (superset of TW_ETF)
@@ -148,6 +149,7 @@ ETF_UNIVERSE = [
     {'symbol': '00980A.TW', 'code': '00980A', 'name': '主動野村臺灣優選'},
     {'symbol': '00675L.TW', 'code': '00675L', 'name': '富邦台灣加權正2'},
     {'symbol': '00663L.TW', 'code': '00663L', 'name': '國泰臺灣加權正2'},
+    {'symbol': '00685L.TW', 'code': '00685L', 'name': '群益臺灣加權正2'},
 ]
 
 JP_INDICES = [
