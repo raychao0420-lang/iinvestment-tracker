@@ -1356,6 +1356,22 @@ def fetch_stock_charts():
                 print(f'  stock_charts {sym}: insufficient ({len(df)} rows)')
                 continue
 
+            # 台股分割/減資還原：yfinance 對部分 ETF 未登記 split，auto_adjust 失效（如 00685L）。
+            # 台股有 10% 漲跌幅限制，相鄰日 >40% 跳空必為分割/減資 → 用比例反推、把較早的價位縮放到最新尺度。
+            if unit_map[sym] == '張' and len(df) > 1:
+                closes = df['Close'].tolist()
+                factor, factors = 1.0, [1.0] * len(closes)
+                for i in range(len(closes) - 1, 0, -1):
+                    r = closes[i] / closes[i - 1] if closes[i - 1] else 1.0
+                    if r < 0.7 or r > 1.4:
+                        factor *= r          # 跨過一次分割 → 更早的日子再乘上此比例
+                    factors[i - 1] = factor
+                if factors[0] != 1.0:
+                    fs = pd.Series(factors, index=df.index)
+                    for col in ('Open', 'High', 'Low', 'Close'):
+                        df[col] = df[col] * fs
+                    print(f'  stock_charts {sym}: 偵測到分割/減資，已還原權值 (x{factors[0]:.4f})')
+
             ma5  = df['Close'].rolling(5).mean()
             ma20 = df['Close'].rolling(20).mean()
             ma60 = df['Close'].rolling(60).mean()
