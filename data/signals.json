@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/27 18:09",
+  "updated": "2026/07/27 18:56",
   "stocks": {
     "TSM": {
       "rsi14": 42.4,
@@ -167,19 +167,19 @@
       "score": 2
     },
     "AAPL": {
-      "rsi14": 65.2,
-      "rsi21": 63.6,
-      "bias20": 5.9,
-      "bias60": 10.1,
-      "bb_pct": 79.1,
-      "bb_width": 20.3,
-      "bb_low": 282.41,
-      "bb_mid": 314.39,
-      "bb_up": 346.36,
+      "rsi14": 58.1,
+      "rsi21": 58.7,
+      "bias20": 3.3,
+      "bias60": 6.7,
+      "bb_pct": 64.4,
+      "bb_width": 22.6,
+      "bb_low": 276.31,
+      "bb_mid": 311.49,
+      "bb_up": 346.68,
       "squeeze": false,
       "trend": true,
       "zone": "neutral",
-      "score": 1
+      "score": 0
     },
     "NVDA": {
       "rsi14": 51.1,
@@ -257,19 +257,19 @@
       "score": 1
     },
     "QCOM": {
-      "rsi14": 36.9,
-      "rsi21": 41.4,
-      "bias20": -7.2,
-      "bias60": -16.9,
-      "bb_pct": 7.4,
-      "bb_width": 16.8,
-      "bb_low": 164.73,
-      "bb_mid": 179.87,
-      "bb_up": 195.01,
+      "rsi14": 39.1,
+      "rsi21": 42.8,
+      "bias20": -5.9,
+      "bias60": -14.8,
+      "bb_pct": 19.8,
+      "bb_width": 19.4,
+      "bb_low": 164.13,
+      "bb_mid": 181.76,
+      "bb_up": 199.4,
       "squeeze": true,
       "trend": false,
       "zone": "neutral",
-      "score": 1
+      "score": 0
     },
     "ARM": {
       "rsi14": 38.2,
@@ -482,19 +482,19 @@
       "score": 0
     },
     "SCHD": {
-      "rsi14": 65.2,
-      "rsi21": 62.8,
-      "bias20": 2.5,
-      "bias60": 3.8,
-      "bb_pct": 99.2,
-      "bb_width": 5.1,
+      "rsi14": 58.3,
+      "rsi21": 58.0,
+      "bias20": 1.2,
+      "bias60": 2.4,
+      "bb_pct": 75.9,
+      "bb_width": 4.7,
       "bb_low": 31.63,
-      "bb_mid": 32.47,
-      "bb_up": 33.3,
+      "bb_mid": 32.4,
+      "bb_up": 33.17,
       "squeeze": false,
       "trend": false,
-      "zone": "sell",
-      "score": 2
+      "zone": "neutral",
+      "score": 0
     },
     "VGT": {
       "rsi14": 45.0,
