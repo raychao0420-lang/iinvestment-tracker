@@ -648,6 +648,8 @@
   .pp-table td.nm { font-family: inherit; }
   .pp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: .2rem .7rem; }
   .pp-qty { width: 62px; background: var(--c2); border: 1px solid var(--bdr); border-radius: 5px; color: var(--t1); font-size: .68rem; padding: .15rem .25rem; font-family: 'Courier New', monospace; text-align: right; }
+  .pp-price { border: 1px solid var(--acc); box-shadow: inset 0 0 0 1px rgba(59,130,246,.25); background: var(--c1); }
+  .pp-price:focus { outline: none; box-shadow: 0 0 0 2px rgba(59,130,246,.5); }
   .pp-btn { border: none; border-radius: 5px; font-size: .62rem; font-weight: 700; padding: .18rem .45rem; cursor: pointer; color: #fff; }
   .pp-btn.buy  { background: var(--up); }
   .pp-btn.sell { background: var(--down); }
@@ -909,7 +911,7 @@
     <div class="pp-summary" id="pp-summary"></div>
 
     <div class="section-title mt-1">隔日 S/R 推薦掛單</div>
-    <div class="pp-note">支撐＝建議買價、壓力＝建議賣價（★＝多法交會強度）。<b>游標移到支撐/壓力價</b>會顯示「這個價格怎麼算的、依據哪些方法」；點 <b>📈線圖</b> 開早上做的 K 線圖（可勾選均線/布林/樞紐/ATR/VPOC/費波等圖層）。填股數後按掛買／掛賣，或直接改價格手動掛。</div>
+    <div class="pp-note"><b>支撐／壓力</b>是引擎算的參考價（唯讀，★＝多法交會強度，游標移上去看怎麼算的）；<b>買價／賣價</b>（藍框）才是你實際要掛的價，預設帶入參考價、可自行改。填好買/賣價與股數後按掛買／掛賣。點 <b>📈線圖</b> 開早上做的 K 線圖。</div>
     <div class="pp-wrap"><div id="pp-reco"><div class="skeleton" style="height:8rem;margin:.3rem"></div></div></div>
 
     <div class="section-title mt-1">未成交掛單</div>
@@ -3294,6 +3296,29 @@ function paperManualFill(id) {
   paperSave(); renderPaper();
 }
 function paperCancel(id) { paperLoad().orders = _paper.orders.filter(x => x.id !== id); paperSave(); renderPaper(); }
+// 修改未成交掛單（改價／改量），沿用 paperPlace 的資金/持股檢查
+function paperEdit(id) {
+  const o = paperLoad().orders.find(x => x.id === id); if (!o) return;
+  const sideTxt = o.side === 'buy' ? '買' : '賣';
+  const np = prompt(`修改「${o.name}」${sideTxt}單\n新掛單價（原 ${ppPx(o.price)}）：`, o.price);
+  if (np == null) return;
+  const price = +np; if (!(price > 0)) { alert('價格無效'); return; }
+  const nq = prompt(`新股數（原 ${o.qty}）：`, o.qty);
+  if (nq == null) return;
+  const qty = Math.floor(+nq); if (!(qty > 0)) { alert('股數無效'); return; }
+  const { cash, pos } = paperCompute();
+  if (o.side === 'buy' && price * qty > (cash[o.ccy] || 0) + 1e-6) {
+    alert(`現金不足：需 ${ppFmt(price * qty, 0)} ${o.ccy}，現有 ${ppFmt(cash[o.ccy] || 0, 0)}`); return;
+  }
+  if (o.side === 'sell') {
+    const have = (pos[o.symbol] && pos[o.symbol].qty) || 0;
+    if (qty > have + 1e-6) { alert(`持股不足：欲賣 ${qty} 股，只有 ${have} 股`); return; }
+  }
+  o.price = price; o.qty = qty;
+  const cd = paperCandles(o.symbol);   // 改單後重設觸價比對起點，避免用舊 K 棒回填
+  if (cd && cd.candles.length) o.afterTime = cd.candles[cd.candles.length - 1].time;
+  paperSave(); renderPaper();
+}
 function paperReset() {
   if (!confirm('確定清空模擬帳戶？所有掛單、持倉、交易紀錄與損益都會歸零。')) return;
   _paper = { v: 1, start: { ...PAPER_START }, orders: [], trades: [] };
@@ -3357,7 +3382,7 @@ function renderPaper() {
   document.getElementById('pp-reco').innerHTML = !recoRows.length
     ? '<div class="pp-empty">目前無可推薦標的（K 線資料尚未載入或不足 60 根）。</div>'
     : `<table class="pp-table"><thead><tr>
-        <th>標的</th><th>現價</th><th>支撐(買)</th><th>壓力(賣)</th><th>股數</th><th>操作</th></tr></thead><tbody>` +
+        <th>標的</th><th>現價</th><th>支撐</th><th>壓力</th><th>買價✏️</th><th>賣價✏️</th><th>股數</th><th>操作</th></tr></thead><tbody>` +
       recoRows.map(({ sym, info, buy, sell, buyN, buyItems, sellN, sellItems }) => {
         const e = sym.replace(/'/g, '');
         const safeName = (info.name || '').replace(/'/g, '&#39;');
@@ -3368,8 +3393,10 @@ function renderPaper() {
           <button class="pp-lnk" onclick="openStockChart('${e}','${safeName}')" title="開 K 線圖（可勾選均線/布林/樞紐/ATR/VPOC/費波等圖層＋明日 S/R）">📈線圖</button>
           <br><span style="color:var(--t3);font-size:.58rem">${sym}</span></td>
           <td>${ppPx(info.price)}</td>
-          <td title="${buyTip}"><input class="pp-qty" id="ppbuy_${e}" value="${buy != null ? ppPx(buy) : ''}" style="color:var(--up)" title="${buyTip}">${stars(buyN)}</td>
-          <td title="${sellTip}"><input class="pp-qty" id="ppsell_${e}" value="${sell != null ? ppPx(sell) : ''}" style="color:var(--down)" title="${sellTip}">${stars(sellN)}</td>
+          <td title="${buyTip}" style="color:var(--up)">${buy != null ? ppPx(buy) : '–'}${stars(buyN)}</td>
+          <td title="${sellTip}" style="color:var(--down)">${sell != null ? ppPx(sell) : '–'}${stars(sellN)}</td>
+          <td><input class="pp-qty pp-price" id="ppbuy_${e}" value="${buy != null ? ppPx(buy) : ''}" style="color:var(--up)" placeholder="買價" title="實際買進掛價（預設帶入支撐，可改）"></td>
+          <td><input class="pp-qty pp-price" id="ppsell_${e}" value="${sell != null ? ppPx(sell) : ''}" style="color:var(--down)" placeholder="賣價" title="實際賣出掛價（預設帶入壓力，可改）"></td>
           <td><input class="pp-qty" id="ppq_${e}" placeholder="股"></td>
           <td style="white-space:nowrap">
             <button class="pp-btn buy"  onclick="paperPlace('${e}','buy',ppRowPrice('${e}','buy'),ppRowQty('${e}'))"${buy == null ? ' disabled' : ''}>掛買</button>
@@ -3391,6 +3418,7 @@ function renderPaper() {
           <td>${gap != null ? (gap >= 0 ? '+' : '') + ppFmt(gap, 1) + '%' : '–'}</td>
           <td style="white-space:nowrap">
             <button class="pp-btn ghost" onclick="paperManualFill('${o.id}')">手動成交</button>
+            <button class="pp-btn ghost" onclick="paperEdit('${o.id}')">改</button>
             <button class="pp-btn ghost" onclick="paperCancel('${o.id}')">取消</button></td></tr>`;
       }).join('') + '</tbody></table>';
 
