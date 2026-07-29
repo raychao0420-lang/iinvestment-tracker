@@ -1,20 +1,20 @@
 {
-  "updated": "2026/07/29 14:02",
+  "updated": "2026/07/29 16:52",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 5677.56,
-      "change": -346.1,
-      "pct": -5.75,
+      "price": 5663.24,
+      "change": -1092.51,
+      "pct": -16.17,
       "date": "07/29"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 660.93,
-      "change": -44.92,
-      "pct": -6.36,
+      "price": 662.68,
+      "change": -102.18,
+      "pct": -13.36,
       "date": "07/29"
     }
   ],
@@ -22,33 +22,33 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 208000.0,
-      "change": -12000.0,
-      "pct": -5.45,
+      "price": 208500.0,
+      "change": -11500.0,
+      "pct": -5.23,
       "date": "07/29"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1418000.0,
-      "change": -132000.0,
-      "pct": -8.52,
+      "price": 1401000.0,
+      "change": -149000.0,
+      "pct": -9.61,
       "date": "07/29"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 168400.0,
-      "change": -11100.0,
-      "pct": -6.18,
+      "price": 167600.0,
+      "change": -11900.0,
+      "pct": -6.63,
       "date": "07/29"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1023000.0,
-      "change": -91000.0,
-      "pct": -8.17,
+      "price": 1029000.0,
+      "change": -85000.0,
+      "pct": -7.63,
       "date": "07/29"
     }
   ],
@@ -56,9 +56,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 8650.0,
-      "change": -350.0,
-      "pct": -3.89,
+      "price": 8570.0,
+      "change": -430.0,
+      "pct": -4.78,
       "date": "07/29"
     }
   ],
@@ -66,9 +66,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 456000.0,
-      "change": -58000.0,
-      "pct": -11.28,
+      "price": 458000.0,
+      "change": -56000.0,
+      "pct": -10.89,
       "date": "07/29"
     }
   ]
