@@ -1,6 +1,21 @@
 {
-  "updated": "2026/07/30 06:11",
+  "updated": "2026/07/30 07:43",
   "stocks": {
+    "TSM": {
+      "rsi14": 34.2,
+      "rsi21": 39.8,
+      "bias20": -10.5,
+      "bias60": -11.1,
+      "bb_pct": -6.7,
+      "bb_width": 18.5,
+      "bb_low": 379.85,
+      "bb_mid": 418.68,
+      "bb_up": 457.51,
+      "squeeze": false,
+      "trend": false,
+      "zone": "strong_buy",
+      "score": 3
+    },
     "MU": {
       "rsi14": 35.7,
       "rsi21": 41.2,
