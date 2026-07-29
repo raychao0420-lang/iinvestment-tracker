@@ -1,75 +1,75 @@
 {
-  "updated": "2026/07/29 07:42",
+  "updated": "2026/07/29 14:02",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 6023.66,
-      "change": -732.09,
-      "pct": -10.84,
-      "date": "07/28"
+      "price": 5677.56,
+      "change": -346.1,
+      "pct": -5.75,
+      "date": "07/29"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 705.85,
-      "change": -59.01,
-      "pct": -7.72,
-      "date": "07/28"
+      "price": 660.93,
+      "change": -44.92,
+      "pct": -6.36,
+      "date": "07/29"
     }
   ],
   "semi": [
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 220000.0,
-      "change": -34000.0,
-      "pct": -13.39,
-      "date": "07/28"
+      "price": 208000.0,
+      "change": -12000.0,
+      "pct": -5.45,
+      "date": "07/29"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1550000.0,
-      "change": -266000.0,
-      "pct": -14.65,
-      "date": "07/28"
+      "price": 1418000.0,
+      "change": -132000.0,
+      "pct": -8.52,
+      "date": "07/29"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 179500.0,
-      "change": -25000.0,
-      "pct": -12.22,
-      "date": "07/28"
+      "price": 168400.0,
+      "change": -11100.0,
+      "pct": -6.18,
+      "date": "07/29"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1114000.0,
-      "change": -211000.0,
-      "pct": -15.92,
-      "date": "07/28"
+      "price": 1023000.0,
+      "change": -91000.0,
+      "pct": -8.17,
+      "date": "07/29"
     }
   ],
   "display": [
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 9000.0,
-      "change": -660.0,
-      "pct": -6.83,
-      "date": "07/28"
+      "price": 8650.0,
+      "change": -350.0,
+      "pct": -3.89,
+      "date": "07/29"
     }
   ],
   "camera": [
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 514000.0,
-      "change": -100000.0,
-      "pct": -16.29,
-      "date": "07/28"
+      "price": 456000.0,
+      "change": -58000.0,
+      "pct": -11.28,
+      "date": "07/29"
     }
   ]
 }
