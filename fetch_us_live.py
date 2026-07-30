@@ -71,6 +71,10 @@ def fetch_one(sym):
 
 
 def quote(item, session):
+    # 現貨指數在盤前/盤後不交易，regularMarketPrice 會凍結在昨收，
+    # 顯示會重播昨天常規盤的漲跌（與日線卡重複）→ 非盤中時跳過，夜盤情緒看期貨即可
+    if item['kind'] == 'idx' and session != '盤中':
+        return None
     reg_px, prev, ext_px = fetch_one(item['symbol'])
     if reg_px is None or prev is None:
         return None
