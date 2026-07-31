@@ -1,5 +1,5 @@
 {
-  "updated": "2026/07/31 20:45",
+  "updated": "2026/07/31 20:50",
   "futures": [
     {
       "symbol": "TX",
@@ -37,9 +37,9 @@
     {
       "symbol": "TE",
       "name": "電子期",
-      "price": 43288.0,
-      "change": -439.0,
-      "pct": -1.0,
+      "price": 43293.0,
+      "change": -434.0,
+      "pct": -0.99,
       "change_open": -21.0,
       "pct_open": -0.7,
       "contract": "202608",
