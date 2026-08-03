@@ -543,14 +543,14 @@ def fetch_tw_analysis(mkt_series=None):
 
 
 def fetch_chart_data(mkt_series=None):
-    """Download ~1y OHLCV for ^TWII and 0050.TW; compute MA5/20/60; keep last 126 bars (≈6 months)."""
+    """Download ~2y OHLCV for ^TWII and 0050.TW; compute MA5/20/60/120/240; keep last 126 bars (≈6 months)."""
     import pandas as pd
 
     symbols = ['^TWII', '0050.TW']
     raw = None
     for attempt in range(3):
         try:
-            raw = yf.download(symbols, period='1y', interval='1d',
+            raw = yf.download(symbols, period='2y', interval='1d',
                               progress=False, auto_adjust=True)
             break
         except Exception as e:
@@ -573,15 +573,19 @@ def fetch_chart_data(mkt_series=None):
                 'volume': raw['Volume'][sym],
             }).dropna()
 
-            # Compute MAs on full 1y data, then trim to last 126 rows (≈6 months)
-            ma5  = df['close'].rolling(5).mean()
-            ma20 = df['close'].rolling(20).mean()
-            ma60 = df['close'].rolling(60).mean()
+            # Compute MAs on full 2y data, then trim to last 126 rows (≈6 months)
+            ma5   = df['close'].rolling(5).mean()
+            ma20  = df['close'].rolling(20).mean()
+            ma60  = df['close'].rolling(60).mean()
+            ma120 = df['close'].rolling(120).mean()
+            ma240 = df['close'].rolling(240).mean()
             std20 = df['close'].rolling(20).std()      # 布林通道 20,2σ
-            df   = df.tail(126)
-            ma5  = ma5.reindex(df.index)
-            ma20 = ma20.reindex(df.index)
-            ma60 = ma60.reindex(df.index)
+            df    = df.tail(126)
+            ma5   = ma5.reindex(df.index)
+            ma20  = ma20.reindex(df.index)
+            ma60  = ma60.reindex(df.index)
+            ma120 = ma120.reindex(df.index)
+            ma240 = ma240.reindex(df.index)
             std20 = std20.reindex(df.index)
             bb_up  = ma20 + 2 * std20
             bb_low = ma20 - 2 * std20
@@ -638,6 +642,8 @@ def fetch_chart_data(mkt_series=None):
                 'ma5':     to_line(ma5),
                 'ma20':    to_line(ma20),
                 'ma60':    to_line(ma60),
+                'ma120':   to_line(ma120),
+                'ma240':   to_line(ma240),
                 'bb_up':   to_line(bb_up),
                 'bb_low':  to_line(bb_low),
             }
@@ -1280,7 +1286,8 @@ def fetch_signals():
 
 
 def fetch_stock_charts():
-    """Download 6mo OHLCV for all individual stocks; compute MA5/20/60.
+    """Download 2y OHLCV for all individual stocks; compute MA5/20/60/120/240;
+    keep last 126 bars (≈6 months) for display.
     Saves data/stock_charts.json with structure {updated, stocks:{symbol:{...}}}.
     """
     import pandas as pd, math
@@ -1320,11 +1327,11 @@ def fetch_stock_charts():
     except Exception:
         cached = {}
 
-    print(f'  stock_charts: downloading {len(symbols)} symbols (6mo)...')
+    print(f'  stock_charts: downloading {len(symbols)} symbols (2y)...')
     raw = None
     for attempt in range(3):
         try:
-            raw = yf.download(symbols, period='6mo', interval='1d',
+            raw = yf.download(symbols, period='2y', interval='1d',
                               progress=False, auto_adjust=True)
             break
         except Exception as e:
@@ -1372,10 +1379,20 @@ def fetch_stock_charts():
                         df[col] = df[col] * fs
                     print(f'  stock_charts {sym}: 偵測到分割/減資，已還原權值 (x{factors[0]:.4f})')
 
-            ma5  = df['Close'].rolling(5).mean()
-            ma20 = df['Close'].rolling(20).mean()
-            ma60 = df['Close'].rolling(60).mean()
+            # 用完整 2y 算均線，再裁切到最後 126 根顯示（檔案大小維持不變）
+            ma5   = df['Close'].rolling(5).mean()
+            ma20  = df['Close'].rolling(20).mean()
+            ma60  = df['Close'].rolling(60).mean()
+            ma120 = df['Close'].rolling(120).mean()
+            ma240 = df['Close'].rolling(240).mean()
             std20 = df['Close'].rolling(20).std()      # 布林通道 20,2σ
+            df    = df.tail(126)
+            ma5   = ma5.reindex(df.index)
+            ma20  = ma20.reindex(df.index)
+            ma60  = ma60.reindex(df.index)
+            ma120 = ma120.reindex(df.index)
+            ma240 = ma240.reindex(df.index)
+            std20 = std20.reindex(df.index)
             bb_up  = ma20 + 2 * std20
             bb_low = ma20 - 2 * std20
 
@@ -1405,6 +1422,8 @@ def fetch_stock_charts():
                 'ma5':     to_line(ma5),
                 'ma20':    to_line(ma20),
                 'ma60':    to_line(ma60),
+                'ma120':   to_line(ma120),
+                'ma240':   to_line(ma240),
                 'bb_up':   to_line(bb_up),
                 'bb_low':  to_line(bb_low),
             }

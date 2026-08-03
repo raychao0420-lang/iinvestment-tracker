@@ -417,6 +417,16 @@
   .lay-chip.on { color: var(--t1); border-color: #475569; background: #1e293b; }
   .lay-chip:not(.on) { opacity: .55; }
   .lay-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  /* ── K 線均線圖例（浮在圖左上角，不擋最新日期）───────────────── */
+  .chart-legend {
+    position: absolute; top: 6px; left: 8px; z-index: 4;
+    display: flex; flex-wrap: wrap; gap: .1rem .55rem;
+    padding: 2px 7px; border-radius: 5px;
+    background: rgba(15, 23, 42, .6); pointer-events: none;
+    font-size: .58rem; line-height: 1.5; color: var(--t2);
+  }
+  .chart-legend .cl-item { display: inline-flex; align-items: center; gap: .25rem; white-space: nowrap; }
+  .chart-legend .cl-bar { display: inline-block; width: 11px; height: 0; border-top: 2px solid; }
   /* ── 明日 S/R 推薦面板 ──────────────────────────────────────── */
   #chart-reco {
     flex-direction: column; gap: .12rem; padding: .35rem .75rem;
@@ -2286,6 +2296,26 @@ let _layerState = (() => { const d = {}; LAYER_DEFS.forEach(x => d[x.g] = x.def)
   try { Object.assign(d, JSON.parse(localStorage.getItem('itk_layers') || '{}')); } catch (e) {}
   return d; })();
 
+// 均線設定（三個 K 線圖共用；顏色刻意避開紅綠 K 棒與青色布林）
+const MA_LINES = [
+  { key: 'ma5',   color: '#f59e0b', label: 'MA5'   },
+  { key: 'ma20',  color: '#60a5fa', label: 'MA20'  },
+  { key: 'ma60',  color: '#c084fc', label: 'MA60'  },
+  { key: 'ma120', color: '#ec4899', label: 'MA120' },
+  { key: 'ma240', color: '#e2e8f0', label: 'MA240' },
+];
+// 在圖表容器左上角放一排浮動圖例（不擋右側最新日期的價格資訊）
+function addChartLegend(container, items) {
+  const old = container.querySelector('.chart-legend'); if (old) old.remove();
+  if (getComputedStyle(container).position === 'static') container.style.position = 'relative';
+  const lg = document.createElement('div');
+  lg.className = 'chart-legend';
+  lg.innerHTML = items.map(i =>
+    `<span class="cl-item"><span class="cl-bar" style="border-color:${i.color}` +
+    `${i.dashed ? ';border-top-style:dashed' : ''}"></span>${i.label}</span>`).join('');
+  container.appendChild(lg);
+}
+
 async function openChart(key) {
   const modal = document.getElementById('chart-modal');
   modal.style.display = 'flex';
@@ -2345,20 +2375,18 @@ async function openChart(key) {
   chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.78, bottom: 0 } });
   volS.setData(data.volume || []);
 
-  // MA lines
-  const mkLine = (color, title) => chart.addLineSeries({
-    color, lineWidth: 1, title,
-    lastValueVisible: false, priceLineVisible: false,
-    crosshairMarkerVisible: false,
+  // MA lines（不設 title，改用左上角浮動圖例，避免標籤疊在最新日期擋住價格）
+  const mkLine = color => chart.addLineSeries({
+    color, lineWidth: 1,
+    lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false,
   });
-  mkLine('#f59e0b', 'MA5').setData(data.ma5  || []);
-  mkLine('#60a5fa', 'MA20').setData(data.ma20 || []);   // 亦為布林中軌
-  mkLine('#c084fc', 'MA60').setData(data.ma60 || []);
+  MA_LINES.forEach(m => mkLine(m.color).setData(data[m.key] || []));
   // 布林通道上下軌（青色虛線，中軌即 MA20）
-  const mkBB = t => chart.addLineSeries({ color: 'rgba(45,212,191,.85)', lineWidth: 1, title: t,
+  const mkBB = () => chart.addLineSeries({ color: 'rgba(45,212,191,.85)', lineWidth: 1,
     lineStyle: 2, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
-  mkBB('布林上軌').setData(data.bb_up || []);
-  mkBB('布林下軌').setData(data.bb_low || []);
+  mkBB().setData(data.bb_up || []);
+  mkBB().setData(data.bb_low || []);
+  addChartLegend(cont, [...MA_LINES, { color: 'rgba(45,212,191,.85)', label: '布林', dashed: true }]);
 
   // Candlestick (紅漲綠跌)
   const candS = chart.addCandlestickSeries({
@@ -2479,19 +2507,18 @@ async function openStockChart(symbol, name) {
   chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.78, bottom: 0 } });
   volS.setData(data.volume || []);
 
-  const mkLine = (color, title) => chart.addLineSeries({
-    color, lineWidth: 1, title,
+  const mkLine = color => chart.addLineSeries({
+    color, lineWidth: 1,
     lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false,
   });
   _layers = {}; _firstT = data.candles[0].time; _lastT = data.candles[data.candles.length - 1].time;
-  const s5 = mkLine('#f59e0b', 'MA5');  s5.setData(data.ma5  || []); regLayer('ma', s5);
-  const s20 = mkLine('#60a5fa', 'MA20'); s20.setData(data.ma20 || []); regLayer('ma', s20);   // 亦為布林中軌
-  const s60 = mkLine('#c084fc', 'MA60'); s60.setData(data.ma60 || []); regLayer('ma', s60);
+  MA_LINES.forEach(m => { const s = mkLine(m.color); s.setData(data[m.key] || []); regLayer('ma', s); });
   // 布林通道上下軌（青色虛線，中軌即 MA20）
-  const mkBB = t => chart.addLineSeries({ color: 'rgba(45,212,191,.85)', lineWidth: 1, title: t,
+  const mkBB = () => chart.addLineSeries({ color: 'rgba(45,212,191,.85)', lineWidth: 1,
     lineStyle: 2, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
-  const bu = mkBB('布林上軌'); bu.setData(data.bb_up || []); regLayer('boll', bu);
-  const bl = mkBB('布林下軌'); bl.setData(data.bb_low || []); regLayer('boll', bl);
+  const bu = mkBB(); bu.setData(data.bb_up || []); regLayer('boll', bu);
+  const bl = mkBB(); bl.setData(data.bb_low || []); regLayer('boll', bl);
+  addChartLegend(cont, MA_LINES);
 
   const candS = chart.addCandlestickSeries({
     upColor: '#dc2626', downColor: '#16a34a',
@@ -3001,13 +3028,12 @@ function initKlineChart() {
   kChart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.78, bottom: 0 } });
   volS.setData(twiiData.volume || []);
 
-  const mkLine = (color, title) => kChart.addLineSeries({
-    color, lineWidth: 1, title,
+  const mkLine = color => kChart.addLineSeries({
+    color, lineWidth: 1,
     lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false,
   });
-  mkLine('#f59e0b', 'MA5').setData(twiiData.ma5  || []);
-  mkLine('#60a5fa', 'MA20').setData(twiiData.ma20 || []);
-  mkLine('#c084fc', 'MA60').setData(twiiData.ma60 || []);
+  MA_LINES.forEach(m => mkLine(m.color).setData(twiiData[m.key] || []));
+  addChartLegend(klineCont, MA_LINES);
 
   const candS = kChart.addCandlestickSeries({
     upColor: '#dc2626', downColor: '#16a34a',
