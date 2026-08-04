@@ -2,8 +2,8 @@ name: Watchdog – 補跑漏掉的排程
 
 on:
   schedule:
-    # 每兩小時，UTC 00-15 週一~五 (= TWN 08-23)
-    - cron: '30 0,2,4,6,8,10,12,14 * * 1-5'
+    # 每兩小時整天輪班 (UTC 偶數點)，週一~五；涵蓋美股活躍窗 UTC 08-24 (夜盤補跑用)
+    - cron: '30 */2 * * 1-5'
     # UTC 22-23 週日 (= TWN 06-07 週一，補週末後首跑)
     - cron: '30 22,23 * * 0'
   workflow_dispatch:
@@ -62,6 +62,48 @@ jobs:
           if [ "$DIFF" -gt 10800 ]; then
             echo "Stale! Triggering update.yml..."
             gh workflow run update.yml --repo "$REPO"
+          else
+            echo "Fresh enough, no action needed."
+          fi
+
+      - name: Auto-trigger us_live if stale（夜盤補跑）
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO="$GITHUB_REPOSITORY"
+
+          # 只在美股延伸盤活躍窗補跑：美東 04:00–20:00 且週一~五。窗外本來就該凍結，不補。
+          ETMIN=$(( 10#$(TZ='America/New_York' date +%H) * 60 + 10#$(TZ='America/New_York' date +%M) ))
+          ETU=$(TZ='America/New_York' date +%u)
+          if [ "$ETU" -gt 5 ] || [ $ETMIN -lt 240 ] || [ $ETMIN -ge 1200 ]; then
+            echo "美股休市/盤外 (ET $(TZ='America/New_York' date '+%a %H:%M'))，跳過。"
+            exit 0
+          fi
+
+          # 已在排隊/執行中就不重複觸發
+          ACTIVE=$(gh run list --repo "$REPO" --workflow=update_us_live.yml \
+            --json status --jq '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
+          if [ "$ACTIVE" -gt 0 ]; then
+            echo "update_us_live already active (${ACTIVE} job), skip."
+            exit 0
+          fi
+
+          LAST=$(gh run list --repo "$REPO" --workflow=update_us_live.yml \
+            --status=success --limit=1 --json updatedAt --jq '.[0].updatedAt // empty')
+          if [ -z "$LAST" ]; then
+            echo "No prior success, triggering update_us_live..."
+            gh workflow run update_us_live.yml --repo "$REPO"
+            exit 0
+          fi
+
+          DIFF=$(( $(date +%s) - $(date -d "$LAST" +%s) ))
+          printf "us_live last success: %s  (%dh %dm ago)\n" \
+            "$LAST" "$((DIFF / 3600))" "$(( (DIFF % 3600) / 60 ))"
+
+          # 每小時排程，超過 90 分沒成功就補跑
+          if [ "$DIFF" -gt 5400 ]; then
+            echo "Stale! Triggering update_us_live..."
+            gh workflow run update_us_live.yml --repo "$REPO"
           else
             echo "Fresh enough, no action needed."
           fi

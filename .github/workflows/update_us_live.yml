@@ -2,7 +2,8 @@ name: Update US Live (夜盤)
 
 on:
   schedule:
-    - cron: '0 * * * *'   # 每小時整點；由 fetch_us_live.py 依美東時間 gate（ET 04:00-20:00 才動）
+    - cron: '0 * * * *'    # 每小時整點；由 fetch_us_live.py 依美東時間 gate（ET 04:00-20:00 才動）
+    - cron: '30 * * * *'   # 半點備援班次（GitHub 常漏個別班次，多一班拉高命中率）
   workflow_dispatch:
 
 concurrency:
