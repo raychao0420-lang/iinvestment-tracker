@@ -5,9 +5,11 @@
       "symbol": "^N225",
       "name": "日經 225",
       "price": 63957.53,
-      "change": -404.49,
-      "pct": -0.63,
-      "date": "08/04"
+      "change": 202.63,
+      "pct": 0.32,
+      "date": "08/04",
+      "prev_close": 63754.9,
+      "prev_date": "08/03"
     }
   ],
   "semieq": [

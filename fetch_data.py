@@ -329,6 +329,24 @@ def _is_newer_date(new_date, old_date):
         return True
 
 
+def _reconcile_change(item, old):
+    """Fix change/pct when yfinance drops the immediately-prior session (it then
+    reports today vs. two-days-ago). Use our own last recorded close as the
+    baseline, persisted in prev_close/prev_date so intraday refreshes keep it."""
+    if not old or old.get('price') is None:
+        return item
+    if old.get('date') != item.get('date'):
+        prev_close, prev_date = old['price'], old.get('date')          # date rolled over
+    else:
+        prev_close, prev_date = old.get('prev_close'), old.get('prev_date')  # same-day refresh
+    if prev_close:
+        item['prev_close'] = prev_close
+        item['prev_date']  = prev_date
+        item['change'] = round(item['price'] - prev_close, 2)
+        item['pct']    = round((item['price'] - prev_close) / prev_close * 100, 2)
+    return item
+
+
 def merge_with_old(new_data, old_lookup):
     """Replace null-price items with cached data so stale fetches don't erase good prices.
     Also keeps cached data when new data has an older date—yfinance sometimes returns NaN
@@ -346,7 +364,7 @@ def merge_with_old(new_data, old_lookup):
                     print(f'  {sym}: new date {item.get("date")} < cached {old.get("date")}, keeping cache')
                     merged[gname].append(old)
                 else:
-                    merged[gname].append(item)
+                    merged[gname].append(_reconcile_change(item, old))
             elif sym in old_lookup and old_lookup[sym].get('price') is not None:
                 print(f'  {sym}: keeping cached data ({old_lookup[sym].get("date")})')
                 merged[gname].append(old_lookup[sym])

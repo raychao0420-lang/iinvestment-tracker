@@ -5,17 +5,21 @@
       "symbol": "^KS11",
       "name": "KOSPI",
       "price": 6358.95,
-      "change": -236.5,
-      "pct": -3.59,
-      "date": "08/04"
+      "change": 101.5,
+      "pct": 1.62,
+      "date": "08/04",
+      "prev_close": 6257.45,
+      "prev_date": "08/03"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
       "price": 780.72,
-      "change": 60.96,
-      "pct": 8.47,
-      "date": "08/04"
+      "change": 43.37,
+      "pct": 5.88,
+      "date": "08/04",
+      "prev_close": 737.35,
+      "prev_date": "08/03"
     }
   ],
   "semi": [
