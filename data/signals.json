@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/04 14:01",
+  "updated": "2026/08/04 16:51",
   "stocks": {
     "TSM": {
       "rsi14": 46.3,
@@ -563,9 +563,9 @@
       "bias60": -2.9,
       "bb_pct": -4.3,
       "bb_width": 3.6,
-      "bb_low": 82.38,
-      "bb_mid": 83.88,
-      "bb_up": 85.39,
+      "bb_low": 82.05,
+      "bb_mid": 83.55,
+      "bb_up": 85.04,
       "squeeze": false,
       "trend": false,
       "zone": "buy",
