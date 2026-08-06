@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/07 03:09",
+  "updated": "2026/08/07 07:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -296,8 +296,8 @@
       "date": "08/06",
       "prev_close": 103.8,
       "prev_date": "08/05",
-      "nav": 104.01,
-      "premium": -0.93
+      "nav": 103.04,
+      "premium": 0.0
     },
     {
       "symbol": "006208.TW",
