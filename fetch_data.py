@@ -112,6 +112,7 @@ TW_DRONE = [
 TW_ETF = [
     {'symbol': '0050.TW',   'name': '元大台灣50'},
     {'symbol': '006208.TW', 'name': '富邦台50'},
+    {'symbol': '0056.TW',   'name': '元大高股息'},
     {'symbol': '00878.TW',  'name': '國泰永續高股息'},
     {'symbol': '00919.TW',  'name': '群益台灣精選高息'},
     {'symbol': '00929.TW',  'name': '復華台灣科技優息'},
@@ -131,6 +132,7 @@ TW_ETF = [
 ETF_UNIVERSE = [
     {'symbol': '0050.TW',   'code': '0050',   'name': '元大台灣50'},
     {'symbol': '006208.TW', 'code': '006208', 'name': '富邦台50'},
+    {'symbol': '0056.TW',   'code': '0056',   'name': '元大高股息'},
     {'symbol': '00878.TW',  'code': '00878',  'name': '國泰永續高股息'},
     {'symbol': '00919.TW',  'code': '00919',  'name': '群益台灣精選高息'},
     {'symbol': '00929.TW',  'code': '00929',  'name': '復華台灣科技優息'},
