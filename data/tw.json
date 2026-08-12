@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/13 05:01",
+  "updated": "2026/08/13 05:30",
   "indices": [
     {
       "symbol": "^TWII",
@@ -68,9 +68,9 @@
     {
       "symbol": "3008.TW",
       "name": "大立光",
-      "price": 4585.0,
-      "change": 230.0,
-      "pct": 5.28,
+      "price": 4543.5,
+      "change": 188.5,
+      "pct": 4.33,
       "date": "08/12",
       "prev_close": 4355.0,
       "prev_date": "08/11"
