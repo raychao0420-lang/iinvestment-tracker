@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/13 06:01",
+  "updated": "2026/08/13 07:23",
   "stocks": {
     "TSM": {
       "rsi14": 56.1,
@@ -62,15 +62,15 @@
       "score": 3
     },
     "EWT": {
-      "rsi14": 59.9,
-      "rsi21": 56.9,
-      "bias20": 7.0,
-      "bias60": 4.5,
-      "bb_pct": 93.5,
+      "rsi14": 59.2,
+      "rsi21": 56.6,
+      "bias20": 6.7,
+      "bias60": 4.6,
+      "bb_pct": 91.5,
       "bb_width": 16.1,
-      "bb_low": 91.23,
-      "bb_mid": 99.23,
-      "bb_up": 107.23,
+      "bb_low": 91.5,
+      "bb_mid": 99.52,
+      "bb_up": 107.55,
       "squeeze": false,
       "trend": false,
       "zone": "neutral",
@@ -422,19 +422,19 @@
       "score": 0
     },
     "ETN": {
-      "rsi14": 65.5,
-      "rsi21": 61.5,
-      "bias20": 10.2,
+      "rsi14": 64.8,
+      "rsi21": 61.0,
+      "bias20": 9.9,
       "bias60": 12.8,
-      "bb_pct": 87.3,
-      "bb_width": 27.3,
-      "bb_low": 360.61,
-      "bb_mid": 417.54,
-      "bb_up": 474.48,
+      "bb_pct": 86.9,
+      "bb_width": 26.9,
+      "bb_low": 362.19,
+      "bb_mid": 418.47,
+      "bb_up": 474.74,
       "squeeze": false,
       "trend": true,
-      "zone": "strong_sell",
-      "score": 3
+      "zone": "sell",
+      "score": 2
     },
     "NEE": {
       "rsi14": 42.5,
