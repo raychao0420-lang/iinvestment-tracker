@@ -253,25 +253,46 @@ def tag_symbols(title, aliases):
     return hits
 
 
-def merge(items, aliases):
-    """去重＋累計 hot＋標記 sym。同一則以最早發布時間為準。"""
-    bucket = {}
-    for it in items:
+def merge(fresh, old_items, aliases):
+    """去重＋標記 sym。同一則以最早發布時間為準。
+
+    ⚠️ hot = 本批「**不同媒體**」報導同一則的家數，不是出現次數。
+    早期版本是每遇到一次就 +1，並且把舊檔項目也當成新的一次 ——
+    結果同一則在下一班再抓到又 +1，跑幾班後幾乎每則都變「多家同報」
+    （實測 493 則裡有 443 則中招），這個訊號等於報廢。
+    現在改成用來源集合的大小，並與舊值取 max（跨班次穩定、不累積）。
+    用集合也順便擋掉 Google News 多組主題查詢回同一家同一則造成的灌水。
+    """
+    bucket, srcs = {}, {}
+    for it in fresh:
         key = norm_title(it['t'])
         if not key:
             continue
         cur = bucket.get(key)
         if cur is None:
             it['id'] = make_id(it['t'])
-            it['hot'] = 1
             it['sym'] = tag_symbols(it['t'], aliases)
-            bucket[key] = it
+            bucket[key], srcs[key] = it, {it['s']}
         else:
-            cur['hot'] += 1
+            srcs[key].add(it['s'])
             if it['p'] < cur['p']:          # 保留最早發布時間
                 cur['p'] = it['p']
             if cur['lang'] != 'zh' and it['lang'] == 'zh':   # 有中文版本就用中文的
                 cur.update({'t': it['t'], 'u': it['u'], 's': it['s'], 'lang': 'zh'})
+    for key, it in bucket.items():
+        it['hot'] = len(srcs[key])
+
+    for it in old_items:                    # 併回舊檔：本批沒再出現的就原樣保留
+        key = norm_title(it['t'])
+        if not key:
+            continue
+        cur = bucket.get(key)
+        if cur is None:
+            bucket[key] = it
+        else:
+            cur['hot'] = max(cur['hot'], it.get('hot', 1))
+            if it['p'] < cur['p']:
+                cur['p'] = it['p']
     return list(bucket.values())
 
 
@@ -344,7 +365,7 @@ def main():
         return 0
 
     aliases = load_aliases()
-    merged = merge(fresh + old.get('items', []), aliases)
+    merged = merge(fresh, old.get('items', []), aliases)
 
     cutoff = (datetime.now(timezone.utc) - timedelta(days=KEEP_DAYS)).isoformat(timespec='seconds')
     merged = [m for m in merged if m['p'] >= cutoff]
