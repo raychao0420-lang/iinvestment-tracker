@@ -1,0 +1,58 @@
+name: Update News (財經新聞)
+
+# 每天四班（台灣時間 07:30／12:30／14:30／21:30），各配一個 +30 分的備援班次。
+# GitHub 排程常漏跑個別班次，所以多排一班拉高命中率；
+# fetch_news.py 自己會 gate（同一班已跑過就跳過），不會重複抓。
+on:
+  schedule:
+    - cron: '30 23 * * *'   # TW 07:30 隔夜美股收盤＋國際，台股開盤前
+    - cron: '0  0  * * *'   # TW 08:00 備援
+    - cron: '30 4  * * *'   # TW 12:30 台股午盤
+    - cron: '0  5  * * *'   # TW 13:00 備援
+    - cron: '30 6  * * *'   # TW 14:30 台股收盤後
+    - cron: '0  7  * * *'   # TW 15:00 備援
+    - cron: '30 13 * * *'   # TW 21:30 美股開盤前
+    - cron: '0  14 * * *'   # TW 22:00 備援
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '忽略班次判定，直接抓'
+        type: boolean
+        default: true
+
+concurrency:
+  group: update-news
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests pytz
+
+      - name: Fetch news
+        run: python fetch_news.py ${{ (github.event_name == 'workflow_dispatch' && inputs.force) && '--force' || '' }}
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/news.json
+          git diff --staged --quiet && echo "no changes (非班次或無更新)" && exit 0
+          git commit -m "news: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          for attempt in 1 2 3; do
+            git push && exit 0
+            echo "push attempt $attempt failed, pulling and retrying..."
+            sleep 5
+            git pull --rebase -X theirs
+          done
+          git push

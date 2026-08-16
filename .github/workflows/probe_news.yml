@@ -1,0 +1,24 @@
+name: Probe News Sources (探路，手動觸發)
+
+# 一次性診斷：確認新聞來源在 GitHub Actions 的美國 IP 底下抓不抓得到。
+# 本機是台灣 IP，但本 repo 的 TWSE / TAIFEX / MOPS 都是「台灣通、境外擋」，
+# 所以台灣媒體那幾家一定要在這裡實跑過才能定案。不排程、不寫檔、不 push。
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Probe news sources
+        run: python tools/probe_news_sources.py
