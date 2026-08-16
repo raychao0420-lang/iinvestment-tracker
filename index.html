@@ -613,6 +613,27 @@
   #sea-tip .tt { color: #93c5fd; font-weight: 700; margin-bottom: .22rem; }
   .sea-heat .hc { width: 26px; height: 20px; color: rgba(255,255,255,.92); font-family: 'Courier New', monospace; border: 1px solid rgba(0,0,0,.25); }
   .sea-heat .totcell { font-family: 'Courier New', monospace; font-weight: 700; padding: 0 .3rem; text-align: right; }
+
+  /* ── 財經新聞 ─────────────────────────────────────────────── */
+  .nw-bar { display: flex; gap: .35rem; margin: .5rem .7rem .2rem; flex-wrap: wrap; align-items: center; }
+  .nw-bar button { background: var(--c1); border: 1px solid var(--bdr); border-radius: 6px; color: var(--t2);
+    font-size: .72rem; padding: .26rem .7rem; cursor: pointer; transition: all .15s; }
+  .nw-bar button.active { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 700; }
+  .nw-bar .nw-count { color: var(--t3); font-size: .64rem; margin-left: auto; }
+  .nw-list { margin: .3rem .7rem; }
+  .nw-item { display: block; background: var(--c1); border: 1px solid var(--bdr); border-radius: 9px;
+    padding: .5rem .7rem; margin-bottom: .38rem; text-decoration: none; color: var(--t1); transition: background .15s; }
+  .nw-item:hover { background: var(--c2); color: var(--t1); }
+  .nw-t { font-size: .8rem; line-height: 1.45; font-weight: 600; }
+  .nw-meta { display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; margin-top: .3rem;
+    font-size: .62rem; color: var(--t3); }
+  .nw-src { color: var(--t2); }
+  .nw-hot { background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.5); color: #fca5a5;
+    border-radius: 4px; padding: 0 .3rem; font-weight: 700; }
+  .nw-sym { background: var(--acc2); border: 1px solid var(--acc); color: #93c5fd;
+    border-radius: 4px; padding: 0 .3rem; font-family: 'Courier New', monospace; }
+  .nw-lang { border: 1px solid var(--bdr); border-radius: 4px; padding: 0 .25rem; color: var(--t3); }
+  .nw-empty { color: var(--t3); font-size: .74rem; text-align: center; padding: 2rem .7rem; }
   /* 事件卡 / 一般卡 */
   .sea-cards { margin: .3rem .7rem; }
   .sea-card { background: var(--c1); border: 1px solid var(--bdr); border-radius: 9px; padding: .6rem .8rem; margin-bottom: .45rem; }
@@ -717,6 +738,11 @@
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="paper-tab" data-bs-toggle="tab" data-bs-target="#paper-panel" type="button" role="tab" onclick="loadPaper()">
       <span class="badge-dot" style="background:#f59e0b"></span>實測績效
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="news-tab" data-bs-toggle="tab" data-bs-target="#news-panel" type="button" role="tab" onclick="loadNews()">
+      <span class="badge-dot" style="background:#10b981"></span>新聞
     </button>
   </li>
 </ul>
@@ -934,6 +960,17 @@
     <div class="pp-wrap"><div id="pp-trades"></div></div>
 
     <button class="pp-reset" onclick="paperReset()">🗑 清空模擬帳戶（歸零重來）</button>
+  </div>
+
+  <div class="tab-pane fade" id="news-panel" role="tabpanel">
+    <div class="sea-intro" id="nw-intro">
+      <b>財經新聞</b>　國內外財經與產業媒體彙整，每天四班更新（07:30／12:30／14:30／21:30）。
+      只列標題與來源，點擊外連原站。<b>🔥 數字</b>＝幾家媒體同時報導，可當重要性參考；
+      <b>藍色代號</b>＝這則新聞提到你追蹤的標的。
+    </div>
+    <div class="nw-bar" id="nw-cats"></div>
+    <div class="nw-bar" id="nw-opts"></div>
+    <div class="nw-list" id="nw-list"><div class="skeleton" style="height:10rem;margin:.3rem"></div></div>
   </div>
 </div>
 
@@ -3487,6 +3524,73 @@ setInterval(() => { updateClock(); updateTags(); }, 30000);
 loadAll().catch(() => {
   document.getElementById('last-update').textContent = '資料載入失敗，請稍後再試';
 });
+
+// ══ 財經新聞（獨立模組，點頁籤才載入）════════════════════════════
+let _nwData = null, _nwCat = 'all', _nwZhOnly = false;
+const NW_CATS = [['all', '全部'], ['sym', '我追蹤的'], ['tw', '台股'], ['us', '美股'],
+                 ['jp', '日股'], ['kr', '韓股'], ['ind', '產業']];
+const NW_LANG = { en: 'EN', ko: 'KR', ja: 'JP' };
+
+// 相對時間；nd=1 的項目沒有真實發布時間（來源沒給），只能說「剛收錄」，不要假裝精確
+function nwAgo(iso, nd) {
+  const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (nd) return mins < 90 ? '剛收錄' : '收錄於 ' + nwAgo(iso, 0);
+  if (mins < 1) return '剛剛';
+  if (mins < 60) return mins + ' 分鐘前';
+  if (mins < 1440) return Math.floor(mins / 60) + ' 小時前';
+  return Math.floor(mins / 1440) + ' 天前';
+}
+
+function nwFilter() {
+  let list = _nwData.items;
+  if (_nwCat === 'sym') list = list.filter(i => i.sym && i.sym.length);
+  else if (_nwCat !== 'all') list = list.filter(i => i.c === _nwCat);
+  if (_nwZhOnly) list = list.filter(i => i.lang === 'zh');
+  return list;
+}
+
+function renderNews() {
+  document.getElementById('nw-cats').innerHTML =
+    NW_CATS.map(([k, label]) => `<button class="${k === _nwCat ? 'active' : ''}" onclick="nwSetCat('${k}')">${label}</button>`).join('') +
+    `<span class="nw-count" id="nw-count"></span>`;
+  document.getElementById('nw-opts').innerHTML =
+    `<button class="${_nwZhOnly ? 'active' : ''}" onclick="nwToggleZh()">只看中文</button>` +
+    `<span class="nw-count">更新 ${_nwData.updated}　已跑班次 ${(_nwData.runs || []).join('、') || '—'}</span>`;
+
+  const list = nwFilter();
+  document.getElementById('nw-count').textContent = list.length + ' 則';
+  document.getElementById('nw-list').innerHTML = !list.length
+    ? '<div class="nw-empty">這個分類目前沒有新聞。</div>'
+    : list.map(i => `<a class="nw-item" href="${i.u}" target="_blank" rel="noopener noreferrer">
+        <div class="nw-t">${nwEsc(i.t)}</div>
+        <div class="nw-meta">
+          <span class="nw-src">${nwEsc(i.s)}</span>
+          <span>${nwAgo(i.p, i.nd)}</span>
+          ${i.hot > 1 ? `<span class="nw-hot">🔥 ${i.hot}</span>` : ''}
+          ${NW_LANG[i.lang] ? `<span class="nw-lang">${NW_LANG[i.lang]}</span>` : ''}
+          ${(i.sym || []).map(s => `<span class="nw-sym">${nwEsc(s)}</span>`).join('')}
+        </div></a>`).join('');
+}
+
+// 標題來自外部 RSS，一律轉義後再進 innerHTML
+function nwEsc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function nwSetCat(c) { _nwCat = c; renderNews(); }
+function nwToggleZh() { _nwZhOnly = !_nwZhOnly; renderNews(); }
+
+async function loadNews() {
+  if (_nwData) return;                       // 已載入過就不重抓
+  try {
+    const r = await fetch('data/news.json?t=' + Date.now());
+    if (!r.ok) throw new Error(r.status);
+    _nwData = await r.json();
+    renderNews();
+  } catch (e) {
+    document.getElementById('nw-list').innerHTML =
+      '<div class="nw-empty">新聞載入失敗（可能尚未產生第一批資料）。</div>';
+  }
+}
 </script>
 <script>
 // ══ 美股夜盤即時（獨立模組，隨頁面載入與刷新更新）════════════════
