@@ -1,12 +1,12 @@
 {
-  "updated": "2026/08/17 13:52",
+  "updated": "2026/08/17 14:01",
   "indices": [
     {
       "symbol": "^TWII",
       "name": "加權指數",
-      "price": 45881.86,
-      "change": 70.85,
-      "pct": 0.15,
+      "price": 45857.27,
+      "change": 46.26,
+      "pct": 0.1,
       "date": "08/17",
       "prev_close": 45811.01,
       "prev_date": "08/14"
@@ -21,7 +21,7 @@
       "prev_close": 35.69,
       "prev_date": "08/14",
       "nav": 35.76,
-      "premium": -0.2
+      "premium": 0.53
     }
   ],
   "semi": [
@@ -297,7 +297,7 @@
       "prev_close": 106.4,
       "prev_date": "08/14",
       "nav": 106.32,
-      "premium": 0.08
+      "premium": 0.12
     },
     {
       "symbol": "006208.TW",
@@ -309,7 +309,7 @@
       "prev_close": 243.45,
       "prev_date": "08/14",
       "nav": 243.58,
-      "premium": -0.05
+      "premium": 0.19
     },
     {
       "symbol": "0056.TW",
@@ -321,7 +321,7 @@
       "prev_close": 53.4,
       "prev_date": "08/14",
       "nav": 53.66,
-      "premium": -0.48
+      "premium": -1.23
     },
     {
       "symbol": "00878.TW",
@@ -333,7 +333,7 @@
       "prev_close": 33.87,
       "prev_date": "08/14",
       "nav": 33.85,
-      "premium": 0.06
+      "premium": -0.3
     },
     {
       "symbol": "00919.TW",
@@ -345,7 +345,7 @@
       "prev_close": 30.57,
       "prev_date": "08/14",
       "nav": 30.76,
-      "premium": -0.62
+      "premium": -1.37
     },
     {
       "symbol": "00929.TW",
@@ -357,7 +357,7 @@
       "prev_close": 29.44,
       "prev_date": "08/14",
       "nav": 29.38,
-      "premium": 0.2
+      "premium": -0.61
     },
     {
       "symbol": "00940.TW",
@@ -369,7 +369,7 @@
       "prev_close": 12.49,
       "prev_date": "08/14",
       "nav": 12.57,
-      "premium": -0.64
+      "premium": -0.88
     },
     {
       "symbol": "00403A.TW",
@@ -381,7 +381,7 @@
       "prev_close": 10.32,
       "prev_date": "08/14",
       "nav": 10.39,
-      "premium": -0.67
+      "premium": 0.1
     },
     {
       "symbol": "00988A.TW",
@@ -393,7 +393,7 @@
       "prev_close": 17.37,
       "prev_date": "08/14",
       "nav": 17.46,
-      "premium": -0.52
+      "premium": 1.32
     },
     {
       "symbol": "00981A.TW",
@@ -405,7 +405,7 @@
       "prev_close": 30.22,
       "prev_date": "08/14",
       "nav": 30.42,
-      "premium": -0.66
+      "premium": -0.1
     },
     {
       "symbol": "00935.TW",
@@ -417,7 +417,7 @@
       "prev_close": 58.65,
       "prev_date": "08/14",
       "nav": 58.73,
-      "premium": -0.14
+      "premium": -0.65
     },
     {
       "symbol": "00980A.TW",
@@ -429,7 +429,7 @@
       "prev_close": 25.24,
       "prev_date": "08/14",
       "nav": 25.3,
-      "premium": -0.24
+      "premium": 1.26
     },
     {
       "symbol": "00631L.TW",
@@ -441,7 +441,7 @@
       "prev_close": 35.69,
       "prev_date": "08/14",
       "nav": 35.76,
-      "premium": -0.2
+      "premium": 0.53
     },
     {
       "symbol": "00675L.TW",
@@ -453,7 +453,7 @@
       "prev_close": 311.9,
       "prev_date": "08/14",
       "nav": 312.51,
-      "premium": -0.2
+      "premium": 0.44
     },
     {
       "symbol": "00663L.TW",
@@ -465,7 +465,7 @@
       "prev_close": 103.2,
       "prev_date": "08/14",
       "nav": 103.41,
-      "premium": -0.2
+      "premium": 0.38
     },
     {
       "symbol": "00685L.TW",
@@ -477,7 +477,7 @@
       "prev_close": 11.76,
       "prev_date": "08/14",
       "nav": 11.79,
-      "premium": -0.25
+      "premium": 0.42
     }
   ]
 }
