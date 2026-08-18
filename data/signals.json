@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/18 14:59",
+  "updated": "2026/08/18 16:07",
   "stocks": {
     "TSM": {
       "rsi14": 54.3,
@@ -572,15 +572,15 @@
       "score": 0
     },
     "ARKK": {
-      "rsi14": 58.9,
-      "rsi21": 56.2,
+      "rsi14": 59.2,
+      "rsi21": 56.4,
       "bias20": 6.6,
       "bias60": 4.4,
-      "bb_pct": 83.5,
+      "bb_pct": 83.3,
       "bb_width": 19.8,
-      "bb_low": 68.51,
-      "bb_mid": 76.05,
-      "bb_up": 83.59,
+      "bb_low": 68.56,
+      "bb_mid": 76.09,
+      "bb_up": 83.62,
       "squeeze": false,
       "trend": true,
       "zone": "neutral",
