@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/20 11:11",
+  "updated": "2026/08/20 15:00",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -24,8 +24,8 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 53463.1,
-      "change": 119.7,
+      "price": 53463.05,
+      "change": 119.65,
       "pct": 0.22,
       "date": "08/19",
       "prev_close": 53343.4,
@@ -66,8 +66,8 @@
     {
       "symbol": "MU",
       "name": "美光 MU",
-      "price": 937.1,
-      "change": -3.66,
+      "price": 937.11,
+      "change": -3.65,
       "pct": -0.39,
       "date": "08/19",
       "prev_close": 940.76,
