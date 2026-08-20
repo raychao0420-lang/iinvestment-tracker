@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/20 16:18",
+  "updated": "2026/08/20 17:43",
   "stocks": {
     "TSM": {
       "rsi14": 46.7,
@@ -62,15 +62,15 @@
       "score": 1
     },
     "EWT": {
-      "rsi14": 54.3,
-      "rsi21": 53.7,
-      "bias20": 3.4,
+      "rsi14": 54.7,
+      "rsi21": 54.0,
+      "bias20": 3.6,
       "bias60": 1.9,
-      "bb_pct": 67.5,
-      "bb_width": 19.4,
-      "bb_low": 91.47,
-      "bb_mid": 101.27,
-      "bb_up": 111.07,
+      "bb_pct": 68.4,
+      "bb_width": 19.8,
+      "bb_low": 90.99,
+      "bb_mid": 101.01,
+      "bb_up": 111.04,
       "squeeze": false,
       "trend": false,
       "zone": "neutral",
@@ -423,9 +423,9 @@
     },
     "ETN": {
       "rsi14": 48.5,
-      "rsi21": 50.5,
+      "rsi21": 50.6,
       "bias20": -0.8,
-      "bias60": 3.0,
+      "bias60": 2.8,
       "bb_pct": 46.9,
       "bb_width": 26.9,
       "bb_low": 370.71,
