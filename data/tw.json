@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/24 21:29",
+  "updated": "2026/08/25 01:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -362,14 +362,14 @@
     {
       "symbol": "00940.TW",
       "name": "元大台灣價值高息",
-      "price": 12.47,
-      "change": -0.01,
-      "pct": -0.08,
+      "price": 12.52,
+      "change": 0.04,
+      "pct": 0.32,
       "date": "08/24",
       "prev_close": 12.48,
       "prev_date": "08/21",
       "nav": 12.56,
-      "premium": -0.72
+      "premium": -0.32
     },
     {
       "symbol": "00403A.TW",
