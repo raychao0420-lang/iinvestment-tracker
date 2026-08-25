@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/25 07:02",
+  "updated": "2026/08/25 14:01",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -200,8 +200,8 @@
     {
       "symbol": "AMD",
       "name": "超微 AMD",
-      "price": 456.74,
-      "change": -16.51,
+      "price": 456.75,
+      "change": -16.5,
       "pct": -3.49,
       "date": "08/24",
       "prev_close": 473.25,
