@@ -1,91 +1,91 @@
 {
-  "updated": "2026/08/26 07:03",
+  "updated": "2026/08/26 14:01",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 6742.74,
-      "change": 45.78,
-      "pct": 0.68,
-      "date": "08/25",
-      "prev_close": 6696.96,
-      "prev_date": "08/24"
+      "price": 6846.44,
+      "change": 103.7,
+      "pct": 1.54,
+      "date": "08/26",
+      "prev_close": 6742.74,
+      "prev_date": "08/25"
     },
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 827.15,
-      "change": 13.82,
-      "pct": 1.7,
-      "date": "08/25",
-      "prev_close": 813.33,
-      "prev_date": "08/24"
+      "price": 826.56,
+      "change": -0.59,
+      "pct": -0.07,
+      "date": "08/26",
+      "prev_close": 827.15,
+      "prev_date": "08/25"
     }
   ],
   "semi": [
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 257000.0,
-      "change": 0.0,
-      "pct": 0.0,
-      "date": "08/25",
+      "price": 263500.0,
+      "change": 6500.0,
+      "pct": 2.53,
+      "date": "08/26",
       "prev_close": 257000.0,
-      "prev_date": "08/24"
+      "prev_date": "08/25"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1678000.0,
-      "change": 7000.0,
-      "pct": 0.42,
-      "date": "08/25",
-      "prev_close": 1671000.0,
-      "prev_date": "08/24"
+      "price": 1709000.0,
+      "change": 31000.0,
+      "pct": 1.85,
+      "date": "08/26",
+      "prev_close": 1678000.0,
+      "prev_date": "08/25"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 217500.0,
-      "change": 8500.0,
-      "pct": 4.07,
-      "date": "08/25",
-      "prev_close": 209000.0,
-      "prev_date": "08/24"
+      "price": 218500.0,
+      "change": 1000.0,
+      "pct": 0.46,
+      "date": "08/26",
+      "prev_close": 217500.0,
+      "prev_date": "08/25"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1362000.0,
-      "change": 44000.0,
-      "pct": 3.34,
-      "date": "08/25",
-      "prev_close": 1318000.0,
-      "prev_date": "08/24"
+      "price": 1341000.0,
+      "change": -21000.0,
+      "pct": -1.54,
+      "date": "08/26",
+      "prev_close": 1362000.0,
+      "prev_date": "08/25"
     }
   ],
   "display": [
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 9550.0,
-      "change": 0.0,
-      "pct": 0.0,
-      "date": "08/25",
+      "price": 9500.0,
+      "change": -50.0,
+      "pct": -0.52,
+      "date": "08/26",
       "prev_close": 9550.0,
-      "prev_date": "08/24"
+      "prev_date": "08/25"
     }
   ],
   "camera": [
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 602000.0,
-      "change": 32000.0,
-      "pct": 5.61,
-      "date": "08/25",
-      "prev_close": 570000.0,
-      "prev_date": "08/24"
+      "price": 587000.0,
+      "change": -15000.0,
+      "pct": -2.49,
+      "date": "08/26",
+      "prev_close": 602000.0,
+      "prev_date": "08/25"
     }
   ]
 }
