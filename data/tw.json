@@ -1,5 +1,5 @@
 {
-  "updated": "2026/08/27 04:23",
+  "updated": "2026/08/27 07:53",
   "indices": [
     {
       "symbol": "^TWII",
@@ -78,9 +78,9 @@
     {
       "symbol": "6770.TW",
       "name": "力積電",
-      "price": 70.2,
-      "change": 1.2,
-      "pct": 1.74,
+      "price": 69.97,
+      "change": 0.97,
+      "pct": 1.41,
       "date": "08/26",
       "prev_close": 69.0,
       "prev_date": "08/25"
