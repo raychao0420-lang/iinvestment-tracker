@@ -1,12 +1,12 @@
 {
-  "updated": "2026/08/28 14:22",
+  "updated": "2026/08/28 18:02",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 6791.29,
-      "change": -121.08,
-      "pct": -1.75,
+      "price": 6788.88,
+      "change": -123.49,
+      "pct": -1.79,
       "date": "08/28",
       "prev_close": 6912.37,
       "prev_date": "08/27"
@@ -14,9 +14,9 @@
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 836.72,
-      "change": -0.93,
-      "pct": -0.11,
+      "price": 838.41,
+      "change": 0.76,
+      "pct": 0.09,
       "date": "08/28",
       "prev_close": 837.65,
       "prev_date": "08/27"
@@ -26,9 +26,9 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 256500.0,
-      "change": -9500.0,
-      "pct": -3.57,
+      "price": 257000.0,
+      "change": -9000.0,
+      "pct": -3.38,
       "date": "08/28",
       "prev_close": 266000.0,
       "prev_date": "08/27"
@@ -36,9 +36,9 @@
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1674000.0,
-      "change": -55625.0,
-      "pct": -3.22,
+      "price": 1653000.0,
+      "change": -76625.0,
+      "pct": -4.43,
       "date": "08/28",
       "prev_close": 1729625.0,
       "prev_date": "08/27"
@@ -46,9 +46,9 @@
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 220000.0,
-      "change": -2000.0,
-      "pct": -0.9,
+      "price": 219500.0,
+      "change": -2500.0,
+      "pct": -1.13,
       "date": "08/28",
       "prev_close": 222000.0,
       "prev_date": "08/27"
@@ -56,9 +56,9 @@
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1420000.0,
-      "change": 35000.0,
-      "pct": 2.53,
+      "price": 1421000.0,
+      "change": 36000.0,
+      "pct": 2.6,
       "date": "08/28",
       "prev_close": 1385000.0,
       "prev_date": "08/27"
@@ -80,9 +80,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 609000.0,
-      "change": 12000.0,
-      "pct": 2.01,
+      "price": 611000.0,
+      "change": 14000.0,
+      "pct": 2.35,
       "date": "08/28",
       "prev_close": 597000.0,
       "prev_date": "08/27"
