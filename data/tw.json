@@ -1,12 +1,12 @@
 {
-  "updated": "2026/08/31 13:51",
+  "updated": "2026/08/31 14:14",
   "indices": [
     {
       "symbol": "^TWII",
       "name": "加權指數",
-      "price": 45979.67,
-      "change": -351.78,
-      "pct": -0.76,
+      "price": 46128.47,
+      "change": -202.98,
+      "pct": -0.44,
       "date": "08/31",
       "prev_close": 46331.45,
       "prev_date": "08/28"
