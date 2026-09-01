@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/02 05:11",
+  "updated": "2026/09/02 06:51",
   "indices": [
     {
       "symbol": "^TWII",
@@ -192,9 +192,9 @@
     {
       "symbol": "6669.TW",
       "name": "緯穎",
-      "price": 7800.0,
-      "change": 705.0,
-      "pct": 9.94,
+      "price": 2615.0,
+      "change": -4480.0,
+      "pct": -63.14,
       "date": "09/01",
       "prev_close": 7095.0,
       "prev_date": "08/31"
