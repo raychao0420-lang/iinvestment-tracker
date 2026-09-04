@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/04 08:26",
+  "updated": "2026/09/04 14:02",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -76,8 +76,8 @@
     {
       "symbol": "TSLA",
       "name": "特斯拉 TSLA",
-      "price": 376.36,
-      "change": 19.35,
+      "price": 376.37,
+      "change": 19.36,
       "pct": 5.42,
       "date": "09/03",
       "prev_close": 357.01,
