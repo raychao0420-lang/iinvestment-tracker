@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/05 08:25",
+  "updated": "2026/09/07 08:10",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -210,9 +210,9 @@
     {
       "symbol": "AVGO",
       "name": "Broadcom",
-      "price": 357.89,
-      "change": 0.73,
-      "pct": 0.2,
+      "price": 357.9,
+      "change": 0.74,
+      "pct": 0.21,
       "date": "09/04",
       "prev_close": 357.16,
       "prev_date": "09/03"
