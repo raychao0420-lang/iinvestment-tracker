@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/10 08:37",
+  "updated": "2026/09/10 19:09",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -34,8 +34,8 @@
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2921.23,
-      "change": -38.97,
+      "price": 2921.24,
+      "change": -38.96,
       "pct": -1.32,
       "date": "09/09",
       "prev_close": 2960.2,
@@ -200,8 +200,8 @@
     {
       "symbol": "AMD",
       "name": "超微 AMD",
-      "price": 521.09,
-      "change": 15.35,
+      "price": 521.1,
+      "change": 15.36,
       "pct": 3.04,
       "date": "09/09",
       "prev_close": 505.74,
