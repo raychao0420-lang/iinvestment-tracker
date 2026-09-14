@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/15 07:15",
+  "updated": "2026/09/15 07:32",
   "stocks": {
     "TSM": {
       "rsi14": 47.7,
@@ -331,6 +331,21 @@
       "zone": "neutral",
       "score": 0
     },
+    "CIEN": {
+      "rsi14": 37.2,
+      "rsi21": 39.5,
+      "bias20": -13.6,
+      "bias60": -20.8,
+      "bb_pct": 13.9,
+      "bb_width": 37.7,
+      "bb_low": 300.19,
+      "bb_mid": 369.96,
+      "bb_up": 439.72,
+      "squeeze": false,
+      "trend": false,
+      "zone": "buy",
+      "score": 2
+    },
     "AAOI": {
       "rsi14": 39.4,
       "rsi21": 42.2,
@@ -375,6 +390,21 @@
       "trend": false,
       "zone": "neutral",
       "score": 0
+    },
+    "CEG": {
+      "rsi14": 40.5,
+      "rsi21": 44.7,
+      "bias20": -5.7,
+      "bias60": -1.3,
+      "bb_pct": 8.0,
+      "bb_width": 13.6,
+      "bb_low": 261.52,
+      "bb_mid": 280.62,
+      "bb_up": 299.73,
+      "squeeze": false,
+      "trend": false,
+      "zone": "neutral",
+      "score": 1
     },
     "GEV": {
       "rsi14": 37.7,
@@ -840,6 +870,21 @@
       "trend": false,
       "zone": "neutral",
       "score": 0
+    },
+    "2881.TW": {
+      "rsi14": 72.3,
+      "rsi21": 69.3,
+      "bias20": 8.3,
+      "bias60": 17.0,
+      "bb_pct": 87.3,
+      "bb_width": 22.2,
+      "bb_low": 126.4,
+      "bb_mid": 142.2,
+      "bb_up": 158.0,
+      "squeeze": false,
+      "trend": true,
+      "zone": "strong_sell",
+      "score": 3
     },
     "2882.TW": {
       "rsi14": 63.9,
