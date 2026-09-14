@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/12 08:43",
+  "updated": "2026/09/14 08:20",
   "indices": [
     {
       "symbol": "^KS11",
@@ -26,66 +26,66 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 259500.0,
-      "change": -9500.0,
-      "pct": -3.53,
-      "date": "09/11",
-      "prev_close": 269000.0,
-      "prev_date": "09/10"
+      "price": 250500.0,
+      "change": -9000.0,
+      "pct": -3.47,
+      "date": "09/14",
+      "prev_close": 259500.0,
+      "prev_date": "09/11"
     },
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1812000.0,
-      "change": -41000.0,
-      "pct": -2.21,
-      "date": "09/11",
-      "prev_close": 1853000.0,
-      "prev_date": "09/10"
+      "price": 1718000.0,
+      "change": -94000.0,
+      "pct": -5.19,
+      "date": "09/14",
+      "prev_close": 1812000.0,
+      "prev_date": "09/11"
     },
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 231000.0,
-      "change": -22000.0,
-      "pct": -8.7,
-      "date": "09/11",
-      "prev_close": 253000.0,
-      "prev_date": "09/10"
+      "price": 225500.0,
+      "change": -5500.0,
+      "pct": -2.38,
+      "date": "09/14",
+      "prev_close": 231000.0,
+      "prev_date": "09/11"
     },
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1400000.0,
-      "change": 0.0,
-      "pct": 0.0,
-      "date": "09/11",
+      "price": 1338000.0,
+      "change": -62000.0,
+      "pct": -4.43,
+      "date": "09/14",
       "prev_close": 1400000.0,
-      "prev_date": "09/10"
+      "prev_date": "09/11"
     }
   ],
   "display": [
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 8900.0,
-      "change": -70.0,
-      "pct": -0.78,
-      "date": "09/11",
-      "prev_close": 8970.0,
-      "prev_date": "09/10"
+      "price": 8750.0,
+      "change": -150.0,
+      "pct": -1.69,
+      "date": "09/14",
+      "prev_close": 8900.0,
+      "prev_date": "09/11"
     }
   ],
   "camera": [
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 543000.0,
+      "price": 529000.0,
       "change": -14000.0,
-      "pct": -2.51,
-      "date": "09/11",
-      "prev_close": 557000.0,
-      "prev_date": "09/10"
+      "pct": -2.58,
+      "date": "09/14",
+      "prev_close": 543000.0,
+      "prev_date": "09/11"
     }
   ]
 }
