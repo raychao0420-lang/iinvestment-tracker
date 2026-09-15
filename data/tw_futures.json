@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/15 11:05",
+  "updated": "2026/09/15 11:10",
   "futures": [
     {
       "symbol": "TX",
@@ -15,8 +15,8 @@
     {
       "symbol": "MTX",
       "name": "小台",
-      "price": 45764.0,
-      "change": -13.0,
+      "price": 45762.0,
+      "change": -15.0,
       "pct": -0.03,
       "change_open": -232.0,
       "pct_open": -0.5,
@@ -26,8 +26,8 @@
     {
       "symbol": "TMF",
       "name": "微台",
-      "price": 45764.0,
-      "change": -13.0,
+      "price": 45762.0,
+      "change": -15.0,
       "pct": -0.03,
       "change_open": -421.0,
       "pct_open": -0.91,
