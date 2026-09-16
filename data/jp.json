@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/17 02:16",
+  "updated": "2026/09/17 05:29",
   "indices": [
     {
       "symbol": "^N225",
@@ -80,9 +80,9 @@
     {
       "symbol": "6861.T",
       "name": "Keyence",
-      "price": 75900.0,
-      "change": 240.0,
-      "pct": 0.32,
+      "price": 75625.0,
+      "change": -35.0,
+      "pct": -0.05,
       "date": "09/16",
       "prev_close": 75660.0,
       "prev_date": "09/15"
