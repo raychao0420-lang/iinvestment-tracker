@@ -1,12 +1,12 @@
 {
-  "updated": "2026/09/16 22:09",
+  "updated": "2026/09/17 02:16",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7608.9,
-      "change": 23.17,
-      "pct": 0.31,
+      "price": 7611.37,
+      "change": 25.64,
+      "pct": 0.34,
       "date": "09/16",
       "prev_close": 7585.73,
       "prev_date": "09/15"
@@ -14,9 +14,9 @@
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 26155.74,
-      "change": 174.17,
-      "pct": 0.67,
+      "price": 26159.67,
+      "change": 178.1,
+      "pct": 0.69,
       "date": "09/16",
       "prev_close": 25981.57,
       "prev_date": "09/15"
@@ -24,9 +24,9 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 51972.8,
-      "change": -120.31,
-      "pct": -0.23,
+      "price": 52070.35,
+      "change": -22.76,
+      "pct": -0.04,
       "date": "09/16",
       "prev_close": 52093.11,
       "prev_date": "09/15"
@@ -34,9 +34,9 @@
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2885.79,
-      "change": 15.5,
-      "pct": 0.54,
+      "price": 2879.04,
+      "change": 8.75,
+      "pct": 0.3,
       "date": "09/16",
       "prev_close": 2870.29,
       "prev_date": "09/15"
@@ -44,9 +44,9 @@
     {
       "symbol": "^SOX",
       "name": "費城半導體",
-      "price": 11375.28,
-      "change": 199.73,
-      "pct": 1.79,
+      "price": 11344.01,
+      "change": 168.46,
+      "pct": 1.51,
       "date": "09/16",
       "prev_close": 11175.55,
       "prev_date": "09/15"
@@ -56,9 +56,9 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR",
-      "price": 418.08,
-      "change": 4.33,
-      "pct": 1.05,
+      "price": 418.53,
+      "change": 4.78,
+      "pct": 1.16,
       "date": "09/16",
       "prev_close": 413.75,
       "prev_date": "09/15"
@@ -66,9 +66,9 @@
     {
       "symbol": "MU",
       "name": "美光 MU",
-      "price": 928.98,
-      "change": 1.38,
-      "pct": 0.15,
+      "price": 927.72,
+      "change": 0.12,
+      "pct": 0.01,
       "date": "09/16",
       "prev_close": 927.6,
       "prev_date": "09/15"
@@ -76,9 +76,9 @@
     {
       "symbol": "TSLA",
       "name": "特斯拉 TSLA",
-      "price": 360.42,
-      "change": 3.84,
-      "pct": 1.08,
+      "price": 360.72,
+      "change": 4.14,
+      "pct": 1.16,
       "date": "09/16",
       "prev_close": 356.58,
       "prev_date": "09/15"
@@ -86,9 +86,9 @@
     {
       "symbol": "SPCX",
       "name": "SpaceX",
-      "price": 150.54,
-      "change": 7.05,
-      "pct": 4.91,
+      "price": 151.42,
+      "change": 7.93,
+      "pct": 5.53,
       "date": "09/16",
       "prev_close": 143.49,
       "prev_date": "09/15"
@@ -96,9 +96,9 @@
     {
       "symbol": "EWT",
       "name": "摩台指 EWT",
-      "price": 109.15,
-      "change": 2.48,
-      "pct": 2.32,
+      "price": 109.13,
+      "change": 2.46,
+      "pct": 2.31,
       "date": "09/16",
       "prev_close": 106.67,
       "prev_date": "09/15"
@@ -106,9 +106,9 @@
     {
       "symbol": "EWJ",
       "name": "日股 ETF EWJ",
-      "price": 97.63,
-      "change": 0.71,
-      "pct": 0.73,
+      "price": 97.89,
+      "change": 0.97,
+      "pct": 1.0,
       "date": "09/16",
       "prev_close": 96.92,
       "prev_date": "09/15"
@@ -118,9 +118,9 @@
     {
       "symbol": "AMZN",
       "name": "亞馬遜 AWS",
-      "price": 248.05,
-      "change": -0.37,
-      "pct": -0.15,
+      "price": 247.55,
+      "change": -0.87,
+      "pct": -0.35,
       "date": "09/16",
       "prev_close": 248.42,
       "prev_date": "09/15"
@@ -128,9 +128,9 @@
     {
       "symbol": "MSFT",
       "name": "微軟 Azure",
-      "price": 493.51,
-      "change": -3.61,
-      "pct": -0.73,
+      "price": 493.45,
+      "change": -3.67,
+      "pct": -0.74,
       "date": "09/16",
       "prev_close": 497.12,
       "prev_date": "09/15"
@@ -138,9 +138,9 @@
     {
       "symbol": "GOOGL",
       "name": "Alphabet GCP",
-      "price": 346.23,
-      "change": 1.25,
-      "pct": 0.36,
+      "price": 346.0,
+      "change": 1.02,
+      "pct": 0.3,
       "date": "09/16",
       "prev_close": 344.98,
       "prev_date": "09/15"
@@ -148,9 +148,9 @@
     {
       "symbol": "ORCL",
       "name": "Oracle Cloud",
-      "price": 146.5,
-      "change": 6.15,
-      "pct": 4.38,
+      "price": 144.26,
+      "change": 3.91,
+      "pct": 2.79,
       "date": "09/16",
       "prev_close": 140.35,
       "prev_date": "09/15"
@@ -158,9 +158,9 @@
     {
       "symbol": "META",
       "name": "Meta",
-      "price": 680.4,
-      "change": 10.16,
-      "pct": 1.52,
+      "price": 678.15,
+      "change": 7.91,
+      "pct": 1.18,
       "date": "09/16",
       "prev_close": 670.24,
       "prev_date": "09/15"
@@ -168,9 +168,9 @@
     {
       "symbol": "IBM",
       "name": "IBM Cloud",
-      "price": 241.02,
-      "change": -7.35,
-      "pct": -2.96,
+      "price": 240.05,
+      "change": -8.32,
+      "pct": -3.35,
       "date": "09/16",
       "prev_close": 248.37,
       "prev_date": "09/15"
@@ -178,9 +178,9 @@
     {
       "symbol": "AAPL",
       "name": "Apple",
-      "price": 333.87,
-      "change": 2.53,
-      "pct": 0.76,
+      "price": 334.52,
+      "change": 3.18,
+      "pct": 0.96,
       "date": "09/16",
       "prev_close": 331.34,
       "prev_date": "09/15"
@@ -190,9 +190,9 @@
     {
       "symbol": "NVDA",
       "name": "NVIDIA",
-      "price": 215.13,
-      "change": 2.96,
-      "pct": 1.4,
+      "price": 215.5,
+      "change": 3.33,
+      "pct": 1.57,
       "date": "09/16",
       "prev_close": 212.17,
       "prev_date": "09/15"
@@ -200,9 +200,9 @@
     {
       "symbol": "AMD",
       "name": "超微 AMD",
-      "price": 524.25,
-      "change": 20.05,
-      "pct": 3.98,
+      "price": 521.18,
+      "change": 16.98,
+      "pct": 3.37,
       "date": "09/16",
       "prev_close": 504.2,
       "prev_date": "09/15"
@@ -210,9 +210,9 @@
     {
       "symbol": "AVGO",
       "name": "Broadcom",
-      "price": 342.78,
-      "change": 3.51,
-      "pct": 1.03,
+      "price": 340.53,
+      "change": 1.26,
+      "pct": 0.37,
       "date": "09/16",
       "prev_close": 339.27,
       "prev_date": "09/15"
@@ -220,9 +220,9 @@
     {
       "symbol": "MRVL",
       "name": "Marvell",
-      "price": 232.28,
-      "change": 10.58,
-      "pct": 4.77,
+      "price": 231.34,
+      "change": 9.64,
+      "pct": 4.35,
       "date": "09/16",
       "prev_close": 221.7,
       "prev_date": "09/15"
@@ -232,9 +232,9 @@
     {
       "symbol": "INTC",
       "name": "Intel",
-      "price": 101.93,
-      "change": 4.79,
-      "pct": 4.93,
+      "price": 102.18,
+      "change": 5.04,
+      "pct": 5.19,
       "date": "09/16",
       "prev_close": 97.14,
       "prev_date": "09/15"
@@ -242,9 +242,9 @@
     {
       "symbol": "QCOM",
       "name": "Qualcomm",
-      "price": 190.6,
-      "change": 2.8,
-      "pct": 1.49,
+      "price": 187.69,
+      "change": -0.11,
+      "pct": -0.06,
       "date": "09/16",
       "prev_close": 187.8,
       "prev_date": "09/15"
@@ -252,9 +252,9 @@
     {
       "symbol": "ARM",
       "name": "Arm Holdings",
-      "price": 250.51,
-      "change": 8.68,
-      "pct": 3.59,
+      "price": 246.35,
+      "change": 4.52,
+      "pct": 1.87,
       "date": "09/16",
       "prev_close": 241.83,
       "prev_date": "09/15"
@@ -264,9 +264,9 @@
     {
       "symbol": "COHR",
       "name": "Coherent",
-      "price": 287.19,
-      "change": 16.02,
-      "pct": 5.91,
+      "price": 290.2,
+      "change": 19.03,
+      "pct": 7.02,
       "date": "09/16",
       "prev_close": 271.17,
       "prev_date": "09/15"
@@ -274,9 +274,9 @@
     {
       "symbol": "LITE",
       "name": "Lumentum",
-      "price": 878.0,
-      "change": 39.04,
-      "pct": 4.65,
+      "price": 922.0,
+      "change": 83.04,
+      "pct": 9.9,
       "date": "09/16",
       "prev_close": 838.96,
       "prev_date": "09/15"
@@ -284,9 +284,9 @@
     {
       "symbol": "CIEN",
       "name": "Ciena",
-      "price": 340.69,
-      "change": 6.36,
-      "pct": 1.9,
+      "price": 349.24,
+      "change": 14.91,
+      "pct": 4.46,
       "date": "09/16",
       "prev_close": 334.33,
       "prev_date": "09/15"
@@ -294,9 +294,9 @@
     {
       "symbol": "AAOI",
       "name": "Applied Optoelectronics",
-      "price": 97.7,
-      "change": 2.41,
-      "pct": 2.53,
+      "price": 97.62,
+      "change": 2.33,
+      "pct": 2.45,
       "date": "09/16",
       "prev_close": 95.29,
       "prev_date": "09/15"
@@ -304,9 +304,9 @@
     {
       "symbol": "VIAV",
       "name": "Viavi Solutions",
-      "price": 34.55,
-      "change": 0.79,
-      "pct": 2.34,
+      "price": 34.62,
+      "change": 0.86,
+      "pct": 2.55,
       "date": "09/16",
       "prev_close": 33.76,
       "prev_date": "09/15"
@@ -316,9 +316,9 @@
     {
       "symbol": "VST",
       "name": "Vistra",
-      "price": 141.58,
-      "change": 0.05,
-      "pct": 0.04,
+      "price": 141.95,
+      "change": 0.42,
+      "pct": 0.3,
       "date": "09/16",
       "prev_close": 141.53,
       "prev_date": "09/15"
@@ -326,9 +326,9 @@
     {
       "symbol": "CEG",
       "name": "Constellation Energy",
-      "price": 258.42,
-      "change": -1.47,
-      "pct": -0.57,
+      "price": 259.73,
+      "change": -0.16,
+      "pct": -0.06,
       "date": "09/16",
       "prev_close": 259.89,
       "prev_date": "09/15"
@@ -336,9 +336,9 @@
     {
       "symbol": "GEV",
       "name": "GE Vernova",
-      "price": 900.62,
-      "change": 17.81,
-      "pct": 2.02,
+      "price": 933.12,
+      "change": 50.31,
+      "pct": 5.7,
       "date": "09/16",
       "prev_close": 882.81,
       "prev_date": "09/15"
@@ -346,9 +346,9 @@
     {
       "symbol": "ETN",
       "name": "Eaton",
-      "price": 398.46,
-      "change": 6.06,
-      "pct": 1.54,
+      "price": 401.74,
+      "change": 9.34,
+      "pct": 2.38,
       "date": "09/16",
       "prev_close": 392.4,
       "prev_date": "09/15"
@@ -356,9 +356,9 @@
     {
       "symbol": "NEE",
       "name": "NextEra Energy",
-      "price": 80.92,
-      "change": -0.15,
-      "pct": -0.19,
+      "price": 80.88,
+      "change": -0.19,
+      "pct": -0.23,
       "date": "09/16",
       "prev_close": 81.07,
       "prev_date": "09/15"
@@ -368,9 +368,9 @@
     {
       "symbol": "SPY",
       "name": "S&P 500 SPY",
-      "price": 759.67,
-      "change": 2.28,
-      "pct": 0.3,
+      "price": 760.03,
+      "change": 2.64,
+      "pct": 0.35,
       "date": "09/16",
       "prev_close": 757.39,
       "prev_date": "09/15"
@@ -378,9 +378,9 @@
     {
       "symbol": "QQQ",
       "name": "Nasdaq 100 QQQ",
-      "price": 709.69,
-      "change": 5.15,
-      "pct": 0.73,
+      "price": 709.81,
+      "change": 5.27,
+      "pct": 0.75,
       "date": "09/16",
       "prev_close": 704.54,
       "prev_date": "09/15"
@@ -388,9 +388,9 @@
     {
       "symbol": "VOO",
       "name": "Vanguard S&P VOO",
-      "price": 698.38,
-      "change": 2.18,
-      "pct": 0.31,
+      "price": 698.61,
+      "change": 2.41,
+      "pct": 0.35,
       "date": "09/16",
       "prev_close": 696.2,
       "prev_date": "09/15"
@@ -398,9 +398,9 @@
     {
       "symbol": "SCHD",
       "name": "Dividend SCHD",
-      "price": 34.17,
-      "change": -0.16,
-      "pct": -0.47,
+      "price": 34.15,
+      "change": -0.18,
+      "pct": -0.52,
       "date": "09/16",
       "prev_close": 34.33,
       "prev_date": "09/15"
@@ -408,9 +408,9 @@
     {
       "symbol": "VGT",
       "name": "Vanguard IT VGT",
-      "price": 119.88,
-      "change": 1.09,
-      "pct": 0.92,
+      "price": 119.83,
+      "change": 1.04,
+      "pct": 0.88,
       "date": "09/16",
       "prev_close": 118.79,
       "prev_date": "09/15"
@@ -418,9 +418,9 @@
     {
       "symbol": "SOXX",
       "name": "Semiconductor SOXX",
-      "price": 508.47,
-      "change": 9.62,
-      "pct": 1.93,
+      "price": 506.93,
+      "change": 8.08,
+      "pct": 1.62,
       "date": "09/16",
       "prev_close": 498.85,
       "prev_date": "09/15"
@@ -428,9 +428,9 @@
     {
       "symbol": "GLD",
       "name": "黃金 GLD",
-      "price": 396.89,
-      "change": 2.74,
-      "pct": 0.7,
+      "price": 395.09,
+      "change": 0.94,
+      "pct": 0.24,
       "date": "09/16",
       "prev_close": 394.15,
       "prev_date": "09/15"
@@ -438,9 +438,9 @@
     {
       "symbol": "TLT",
       "name": "長債 TLT",
-      "price": 81.01,
-      "change": 0.3,
-      "pct": 0.37,
+      "price": 81.43,
+      "change": 0.72,
+      "pct": 0.89,
       "date": "09/16",
       "prev_close": 80.71,
       "prev_date": "09/15"
@@ -448,9 +448,9 @@
     {
       "symbol": "ARKK",
       "name": "ARK Innovation",
-      "price": 83.9,
-      "change": 0.41,
-      "pct": 0.49,
+      "price": 83.64,
+      "change": 0.15,
+      "pct": 0.18,
       "date": "09/16",
       "prev_close": 83.49,
       "prev_date": "09/15"
