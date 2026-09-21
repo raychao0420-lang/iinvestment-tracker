@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/21 08:31",
+  "updated": "2026/09/21 20:40",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -35,11 +35,11 @@
       "symbol": "^RUT",
       "name": "羅素 2000",
       "price": 2860.4,
-      "change": -14.23,
-      "pct": -0.5,
-      "date": "09/18",
-      "prev_close": 2874.63,
-      "prev_date": "09/17"
+      "change": 0.0,
+      "pct": 0.0,
+      "date": "09/21",
+      "prev_close": 2860.4,
+      "prev_date": "09/18"
     },
     {
       "symbol": "^SOX",
