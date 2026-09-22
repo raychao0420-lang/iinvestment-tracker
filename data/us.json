@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/22 09:12",
+  "updated": "2026/09/22 19:26",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -158,8 +158,8 @@
     {
       "symbol": "META",
       "name": "Meta",
-      "price": 741.24,
-      "change": 75.49,
+      "price": 741.25,
+      "change": 75.5,
       "pct": 11.34,
       "date": "09/21",
       "prev_close": 665.75,
