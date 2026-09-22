@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/23 07:17",
+  "updated": "2026/09/23 07:36",
   "indices": [
     {
       "symbol": "^TWII",
@@ -308,8 +308,8 @@
       "date": "09/22",
       "prev_close": 254.7,
       "prev_date": "09/21",
-      "nav": 252.08,
-      "premium": 1.44
+      "nav": 255.65,
+      "premium": 0.02
     },
     {
       "symbol": "0056.TW",
@@ -320,8 +320,8 @@
       "date": "09/22",
       "prev_close": 57.15,
       "prev_date": "09/21",
-      "nav": 56.94,
-      "premium": -0.16
+      "nav": 57.07,
+      "premium": -0.39
     },
     {
       "symbol": "00878.TW",
@@ -332,8 +332,8 @@
       "date": "09/22",
       "prev_close": 35.11,
       "prev_date": "09/21",
-      "nav": 34.95,
-      "premium": 0.74
+      "nav": 35.19,
+      "premium": 0.06
     },
     {
       "symbol": "00919.TW",
@@ -356,8 +356,8 @@
       "date": "09/22",
       "prev_close": 29.06,
       "prev_date": "09/21",
-      "nav": 29.15,
-      "premium": -0.07
+      "nav": 29.14,
+      "premium": -0.03
     },
     {
       "symbol": "00940.TW",
@@ -380,8 +380,8 @@
       "date": "09/22",
       "prev_close": 10.49,
       "prev_date": "09/21",
-      "nav": 10.41,
-      "premium": 2.79
+      "nav": 10.56,
+      "premium": 1.33
     },
     {
       "symbol": "00988A.TW",
@@ -392,8 +392,8 @@
       "date": "09/22",
       "prev_close": 16.41,
       "prev_date": "09/21",
-      "nav": 16.06,
-      "premium": 4.17
+      "nav": 16.34,
+      "premium": 2.39
     },
     {
       "symbol": "00981A.TW",
@@ -404,8 +404,8 @@
       "date": "09/22",
       "prev_close": 29.57,
       "prev_date": "09/21",
-      "nav": 29.19,
-      "premium": 3.29
+      "nav": 29.73,
+      "premium": 1.41
     },
     {
       "symbol": "00935.TW",
@@ -416,8 +416,8 @@
       "date": "09/22",
       "prev_close": 59.9,
       "prev_date": "09/21",
-      "nav": 58.58,
-      "premium": 4.13
+      "nav": 60.1,
+      "premium": 1.5
     },
     {
       "symbol": "00980A.TW",
@@ -464,8 +464,8 @@
       "date": "09/22",
       "prev_close": 111.2,
       "prev_date": "09/21",
-      "nav": 108.79,
-      "premium": 2.72
+      "nav": 111.66,
+      "premium": 0.08
     },
     {
       "symbol": "00685L.TW",
