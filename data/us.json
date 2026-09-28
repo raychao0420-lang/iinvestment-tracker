@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/26 08:56",
+  "updated": "2026/09/28 09:12",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -220,8 +220,8 @@
     {
       "symbol": "MRVL",
       "name": "Marvell",
-      "price": 261.93,
-      "change": 2.98,
+      "price": 261.94,
+      "change": 2.99,
       "pct": 1.15,
       "date": "09/25",
       "prev_close": 258.95,
