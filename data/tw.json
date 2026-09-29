@@ -1,5 +1,5 @@
 {
-  "updated": "2026/09/29 14:19",
+  "updated": "2026/09/29 16:48",
   "indices": [
     {
       "symbol": "^TWII",
@@ -21,7 +21,7 @@
       "prev_close": 38.87,
       "prev_date": "09/24",
       "nav": 38.68,
-      "premium": 0.18
+      "premium": -1.03
     }
   ],
   "semi": [
@@ -297,7 +297,7 @@
       "prev_close": 112.4,
       "prev_date": "09/24",
       "nav": 112.33,
-      "premium": -0.29
+      "premium": -0.92
     },
     {
       "symbol": "006208.TW",
@@ -309,7 +309,7 @@
       "prev_close": 256.85,
       "prev_date": "09/24",
       "nav": 257.34,
-      "premium": -0.4
+      "premium": -0.83
     },
     {
       "symbol": "0056.TW",
@@ -321,7 +321,7 @@
       "prev_close": 56.65,
       "prev_date": "09/24",
       "nav": 56.62,
-      "premium": 0.14
+      "premium": -0.12
     },
     {
       "symbol": "00878.TW",
@@ -333,7 +333,7 @@
       "prev_close": 34.88,
       "prev_date": "09/24",
       "nav": 34.88,
-      "premium": 0.43
+      "premium": -0.14
     },
     {
       "symbol": "00919.TW",
@@ -345,7 +345,7 @@
       "prev_close": 31.83,
       "prev_date": "09/24",
       "nav": 31.76,
-      "premium": 0.88
+      "premium": 0.38
     },
     {
       "symbol": "00929.TW",
@@ -357,7 +357,7 @@
       "prev_close": 29.18,
       "prev_date": "09/24",
       "nav": 29.23,
-      "premium": -0.03
+      "premium": -0.24
     },
     {
       "symbol": "00940.TW",
@@ -369,7 +369,7 @@
       "prev_close": 13.1,
       "prev_date": "09/24",
       "nav": 13.19,
-      "premium": -0.45
+      "premium": -0.83
     },
     {
       "symbol": "00403A.TW",
@@ -381,7 +381,7 @@
       "prev_close": 10.88,
       "prev_date": "09/24",
       "nav": 10.96,
-      "premium": -1.64
+      "premium": -2.37
     },
     {
       "symbol": "00988A.TW",
@@ -393,7 +393,7 @@
       "prev_close": 16.91,
       "prev_date": "09/24",
       "nav": 16.96,
-      "premium": -2.36
+      "premium": -2.83
     },
     {
       "symbol": "00981A.TW",
@@ -405,7 +405,7 @@
       "prev_close": 30.85,
       "prev_date": "09/24",
       "nav": 31.07,
-      "premium": -1.71
+      "premium": -2.45
     },
     {
       "symbol": "00935.TW",
@@ -417,7 +417,7 @@
       "prev_close": 61.65,
       "prev_date": "09/24",
       "nav": 61.72,
-      "premium": -1.65
+      "premium": -2.14
     },
     {
       "symbol": "00980A.TW",
@@ -429,7 +429,7 @@
       "prev_close": 25.56,
       "prev_date": "09/24",
       "nav": 25.68,
-      "premium": -1.01
+      "premium": -1.09
     },
     {
       "symbol": "00631L.TW",
@@ -441,7 +441,7 @@
       "prev_close": 38.87,
       "prev_date": "09/24",
       "nav": 38.68,
-      "premium": 0.18
+      "premium": -1.03
     },
     {
       "symbol": "00675L.TW",
@@ -453,7 +453,7 @@
       "prev_close": 340.5,
       "prev_date": "09/24",
       "nav": 339.26,
-      "premium": 0.09
+      "premium": -1.55
     },
     {
       "symbol": "00663L.TW",
@@ -465,7 +465,7 @@
       "prev_close": 112.55,
       "prev_date": "09/24",
       "nav": 111.98,
-      "premium": -0.12
+      "premium": -1.37
     },
     {
       "symbol": "00685L.TW",
@@ -477,7 +477,7 @@
       "prev_close": 12.87,
       "prev_date": "09/24",
       "nav": 12.8,
-      "premium": 0.0
+      "premium": -1.25
     }
   ]
 }
