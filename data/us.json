@@ -1,12 +1,12 @@
 {
-  "updated": "2026/09/29 01:36",
+  "updated": "2026/09/29 08:36",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7702.61,
-      "change": -40.8,
-      "pct": -0.53,
+      "price": 7683.69,
+      "change": -59.72,
+      "pct": -0.77,
       "date": "09/28",
       "prev_close": 7743.41,
       "prev_date": "09/25"
@@ -14,9 +14,9 @@
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 26913.28,
-      "change": -155.44,
-      "pct": -0.57,
+      "price": 26820.38,
+      "change": -248.34,
+      "pct": -0.92,
       "date": "09/28",
       "prev_close": 27068.72,
       "prev_date": "09/25"
@@ -24,9 +24,9 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 51603.73,
-      "change": -224.89,
-      "pct": -0.43,
+      "price": 51481.51,
+      "change": -347.11,
+      "pct": -0.67,
       "date": "09/28",
       "prev_close": 51828.62,
       "prev_date": "09/25"
@@ -34,9 +34,9 @@
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2826.96,
-      "change": -10.59,
-      "pct": -0.37,
+      "price": 2817.91,
+      "change": -19.64,
+      "pct": -0.69,
       "date": "09/28",
       "prev_close": 2837.55,
       "prev_date": "09/25"
@@ -44,9 +44,9 @@
     {
       "symbol": "^SOX",
       "name": "費城半導體",
-      "price": 12484.41,
-      "change": -184.52,
-      "pct": -1.46,
+      "price": 12465.24,
+      "change": -203.69,
+      "pct": -1.61,
       "date": "09/28",
       "prev_close": 12668.93,
       "prev_date": "09/25"
