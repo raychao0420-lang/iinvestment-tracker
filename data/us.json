@@ -1,5 +1,5 @@
 {
-  "updated": "2026/10/08 08:58",
+  "updated": "2026/10/08 10:17",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -438,9 +438,9 @@
     {
       "symbol": "TLT",
       "name": "長債 TLT",
-      "price": 77.14,
-      "change": -0.14,
-      "pct": -0.18,
+      "price": 77.15,
+      "change": -0.13,
+      "pct": -0.17,
       "date": "10/07",
       "prev_close": 77.28,
       "prev_date": "10/06"
