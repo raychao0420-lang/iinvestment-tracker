@@ -1,5 +1,5 @@
 {
-  "updated": "2026/10/13 10:34",
+  "updated": "2026/10/13 11:11",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -24,8 +24,8 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 51850.55,
-      "change": 195.6,
+      "price": 51850.6,
+      "change": 195.65,
       "pct": 0.38,
       "date": "10/12",
       "prev_close": 51654.95,
