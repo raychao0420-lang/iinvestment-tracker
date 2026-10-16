@@ -1,12 +1,12 @@
 {
-  "updated": "2026/10/16 15:23",
+  "updated": "2026/10/16 17:46",
   "indices": [
     {
       "symbol": "^TWII",
       "name": "加權指數",
-      "price": 47302.8,
-      "change": 332.93,
-      "pct": 0.71,
+      "price": 47111.26,
+      "change": 141.39,
+      "pct": 0.3,
       "date": "10/16",
       "prev_close": 46969.87,
       "prev_date": "10/15"
