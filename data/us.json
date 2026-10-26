@@ -1,5 +1,5 @@
 {
-  "updated": "2026/10/24 09:10",
+  "updated": "2026/10/26 08:32",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -304,9 +304,9 @@
     {
       "symbol": "VIAV",
       "name": "Viavi Solutions",
-      "price": 30.44,
-      "change": 0.14,
-      "pct": 0.46,
+      "price": 30.45,
+      "change": 0.15,
+      "pct": 0.5,
       "date": "10/23",
       "prev_close": 30.3,
       "prev_date": "10/22"
