@@ -1,12 +1,12 @@
 {
-  "updated": "2026/10/26 08:44",
+  "updated": "2026/10/26 20:48",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 5548.13,
-      "change": -2.17,
-      "pct": -0.04,
+      "price": 5469.47,
+      "change": -80.83,
+      "pct": -1.46,
       "date": "10/26",
       "prev_close": 5550.3,
       "prev_date": "10/23"
@@ -14,9 +14,9 @@
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 745.35,
-      "change": -6.34,
-      "pct": -0.84,
+      "price": 727.21,
+      "change": -24.48,
+      "pct": -3.26,
       "date": "10/26",
       "prev_close": 751.69,
       "prev_date": "10/23"
@@ -26,9 +26,9 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 214000.0,
-      "change": -1500.0,
-      "pct": -0.7,
+      "price": 213000.0,
+      "change": -2500.0,
+      "pct": -1.16,
       "date": "10/26",
       "prev_close": 215500.0,
       "prev_date": "10/23"
@@ -36,9 +36,9 @@
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1300000.0,
-      "change": 23000.0,
-      "pct": 1.8,
+      "price": 1275000.0,
+      "change": -2000.0,
+      "pct": -0.16,
       "date": "10/26",
       "prev_close": 1277000.0,
       "prev_date": "10/23"
@@ -46,9 +46,9 @@
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 189100.0,
-      "change": -1900.0,
-      "pct": -0.99,
+      "price": 184000.0,
+      "change": -7000.0,
+      "pct": -3.66,
       "date": "10/26",
       "prev_close": 191000.0,
       "prev_date": "10/23"
@@ -56,9 +56,9 @@
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1129000.0,
-      "change": 7000.0,
-      "pct": 0.62,
+      "price": 1118000.0,
+      "change": -4000.0,
+      "pct": -0.36,
       "date": "10/26",
       "prev_close": 1122000.0,
       "prev_date": "10/23"
@@ -68,9 +68,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 7170.0,
-      "change": 20.0,
-      "pct": 0.28,
+      "price": 7320.0,
+      "change": 170.0,
+      "pct": 2.38,
       "date": "10/26",
       "prev_close": 7150.0,
       "prev_date": "10/23"
@@ -80,9 +80,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 375000.0,
-      "change": -4000.0,
-      "pct": -1.06,
+      "price": 367000.0,
+      "change": -12000.0,
+      "pct": -3.17,
       "date": "10/26",
       "prev_close": 379000.0,
       "prev_date": "10/23"
