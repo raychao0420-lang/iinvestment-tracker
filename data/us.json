@@ -1,11 +1,11 @@
 {
-  "updated": "2026/10/27 04:02",
+  "updated": "2026/10/27 07:58",
   "indices": [
     {
       "symbol": "^GSPC",
       "name": "S&P 500",
-      "price": 7676.79,
-      "change": 53.11,
+      "price": 7676.77,
+      "change": 53.09,
       "pct": 0.7,
       "date": "10/26",
       "prev_close": 7623.68,
@@ -24,8 +24,8 @@
     {
       "symbol": "^DJI",
       "name": "道瓊",
-      "price": 52361.52,
-      "change": 146.36,
+      "price": 52361.58,
+      "change": 146.42,
       "pct": 0.28,
       "date": "10/26",
       "prev_close": 52215.16,
@@ -34,9 +34,9 @@
     {
       "symbol": "^RUT",
       "name": "羅素 2000",
-      "price": 2787.84,
-      "change": 11.94,
-      "pct": 0.43,
+      "price": 2786.42,
+      "change": 10.52,
+      "pct": 0.38,
       "date": "10/26",
       "prev_close": 2775.9,
       "prev_date": "10/23"
@@ -56,8 +56,8 @@
     {
       "symbol": "TSM",
       "name": "台積電 ADR",
-      "price": 424.39,
-      "change": 5.88,
+      "price": 424.37,
+      "change": 5.86,
       "pct": 1.4,
       "date": "10/26",
       "prev_close": 418.51,
@@ -96,9 +96,9 @@
     {
       "symbol": "EWT",
       "name": "摩台指 EWT",
-      "price": 105.59,
-      "change": 0.69,
-      "pct": 0.66,
+      "price": 105.61,
+      "change": 0.71,
+      "pct": 0.68,
       "date": "10/26",
       "prev_close": 104.9,
       "prev_date": "10/23"
@@ -106,9 +106,9 @@
     {
       "symbol": "EWJ",
       "name": "日股 ETF EWJ",
-      "price": 94.27,
-      "change": 0.17,
-      "pct": 0.18,
+      "price": 94.28,
+      "change": 0.18,
+      "pct": 0.19,
       "date": "10/26",
       "prev_close": 94.1,
       "prev_date": "10/23"
@@ -168,9 +168,9 @@
     {
       "symbol": "IBM",
       "name": "IBM Cloud",
-      "price": 253.41,
-      "change": -0.15,
-      "pct": -0.06,
+      "price": 253.44,
+      "change": -0.12,
+      "pct": -0.05,
       "date": "10/26",
       "prev_close": 253.56,
       "prev_date": "10/23"
@@ -264,9 +264,9 @@
     {
       "symbol": "COHR",
       "name": "Coherent",
-      "price": 221.71,
-      "change": 12.42,
-      "pct": 5.93,
+      "price": 221.5,
+      "change": 12.21,
+      "pct": 5.83,
       "date": "10/26",
       "prev_close": 209.29,
       "prev_date": "10/23"
@@ -284,9 +284,9 @@
     {
       "symbol": "CIEN",
       "name": "Ciena",
-      "price": 336.09,
-      "change": 15.83,
-      "pct": 4.94,
+      "price": 335.93,
+      "change": 15.67,
+      "pct": 4.89,
       "date": "10/26",
       "prev_close": 320.26,
       "prev_date": "10/23"
@@ -316,9 +316,9 @@
     {
       "symbol": "VST",
       "name": "Vistra",
-      "price": 141.77,
-      "change": 1.61,
-      "pct": 1.15,
+      "price": 141.73,
+      "change": 1.57,
+      "pct": 1.12,
       "date": "10/26",
       "prev_close": 140.16,
       "prev_date": "10/23"
@@ -336,9 +336,9 @@
     {
       "symbol": "GEV",
       "name": "GE Vernova",
-      "price": 855.38,
-      "change": 40.38,
-      "pct": 4.95,
+      "price": 855.12,
+      "change": 40.12,
+      "pct": 4.92,
       "date": "10/26",
       "prev_close": 815.0,
       "prev_date": "10/23"
@@ -346,9 +346,9 @@
     {
       "symbol": "ETN",
       "name": "Eaton",
-      "price": 371.81,
-      "change": 5.7,
-      "pct": 1.56,
+      "price": 371.92,
+      "change": 5.81,
+      "pct": 1.59,
       "date": "10/26",
       "prev_close": 366.11,
       "prev_date": "10/23"
@@ -356,9 +356,9 @@
     {
       "symbol": "NEE",
       "name": "NextEra Energy",
-      "price": 82.02,
-      "change": -0.08,
-      "pct": -0.1,
+      "price": 82.04,
+      "change": -0.06,
+      "pct": -0.07,
       "date": "10/26",
       "prev_close": 82.1,
       "prev_date": "10/23"
@@ -368,9 +368,9 @@
     {
       "symbol": "SPY",
       "name": "S&P 500 SPY",
-      "price": 765.29,
-      "change": 5.32,
-      "pct": 0.7,
+      "price": 765.37,
+      "change": 5.4,
+      "pct": 0.71,
       "date": "10/26",
       "prev_close": 759.97,
       "prev_date": "10/23"
@@ -388,9 +388,9 @@
     {
       "symbol": "VOO",
       "name": "Vanguard S&P VOO",
-      "price": 703.46,
-      "change": 4.88,
-      "pct": 0.7,
+      "price": 703.41,
+      "change": 4.83,
+      "pct": 0.69,
       "date": "10/26",
       "prev_close": 698.58,
       "prev_date": "10/23"
@@ -398,9 +398,9 @@
     {
       "symbol": "SCHD",
       "name": "Dividend SCHD",
-      "price": 35.27,
-      "change": 0.0,
-      "pct": 0.0,
+      "price": 35.3,
+      "change": 0.03,
+      "pct": 0.09,
       "date": "10/26",
       "prev_close": 35.27,
       "prev_date": "10/23"
@@ -408,9 +408,9 @@
     {
       "symbol": "VGT",
       "name": "Vanguard IT VGT",
-      "price": 120.94,
-      "change": 1.77,
-      "pct": 1.49,
+      "price": 120.97,
+      "change": 1.8,
+      "pct": 1.51,
       "date": "10/26",
       "prev_close": 119.17,
       "prev_date": "10/23"
@@ -448,9 +448,9 @@
     {
       "symbol": "ARKK",
       "name": "ARK Innovation",
-      "price": 81.81,
-      "change": -0.18,
-      "pct": -0.22,
+      "price": 81.84,
+      "change": -0.15,
+      "pct": -0.18,
       "date": "10/26",
       "prev_close": 81.99,
       "prev_date": "10/23"
