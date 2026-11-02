@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/02 23:36",
+  "updated": "2026/11/03 01:26",
   "indices": [
     {
       "symbol": "^N225",
@@ -166,9 +166,9 @@
     {
       "symbol": "1321.T",
       "name": "NEXT日経225 ETF",
-      "price": 656.2,
-      "change": -1.5,
-      "pct": -0.23,
+      "price": 657.0,
+      "change": -0.7,
+      "pct": -0.11,
       "date": "11/02",
       "prev_close": 657.7,
       "prev_date": "10/30"
@@ -176,9 +176,9 @@
     {
       "symbol": "1306.T",
       "name": "NEXT TOPIX ETF",
-      "price": 412.7,
-      "change": -3.7,
-      "pct": -0.89,
+      "price": 413.0,
+      "change": -3.4,
+      "pct": -0.82,
       "date": "11/02",
       "prev_close": 416.4,
       "prev_date": "10/30"
@@ -186,9 +186,9 @@
     {
       "symbol": "1570.T",
       "name": "日経225レバレッジ ETF",
-      "price": 62670.0,
-      "change": -240.0,
-      "pct": -0.38,
+      "price": 62830.0,
+      "change": -80.0,
+      "pct": -0.13,
       "date": "11/02",
       "prev_close": 62910.0,
       "prev_date": "10/30"
@@ -196,9 +196,9 @@
     {
       "symbol": "2631.T",
       "name": "MAXIS全世界(除日本)",
-      "price": 32380.0,
-      "change": -210.0,
-      "pct": -0.64,
+      "price": 32370.0,
+      "change": -220.0,
+      "pct": -0.68,
       "date": "11/02",
       "prev_close": 32590.0,
       "prev_date": "10/30"
@@ -206,9 +206,9 @@
     {
       "symbol": "2558.T",
       "name": "MAXIS S&P500(JPY)",
-      "price": 3462.0,
-      "change": -13.0,
-      "pct": -0.37,
+      "price": 3465.0,
+      "change": -10.0,
+      "pct": -0.29,
       "date": "11/02",
       "prev_close": 3475.0,
       "prev_date": "10/30"
