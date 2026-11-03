@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/03 17:53",
+  "updated": "2026/11/03 22:01",
   "indices": [
     {
       "symbol": "^TWII",
@@ -308,8 +308,8 @@
       "date": "11/03",
       "prev_close": 238.65,
       "prev_date": "11/02",
-      "nav": 239.84,
-      "premium": -3.87
+      "nav": 237.7,
+      "premium": -3.01
     },
     {
       "symbol": "0056.TW",
@@ -320,8 +320,8 @@
       "date": "11/03",
       "prev_close": 55.75,
       "prev_date": "11/02",
-      "nav": 55.79,
-      "premium": -4.02
+      "nav": 55.69,
+      "premium": -3.84
     },
     {
       "symbol": "00878.TW",
@@ -356,8 +356,8 @@
       "date": "11/03",
       "prev_close": 27.6,
       "prev_date": "11/02",
-      "nav": 27.67,
-      "premium": -4.16
+      "nav": 27.55,
+      "premium": -3.74
     },
     {
       "symbol": "00940.TW",
@@ -392,8 +392,8 @@
       "date": "11/03",
       "prev_close": 14.36,
       "prev_date": "11/02",
-      "nav": 15.14,
-      "premium": -10.96
+      "nav": 14.22,
+      "premium": -5.2
     },
     {
       "symbol": "00981A.TW",
