@@ -1,12 +1,12 @@
 {
-  "updated": "2026/11/05 09:05",
+  "updated": "2026/11/05 09:27",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 5498.71,
-      "change": -185.09,
-      "pct": -3.26,
+      "price": 5485.68,
+      "change": -198.12,
+      "pct": -3.49,
       "date": "11/05",
       "prev_close": 5683.8,
       "prev_date": "11/04"
@@ -14,9 +14,9 @@
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 696.82,
-      "change": -18.13,
-      "pct": -2.54,
+      "price": 691.26,
+      "change": -23.69,
+      "pct": -3.31,
       "date": "11/05",
       "prev_close": 714.95,
       "prev_date": "11/04"
@@ -36,9 +36,9 @@
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1297000.0,
-      "change": -99000.0,
-      "pct": -7.09,
+      "price": 1295000.0,
+      "change": -101000.0,
+      "pct": -7.23,
       "date": "11/05",
       "prev_close": 1396000.0,
       "prev_date": "11/04"
@@ -46,9 +46,9 @@
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 173700.0,
-      "change": -12400.0,
-      "pct": -6.66,
+      "price": 173100.0,
+      "change": -13000.0,
+      "pct": -6.99,
       "date": "11/05",
       "prev_close": 186100.0,
       "prev_date": "11/04"
@@ -56,9 +56,9 @@
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 1002000.0,
-      "change": -113000.0,
-      "pct": -10.13,
+      "price": 1001000.0,
+      "change": -114000.0,
+      "pct": -10.22,
       "date": "11/05",
       "prev_close": 1115000.0,
       "prev_date": "11/04"
@@ -68,9 +68,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 7290.0,
-      "change": -50.0,
-      "pct": -0.68,
+      "price": 7270.0,
+      "change": -70.0,
+      "pct": -0.95,
       "date": "11/05",
       "prev_close": 7340.0,
       "prev_date": "11/04"
@@ -80,9 +80,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 291500.0,
-      "change": -17500.0,
-      "pct": -5.66,
+      "price": 288500.0,
+      "change": -20500.0,
+      "pct": -6.63,
       "date": "11/05",
       "prev_close": 309000.0,
       "prev_date": "11/04"
