@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/07 00:41",
+  "updated": "2026/11/07 08:11",
   "indices": [
     {
       "symbol": "^TWII",
@@ -290,14 +290,14 @@
     {
       "symbol": "0050.TW",
       "name": "元大台灣50",
-      "price": 92.5,
-      "change": -4.65,
-      "pct": -4.79,
+      "price": 92.3,
+      "change": -4.85,
+      "pct": -4.99,
       "date": "11/06",
       "prev_close": 97.15,
       "prev_date": "11/05",
-      "nav": 96.79,
-      "premium": -4.43
+      "nav": 92.3,
+      "premium": 0.0
     },
     {
       "symbol": "006208.TW",
@@ -314,14 +314,14 @@
     {
       "symbol": "0056.TW",
       "name": "元大高股息",
-      "price": 49.91,
-      "change": -1.64,
-      "pct": -3.18,
+      "price": 49.72,
+      "change": -1.83,
+      "pct": -3.55,
       "date": "11/06",
       "prev_close": 51.55,
       "prev_date": "11/05",
-      "nav": 51.43,
-      "premium": -2.96
+      "nav": 49.72,
+      "premium": 0.0
     },
     {
       "symbol": "00878.TW",
@@ -362,14 +362,14 @@
     {
       "symbol": "00940.TW",
       "name": "元大台灣價值高息",
-      "price": 11.8,
-      "change": -0.43,
-      "pct": -3.52,
+      "price": 11.86,
+      "change": -0.37,
+      "pct": -3.03,
       "date": "11/06",
       "prev_close": 12.23,
       "prev_date": "11/05",
-      "nav": 12.26,
-      "premium": -3.75
+      "nav": 11.86,
+      "premium": 0.0
     },
     {
       "symbol": "00403A.TW",
