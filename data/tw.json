@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/10 00:00",
+  "updated": "2026/11/10 01:48",
   "indices": [
     {
       "symbol": "^TWII",
@@ -296,8 +296,8 @@
       "date": "11/09",
       "prev_close": 92.3,
       "prev_date": "11/06",
-      "nav": 92.3,
-      "premium": 5.58
+      "nav": 97.08,
+      "premium": 0.38
     },
     {
       "symbol": "006208.TW",
@@ -332,8 +332,8 @@
       "date": "11/09",
       "prev_close": 31.99,
       "prev_date": "11/06",
-      "nav": 31.87,
-      "premium": 2.82
+      "nav": 32.72,
+      "premium": 0.15
     },
     {
       "symbol": "00919.TW",
@@ -368,8 +368,8 @@
       "date": "11/09",
       "prev_close": 11.86,
       "prev_date": "11/06",
-      "nav": 11.86,
-      "premium": 1.94
+      "nav": 12.14,
+      "premium": -0.41
     },
     {
       "symbol": "00403A.TW",
@@ -416,8 +416,8 @@
       "date": "11/09",
       "prev_close": 44.43,
       "prev_date": "11/06",
-      "nav": 44.4,
-      "premium": 7.21
+      "nav": 47.38,
+      "premium": 0.46
     },
     {
       "symbol": "00980A.TW",
@@ -458,14 +458,14 @@
     {
       "symbol": "00663L.TW",
       "name": "國泰臺灣加權正2",
-      "price": 82.0,
-      "change": 7.45,
-      "pct": 9.99,
+      "price": 81.52,
+      "change": 6.97,
+      "pct": 9.35,
       "date": "11/09",
       "prev_close": 74.55,
       "prev_date": "11/06",
-      "nav": 74.66,
-      "premium": 9.83
+      "nav": 81.52,
+      "premium": 0.0
     },
     {
       "symbol": "00685L.TW",
