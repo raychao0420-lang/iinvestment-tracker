@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/07 10:24",
+  "updated": "2026/11/09 09:59",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -14,8 +14,8 @@
     {
       "symbol": "^IXIC",
       "name": "NASDAQ",
-      "price": 24579.42,
-      "change": 264.42,
+      "price": 24579.43,
+      "change": 264.43,
       "pct": 1.09,
       "date": "11/06",
       "prev_close": 24315.0,
