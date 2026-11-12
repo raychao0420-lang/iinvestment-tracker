@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/12 10:14",
+  "updated": "2026/11/12 11:23",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -128,8 +128,8 @@
     {
       "symbol": "MSFT",
       "name": "微軟 Azure",
-      "price": 521.12,
-      "change": -12.04,
+      "price": 521.13,
+      "change": -12.03,
       "pct": -2.26,
       "date": "11/11",
       "prev_close": 533.16,
