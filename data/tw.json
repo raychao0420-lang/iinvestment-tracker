@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/16 23:34",
+  "updated": "2026/11/17 01:28",
   "indices": [
     {
       "symbol": "^TWII",
@@ -296,8 +296,8 @@
       "date": "11/16",
       "prev_close": 102.5,
       "prev_date": "11/13",
-      "nav": 102.28,
-      "premium": -5.7
+      "nav": 95.85,
+      "premium": 0.63
     },
     {
       "symbol": "006208.TW",
