@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/20 11:44",
+  "updated": "2026/11/20 21:21",
   "indices": [
     {
       "symbol": "^GSPC",
@@ -86,9 +86,9 @@
     {
       "symbol": "SPCX",
       "name": "SpaceX",
-      "price": 137.07,
-      "change": -6.43,
-      "pct": -4.48,
+      "price": 138.43,
+      "change": -5.07,
+      "pct": -3.53,
       "date": "11/19",
       "prev_close": 143.5,
       "prev_date": "11/18"
@@ -158,9 +158,9 @@
     {
       "symbol": "META",
       "name": "Meta",
-      "price": 604.47,
-      "change": -11.91,
-      "pct": -1.93,
+      "price": 596.22,
+      "change": -20.16,
+      "pct": -3.27,
       "date": "11/19",
       "prev_close": 616.38,
       "prev_date": "11/18"
@@ -252,9 +252,9 @@
     {
       "symbol": "ARM",
       "name": "Arm Holdings",
-      "price": 178.96,
-      "change": -3.8,
-      "pct": -2.08,
+      "price": 177.17,
+      "change": -5.59,
+      "pct": -3.06,
       "date": "11/19",
       "prev_close": 182.76,
       "prev_date": "11/18"
@@ -274,9 +274,9 @@
     {
       "symbol": "LITE",
       "name": "Lumentum",
-      "price": 538.71,
-      "change": -12.36,
-      "pct": -2.24,
+      "price": 535.15,
+      "change": -15.92,
+      "pct": -2.89,
       "date": "11/19",
       "prev_close": 551.07,
       "prev_date": "11/18"
@@ -294,9 +294,9 @@
     {
       "symbol": "AAOI",
       "name": "Applied Optoelectronics",
-      "price": 40.19,
-      "change": -0.6,
-      "pct": -1.47,
+      "price": 39.46,
+      "change": -1.33,
+      "pct": -3.26,
       "date": "11/19",
       "prev_close": 40.79,
       "prev_date": "11/18"
@@ -316,9 +316,9 @@
     {
       "symbol": "VST",
       "name": "Vistra",
-      "price": 124.57,
-      "change": -1.01,
-      "pct": -0.8,
+      "price": 124.15,
+      "change": -1.43,
+      "pct": -1.14,
       "date": "11/19",
       "prev_close": 125.58,
       "prev_date": "11/18"
@@ -326,9 +326,9 @@
     {
       "symbol": "CEG",
       "name": "Constellation Energy",
-      "price": 256.73,
-      "change": -6.01,
-      "pct": -2.29,
+      "price": 252.03,
+      "change": -10.71,
+      "pct": -4.08,
       "date": "11/19",
       "prev_close": 262.74,
       "prev_date": "11/18"
@@ -336,9 +336,9 @@
     {
       "symbol": "GEV",
       "name": "GE Vernova",
-      "price": 763.35,
-      "change": -8.87,
-      "pct": -1.15,
+      "price": 756.28,
+      "change": -15.94,
+      "pct": -2.06,
       "date": "11/19",
       "prev_close": 772.22,
       "prev_date": "11/18"
@@ -448,9 +448,9 @@
     {
       "symbol": "ARKK",
       "name": "ARK Innovation",
-      "price": 69.65,
-      "change": -1.41,
-      "pct": -1.98,
+      "price": 68.93,
+      "change": -2.13,
+      "pct": -3.0,
       "date": "11/19",
       "prev_close": 71.06,
       "prev_date": "11/18"
