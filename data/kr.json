@@ -1,12 +1,12 @@
 {
-  "updated": "2026/11/25 13:02",
+  "updated": "2026/11/25 22:44",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 4713.68,
-      "change": -307.32,
-      "pct": -6.12,
+      "price": 4697.51,
+      "change": -323.49,
+      "pct": -6.44,
       "date": "11/25",
       "prev_close": 5021.0,
       "prev_date": "11/24"
@@ -14,9 +14,9 @@
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 650.51,
-      "change": -15.77,
-      "pct": -2.37,
+      "price": 650.64,
+      "change": -15.64,
+      "pct": -2.35,
       "date": "11/25",
       "prev_close": 666.28,
       "prev_date": "11/24"
@@ -26,9 +26,9 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 171600.0,
-      "change": -18900.0,
-      "pct": -9.92,
+      "price": 170700.0,
+      "change": -19800.0,
+      "pct": -10.39,
       "date": "11/25",
       "prev_close": 190500.0,
       "prev_date": "11/24"
@@ -36,9 +36,9 @@
     {
       "symbol": "000660.KS",
       "name": "SK 海力士",
-      "price": 1043000.0,
-      "change": -122000.0,
-      "pct": -10.47,
+      "price": 1030000.0,
+      "change": -135000.0,
+      "pct": -11.59,
       "date": "11/25",
       "prev_close": 1165000.0,
       "prev_date": "11/24"
@@ -46,9 +46,9 @@
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 149400.0,
-      "change": -14300.0,
-      "pct": -8.74,
+      "price": 147300.0,
+      "change": -16400.0,
+      "pct": -10.02,
       "date": "11/25",
       "prev_close": 163700.0,
       "prev_date": "11/24"
@@ -56,9 +56,9 @@
     {
       "symbol": "009150.KS",
       "name": "三星電機",
-      "price": 761000.0,
-      "change": -99500.0,
-      "pct": -11.56,
+      "price": 755000.0,
+      "change": -105500.0,
+      "pct": -12.26,
       "date": "11/25",
       "prev_close": 860500.0,
       "prev_date": "11/24"
