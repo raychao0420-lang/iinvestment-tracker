@@ -1,12 +1,12 @@
 {
-  "updated": "2026/11/25 11:47",
+  "updated": "2026/11/25 12:09",
   "indices": [
     {
       "symbol": "^TWII",
       "name": "加權指數",
-      "price": 37786.57,
-      "change": -2335.78,
-      "pct": -5.82,
+      "price": 38005.07,
+      "change": -2117.28,
+      "pct": -5.28,
       "date": "11/25",
       "prev_close": 40122.35,
       "prev_date": "11/24"
@@ -14,23 +14,23 @@
     {
       "symbol": "00631L.TW",
       "name": "元大台灣50正2",
-      "price": 23.45,
-      "change": -3.55,
-      "pct": -13.15,
+      "price": 23.72,
+      "change": -3.28,
+      "pct": -12.15,
       "date": "11/25",
       "prev_close": 27.0,
       "prev_date": "11/24",
       "nav": 22.23,
-      "premium": 5.49
+      "premium": 6.7
     }
   ],
   "semi": [
     {
       "symbol": "2330.TW",
       "name": "台積電",
-      "price": 2105.0,
-      "change": -125.0,
-      "pct": -5.61,
+      "price": 2130.0,
+      "change": -100.0,
+      "pct": -4.48,
       "date": "11/25",
       "prev_close": 2230.0,
       "prev_date": "11/24"
@@ -48,9 +48,9 @@
     {
       "symbol": "3711.TW",
       "name": "ASE 日月光",
-      "price": 487.5,
-      "change": -42.5,
-      "pct": -8.02,
+      "price": 489.5,
+      "change": -40.5,
+      "pct": -7.64,
       "date": "11/25",
       "prev_close": 530.0,
       "prev_date": "11/24"
@@ -68,9 +68,9 @@
     {
       "symbol": "3008.TW",
       "name": "大立光",
-      "price": 4010.0,
-      "change": 30.0,
-      "pct": 0.75,
+      "price": 4000.0,
+      "change": 20.0,
+      "pct": 0.5,
       "date": "11/25",
       "prev_close": 3980.0,
       "prev_date": "11/24"
@@ -78,9 +78,9 @@
     {
       "symbol": "6770.TW",
       "name": "力積電",
-      "price": 48.4,
-      "change": -4.9,
-      "pct": -9.19,
+      "price": 48.35,
+      "change": -4.95,
+      "pct": -9.29,
       "date": "11/25",
       "prev_close": 53.3,
       "prev_date": "11/24"
@@ -90,9 +90,9 @@
     {
       "symbol": "1802.TW",
       "name": "台玻",
-      "price": 61.2,
-      "change": -2.7,
-      "pct": -4.23,
+      "price": 60.9,
+      "change": -3.0,
+      "pct": -4.69,
       "date": "11/25",
       "prev_close": 63.9,
       "prev_date": "11/24"
@@ -100,9 +100,9 @@
     {
       "symbol": "3037.TW",
       "name": "欣興",
-      "price": 590.0,
-      "change": -23.0,
-      "pct": -3.75,
+      "price": 588.0,
+      "change": -25.0,
+      "pct": -4.08,
       "date": "11/25",
       "prev_close": 613.0,
       "prev_date": "11/24"
@@ -110,9 +110,9 @@
     {
       "symbol": "8046.TW",
       "name": "南電",
-      "price": 679.0,
-      "change": -58.0,
-      "pct": -7.87,
+      "price": 677.0,
+      "change": -60.0,
+      "pct": -8.14,
       "date": "11/25",
       "prev_close": 737.0,
       "prev_date": "11/24"
@@ -120,9 +120,9 @@
     {
       "symbol": "3189.TW",
       "name": "景碩",
-      "price": 506.0,
-      "change": -8.0,
-      "pct": -1.56,
+      "price": 503.0,
+      "change": -11.0,
+      "pct": -2.14,
       "date": "11/25",
       "prev_close": 514.0,
       "prev_date": "11/24"
@@ -130,9 +130,9 @@
     {
       "symbol": "3149.TW",
       "name": "正達",
-      "price": 52.5,
-      "change": -5.6,
-      "pct": -9.64,
+      "price": 52.8,
+      "change": -5.3,
+      "pct": -9.12,
       "date": "11/25",
       "prev_close": 58.1,
       "prev_date": "11/24"
@@ -142,9 +142,9 @@
     {
       "symbol": "2317.TW",
       "name": "鴻海",
-      "price": 206.0,
-      "change": -20.5,
-      "pct": -9.05,
+      "price": 207.0,
+      "change": -19.5,
+      "pct": -8.61,
       "date": "11/25",
       "prev_close": 226.5,
       "prev_date": "11/24"
@@ -152,9 +152,9 @@
     {
       "symbol": "2382.TW",
       "name": "廣達",
-      "price": 257.5,
-      "change": -25.0,
-      "pct": -8.85,
+      "price": 260.5,
+      "change": -22.0,
+      "pct": -7.79,
       "date": "11/25",
       "prev_close": 282.5,
       "prev_date": "11/24"
@@ -162,9 +162,9 @@
     {
       "symbol": "3231.TW",
       "name": "緯創",
-      "price": 153.5,
-      "change": -9.5,
-      "pct": -5.83,
+      "price": 152.5,
+      "change": -10.5,
+      "pct": -6.44,
       "date": "11/25",
       "prev_close": 163.0,
       "prev_date": "11/24"
@@ -172,9 +172,9 @@
     {
       "symbol": "2356.TW",
       "name": "英業達",
-      "price": 39.4,
-      "change": -2.8,
-      "pct": -6.64,
+      "price": 39.3,
+      "change": -2.9,
+      "pct": -6.87,
       "date": "11/25",
       "prev_close": 42.2,
       "prev_date": "11/24"
@@ -182,9 +182,9 @@
     {
       "symbol": "2376.TW",
       "name": "技嘉",
-      "price": 255.5,
-      "change": -22.5,
-      "pct": -8.09,
+      "price": 258.5,
+      "change": -19.5,
+      "pct": -7.01,
       "date": "11/25",
       "prev_close": 278.0,
       "prev_date": "11/24"
@@ -192,9 +192,9 @@
     {
       "symbol": "6669.TW",
       "name": "緯穎",
-      "price": 1410.0,
-      "change": -100.0,
-      "pct": -6.62,
+      "price": 1420.0,
+      "change": -90.0,
+      "pct": -5.96,
       "date": "11/25",
       "prev_close": 1510.0,
       "prev_date": "11/24"
@@ -204,9 +204,9 @@
     {
       "symbol": "2308.TW",
       "name": "台達電",
-      "price": 1045.0,
-      "change": -40.0,
-      "pct": -3.69,
+      "price": 1050.0,
+      "change": -35.0,
+      "pct": -3.23,
       "date": "11/25",
       "prev_close": 1085.0,
       "prev_date": "11/24"
@@ -214,9 +214,9 @@
     {
       "symbol": "2603.TW",
       "name": "長榮",
-      "price": 251.5,
-      "change": -5.5,
-      "pct": -2.14,
+      "price": 252.5,
+      "change": -4.5,
+      "pct": -1.75,
       "date": "11/25",
       "prev_close": 257.0,
       "prev_date": "11/24"
@@ -226,9 +226,9 @@
     {
       "symbol": "2881.TW",
       "name": "富邦金",
-      "price": 131.0,
-      "change": -12.5,
-      "pct": -8.71,
+      "price": 132.5,
+      "change": -11.0,
+      "pct": -7.67,
       "date": "11/25",
       "prev_close": 143.5,
       "prev_date": "11/24"
@@ -236,9 +236,9 @@
     {
       "symbol": "2882.TW",
       "name": "國泰金",
-      "price": 98.7,
-      "change": -5.8,
-      "pct": -5.55,
+      "price": 99.2,
+      "change": -5.3,
+      "pct": -5.07,
       "date": "11/25",
       "prev_close": 104.5,
       "prev_date": "11/24"
@@ -246,9 +246,9 @@
     {
       "symbol": "2891.TW",
       "name": "中信金",
-      "price": 64.3,
-      "change": -5.6,
-      "pct": -8.01,
+      "price": 64.6,
+      "change": -5.3,
+      "pct": -7.58,
       "date": "11/25",
       "prev_close": 69.9,
       "prev_date": "11/24"
@@ -258,9 +258,9 @@
     {
       "symbol": "8033.TW",
       "name": "雷虎科技",
-      "price": 107.0,
-      "change": -7.0,
-      "pct": -6.14,
+      "price": 107.5,
+      "change": -6.5,
+      "pct": -5.7,
       "date": "11/25",
       "prev_close": 114.0,
       "prev_date": "11/24"
@@ -268,9 +268,9 @@
     {
       "symbol": "2634.TW",
       "name": "漢翔航空",
-      "price": 46.65,
-      "change": -2.05,
-      "pct": -4.21,
+      "price": 46.7,
+      "change": -2.0,
+      "pct": -4.11,
       "date": "11/25",
       "prev_close": 48.7,
       "prev_date": "11/24"
@@ -278,9 +278,9 @@
     {
       "symbol": "4961.TW",
       "name": "鼎天國際",
-      "price": 165.0,
-      "change": -1.0,
-      "pct": -0.6,
+      "price": 164.0,
+      "change": -2.0,
+      "pct": -1.2,
       "date": "11/25",
       "prev_close": 166.0,
       "prev_date": "11/24"
@@ -290,194 +290,194 @@
     {
       "symbol": "0050.TW",
       "name": "元大台灣50",
-      "price": 89.15,
-      "change": -6.55,
-      "pct": -6.84,
+      "price": 89.8,
+      "change": -5.9,
+      "pct": -6.17,
       "date": "11/25",
       "prev_close": 95.7,
       "prev_date": "11/24",
       "nav": 86.57,
-      "premium": 2.98
+      "premium": 3.73
     },
     {
       "symbol": "006208.TW",
       "name": "富邦台50",
-      "price": 200.45,
-      "change": -14.65,
-      "pct": -6.81,
+      "price": 201.55,
+      "change": -13.55,
+      "pct": -6.3,
       "date": "11/25",
       "prev_close": 215.1,
       "prev_date": "11/24",
       "nav": 194.79,
-      "premium": 2.91
+      "premium": 3.47
     },
     {
       "symbol": "0056.TW",
       "name": "元大高股息",
-      "price": 45.54,
-      "change": -4.4,
-      "pct": -8.81,
+      "price": 45.67,
+      "change": -4.27,
+      "pct": -8.55,
       "date": "11/25",
       "prev_close": 49.94,
       "prev_date": "11/24",
       "nav": 45.01,
-      "premium": 1.18
+      "premium": 1.47
     },
     {
       "symbol": "00878.TW",
       "name": "國泰永續高股息",
-      "price": 28.47,
-      "change": -2.34,
-      "pct": -7.59,
+      "price": 28.55,
+      "change": -2.26,
+      "pct": -7.34,
       "date": "11/25",
       "prev_close": 30.81,
       "prev_date": "11/24",
       "nav": 27.96,
-      "premium": 1.82
+      "premium": 2.11
     },
     {
       "symbol": "00919.TW",
       "name": "群益台灣精選高息",
-      "price": 27.67,
-      "change": -1.83,
-      "pct": -6.2,
+      "price": 27.8,
+      "change": -1.7,
+      "pct": -5.76,
       "date": "11/25",
       "prev_close": 29.5,
       "prev_date": "11/24",
       "nav": 27.04,
-      "premium": 2.33
+      "premium": 2.81
     },
     {
       "symbol": "00929.TW",
       "name": "復華台灣科技優息",
-      "price": 22.0,
-      "change": -1.8,
-      "pct": -7.56,
+      "price": 22.04,
+      "change": -1.76,
+      "pct": -7.39,
       "date": "11/25",
       "prev_close": 23.8,
       "prev_date": "11/24",
       "nav": 21.62,
-      "premium": 1.76
+      "premium": 1.94
     },
     {
       "symbol": "00940.TW",
       "name": "元大台灣價值高息",
-      "price": 10.98,
-      "change": -0.67,
-      "pct": -5.75,
+      "price": 10.99,
+      "change": -0.66,
+      "pct": -5.67,
       "date": "11/25",
       "prev_close": 11.65,
       "prev_date": "11/24",
       "nav": 10.88,
-      "premium": 0.92
+      "premium": 1.01
     },
     {
       "symbol": "00403A.TW",
       "name": "統一台股升級50",
-      "price": 7.47,
-      "change": -0.57,
-      "pct": -7.09,
+      "price": 7.48,
+      "change": -0.56,
+      "pct": -6.97,
       "date": "11/25",
       "prev_close": 8.04,
       "prev_date": "11/24",
       "nav": 7.25,
-      "premium": 3.03
+      "premium": 3.17
     },
     {
       "symbol": "00988A.TW",
       "name": "主動統一全球創新",
-      "price": 11.65,
-      "change": -0.55,
-      "pct": -4.51,
+      "price": 11.67,
+      "change": -0.53,
+      "pct": -4.34,
       "date": "11/25",
       "prev_close": 12.2,
       "prev_date": "11/24",
       "nav": 11.41,
-      "premium": 2.1
+      "premium": 2.28
     },
     {
       "symbol": "00981A.TW",
       "name": "主動統一台股增長",
-      "price": 20.45,
-      "change": -1.59,
-      "pct": -7.21,
+      "price": 20.55,
+      "change": -1.49,
+      "pct": -6.76,
       "date": "11/25",
       "prev_close": 22.04,
       "prev_date": "11/24",
       "nav": 19.73,
-      "premium": 3.65
+      "premium": 4.16
     },
     {
       "symbol": "00935.TW",
       "name": "野村臺灣新科技50",
-      "price": 42.95,
-      "change": -3.49,
-      "pct": -7.52,
+      "price": 43.1,
+      "change": -3.34,
+      "pct": -7.19,
       "date": "11/25",
       "prev_close": 46.44,
       "prev_date": "11/24",
       "nav": 41.84,
-      "premium": 2.65
+      "premium": 3.01
     },
     {
       "symbol": "00980A.TW",
       "name": "主動野村臺灣優選",
-      "price": 16.71,
-      "change": -1.16,
-      "pct": -6.49,
+      "price": 16.76,
+      "change": -1.11,
+      "pct": -6.21,
       "date": "11/25",
       "prev_close": 17.87,
       "prev_date": "11/24",
       "nav": 16.19,
-      "premium": 3.21
+      "premium": 3.52
     },
     {
       "symbol": "00631L.TW",
       "name": "元大台灣50正2",
-      "price": 23.45,
-      "change": -3.55,
-      "pct": -13.15,
+      "price": 23.72,
+      "change": -3.28,
+      "pct": -12.15,
       "date": "11/25",
       "prev_close": 27.0,
       "prev_date": "11/24",
       "nav": 22.23,
-      "premium": 5.49
+      "premium": 6.7
     },
     {
       "symbol": "00675L.TW",
       "name": "富邦台灣加權正2",
-      "price": 195.85,
-      "change": -30.8,
-      "pct": -13.59,
+      "price": 198.35,
+      "change": -28.3,
+      "pct": -12.49,
       "date": "11/25",
       "prev_close": 226.65,
       "prev_date": "11/24",
       "nav": 187.7,
-      "premium": 4.34
+      "premium": 5.67
     },
     {
       "symbol": "00663L.TW",
       "name": "國泰臺灣加權正2",
-      "price": 65.15,
-      "change": -9.9,
-      "pct": -13.19,
+      "price": 65.85,
+      "change": -9.2,
+      "pct": -12.26,
       "date": "11/25",
       "prev_close": 75.05,
       "prev_date": "11/24",
       "nav": 62.18,
-      "premium": 4.78
+      "premium": 5.9
     },
     {
       "symbol": "00685L.TW",
       "name": "群益臺灣加權正2",
-      "price": 7.52,
-      "change": -1.09,
-      "pct": -12.66,
+      "price": 7.6,
+      "change": -1.01,
+      "pct": -11.73,
       "date": "11/25",
       "prev_close": 8.61,
       "prev_date": "11/24",
       "nav": 7.13,
-      "premium": 5.47
+      "premium": 6.59
     }
   ]
 }
