@@ -1,12 +1,12 @@
 {
-  "updated": "2026/11/26 11:12",
+  "updated": "2026/11/26 11:32",
   "indices": [
     {
       "symbol": "^KS11",
       "name": "KOSPI",
-      "price": 4727.68,
-      "change": 30.17,
-      "pct": 0.64,
+      "price": 4732.52,
+      "change": 35.01,
+      "pct": 0.75,
       "date": "11/26",
       "prev_close": 4697.51,
       "prev_date": "11/25"
@@ -14,9 +14,9 @@
     {
       "symbol": "^KQ11",
       "name": "KOSDAQ",
-      "price": 660.75,
-      "change": 10.11,
-      "pct": 1.55,
+      "price": 660.0,
+      "change": 9.36,
+      "pct": 1.44,
       "date": "11/26",
       "prev_close": 650.64,
       "prev_date": "11/25"
@@ -26,9 +26,9 @@
     {
       "symbol": "005930.KS",
       "name": "三星電子",
-      "price": 172100.0,
-      "change": 1400.0,
-      "pct": 0.82,
+      "price": 172600.0,
+      "change": 1900.0,
+      "pct": 1.11,
       "date": "11/26",
       "prev_close": 170700.0,
       "prev_date": "11/25"
@@ -46,9 +46,9 @@
     {
       "symbol": "042700.KS",
       "name": "漢美半導體",
-      "price": 149400.0,
-      "change": 2100.0,
-      "pct": 1.43,
+      "price": 149600.0,
+      "change": 2300.0,
+      "pct": 1.56,
       "date": "11/26",
       "prev_close": 147300.0,
       "prev_date": "11/25"
@@ -68,9 +68,9 @@
     {
       "symbol": "034220.KS",
       "name": "LG Display",
-      "price": 6525.0,
-      "change": -35.0,
-      "pct": -0.53,
+      "price": 6520.0,
+      "change": -40.0,
+      "pct": -0.61,
       "date": "11/26",
       "prev_close": 6560.0,
       "prev_date": "11/25"
@@ -80,9 +80,9 @@
     {
       "symbol": "011070.KS",
       "name": "LG Innotek",
-      "price": 257500.0,
-      "change": -9000.0,
-      "pct": -3.38,
+      "price": 258000.0,
+      "change": -8500.0,
+      "pct": -3.19,
       "date": "11/26",
       "prev_close": 266500.0,
       "prev_date": "11/25"
