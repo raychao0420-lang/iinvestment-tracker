@@ -1,5 +1,5 @@
 {
-  "updated": "2026/11/28 06:49",
+  "updated": "2026/11/28 10:58",
   "stocks": {
     "TSM": {
       "rsi14": 42.2,
@@ -437,15 +437,15 @@
       "score": 0
     },
     "NEE": {
-      "rsi14": 55.4,
-      "rsi21": 55.4,
-      "bias20": -0.5,
-      "bias60": 4.3,
-      "bb_pct": 43.0,
+      "rsi14": 58.8,
+      "rsi21": 57.5,
+      "bias20": 0.2,
+      "bias60": 5.1,
+      "bb_pct": 53.5,
       "bb_width": 6.6,
-      "bb_low": 82.52,
-      "bb_mid": 85.35,
-      "bb_up": 88.17,
+      "bb_low": 81.96,
+      "bb_mid": 84.76,
+      "bb_up": 87.55,
       "squeeze": true,
       "trend": false,
       "zone": "neutral",
